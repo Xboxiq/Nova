@@ -1,6 +1,7 @@
 import { ThemeProvider } from './theme/ThemeContext';
 import { ControlBar } from './showcase/ControlBar';
 import { Hero } from './showcase/sections/Hero';
+import { Atelier } from './showcase/sections/Atelier';
 import { ColorTokens } from './showcase/sections/ColorTokens';
 import { Typography } from './showcase/sections/Typography';
 import { Buttons } from './showcase/sections/Buttons';
@@ -34,6 +35,7 @@ function App() {
     <ThemeProvider>
       <ControlBar />
       <Hero />
+      <Atelier />
       <ColorTokens />
       <Typography />
       <Buttons />

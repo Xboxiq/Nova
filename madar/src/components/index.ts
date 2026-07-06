@@ -106,6 +106,11 @@ export {
 } from './kinetics99';
 
 export {
+  AtelierEyebrow, BezelCard, MagneticCTA, RevealOnView, SpecularCard, EditorialFigure, DisplaySerif,
+} from './atelier';
+export type { BezelCardProps, MagneticCTAProps } from './atelier';
+
+export {
   DataTable, Drawer, ToastDemo, FileDropzone, EmptyState, Banner, RangeSlider,
 } from './essentials';
 export type {

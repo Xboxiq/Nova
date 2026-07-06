@@ -1,6 +1,6 @@
 # Madar Components — مكتبة المكونات
 
-**170+ reusable, typed React components** rebuilt on Madar's token system — the full 21st.dev import set (design.md §18), the **complete 99/99 Kinetics catalog** (§19, verified against [ckissi/kinetics](https://github.com/ckissi/kinetics)), every worthwhile pattern mined from the four source libraries (Jahez 95-pattern bank, Liquid Soft, Icons & Cards Lab, v2 — §16–§17), the 2026 X-trends vocabulary (TRENDS.md), a dataviz + collections layer built to the dataviz-skill procedure, and five full hero-section layouts. Every component recolors with the 5 themes and mirrors under `dir="rtl"` automatically. Import any of them anywhere:
+**175+ reusable, typed React components** rebuilt on Madar's token system — the full 21st.dev import set (design.md §18), the **complete 99/99 Kinetics catalog** (§19, verified against [ckissi/kinetics](https://github.com/ckissi/kinetics)), every worthwhile pattern mined from the four source libraries (Jahez 95-pattern bank, Liquid Soft, Icons & Cards Lab, v2 — §16–§17), the 2026 X-trends vocabulary (TRENDS.md), a dataviz + collections layer built to the dataviz-skill procedure, and five full hero-section layouts. Every component recolors with the 5 themes and mirrors under `dir="rtl"` automatically. Import any of them anywhere:
 
 ```tsx
 import { PublishButton, DynamicIsland, ToolbarDock, Stepper } from './components';
@@ -217,6 +217,21 @@ Live demo: showcase section **25 Kinetics 99** (LTR + Night/RTL verified).
 Live demo: showcase section **26 Essentials** (LTR + Night/RTL verified).
 
 `HeroVisual` (in `heroLayouts.tsx`) now takes `src` + `alt`: pass real art and it renders an `<img>`; omit them and it stays a labelled generative placeholder slot.
+
+## Atelier — the premium tier (high-end-visual-design skill)
+
+**`atelier.tsx`** — the $150k-agency techniques, made reusable and token-driven so they recolor across all five themes and mirror under RTL. Adds a high-contrast Didone display font (`--font-display`: Bodoni Moda, with Aref Ruqaa for Arabic).
+
+| Export | Technique (skill section) |
+|---|---|
+| `BezelCard` | Double-Bezel / Doppelrand — machined outer shell + inner core, concentric radii, inset highlight (§4.A) |
+| `MagneticCTA` | Island pill + button-in-button trailing icon, magnetic drift, diagonal icon travel, press compression (§4.B / §5.B) |
+| `SpecularCard` | pointer-tracked specular sheen + reactive tilt + accent-tinted reactive shadow (haptic depth) |
+| `RevealOnView` | heavy fade-up + de-blur on enter via IntersectionObserver, reduced-motion safe (§5.C) |
+| `EditorialFigure` | oversized Didone numeral + eyebrow pill + accent hairline (editorial luxury) |
+| `AtelierEyebrow`, `DisplaySerif` | the microscopic pill eyebrow + a luxe display-serif wrapper |
+
+Live demo: showcase section **Atelier** (unnumbered showpiece after the hero; LTR + Night/RTL verified). Motion touches only transform/opacity/filter; all curves are the heavy `cubic-bezier(0.32,0.72,0,1)`.
 
 ## Rules that ship with the bank (design.md §18.4)
 
