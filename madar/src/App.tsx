@@ -26,6 +26,7 @@ import { Trends2026 } from './showcase/sections/Trends2026';
 import { DataCollections } from './showcase/sections/DataCollections';
 import { HeroLayouts } from './showcase/sections/HeroLayouts';
 import { Kinetics99 } from './showcase/sections/Kinetics99';
+import { Essentials } from './showcase/sections/Essentials';
 import { Motion } from './showcase/sections/Motion';
 
 function App() {
@@ -58,6 +59,7 @@ function App() {
       <DataCollections />
       <HeroLayouts />
       <Kinetics99 />
+      <Essentials />
       <Motion />
     </ThemeProvider>
   );

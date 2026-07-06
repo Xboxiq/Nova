@@ -1,6 +1,6 @@
 # Madar Components — مكتبة المكونات
 
-**165+ reusable, typed React components** rebuilt on Madar's token system — the full 21st.dev import set (design.md §18), the **complete 99/99 Kinetics catalog** (§19, verified against [ckissi/kinetics](https://github.com/ckissi/kinetics)), every worthwhile pattern mined from the four source libraries (Jahez 95-pattern bank, Liquid Soft, Icons & Cards Lab, v2 — §16–§17), the 2026 X-trends vocabulary (TRENDS.md), a dataviz + collections layer built to the dataviz-skill procedure, and five full hero-section layouts. Every component recolors with the 5 themes and mirrors under `dir="rtl"` automatically. Import any of them anywhere:
+**170+ reusable, typed React components** rebuilt on Madar's token system — the full 21st.dev import set (design.md §18), the **complete 99/99 Kinetics catalog** (§19, verified against [ckissi/kinetics](https://github.com/ckissi/kinetics)), every worthwhile pattern mined from the four source libraries (Jahez 95-pattern bank, Liquid Soft, Icons & Cards Lab, v2 — §16–§17), the 2026 X-trends vocabulary (TRENDS.md), a dataviz + collections layer built to the dataviz-skill procedure, and five full hero-section layouts. Every component recolors with the 5 themes and mirrors under `dir="rtl"` automatically. Import any of them anywhere:
 
 ```tsx
 import { PublishButton, DynamicIsland, ToolbarDock, Stepper } from './components';
@@ -199,6 +199,24 @@ Live demo: showcase section **24 Hero Layouts** (LTR + Night/RTL verified).
 `RippleButton`, `CursorTrail`, `PasswordMeter`, `RotaryKnob`, `CountdownRing`, `SkeletonToContent`, `BatteryCharge`, `SignalBars`, `BookmarkToggle`, `WaveLoader`, `EqualizerBars`, `NewtonsCradle`, `BouncingBall`, `NeonGlowPulse`, `GradientBorderMorph`, `GlitchText`, `TextSplitReveal`, `TextWave`, `FlipCard`, `CubeRotate3D`, `ClipWipe`, `FoldingDoors`, `BeforeAfter`, `PagePeel`
 
 Live demo: showcase section **25 Kinetics 99** (LTR + Night/RTL verified).
+
+## Essentials — structural app surfaces
+
+**`essentials.tsx`** — the production pieces a complete design system needs. All tokenized, theme-aware, RTL-safe (logical properties only).
+
+| Export | Notes |
+|---|---|
+| `DataTable` | generic, sortable headers, optional row selection, zebra rows, horizontal scroll |
+| `Drawer` | edge sheet over a scrim, `side` is logical (mirrors under RTL), Esc + scrim close |
+| `ToastDemo` | spring-in toast stack, four tones, auto-dismiss (the reducer that powers a provider) |
+| `FileDropzone` | drag-and-drop upload with a growing file list + sizes |
+| `EmptyState` | icon + title + copy + action |
+| `Banner` | inline status message, four tones, dismissible |
+| `RangeSlider` | dual-handle min/max, filled track, RTL-aware dragging |
+
+Live demo: showcase section **26 Essentials** (LTR + Night/RTL verified).
+
+`HeroVisual` (in `heroLayouts.tsx`) now takes `src` + `alt`: pass real art and it renders an `<img>`; omit them and it stays a labelled generative placeholder slot.
 
 ## Rules that ship with the bank (design.md §18.4)
 

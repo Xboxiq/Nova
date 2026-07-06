@@ -106,6 +106,13 @@ export {
 } from './kinetics99';
 
 export {
+  DataTable, Drawer, ToastDemo, FileDropzone, EmptyState, Banner, RangeSlider,
+} from './essentials';
+export type {
+  Cell, Column, DataTableProps, DrawerProps, ToastTone, DroppedFile, EmptyStateProps,
+} from './essentials';
+
+export {
   HeroVisual, HeroNav, SplitStatsHero, ProductHero, ImmersiveHero, DisplayWordHero, GalleryScatterHero,
 } from './heroLayouts';
 export type {

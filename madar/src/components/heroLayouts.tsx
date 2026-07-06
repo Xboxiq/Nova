@@ -33,6 +33,9 @@ export interface HeroVisualProps {
   className?: string;
   children?: ReactNode;
   label?: string;
+  /** Real art: when set, an <img> is rendered instead of the generative mood. */
+  src?: string;
+  alt?: string;
 }
 const MOODS: Record<HeroVisualMood, string> = {
   bloom:
@@ -57,15 +60,18 @@ const MOODS: Record<HeroVisualMood, string> = {
     'radial-gradient(70% 90% at 50% 20%, oklch(from var(--accent) 0.6 0.16 h / 0.5), transparent 60%),' +
     'var(--bg-deep)',
 };
-export function HeroVisual({ mood = 'mesh', radius = 20, style, className, children, label }: HeroVisualProps) {
+export function HeroVisual({ mood = 'mesh', radius = 20, style, className, children, label, src, alt }: HeroVisualProps) {
+  const hasArt = !!src;
   return (
     <div
       className={className}
-      style={{ position: 'relative', overflow: 'hidden', borderRadius: radius, background: MOODS[mood], backgroundColor: 'var(--surface-2)', ...style }}
+      style={{ position: 'relative', overflow: 'hidden', borderRadius: radius, background: hasArt ? 'var(--surface-2)' : MOODS[mood], backgroundColor: 'var(--surface-2)', ...style }}
     >
-      {/* grain overlay for tactility */}
-      <span aria-hidden style={{ position: 'absolute', inset: 0, opacity: 0.5, mixBlendMode: 'overlay', backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E\")" }} />
-      {label && !children && <span style={{ position: 'absolute', insetInlineStart: 14, bottom: 12, fontSize: 11, fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.72)' }}>{label}</span>}
+      {/* real art when provided; otherwise the generative mood surface (an
+          explicit, labelled placeholder slot — pass `src` to drop in art) */}
+      {hasArt && <img src={src} alt={alt ?? ''} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />}
+      {!hasArt && <span aria-hidden style={{ position: 'absolute', inset: 0, opacity: 0.5, mixBlendMode: 'overlay', backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E\")" }} />}
+      {label && !children && !hasArt && <span style={{ position: 'absolute', insetInlineStart: 14, bottom: 12, fontSize: 11, fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.72)' }}>{label}</span>}
       {children}
     </div>
   );

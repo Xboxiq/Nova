@@ -3,7 +3,7 @@ import { Section, SectionHeader } from '../SectionHeader';
 export function Motion() {
   return (
     <Section label="Motion" padding="88px 32px 96px">
-      <SectionHeader eyebrow="26 · MOTION" title="Motion — physics, not fireworks">
+      <SectionHeader eyebrow="27 · MOTION" title="Motion — physics, not fireworks">
         Four durations, three curves. Only transform, opacity, filter and shadow ever animate. Exits run at 60% of entrances.
       </SectionHeader>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(240px,1fr))', gap: 20 }}>
