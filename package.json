@@ -1,0 +1,29 @@
+{
+  "name": "nova-ui-react-library",
+  "private": true,
+  "version": "7.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:mobile": "vite --host 0.0.0.0",
+    "typecheck": "tsc -b --pretty false",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "preview:mobile": "vite preview --host 0.0.0.0"
+  },
+  "dependencies": {
+    "@fontsource-variable/geist-mono": "^5.2.8",
+    "@fontsource-variable/ibm-plex-sans": "^5.2.8",
+    "@fontsource/ibm-plex-sans-arabic": "^5.2.9",
+    "react": "19.2.7",
+    "react-dom": "19.2.7",
+    "react-icons": "5.7.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "6.0.3",
+    "typescript": "7.0.2",
+    "vite": "8.1.5"
+  }
+}

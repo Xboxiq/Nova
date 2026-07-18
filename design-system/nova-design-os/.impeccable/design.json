@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-07-17T17:48:26Z",
+  "title": "Design System: NOVA Design OS",
+  "extensions": {
+    "colorMeta": {
+      "iris": {
+        "role": "primary",
+        "displayName": "Signal Iris",
+        "canonical": "#554FE8",
+        "tonalRamp": ["#EFEEFF", "#D7D4FF", "#9792FF", "#554FE8", "#443ED4", "#352FAF"]
+      },
+      "light-canvas": {
+        "role": "neutral",
+        "displayName": "Luminous Cloud",
+        "canonical": "#F6F7FB",
+        "tonalRamp": ["#FFFFFF", "#FCFCFF", "#F6F7FB", "#F0F2F8", "#DDE1EC"]
+      },
+      "dark-canvas": {
+        "role": "neutral",
+        "displayName": "Indigo Night",
+        "canonical": "#12172D",
+        "tonalRamp": ["#12172D", "#19213D", "#202A4A", "#273254", "#303B60", "#465276"]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "One hero or campaign statement; never dense product controls. Latin tracking only."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Default reading and interface copy; Arabic line-height is allowed extra room."
+      },
+      "mono": {
+        "displayName": "Telemetry",
+        "purpose": "Code, IDs, timestamps, and numeric instrumentation only."
+      }
+    },
+    "shadows": {
+      "sm": "0 1px 2px rgb(18 21 40 / 4%), 0 8px 24px rgb(18 21 40 / 6%)",
+      "md": "0 12px 36px rgb(18 21 40 / 10%)",
+      "lg": "0 28px 90px rgb(18 21 40 / 18%)",
+      "dark": "0 18px 54px rgb(5 8 22 / 28%)"
+    },
+    "motion": {
+      "instant": { "duration": "90ms", "purpose": "pointer-down feedback" },
+      "fast": { "duration": "160ms", "purpose": "hover, focus, icon state" },
+      "base": { "duration": "240ms", "purpose": "standard state transition" },
+      "slow": { "duration": "360ms", "purpose": "popover, dialog, sheet" },
+      "scene": { "duration": "480ms", "purpose": "shared layout or authored hero scene" },
+      "springDefault": { "dampingRatio": 1, "responseSeconds": 0.4, "overshoot": false },
+      "springMomentum": { "dampingRatio": 0.8, "responseSeconds": 0.35, "overshoot": "gesture-earned only" }
+    },
+    "breakpoints": {
+      "phoneBaseline": "390px",
+      "largePhone": "480px",
+      "tablet": "768px",
+      "productShell": "1024px",
+      "wide": "1280px",
+      "maxWide": "1536px"
+    },
+    "layers": {
+      "base": 0,
+      "sticky": 100,
+      "dropdown": 300,
+      "dock": 400,
+      "overlay": 600,
+      "modal": 700,
+      "toast": 900,
+      "commandPalette": 1000
+    },
+    "narrative": {
+      "northStar": "The Luminous Instrument - an interface that is calm at rest, immediate under touch, and memorable in one authored moment.",
+      "registers": ["Product", "Editorial", "Data", "Immersive"],
+      "rules": [
+        "One register per page.",
+        "One signature artifact per viewport or narrative chapter.",
+        "Opaque and tonal by default; glass and glow must be earned.",
+        "Iris is rare and functional.",
+        "Arabic is designed first, not mirrored later.",
+        "Content remains available without animation."
+      ],
+      "donts": [
+        "No generic purple-to-blue AI gradient across the product.",
+        "No default three-card template rhythm.",
+        "No effect stack of glass, glow, foil, gradient border, and 3D.",
+        "No fake metrics, urgency, testimonials, or code.",
+        "No hover-, motion-, or color-only meaning."
+      ]
+    }
+  }
+}
+

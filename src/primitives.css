@@ -1,0 +1,203 @@
+/* NOVA primitives — shared geometry, state layers, and material behavior. */
+
+.nova-control {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--nova-space-2);
+  min-height: var(--nova-control-md);
+  padding-inline: var(--nova-space-4);
+  overflow: hidden;
+  color: var(--nova-ink);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--nova-radius-control);
+  font-size: var(--nova-text-body-sm);
+  font-weight: var(--nova-weight-semibold);
+  line-height: 1;
+  isolation: isolate;
+  transition:
+    color var(--nova-motion-control) var(--nova-ease-standard),
+    background-color var(--nova-motion-control) var(--nova-ease-standard),
+    border-color var(--nova-motion-control) var(--nova-ease-standard),
+    box-shadow var(--nova-motion-control) var(--nova-ease-standard),
+    transform var(--nova-motion-press) var(--nova-ease-standard);
+}
+
+.nova-control::after {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: transparent;
+  border-radius: inherit;
+  content: "";
+  transition: background-color var(--nova-motion-control) var(--nova-ease-standard);
+}
+
+.nova-control:hover::after { background: var(--nova-state-hover); }
+.nova-control:active { transform: translateY(1px) scale(.985); }
+.nova-control:active::after { background: var(--nova-state-pressed); }
+.nova-control > svg { width: var(--nova-icon-md); height: var(--nova-icon-md); flex: 0 0 auto; }
+
+.nova-control.is-sm { min-height: var(--nova-control-sm); padding-inline: var(--nova-space-3); font-size: var(--nova-text-label-md); }
+.nova-control.is-lg { min-height: var(--nova-control-lg); padding-inline: var(--nova-space-5); font-size: var(--nova-text-body-md); }
+.nova-control.is-xl { min-height: var(--nova-control-xl); padding-inline: var(--nova-space-6); font-size: var(--nova-text-body-md); }
+
+.nova-control.is-primary {
+  color: var(--nova-on-action);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--nova-action) 78%, white) 0%, var(--nova-action) 48%, var(--nova-action-pressed) 100%);
+  border-color: color-mix(in srgb, var(--nova-action-pressed) 74%, transparent);
+  box-shadow:
+    inset 0 1px rgb(255 255 255 / 30%),
+    inset 0 -1px rgb(0 24 58 / 16%),
+    0 10px 24px color-mix(in srgb, var(--nova-action) 22%, transparent);
+}
+
+.nova-control.is-primary::after { background: transparent; }
+.nova-control.is-primary:hover {
+  box-shadow:
+    inset 0 1px rgb(255 255 255 / 34%),
+    inset 0 -1px rgb(0 24 58 / 18%),
+    0 14px 30px color-mix(in srgb, var(--nova-action) 28%, transparent);
+}
+.nova-control.is-primary:hover::after { background: rgb(255 255 255 / 7%); }
+.nova-control.is-primary:active::after { background: rgb(0 21 49 / 12%); }
+
+.nova-control.is-secondary {
+  background: var(--nova-surface);
+  border-color: var(--nova-border);
+  box-shadow: var(--nova-shadow-sm);
+}
+
+.nova-control.is-quiet { color: var(--nova-ink-secondary); }
+
+.nova-control.is-danger {
+  color: var(--nova-danger);
+  background: var(--nova-danger-soft);
+  border-color: color-mix(in srgb, var(--nova-danger) 24%, var(--nova-border));
+}
+
+.nova-control.is-glass {
+  color: var(--nova-ink);
+  background:
+    linear-gradient(150deg, var(--nova-glass-strong), color-mix(in srgb, var(--nova-glass) 76%, transparent));
+  border-color: var(--nova-glass-edge);
+  box-shadow: inset 0 1px var(--nova-glass-specular), 0 12px 30px color-mix(in srgb, var(--nova-ink) 12%, transparent);
+  backdrop-filter: blur(22px) saturate(170%);
+  -webkit-backdrop-filter: blur(22px) saturate(170%);
+}
+
+.nova-control.is-icon-only {
+  width: var(--nova-control-md);
+  padding: 0;
+}
+
+.nova-control.is-icon-only.is-lg { width: var(--nova-control-lg); }
+
+.nova-control[aria-pressed="true"],
+.nova-control[aria-current="page"] {
+  color: var(--nova-action-ink);
+  background: var(--nova-action-soft);
+  border-color: color-mix(in srgb, var(--nova-action) 30%, var(--nova-border));
+}
+
+.nova-control .nova-spinner {
+  width: var(--nova-icon-md);
+  height: var(--nova-icon-md);
+  animation: nova-spin .8s linear infinite;
+}
+
+.nova-icon-tile {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: var(--nova-icon-tile-md);
+  height: var(--nova-icon-tile-md);
+  flex: 0 0 auto;
+  overflow: hidden;
+  color: var(--nova-action-ink);
+  border: 1px solid transparent;
+  border-radius: 12px;
+  isolation: isolate;
+  transition:
+    color var(--nova-motion-control),
+    background-color var(--nova-motion-control),
+    border-color var(--nova-motion-control),
+    box-shadow var(--nova-motion-control),
+    transform var(--nova-motion-press);
+}
+
+.nova-icon-tile > svg { position: relative; z-index: 2; width: var(--nova-icon-md); height: var(--nova-icon-md); }
+.nova-icon-tile.is-sm { width: var(--nova-icon-tile-sm); height: var(--nova-icon-tile-sm); border-radius: 9px; }
+.nova-icon-tile.is-sm > svg { width: var(--nova-icon-sm); height: var(--nova-icon-sm); }
+.nova-icon-tile.is-lg { width: var(--nova-icon-tile-lg); height: var(--nova-icon-tile-lg); border-radius: 15px; }
+.nova-icon-tile.is-lg > svg { width: var(--nova-icon-lg); height: var(--nova-icon-lg); }
+.nova-icon-tile.is-xl { width: var(--nova-icon-tile-xl); height: var(--nova-icon-tile-xl); border-radius: 20px; }
+.nova-icon-tile.is-xl > svg { width: var(--nova-icon-xl); height: var(--nova-icon-xl); }
+
+.nova-icon-tile.is-tonal {
+  background: var(--nova-action-soft);
+  border-color: color-mix(in srgb, var(--nova-action) 14%, transparent);
+}
+
+.nova-icon-tile.is-outline {
+  color: var(--nova-ink-secondary);
+  background: color-mix(in srgb, var(--nova-surface) 54%, transparent);
+  border-color: var(--nova-border);
+}
+
+.nova-icon-tile.is-drawn {
+  color: var(--nova-ink);
+  background: transparent;
+  border-color: color-mix(in srgb, var(--nova-ink) 32%, transparent);
+  border-radius: 50% 46% 52% 44% / 44% 54% 46% 52%;
+  box-shadow: 2px 2px 0 color-mix(in srgb, var(--nova-action) 24%, transparent);
+  transform: rotate(-2deg);
+}
+
+[dir="rtl"] .nova-icon-tile.is-drawn { transform: rotate(2deg); }
+
+.nova-icon-tile.is-glass {
+  color: var(--nova-ink);
+  background:
+    linear-gradient(150deg, var(--nova-glass-strong), color-mix(in srgb, var(--nova-glass) 70%, var(--nova-glass-caustic)));
+  border-color: var(--nova-glass-edge);
+  box-shadow:
+    inset 0 1px var(--nova-glass-specular),
+    inset 0 -1px var(--nova-glass-edge-shade),
+    0 12px 28px color-mix(in srgb, var(--nova-ink) 14%, transparent);
+  backdrop-filter: blur(24px) saturate(175%);
+  -webkit-backdrop-filter: blur(24px) saturate(175%);
+}
+
+.nova-icon-tile.is-glass::before {
+  position: absolute;
+  inset: -18% 42% 54% -14%;
+  z-index: 1;
+  background: var(--nova-glass-specular);
+  border-radius: 50%;
+  filter: blur(6px);
+  opacity: .66;
+  content: "";
+}
+
+button.nova-icon-tile:hover { transform: translateY(-1px); }
+button.nova-icon-tile:active { transform: translateY(1px) scale(.96); }
+
+@keyframes nova-spin { to { transform: rotate(360deg); } }
+
+@media (prefers-reduced-transparency: reduce) {
+  .nova-control.is-glass,
+  .nova-icon-tile.is-glass {
+    background: var(--nova-surface-raised);
+    border-color: var(--nova-border-strong);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nova-control .nova-spinner { animation: none; }
+}

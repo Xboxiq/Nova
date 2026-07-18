@@ -1,0 +1,341 @@
+:root,
+[data-theme="light"] {
+  color-scheme: light;
+
+  --nova-canvas: #f3f7f8;
+  --nova-surface: #ffffff;
+  --nova-surface-quiet: #eaf0f2;
+  --nova-surface-raised: #fbfdfd;
+  --nova-ink: #10242e;
+  --nova-ink-secondary: #455e68;
+  --nova-ink-tertiary: #5d747d;
+  --nova-border: #d6e1e4;
+  --nova-border-strong: #b8c9ce;
+
+  --nova-action: #0068d9;
+  --nova-action-hover: #005ec6;
+  --nova-action-pressed: #004ea8;
+  --nova-action-soft: #dceeff;
+  --nova-action-ink: #004f9e;
+  --nova-on-action: #ffffff;
+  --nova-focus: #0a72eb;
+
+  --nova-success: #0b704b;
+  --nova-success-soft: #e6f6ef;
+  --nova-warning: #9a5c08;
+  --nova-warning-soft: #fff3d9;
+  --nova-danger: #c43b4d;
+  --nova-danger-soft: #ffecef;
+  --nova-info: #1769aa;
+  --nova-info-soft: #e7f3fc;
+
+  --nova-expressive-mint: #37cdb0;
+  --nova-expressive-coral: #ff8068;
+  --nova-expressive-amber: #f4b342;
+  --nova-expressive-sky: #5dbbf0;
+  --nova-expressive-frost: #beeaff;
+
+  --nova-scrim: rgb(12 34 44 / 46%);
+  --nova-glass: rgb(247 252 253 / 54%);
+  --nova-glass-strong: rgb(252 254 255 / 72%);
+  --nova-glass-edge: rgb(255 255 255 / 88%);
+  --nova-glass-edge-shade: rgb(50 106 124 / 16%);
+  --nova-glass-specular: rgb(255 255 255 / 92%);
+  --nova-glass-caustic: rgb(71 203 208 / 18%);
+  --nova-state-hover: rgb(0 104 217 / 7%);
+  --nova-state-pressed: rgb(0 78 168 / 12%);
+  --nova-state-selected: rgb(0 104 217 / 14%);
+  --nova-glass-shadow: 0 1px 0 rgb(255 255 255 / 64%) inset, 0 -1px 0 rgb(49 102 118 / 10%) inset, 0 18px 46px rgb(27 69 82 / 12%), 0 3px 12px rgb(27 69 82 / 8%);
+
+  --nova-shadow-sm: 0 1px 2px rgb(16 36 46 / 4%), 0 8px 24px rgb(16 36 46 / 6%);
+  --nova-shadow-md: 0 12px 36px rgb(16 36 46 / 10%);
+  --nova-shadow-lg: 0 28px 90px rgb(16 36 46 / 18%);
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --nova-canvas: #0d1b22;
+  --nova-surface: #122833;
+  --nova-surface-quiet: #19343f;
+  --nova-surface-raised: #21414f;
+  --nova-ink: #f3fafb;
+  --nova-ink-secondary: #c0d0d4;
+  --nova-ink-tertiary: #91a8af;
+  --nova-border: #294955;
+  --nova-border-strong: #3d6270;
+
+  --nova-action: #70b7ff;
+  --nova-action-hover: #89c4ff;
+  --nova-action-pressed: #57a7f6;
+  --nova-action-soft: #103a57;
+  --nova-action-ink: #a8d4ff;
+  --nova-on-action: #08223a;
+  --nova-focus: #79c2ff;
+
+  --nova-success: #67d8aa;
+  --nova-success-soft: #173b32;
+  --nova-warning: #f2be70;
+  --nova-warning-soft: #44331d;
+  --nova-danger: #ff909d;
+  --nova-danger-soft: #4a2530;
+  --nova-info: #77c9f5;
+  --nova-info-soft: #143b50;
+
+  --nova-scrim: rgb(2 12 17 / 62%);
+  --nova-glass: rgb(17 43 54 / 58%);
+  --nova-glass-strong: rgb(23 53 65 / 76%);
+  --nova-glass-edge: rgb(211 244 255 / 20%);
+  --nova-glass-edge-shade: rgb(0 8 13 / 46%);
+  --nova-glass-specular: rgb(232 251 255 / 32%);
+  --nova-glass-caustic: rgb(56 186 206 / 20%);
+  --nova-state-hover: rgb(112 183 255 / 9%);
+  --nova-state-pressed: rgb(112 183 255 / 16%);
+  --nova-state-selected: rgb(112 183 255 / 18%);
+  --nova-glass-shadow: 0 1px 0 rgb(235 252 255 / 15%) inset, 0 -1px 0 rgb(0 8 12 / 34%) inset, 0 22px 64px rgb(0 7 12 / 38%), 0 4px 16px rgb(0 7 12 / 24%);
+
+  --nova-shadow-sm: 0 1px 2px rgb(1 9 13 / 18%), 0 10px 28px rgb(1 9 13 / 18%);
+  --nova-shadow-md: 0 18px 54px rgb(1 9 13 / 28%);
+  --nova-shadow-lg: 0 30px 96px rgb(1 9 13 / 44%);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    color-scheme: dark;
+
+    --nova-canvas: #0d1b22;
+    --nova-surface: #122833;
+    --nova-surface-quiet: #19343f;
+    --nova-surface-raised: #21414f;
+    --nova-ink: #f3fafb;
+    --nova-ink-secondary: #c0d0d4;
+    --nova-ink-tertiary: #91a8af;
+    --nova-border: #294955;
+    --nova-border-strong: #3d6270;
+    --nova-action: #70b7ff;
+    --nova-action-hover: #89c4ff;
+    --nova-action-pressed: #57a7f6;
+    --nova-action-soft: #103a57;
+    --nova-action-ink: #a8d4ff;
+    --nova-on-action: #08223a;
+    --nova-focus: #79c2ff;
+    --nova-success: #67d8aa;
+    --nova-success-soft: #173b32;
+    --nova-warning: #f2be70;
+    --nova-warning-soft: #44331d;
+    --nova-danger: #ff909d;
+    --nova-danger-soft: #4a2530;
+    --nova-info: #77c9f5;
+    --nova-info-soft: #143b50;
+    --nova-scrim: rgb(2 12 17 / 62%);
+    --nova-glass: rgb(17 43 54 / 58%);
+    --nova-glass-strong: rgb(23 53 65 / 76%);
+    --nova-glass-edge: rgb(211 244 255 / 20%);
+    --nova-glass-edge-shade: rgb(0 8 13 / 46%);
+    --nova-glass-specular: rgb(232 251 255 / 32%);
+    --nova-glass-caustic: rgb(56 186 206 / 20%);
+    --nova-state-hover: rgb(112 183 255 / 9%);
+    --nova-state-pressed: rgb(112 183 255 / 16%);
+    --nova-state-selected: rgb(112 183 255 / 18%);
+    --nova-glass-shadow: 0 1px 0 rgb(235 252 255 / 15%) inset, 0 -1px 0 rgb(0 8 12 / 34%) inset, 0 22px 64px rgb(0 7 12 / 38%), 0 4px 16px rgb(0 7 12 / 24%);
+    --nova-shadow-sm: 0 1px 2px rgb(1 9 13 / 18%), 0 10px 28px rgb(1 9 13 / 18%);
+    --nova-shadow-md: 0 18px 54px rgb(1 9 13 / 28%);
+    --nova-shadow-lg: 0 30px 96px rgb(1 9 13 / 44%);
+  }
+}
+
+:root {
+  --nova-font-ui: -apple-system, BlinkMacSystemFont, "SF Pro Text", "IBM Plex Sans Arabic", "IBM Plex Sans", "Segoe UI", Tahoma, Arial, sans-serif;
+  --nova-font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "IBM Plex Sans Arabic", "IBM Plex Sans", "Segoe UI", sans-serif;
+  --nova-font-editorial-ar: "IBM Plex Sans Arabic", -apple-system, BlinkMacSystemFont, sans-serif;
+  --nova-font-mono: "Geist Mono Variable", ui-monospace, SFMono-Regular, Consolas, monospace;
+
+  --nova-weight-regular: 400;
+  --nova-weight-medium: 550;
+  --nova-weight-semibold: 650;
+  --nova-weight-bold: 750;
+
+  --nova-text-display-xl: clamp(2.5rem, 6vw, 5.5rem);
+  --nova-text-headline-lg: clamp(2rem, 4vw, 3.5rem);
+  --nova-text-headline-md: clamp(1.75rem, 3vw, 3rem);
+  --nova-text-title-lg: 1.5rem;
+  --nova-text-title-md: 1.25rem;
+  --nova-text-body-lg: 1.125rem;
+  --nova-text-body-md: 1rem;
+  --nova-text-body-sm: 0.875rem;
+  --nova-text-label-md: 0.8125rem;
+  --nova-text-label-sm: 0.75rem;
+
+  --nova-space-0-5: 0.125rem;
+  --nova-space-1: 0.25rem;
+  --nova-space-2: 0.5rem;
+  --nova-space-3: 0.75rem;
+  --nova-space-4: 1rem;
+  --nova-space-5: 1.25rem;
+  --nova-space-6: 1.5rem;
+  --nova-space-8: 2rem;
+  --nova-space-10: 2.5rem;
+  --nova-space-12: 3rem;
+  --nova-space-16: 4rem;
+  --nova-space-20: 5rem;
+  --nova-space-24: 6rem;
+  --nova-space-28: 7rem;
+  --nova-space-32: 8rem;
+
+  /* Composition aliases: use these before inventing page-local margins. */
+  --nova-gutter-page: clamp(1.25rem, 3.5vw, 4rem);
+  --nova-section-space: clamp(5.5rem, 8vw, 9rem);
+  --nova-section-space-compact: clamp(4rem, 6vw, 6.5rem);
+  --nova-copy-gap: clamp(1.25rem, 2vw, 2rem);
+  --nova-card-inset: clamp(1.25rem, 2.2vw, 2rem);
+
+  --nova-radius-control: 10px;
+  --nova-radius-field: 16px;
+  --nova-radius-card: 24px;
+  --nova-radius-feature: 32px;
+  --nova-radius-pill: 999px;
+
+  /* Controls and icon containers share optical—not merely numeric—sizes. */
+  --nova-control-sm: 36px;
+  --nova-control-md: 44px;
+  --nova-control-lg: 52px;
+  --nova-control-xl: 60px;
+  --nova-hit-min: 44px;
+  --nova-icon-sm: 16px;
+  --nova-icon-md: 20px;
+  --nova-icon-lg: 24px;
+  --nova-icon-xl: 32px;
+  --nova-icon-tile-sm: 32px;
+  --nova-icon-tile-md: 40px;
+  --nova-icon-tile-lg: 48px;
+  --nova-icon-tile-xl: 64px;
+
+  --nova-motion-instant: 90ms;
+  --nova-motion-fast: 160ms;
+  --nova-motion-base: 240ms;
+  --nova-motion-slow: 360ms;
+  --nova-motion-scene: 480ms;
+  --nova-ease-standard: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --nova-ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
+  --nova-ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  --nova-motion-press: 90ms;
+  --nova-motion-control: 180ms;
+  --nova-motion-disclosure: 260ms;
+  --nova-motion-route: 420ms;
+  --nova-ease-physical: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --nova-content-reading: 720px;
+  --nova-content-copy: 68ch;
+  --nova-content-compact-copy: 48ch;
+  --nova-content-form: 880px;
+  --nova-content-standard: 1200px;
+  --nova-content-wide: 1512px;
+  --nova-sidebar: 264px;
+  --nova-rail: 72px;
+  --nova-topbar: 64px;
+  --nova-mobile-nav: 64px;
+
+  --nova-layer-base: 0;
+  --nova-layer-sticky: 100;
+  --nova-layer-dropdown: 300;
+  --nova-layer-dock: 400;
+  --nova-layer-overlay: 600;
+  --nova-layer-modal: 700;
+  --nova-layer-toast: 900;
+  --nova-layer-command: 1000;
+}
+
+:where(html) {
+  font-family: var(--nova-font-ui);
+  background: var(--nova-canvas);
+  color: var(--nova-ink);
+}
+
+:where(:focus-visible) {
+  outline: 2px solid var(--nova-focus);
+  outline-offset: 2px;
+}
+
+.nova-glass {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    linear-gradient(148deg, var(--nova-glass-strong) 0%, var(--nova-glass) 46%, color-mix(in srgb, var(--nova-glass) 70%, var(--nova-glass-caustic)) 100%);
+  border: 1px solid var(--nova-glass-edge);
+  box-shadow: var(--nova-glass-shadow);
+  backdrop-filter: blur(28px) saturate(180%) contrast(104%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%) contrast(104%);
+}
+
+.nova-glass::before,
+.nova-glass::after {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  content: "";
+}
+
+.nova-glass > * {
+  position: relative;
+  z-index: 1;
+}
+
+.nova-glass::before {
+  background:
+    linear-gradient(112deg, var(--nova-glass-specular) 0%, transparent 24%, transparent 68%, color-mix(in srgb, var(--nova-glass-specular) 42%, transparent) 100%);
+  opacity: 0.72;
+  mask-image: linear-gradient(to bottom, black 0%, transparent 46%);
+}
+
+.nova-glass::after {
+  background:
+    radial-gradient(80% 54% at 12% -6%, var(--nova-glass-caustic), transparent 64%),
+    radial-gradient(44% 70% at 98% 104%, color-mix(in srgb, var(--nova-expressive-sky) 12%, transparent), transparent 72%);
+  box-shadow: inset 0 0 0 1px var(--nova-glass-edge-shade);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --nova-motion-instant: 1ms;
+    --nova-motion-fast: 1ms;
+    --nova-motion-base: 1ms;
+    --nova-motion-slow: 1ms;
+    --nova-motion-scene: 1ms;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .nova-glass {
+    background: var(--nova-surface-raised);
+    border-color: var(--nova-border-strong);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .nova-glass::before,
+  .nova-glass::after { display: none; }
+}
+
+@media (prefers-contrast: more) {
+  :root {
+    --nova-border: var(--nova-border-strong);
+  }
+
+  .nova-glass {
+    background: var(--nova-surface-raised);
+    border-color: currentColor;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}

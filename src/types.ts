@@ -1,0 +1,102 @@
+export type CategoryId =
+  | "flows"
+  | "controls"
+  | "navigation"
+  | "motion"
+  | "inputs"
+  | "actions"
+  | "surfaces"
+  | "effects";
+
+export type DemoKind =
+  | "onboarding"
+  | "registration"
+  | "events"
+  | "multistep"
+  | "arrival"
+  | "unsaved"
+  | "publish"
+  | "glow-toggle"
+  | "bouncy-toggle"
+  | "theme-switcher"
+  | "format-toggle"
+  | "number-field"
+  | "autocomplete"
+  | "list-box"
+  | "fieldset"
+  | "copy-code"
+  | "dynamic-island"
+  | "toolbar"
+  | "location"
+  | "activity"
+  | "glow-menu"
+  | "agent-dock"
+  | "dia-text"
+  | "skills"
+  | "mini-chart"
+  | "sparkline"
+  | "shatter"
+  | "logo-loader"
+  | "shimmer"
+  | "foil"
+  | "avatar-picker"
+  | "md3-switch"
+  | "date-wheel"
+  | "liquid-radio"
+  | "apple-calendar"
+  | "otp"
+  | "hero-form"
+  | "select"
+  | "multi-select"
+  | "addons-input"
+  | "image-upload"
+  | "search-dock"
+  | "create-menu"
+  | "tabs"
+  | "announcement"
+  | "theme-toggle"
+  | "fab"
+  | "expandable-tabs"
+  | "profile"
+  | "dashboard"
+  | "tracking"
+  | "dialog"
+  | "checkout"
+  | "ai-gen"
+  | "display-cards"
+  | "glowing-shadow"
+  | "gradient-button"
+  | "glass-button"
+  | "liquid-glass"
+  | "shiny-text"
+  | "action-system"
+  | "navigation-architecture"
+  | "icon-material-lab"
+  | "anchored-transition"
+  | "context-ribbon"
+  | "signal-lens"
+  | "flow-constellation"
+  | "notification-stack"
+  | "range-composer"
+  | "guided-empty-state"
+  | "fold-deck"
+  | "adaptive-inspector";
+
+export interface CatalogItem {
+  id: string;
+  title: string;
+  titleAr: string;
+  description: string;
+  category: CategoryId;
+  kind: DemoKind;
+  author: string;
+  source: string;
+  tags: string[];
+}
+
+export interface Category {
+  id: CategoryId;
+  label: string;
+  labelEn: string;
+  description: string;
+}

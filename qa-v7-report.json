@@ -1,0 +1,51 @@
+{
+  "generatedAt": "2026-07-18T05:12:21.849Z",
+  "desktop": {
+    "title": "NOVA UI | Interactive Design System",
+    "direction": "rtl",
+    "theme": "light",
+    "patterns": "72",
+    "advancedPanels": 8,
+    "overflow": {
+      "scrollWidth": 1440,
+      "innerWidth": 1440
+    },
+    "consoleErrors": [],
+    "axe": []
+  },
+  "mobileLight": {
+    "direction": "rtl",
+    "theme": "light",
+    "overflow": {
+      "scrollWidth": 390,
+      "innerWidth": 390
+    },
+    "contextWidth": 366,
+    "consoleErrors": [],
+    "axe": []
+  },
+  "mobileDark": {
+    "direction": "rtl",
+    "theme": "dark",
+    "reducedMotion": true,
+    "overflow": {
+      "scrollWidth": 390,
+      "innerWidth": 390
+    },
+    "consoleErrors": [],
+    "axe": []
+  },
+  "interactions": {
+    "context": {
+      "selected": "النص",
+      "disclosure": true
+    },
+    "signal": "84%",
+    "flow": "قادم\nالإطلاق\nبعد الاعتماد\n5/5",
+    "notifications": "2 تحديثات",
+    "inspectorAdvanced": 3,
+    "range": "60",
+    "empty": "المساحة جاهزة",
+    "fold": "الوصول"
+  }
+}
