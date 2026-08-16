@@ -326,5 +326,3 @@ export const madarSections: MadarSection[] = [
     component: load("Kinetics99", () => import("./showcase/sections/Kinetics99")),
   },
 ];
-
-export const madarSectionCount = madarSections.length;

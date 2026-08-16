@@ -26,6 +26,21 @@ Apply these rules to every request that changes how NOVA looks, feels, moves, or
 10. Use the installed `apple-design` skill for direct manipulation, interruptible motion, material hierarchy, and native-feeling mobile behavior.
 11. Run `design-system/nova-design-os/11-ANTI-SLOP.md` and the checklist in `DESIGN.md` before delivery.
 
+## Project Skills
+
+Three skill sets are vendored under `.claude/skills/` so every session on this repo gets them without a separate install.
+
+- **ponytail** (`skills/ponytail`, MIT, DietrichGebert/ponytail @ 2ed6c52) governs what gets built: YAGNI, reuse what is already in this codebase, stdlib and native platform features before dependencies, no unrequested abstractions. Default intensity is full. Companions: `ponytail-review` for a diff, `ponytail-audit` for the whole repo, `ponytail-debt` to harvest `ponytail:` comments.
+- **unlazy** (`skills/unlazy`, MIT, Leonxlnx/unlazy @ ed9e8d2) governs when work is finished: write acceptance gates to a file before starting, prove each one with a runnable check, and report only against a full ledger. Use it for substantial work, never for a one-line fix.
+- Run them together on real changes. ponytail decides what to build, unlazy decides when you are done. Where they collide, ponytail loses: a gate is not satisfied by a smaller diff.
+
+Rules for this repo:
+
+- A substantial change writes `GATES.md` first, with a `CHECK:` and `EXPECT:` line wherever an outcome can be proved by a command. Verify with `node .claude/skills/unlazy/scripts/gate-check.mjs GATES.md`.
+- `npm run qa:madar` is the existing runnable check for the Madar surface: contrast across all packs, Axe, overflow, theme menu, runtime errors. Reuse it in gates instead of writing a new harness.
+- Every ponytail-review finding is either applied or refused with the reason recorded. A silently dropped finding is an unmet gate.
+- unlazy's Stop hook is **not** installed. It blocks ending a turn while gates are unmet; install it deliberately with `node .claude/skills/unlazy/scripts/install-hooks.mjs` and remove it with `--uninstall`.
+
 ## Impeccable Full Mode
 
 Use the full project-local Impeccable payload in `tools/impeccable/` for context, audit, critique, layout, typography, accessibility, and polish guidance.

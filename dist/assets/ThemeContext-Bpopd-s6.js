@@ -1,2 +1,0 @@
-import{r as e,t}from"./react-C1VktWof.js";import{g as n}from"./index-aa0rzEkd.js";var r=e(t(),1),i=n(),a=(0,r.createContext)(null);function o({theme:e,glass:t,rtl:n,children:o}){let s=(0,r.useMemo)(()=>({theme:e,glass:t,rtl:n,dir:n?`rtl`:`ltr`}),[e,t,n]);return(0,i.jsx)(a.Provider,{value:s,children:o})}function s(){let e=(0,r.useContext)(a);if(!e)throw Error(`useTheme must be used within ThemeProvider`);return e}export{s as n,o as t};
-//# sourceMappingURL=ThemeContext-Bpopd-s6.js.map

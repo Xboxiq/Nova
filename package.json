@@ -9,7 +9,8 @@
     "typecheck": "tsc -b --pretty false",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
-    "preview:mobile": "vite preview --host 0.0.0.0"
+    "preview:mobile": "vite preview --host 0.0.0.0",
+    "qa:madar": "node tools/qa/madar-qa.mjs"
   },
   "dependencies": {
     "@fontsource-variable/geist-mono": "^5.2.8",
@@ -23,6 +24,7 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "6.0.3",
+    "axe-core": "^4.13.0",
     "typescript": "7.0.2",
     "vite": "8.1.5"
   }

@@ -1,4 +1,4 @@
-import { Suspense, useMemo, useState } from "react";
+import { Suspense, useState } from "react";
 import { PiCaretRight, PiStack } from "react-icons/pi";
 import { ThemeProvider } from "../madar/theme/ThemeContext";
 import type { GlassLevel, ThemeName } from "../madar/theme/themes";
@@ -24,11 +24,7 @@ export default function MadarLibrary({
   const copy = uiCopy[locale];
   const [family, setFamily] = useState<MadarFamilyId | "all">("all");
 
-  const visible = useMemo(
-    () => (family === "all" ? madarSections : madarSections.filter((section) => section.family === family)),
-    [family],
-  );
-
+  const visible = family === "all" ? madarSections : madarSections.filter((section) => section.family === family);
   const current = madarSections.find((section) => section.id === activeSection) ?? madarSections[0];
   const Section = current.component;
 

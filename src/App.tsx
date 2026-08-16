@@ -84,10 +84,10 @@ function App() {
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
-    document.documentElement.style.colorScheme = DARK_THEMES.includes(theme) ? "dark" : "light";
+    document.documentElement.style.colorScheme = isDarkTheme ? "dark" : "light";
     document.querySelector('meta[name="theme-color"]')?.setAttribute("content", THEME_COLOR[theme]);
     window.localStorage.setItem("nova-theme", theme);
-  }, [theme]);
+  }, [isDarkTheme, theme]);
 
   useEffect(() => {
     document.documentElement.dataset.glass = glass;
@@ -97,18 +97,17 @@ function App() {
   useEffect(() => {
     if (!themeMenuOpen) return;
 
-    const onPointerDown = (event: PointerEvent) => {
-      if (!themeMenuRef.current?.contains(event.target as Node)) setThemeMenuOpen(false);
-    };
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setThemeMenuOpen(false);
+    const close = (event: Event) => {
+      if (event.type === "keydown" && (event as KeyboardEvent).key !== "Escape") return;
+      if (event.type === "pointerdown" && themeMenuRef.current?.contains(event.target as Node)) return;
+      setThemeMenuOpen(false);
     };
 
-    document.addEventListener("pointerdown", onPointerDown);
-    document.addEventListener("keydown", onKeyDown);
+    document.addEventListener("pointerdown", close);
+    document.addEventListener("keydown", close);
     return () => {
-      document.removeEventListener("pointerdown", onPointerDown);
-      document.removeEventListener("keydown", onKeyDown);
+      document.removeEventListener("pointerdown", close);
+      document.removeEventListener("keydown", close);
     };
   }, [themeMenuOpen]);
 
@@ -249,44 +248,44 @@ function App() {
               <PiPalette />
             </button>
             {themeMenuOpen && (
-              <div className="theme-panel nova-glass" role="group" aria-label={copy.themeLabel}>
-                <p className="theme-panel-heading">{copy.themePacks}</p>
-                <div className="theme-pack-list" role="radiogroup" aria-label={copy.themePacks}>
-                  {THEMES.map((pack) => (
-                    <button
-                      key={pack.name}
-                      type="button"
-                      role="radio"
-                      aria-checked={theme === pack.name}
-                      className={theme === pack.name ? "active" : ""}
-                      onClick={() => setTheme(pack.name)}
-                    >
-                      <span className="theme-swatch" style={{ background: pack.swatch }} aria-hidden="true" />
-                      {locale === "ar" ? pack.labelAr : pack.label}
-                    </button>
-                  ))}
-                </div>
-
-                <p className="theme-panel-heading">
-                  <PiDrop aria-hidden="true" />
-                  {copy.glassLabel}
-                </p>
-                <div className="theme-glass-list" role="radiogroup" aria-label={copy.glassLabel}>
-                  {GLASS_LEVELS.map((level) => (
-                    <button
-                      key={level.level}
-                      type="button"
-                      role="radio"
-                      aria-checked={glass === level.level}
-                      aria-label={locale === "ar" ? level.labelAr : level.label}
-                      className={glass === level.level ? "active" : ""}
-                      onClick={() => setGlass(level.level)}
-                    >
-                      {level.label}
-                    </button>
-                  ))}
-                </div>
+            <div className="theme-panel nova-glass" role="group" aria-label={copy.themeLabel}>
+              <p className="theme-panel-heading">{copy.themePacks}</p>
+              <div className="theme-pack-list" role="radiogroup" aria-label={copy.themePacks}>
+                {THEMES.map((pack) => (
+                  <button
+                    key={pack.name}
+                    type="button"
+                    role="radio"
+                    aria-checked={theme === pack.name}
+                    className={theme === pack.name ? "active" : ""}
+                    onClick={() => setTheme(pack.name)}
+                  >
+                    <span className="theme-swatch" style={{ background: pack.swatch }} aria-hidden="true" />
+                    {locale === "ar" ? pack.labelAr : pack.label}
+                  </button>
+                ))}
               </div>
+
+              <p className="theme-panel-heading">
+                <PiDrop aria-hidden="true" />
+                {copy.glassLabel}
+              </p>
+              <div className="theme-glass-list" role="radiogroup" aria-label={copy.glassLabel}>
+                {GLASS_LEVELS.map((level) => (
+                  <button
+                    key={level.level}
+                    type="button"
+                    role="radio"
+                    aria-checked={glass === level.level}
+                    aria-label={locale === "ar" ? level.labelAr : level.label}
+                    className={glass === level.level ? "active" : ""}
+                    onClick={() => setGlass(level.level)}
+                  >
+                    {level.label}
+                  </button>
+                ))}
+              </div>
+            </div>
             )}
           </div>
           <a className="primary-link top-cta" href="#components">

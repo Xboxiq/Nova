@@ -48,33 +48,30 @@ export default function CommandPalette({
     if (!open && dialog.open) dialog.close();
   }, [open]);
 
-  const results = useMemo(() => {
-    const normalized = query.trim().toLocaleLowerCase(locale === "ar" ? "ar" : "en");
-    if (!normalized) return items.slice(0, 8);
+  const search = useMemo(() => {
+    const normalized = query.trim().toLocaleLowerCase(locale);
+    return <T,>(list: T[], limit: number, haystack: (item: T) => string[]) =>
+      (normalized
+        ? list.filter((item) => haystack(item).join(" ").toLocaleLowerCase(locale).includes(normalized))
+        : list
+      ).slice(0, limit);
+  }, [locale, query]);
 
-    return items
-      .filter((item) =>
-        [item.title, item.titleAr, item.description, item.author, ...item.tags]
-          .join(" ")
-          .toLocaleLowerCase(locale === "ar" ? "ar" : "en")
-          .includes(normalized),
-      )
-      .slice(0, 8);
-  }, [items, locale, query]);
+  const results = search(items, 8, (item) => [
+    item.title,
+    item.titleAr,
+    item.description,
+    item.author,
+    ...item.tags,
+  ]);
 
-  const madarResults = useMemo(() => {
-    const normalized = query.trim().toLocaleLowerCase(locale === "ar" ? "ar" : "en");
-    if (!normalized) return madarItems.slice(0, 4);
-
-    return madarItems
-      .filter((item) =>
-        [item.title, item.titleAr, item.description, item.descriptionAr, ...item.tags]
-          .join(" ")
-          .toLocaleLowerCase(locale === "ar" ? "ar" : "en")
-          .includes(normalized),
-      )
-      .slice(0, 4);
-  }, [locale, madarItems, query]);
+  const madarResults = search(madarItems, 4, (item) => [
+    item.title,
+    item.titleAr,
+    item.description,
+    item.descriptionAr,
+    ...item.tags,
+  ]);
 
   return (
     <dialog
