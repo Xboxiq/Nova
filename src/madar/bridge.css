@@ -102,6 +102,28 @@
   font-family: inherit;
 }
 
+/* Folder — the tab is drawn on one side of the SVG, so in RTL the whole object
+   mirrors and only its text mirrors back. Keeping the sides here rather than in
+   the component is what lets the component stay free of physical left/right. */
+.madar-folder-tab { position: absolute; inset-block-start: -3px; left: 2px; }
+.madar-folder-slot { position: absolute; left: 16px; right: 16px; bottom: 52px; height: 30px; }
+
+[dir="rtl"] .madar-folder { transform: scaleX(-1); }
+[dir="rtl"] .madar-folder-tab,
+[dir="rtl"] .madar-folder-slot { transform: scaleX(-1); }
+
+/* A fill that grows from the reading edge. Scaling composites where animating
+   width would lay out on every frame, and the origin has to follow direction
+   because a progress bar that fills away from the text reads as draining. */
+.madar-fill {
+  transform-origin: left center;
+  will-change: transform;
+}
+
+[dir="rtl"] .madar-fill {
+  transform-origin: right center;
+}
+
 @keyframes floaty { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
 @keyframes floatyTiltA { 0%, 100% { transform: rotate(-2deg) translateY(0); } 50% { transform: rotate(-2deg) translateY(-6px); } }
 @keyframes floatyTiltB { 0%, 100% { transform: rotate(1.5deg) translateY(0); } 50% { transform: rotate(1.5deg) translateY(-7px); } }

@@ -132,6 +132,16 @@ export const madarSections: MadarSection[] = [
     tags: ["text", "list", "dropdown", "نص", "قوائم"],
     component: load("TextLists", () => import("./showcase/sections/TextLists")),
   },
+  {
+    id: "madar-upload",
+    title: "Upload",
+    titleAr: "الرفع",
+    family: "controls",
+    description: "A destination that opens for what lands in it, with per-file state, cancel, and retry.",
+    descriptionAr: "وجهة تفتح غطاءها لما يهبط فيها، وحالة لكل ملف مع إلغاء وإعادة محاولة.",
+    tags: ["upload", "file", "progress", "رفع", "ملفات"],
+    component: load("Upload", () => import("./showcase/sections/Upload")),
+  },
 
   {
     id: "madar-cards",

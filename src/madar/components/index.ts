@@ -128,3 +128,6 @@ export type {
 export {
   ShredConfirm, ReceiptPrinter, DotMatrixReadout, ElasticSwitch, PerimeterProgress, MarqueeFrame,
 } from './consequence';
+
+export { UploadFolder, simulatedUpload } from './upload';
+export type { UploadFolderProps, UploadItem, UploadPhase, Uploader } from './upload';
