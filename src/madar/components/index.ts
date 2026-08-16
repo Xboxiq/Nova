@@ -124,3 +124,7 @@ export type {
   HeroVisualMood, HeroVisualProps, HeroNavProps, HeroStat, SplitStatsHeroProps,
   ProductHeroProps, ImmersiveHeroProps, DisplayWordHeroProps, ScatterTile, GalleryScatterHeroProps,
 } from './heroLayouts';
+
+export {
+  ShredConfirm, ReceiptPrinter, DotMatrixReadout, ElasticSwitch, PerimeterProgress, MarqueeFrame,
+} from './consequence';

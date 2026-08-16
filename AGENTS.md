@@ -70,7 +70,8 @@ The user explicitly approved full mode for this private project. If the live bro
 - Treat `design-system/nova-design-os/tokens/tokens.json` as the future portable token source and migrate deliberately; do not mix old and new token systems inside one component.
 - Color lives in exactly two files: `tokens.css` for the base set and the light and dark packs, and `tokens/theme-packs.css` for the Madar packs. `src/madar/bridge.css` only aliases Madar names onto `--nova-*` and must never declare a color.
 - The Madar library stays under `src/madar/`. Its showcase sections consume `src/madar/components`; they never re-implement a component, and they never own theme state.
-- Register a new Madar section in `src/madar/sections.ts` so search and the command palette can reach it.
+- Register a new Madar section in `src/madar/sections.ts` so search and the command palette can reach it, and add its id to `PACK_SECTIONS` in `tools/qa/madar-qa.mjs` so the Axe and overflow gates actually exercise it.
+- Anything imported from an external gallery is triaged against the existing exports first and recorded in `design-system/madar/SOURCES-UIVERSE.md`: what was added with its author, and what was rejected with the component that already covers it. Ideas are adapted onto tokens; no third-party CSS is copied verbatim.
 - Element-level CSS coming from Madar is scoped to `.madar-surface`. Do not add unscoped element selectors that reach the NOVA shell.
 - `archive/madar/` is a historical record. Never import from it and never build it.
 - Do not publish, upload, or sync components or themes externally without explicit user authorization.

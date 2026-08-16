@@ -18,7 +18,7 @@ import { execSync } from "node:child_process";
 const PORT = 4319;
 const URL = `http://localhost:${PORT}/`;
 const THEMES = ["light", "dark", "mint", "coral", "sky", "iris", "night"];
-const PACK_SECTIONS = ["madar-color-tokens", "madar-admin-access"];
+const PACK_SECTIONS = ["madar-color-tokens", "madar-admin-access", "madar-consequence"];
 const AA = 4.5;
 
 // Pairs that carry text or an icon on a surface, so AA applies to all of them.

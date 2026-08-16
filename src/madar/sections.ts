@@ -316,6 +316,16 @@ export const madarSections: MadarSection[] = [
     component: load("KineticsBank", () => import("./showcase/sections/KineticsBank")),
   },
   {
+    id: "madar-consequence",
+    title: "Consequence",
+    titleAr: "الأثر",
+    family: "kinetics",
+    description: "Controls that show their own outcome: shredding, printing, stretching, filling.",
+    descriptionAr: "ضوابط تُظهر أثرها بنفسها: إتلاف وطباعة ومطّ وامتلاء.",
+    tags: ["feedback", "destructive", "progress", "أثر", "تغذية راجعة"],
+    component: load("Consequence", () => import("./showcase/sections/Consequence")),
+  },
+  {
     id: "madar-kinetics-99",
     title: "Kinetics 99",
     titleAr: "حركيات 99",
