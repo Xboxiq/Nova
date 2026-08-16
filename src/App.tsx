@@ -298,7 +298,6 @@ function App() {
       <main id="main-content">
         <section className="hero" id="top" aria-labelledby="hero-title">
           <div className="hero-copy">
-            <p className="eyebrow"><span />{copy.eyebrow}</p>
             <h1 id="hero-title">
               {copy.heroTitle}<br />
               <span>{copy.heroAccent}</span>
@@ -332,7 +331,6 @@ function App() {
         <section className="library-section" id="components" aria-labelledby="library-title">
           <div className="section-intro library-intro">
             <div>
-              <p className="eyebrow"><span />{copy.libraryEyebrow}</p>
               <h2 id="library-title">{copy.libraryTitle}</h2>
             </div>
             <p>{copy.libraryLead}</p>

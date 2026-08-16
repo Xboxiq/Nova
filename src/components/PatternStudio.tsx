@@ -38,7 +38,6 @@ interface WorkbenchProps {
 
 const studioCopy = {
   ar: {
-    eyebrow: "مختبر القرار · V7",
     title: "من التوكن إلى التفاعل، بلا تخمين.",
     lead: "مساحة عمل حيّة تجمع هندسة المسافات، هرمية الإجراءات، التنقّل، مادة الأيقونة، ومسارات الحركة ضمن قواعد قابلة لإعادة الاستخدام.",
     ruler: "إيقاع المسافة",
@@ -53,7 +52,6 @@ const studioCopy = {
     motionBody: "ضغط 90ms، إفصاح 260ms، وانتقال مسار 420ms—مع أصل حركة مرتبط بمكان القرار.",
   },
   en: {
-    eyebrow: "Decision studio · V7",
     title: "From token to interaction, without guesswork.",
     lead: "A live workbench joining spacing architecture, action hierarchy, navigation, icon material, and motion paths into reusable rules.",
     ruler: "Spacing rhythm",
@@ -76,7 +74,6 @@ export default function PatternStudio({ locale, onNotify }: PatternStudioProps) 
     <section className="pattern-studio" id="workbench" aria-labelledby="workbench-title">
       <div className="section-intro studio-intro">
         <div>
-          <p className="eyebrow"><span />{copy.eyebrow}</p>
           <h2 id="workbench-title">{copy.title}</h2>
         </div>
         <p>{copy.lead}</p>

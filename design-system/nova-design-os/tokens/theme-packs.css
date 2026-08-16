@@ -35,13 +35,13 @@
   --nova-on-action: oklch(0.20 0.040 200);
   --nova-focus: oklch(0.58 0.120 178);
 
-  --nova-success: oklch(0.53 0.130 158);
+  --nova-success: oklch(0.47 0.125 158);
   --nova-success-soft: oklch(0.68 0.145 158 / 0.14);
-  --nova-warning: oklch(0.52 0.120 80);
+  --nova-warning: oklch(0.46 0.115 80);
   --nova-warning-soft: oklch(0.78 0.140 80 / 0.16);
   --nova-danger: oklch(0.53 0.180 27);
   --nova-danger-soft: oklch(0.62 0.185 27 / 0.13);
-  --nova-info: oklch(0.53 0.125 245);
+  --nova-info: oklch(0.47 0.120 245);
   --nova-info-soft: oklch(0.68 0.130 245 / 0.14);
 
   --nova-scrim: oklch(0.30 0.030 200 / 0.46);
@@ -89,13 +89,13 @@
   --nova-on-action: oklch(0.99 0.005 70);
   --nova-focus: oklch(0.53 0.170 38);
 
-  --nova-success: oklch(0.53 0.130 158);
+  --nova-success: oklch(0.47 0.125 158);
   --nova-success-soft: oklch(0.68 0.145 158 / 0.14);
-  --nova-warning: oklch(0.52 0.120 80);
+  --nova-warning: oklch(0.46 0.115 80);
   --nova-warning-soft: oklch(0.78 0.140 80 / 0.16);
   --nova-danger: oklch(0.53 0.180 27);
   --nova-danger-soft: oklch(0.62 0.185 27 / 0.13);
-  --nova-info: oklch(0.53 0.125 245);
+  --nova-info: oklch(0.47 0.120 245);
   --nova-info-soft: oklch(0.68 0.130 245 / 0.14);
 
   --nova-scrim: oklch(0.30 0.030 50 / 0.46);
@@ -143,13 +143,13 @@
   --nova-on-action: oklch(0.99 0.005 235);
   --nova-focus: oklch(0.50 0.170 245);
 
-  --nova-success: oklch(0.53 0.130 158);
+  --nova-success: oklch(0.47 0.125 158);
   --nova-success-soft: oklch(0.68 0.145 158 / 0.14);
-  --nova-warning: oklch(0.52 0.120 80);
+  --nova-warning: oklch(0.46 0.115 80);
   --nova-warning-soft: oklch(0.78 0.140 80 / 0.16);
   --nova-danger: oklch(0.53 0.180 27);
   --nova-danger-soft: oklch(0.62 0.185 27 / 0.13);
-  --nova-info: oklch(0.53 0.125 245);
+  --nova-info: oklch(0.47 0.120 245);
   --nova-info-soft: oklch(0.68 0.130 245 / 0.14);
 
   --nova-scrim: oklch(0.28 0.032 250 / 0.46);
@@ -197,13 +197,13 @@
   --nova-on-action: oklch(0.99 0.005 300);
   --nova-focus: oklch(0.54 0.190 293);
 
-  --nova-success: oklch(0.53 0.130 158);
+  --nova-success: oklch(0.47 0.125 158);
   --nova-success-soft: oklch(0.68 0.145 158 / 0.14);
-  --nova-warning: oklch(0.52 0.120 80);
+  --nova-warning: oklch(0.46 0.115 80);
   --nova-warning-soft: oklch(0.78 0.140 80 / 0.16);
   --nova-danger: oklch(0.53 0.180 27);
   --nova-danger-soft: oklch(0.62 0.185 27 / 0.13);
-  --nova-info: oklch(0.53 0.125 245);
+  --nova-info: oklch(0.47 0.120 245);
   --nova-info-soft: oklch(0.68 0.130 245 / 0.14);
 
   --nova-scrim: oklch(0.28 0.030 295 / 0.46);
@@ -237,7 +237,7 @@
   --nova-surface-raised: oklch(0.385 0.045 274);
   --nova-ink: oklch(0.955 0.010 270);
   --nova-ink-secondary: oklch(0.780 0.022 270);
-  --nova-ink-tertiary: oklch(0.680 0.026 270);
+  --nova-ink-tertiary: oklch(0.770 0.024 270);
   --nova-ink-block: oklch(0.955 0.010 270);
   --nova-on-ink-block: oklch(0.25 0.045 274);
   --nova-border: oklch(0.415 0.045 274);

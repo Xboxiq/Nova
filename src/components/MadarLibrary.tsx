@@ -32,7 +32,6 @@ export default function MadarLibrary({
     <section className="madar-section" id="madar" aria-labelledby="madar-title">
       <div className="section-intro">
         <div>
-          <p className="eyebrow"><span />{copy.madarEyebrow}</p>
           <h2 id="madar-title">{copy.madarTitle}</h2>
         </div>
         <p>{copy.madarLead}</p>

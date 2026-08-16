@@ -48,11 +48,8 @@
 }
 
 .studio-actions { grid-column: span 7; color: #eff8fa; background:
-  radial-gradient(28rem 18rem at 98% -8%, rgb(31 147 195 / 24%), transparent 72%),
-  radial-gradient(18rem 14rem at 4% 108%, rgb(55 205 176 / 15%), transparent 72%),
-  #102b35; border-color: rgb(184 231 239 / 16%); box-shadow: 0 34px 80px rgb(11 43 54 / 20%); }
+  #102b35; border-color: rgb(184 231 239 / 16%); box-shadow: 0 16px 38px rgb(11 43 54 / 18%); }
 .studio-icons { grid-column: span 5; background:
-  radial-gradient(24rem 20rem at 10% 12%, color-mix(in srgb, var(--nova-expressive-frost) 56%, transparent), transparent 70%),
   linear-gradient(160deg, color-mix(in srgb, var(--nova-surface-raised) 84%, var(--nova-expressive-mint)) 0%, var(--nova-surface) 76%); }
 .studio-navigation { grid-column: span 8; min-height: 520px; }
 .studio-motion { grid-column: span 4; min-height: 520px; background: color-mix(in srgb, var(--nova-action-soft) 58%, var(--nova-surface)); }
@@ -77,7 +74,6 @@
   color: var(--nova-action-ink);
   background: var(--nova-action-soft);
   border-radius: 10px;
-  font-family: var(--nova-font-mono);
   font-size: var(--nova-text-label-sm);
   font-weight: var(--nova-weight-bold);
 }
@@ -87,7 +83,7 @@
 .studio-panel-header h3 { margin: 0; font-size: var(--nova-text-title-lg); line-height: 1.3; letter-spacing: normal; text-wrap: balance; }
 .studio-panel-header p { max-width: 54ch; margin: var(--nova-space-2) 0 0; color: var(--nova-ink-secondary); font-size: var(--nova-text-body-sm); line-height: 1.75; text-wrap: pretty; }
 .studio-actions .studio-panel-header p { color: #b7cdd3; }
-.studio-panel-header > small { padding-block-start: 8px; color: var(--nova-ink-tertiary); font-family: var(--nova-font-mono); font-size: 10px; white-space: nowrap; }
+.studio-panel-header > small { padding-block-start: 8px; color: var(--nova-ink-tertiary); font-size: 10px; white-space: nowrap; }
 .studio-actions .studio-panel-header > small { color: #8aa7af; }
 
 .workbench-bar {
@@ -163,7 +159,7 @@
 .icon-controls { display: flex; align-items: center; justify-content: space-between; gap: var(--nova-space-3); margin-block-end: var(--nova-space-5); }
 .icon-controls > div { display: flex; gap: var(--nova-space-1); }
 .icon-controls > div:last-child { padding: 3px; background: color-mix(in srgb, var(--nova-surface) 58%, transparent); border: 1px solid var(--nova-border); border-radius: 10px; }
-.icon-controls > div:last-child button { width: 32px; height: 30px; padding: 0; color: var(--nova-ink-tertiary); background: transparent; border: 0; border-radius: 7px; font-family: var(--nova-font-mono); font-size: 9px; }
+.icon-controls > div:last-child button { width: 32px; height: 30px; padding: 0; color: var(--nova-ink-tertiary); background: transparent; border: 0; border-radius: 7px; font-size: 9px; }
 .icon-controls > div:last-child button[aria-pressed="true"] { color: var(--nova-action-ink); background: var(--nova-surface); box-shadow: var(--nova-shadow-sm); }
 
 .icon-material-scene {
@@ -174,8 +170,6 @@
   padding: var(--nova-space-8);
   overflow: hidden;
   background:
-    radial-gradient(circle at 18% 18%, color-mix(in srgb, var(--nova-expressive-mint) 22%, transparent), transparent 30%),
-    radial-gradient(circle at 84% 78%, color-mix(in srgb, var(--nova-expressive-sky) 28%, transparent), transparent 36%),
     linear-gradient(145deg, color-mix(in srgb, var(--nova-surface) 56%, transparent), color-mix(in srgb, var(--nova-action-soft) 44%, transparent));
   border: 1px solid color-mix(in srgb, var(--nova-glass-edge) 68%, var(--nova-border));
   border-radius: var(--nova-radius-card);
@@ -201,8 +195,6 @@
   padding: var(--nova-space-5);
   overflow: hidden;
   background:
-    radial-gradient(18rem 14rem at 12% 8%, color-mix(in srgb, var(--nova-expressive-frost) 50%, transparent), transparent 74%),
-    radial-gradient(20rem 18rem at 90% 110%, color-mix(in srgb, var(--nova-expressive-mint) 18%, transparent), transparent 74%),
     color-mix(in srgb, var(--nova-surface-quiet) 78%, var(--nova-surface));
   border: 1px solid var(--nova-border);
   border-radius: var(--nova-radius-card);
@@ -250,7 +242,7 @@
 
 .motion-workbench { position: relative; z-index: 2; }
 .motion-mode-switch { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; margin-block-end: var(--nova-space-4); padding: 3px; background: color-mix(in srgb, var(--nova-surface) 66%, transparent); border: 1px solid var(--nova-border); border-radius: 11px; }
-.motion-mode-switch button { min-height: 34px; padding: 0 var(--nova-space-2); color: var(--nova-ink-tertiary); background: transparent; border: 0; border-radius: 8px; font-family: var(--nova-font-mono); font-size: 9px; }
+.motion-mode-switch button { min-height: 34px; padding: 0 var(--nova-space-2); color: var(--nova-ink-tertiary); background: transparent; border: 0; border-radius: 8px; font-size: 9px; }
 .motion-mode-switch button[aria-pressed="true"] { color: var(--nova-action-ink); background: var(--nova-surface); box-shadow: var(--nova-shadow-sm); }
 .motion-canvas { position: relative; display: grid; place-items: center; width: 100%; min-height: 250px; padding: var(--nova-space-5); overflow: hidden; color: var(--nova-ink); background:
   linear-gradient(var(--nova-border) 1px, transparent 1px),
@@ -265,7 +257,7 @@
 .motion-reveal-object small { color: var(--nova-ink-tertiary); font-size: var(--nova-text-label-sm); }
 .motion-canvas.is-open .motion-reveal-object { transform: scale(1) translateY(0); opacity: 1; }
 .motion-route-object { position: relative; z-index: 1; display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: var(--nova-space-3); width: min(100%, 270px); padding: var(--nova-space-4); text-align: start; background: var(--nova-surface); border: 1px solid var(--nova-border); border-radius: var(--nova-radius-field); box-shadow: var(--nova-shadow-md); animation: studio-route var(--nova-motion-route) var(--nova-ease-physical); }
-.motion-route-object i { display: grid; place-items: center; width: 36px; height: 36px; color: var(--nova-action-ink); background: var(--nova-action-soft); border-radius: 10px; font-family: var(--nova-font-mono); font-style: normal; font-size: 10px; }
+.motion-route-object i { display: grid; place-items: center; width: 36px; height: 36px; color: var(--nova-action-ink); background: var(--nova-action-soft); border-radius: 10px; font-style: normal; font-size: 10px; }
 .motion-route-object b { font-size: var(--nova-text-body-sm); }
 .motion-route-object > svg { color: var(--nova-action-ink); }
 [dir="rtl"] .motion-route-object > svg { transform: scaleX(-1); }

@@ -14,7 +14,7 @@
 | Production server | ناجح | الصفحة وملف JavaScript الرئيس يعيدان HTTP 200 |
 | Dependency audit | ناجح | `npm audit --audit-level=high`: صفر ثغرات |
 | Axe على سطح مدار | ناجح | صفر مخالفات في 6 تركيبات × قسمين |
-| Axe على الصفحة كاملة | مخالفة واحدة قائمة سلفًا | تفصيلها أدناه |
+| Axe على الصفحة كاملة | ناجح | المخالفة التي كانت «قائمة سلفًا» أُصلحت، تفصيلها أدناه |
 | Browser console | ناجح | صفر console errors وصفر page errors |
 | 390px reflow | ناجح | 390px بلا overflow أفقي في light وnight وmint، وRTL وLTR |
 | 1440px reflow | ناجح | `scrollWidth` يساوي `clientWidth` |
@@ -64,7 +64,7 @@
 - نهاري: `.motion-workbench.is-compact .motion-metrics span` بنسبة 4.28:1 (`#5D747D` على `#EAF0F2`)، عنصران.
 - ليلي: `.advanced-notices .notification-stack time` بنسبة 4.35:1 (`#91A8AF` على `#21414F`)، خمسة عناصر.
 
-هذه المخالفة **ليست من الدمج**. أُعيد تشغيل Axe على نسخة `dist` المبنية من commit `5464db2` قبل أي تعديل، فأعادت المخالفتين نفسيهما بالأعداد نفسها. مصدرها `--nova-ink-tertiary` عند 9px، وإصلاحها يتطلّب قرارًا على لوحة NOVA الأساسية خارج نطاق هذا الدمج.
+هذه المخالفة لم تكن من الدمج، وقد **أُصلحت لاحقًا** في تمريرة مكافحة الـslop: `--nova-ink-tertiary` دُكِّن في الحزمة الفاتحة من `#5d747d` إلى `#566c74`، وفي الداكنة من `#91a8af` إلى `#9db3b9`. أُلغي معها الاستثناء الذي كان يعفي الحزمة الفاتحة في `tools/qa/madar-qa.mjs`، ووُسّعت أزواج القياس لتشمل `surface` و`surface-raised` لا `surface-quiet` وحدها. التفصيل في `design-system/ANTI-SLOP-PASS.md`.
 
 ## Screenshots الحالية
 
