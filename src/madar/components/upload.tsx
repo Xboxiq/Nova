@@ -85,8 +85,12 @@ const LID_H = 84;
 const TAB_W = 58;
 const TAB_H = 15;
 
-/* Face brightness is the lighting model: one light, above and slightly behind
-   the camera. The numbers are angles turned into values, not decoration. */
+/* Face brightness is the lighting model, and its direction is a constraint
+   rather than a taste: the light sits *directly above* the object, tilted only
+   toward the camera. Any lateral light would invert when the object mirrors
+   for RTL, and light is physical, not linguistic — it must not follow the
+   reading direction. See design-system/VISUAL-LAW.md §2. The two side walls
+   therefore carry the same value; nothing here is brighter on one side. */
 const LIGHT = {
   back: 0.80,
   tab: 0.88,
@@ -115,14 +119,49 @@ function Face({
   );
 }
 
+/* Unequal by hand, not by loop: three identical angles read as a `for`, three
+   different ones read as someone having put them there. VISUAL-LAW.md §4. */
+const SLIP_TILT = [-3.5, 2.1, -1.2];
+
+/* One paperclip drawn twice: the back copy is clipped to the length that
+   passes behind the leaf, the front copy to the length that passes over it.
+   Their different translateZ does the occluding, so the wire genuinely goes
+   over and under rather than being painted to look as though it does. */
+function Clip({ z, lift, half }: { z: number; lift: number; half: 'front' | 'back' }) {
+  return (
+    <div
+      data-folder-part={`clip-${half}`}
+      className="madar-folder-face"
+      style={{
+        insetInlineStart: W - 56, top: H - LID_H - 16,
+        width: 30, height: 46, background: 'transparent',
+        color: 'var(--text-2)',
+        clipPath: half === 'back' ? 'inset(38% 0 0 0)' : 'inset(0 0 62% 0)',
+        transform: `translateZ(${z}px) translateY(${-lift}px) rotateZ(${SLIP_TILT[0]}deg)`,
+      }}
+    >
+      <svg viewBox="0 0 26 40" width="30" height="46" fill="none" aria-hidden="true">
+        <path
+          d="M18 11v18a5.5 5.5 0 0 1-11 0V9a3.5 3.5 0 0 1 7 0v19a1.8 1.8 0 0 1-3.6 0V12"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+        />
+      </svg>
+    </div>
+  );
+}
+
 function Folder({
-  open, count, label, variant, tilt,
+  open, count, label, variant, tilt, filed,
 }: {
   open: number;
   count: number;
   label: string;
   variant: FolderVariant;
   tilt: { x: number; y: number };
+  /** True once every transfer has settled — the clip is a state, not a trim. */
+  filed: boolean;
 }) {
   if (variant === 'flat') return <FlatFolder open={open} count={count} label={label} />;
 
@@ -137,23 +176,37 @@ function Folder({
     <div
       aria-hidden="true"
       className="madar-folder-stage"
-      style={{ width: W + 24, height: H + (spread ? 62 : 44), flex: 'none' }}
+      style={{ width: W + 24, height: H + (spread ? 62 : 78), flex: 'none' }}
     >
       <div className="madar-folder-mirror">
         <div
           className="madar-folder-scene"
           style={{
-            width: W, height: H, margin: `${spread ? 40 : 26}px auto 0`,
+            width: W, height: H, margin: `${spread ? 40 : 58}px auto 0`,
             transform: `rotateX(${camX}deg) rotateY(${camY}deg) scale(${spread ? 0.78 : 0.92})`,
           }}
         >
-          {/* the object's weight on the surface below it */}
+          {/* Two of the three shadows the law asks for. Contact is tight and
+              dark where the object meets the surface and gives it weight; cast
+              is wider, softer and lower and gives it height. Both fall straight
+              down, because the light is straight above. VISUAL-LAW.md §3. */}
           <div
+            data-folder-part="cast-shadow"
             className="madar-folder-contact"
             style={{
-              insetInlineStart: 16, top: H + 1, width: W - 32, height: 10,
-              filter: 'blur(7px)',
-              opacity: spread ? 0.08 : 0.24,
+              insetInlineStart: 4, top: H + 6, width: W - 8, height: 18,
+              filter: 'blur(14px)',
+              opacity: spread ? 0.05 : 0.13,
+              transform: `translateZ(-${D}px) scaleX(${1 + open * 0.16})`,
+            }}
+          />
+          <div
+            data-folder-part="contact-shadow"
+            className="madar-folder-contact"
+            style={{
+              insetInlineStart: 16, top: H + 1, width: W - 32, height: 8,
+              filter: 'blur(5px)',
+              opacity: spread ? 0.08 : 0.3,
               transform: `translateZ(-${D}px) scaleX(${1 + open * 0.1})`,
             }}
           />
@@ -238,9 +291,11 @@ function Folder({
                 background: 'var(--surface)',
                 border: '1px solid var(--border)',
                 borderRadius: 'var(--r-xs)',
-                boxShadow: 'var(--shadow-1)',
+                // cast straight down: the light is overhead, so a leaf drops its
+                // shadow onto the leaf behind it, not off to one side
+                boxShadow: '0 3px 6px -2px var(--shadow-color)',
                 filter: `brightness(${1 - i * 0.04})`,
-                transform: `translateZ(${5 + i * 3 + spread * (22 + i * 18)}px) translateY(${-open * (34 + i * 13)}px) rotateZ(${(i % 2 ? 1 : -1) * 1.1}deg)`,
+                transform: `translateZ(${5 + i * 3 + spread * (22 + i * 18)}px) translateY(${-open * (48 + i * 15)}px) rotateZ(${SLIP_TILT[i]}deg)`,
               }}
             />
           ))}
@@ -252,14 +307,46 @@ function Folder({
               style={{
                 insetInlineStart: 15 + (sheets - 1) * 4, top: H - LID_H,
                 width: W - 30 - (sheets - 1) * 8, height: LID_H - 6,
-                background: 'transparent', display: 'grid', placeItems: 'center',
-                transform: `translateZ(${6 + (sheets - 1) * 3 + spread * (22 + (sheets - 1) * 18)}px) translateY(${-open * (34 + (sheets - 1) * 13)}px)`,
-                fontSize: 19, fontWeight: 700, color: 'var(--accent-ink)',
+                background: 'transparent',
+                display: 'grid', justifyItems: 'center', alignItems: 'start',
+                paddingBlockStart: 13,
+                transform: `translateZ(${6 + (sheets - 1) * 3 + spread * (22 + (sheets - 1) * 18)}px) translateY(${-open * (48 + (sheets - 1) * 15)}px) rotateZ(${SLIP_TILT[Math.max(0, sheets - 1)]}deg)`,
+                fontSize: 20, fontWeight: 700, color: 'var(--accent-ink)',
                 fontVariantNumeric: 'tabular-nums',
               }}
             >
               {count}
             </div>
+          )}
+
+          {/* The third shadow: the lid is in front and overhead light does not
+              reach behind it, so the leaves darken where they enter the pocket.
+              This is the joint, and the joint is where objects stop being
+              stickers. VISUAL-LAW.md §3, §5. */}
+          {sheets > 0 && spread === 0 && (
+            <div
+              data-folder-part="occlusion"
+              className="madar-folder-contact"
+              style={{
+                insetInlineStart: 12, top: H - LID_H - 4, width: W - 24, height: 14,
+                borderRadius: 0,
+                filter: 'blur(6px)',
+                opacity: 0.26,
+                transform: `translateZ(${D - 2}px)`,
+              }}
+            />
+          )}
+
+          {/* Filed: the clip appears only once every transfer has settled, so it
+              reports a state rather than trimming the object. Its wire crosses
+              in front of the top leaf and disappears behind it, which is the
+              detail that makes a drawn object read as a real one.
+              VISUAL-LAW.md §5, §8. */}
+          {filed && sheets > 0 && spread === 0 && (
+            <>
+              <Clip z={5 + (sheets - 1) * 3 - 2} lift={open * (48 + (sheets - 1) * 15)} half="back" />
+              <Clip z={5 + (sheets - 1) * 3 + 4} lift={open * (48 + (sheets - 1) * 15)} half="front" />
+            </>
           )}
 
           {/* the lid — hinged at the bottom edge, its angle is the state */}
@@ -575,7 +662,7 @@ export function UploadFolder({
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--sp-5)' }}>
-        <Folder open={lid} count={items.length} label={tabLabel} variant={variant} tilt={tilt} />
+        <Folder open={lid} count={items.length} label={tabLabel} variant={variant} tilt={tilt} filed={!active && !failed && items.length > 0} />
         <div style={{ minWidth: 0 }}>
           <h3 style={{ margin: 0, fontSize: 17, fontWeight: 600, color: 'var(--text)' }}>{title}</h3>
           <p style={{ margin: '6px 0 0', fontSize: 13, color: 'var(--text-3)' }}>{meta}</p>
