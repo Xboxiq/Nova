@@ -501,10 +501,8 @@ function Row({
         </bdi>
         {/* the track doubles as the row's rule, so progress needs no extra height */}
         <div
-          style={{
-            marginBlockStart: 7, height: 4, borderRadius: 'var(--r-full)',
-            background: 'var(--surface-2)', overflow: 'hidden',
-          }}
+          className="madar-track"
+          style={{ marginBlockStart: 7, height: 4, borderRadius: 'var(--r-full)', overflow: 'hidden' }}
         >
           <div
             className="madar-fill"
@@ -717,7 +715,8 @@ export function UploadFolder({
           aria-valuemin={0}
           aria-valuemax={100}
           aria-label="تقدّم الرفع الكلّي"
-          style={{ height: 8, borderRadius: 'var(--r-full)', background: 'var(--surface)', border: '1px solid var(--border)', overflow: 'hidden' }}
+          className="madar-track"
+          style={{ height: 8, borderRadius: 'var(--r-full)', border: '1px solid var(--border)', overflow: 'hidden' }}
         >
           <div
             className="madar-fill"

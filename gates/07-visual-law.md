@@ -67,3 +67,18 @@ so these gates cover both the written rule and its reference implementation in
   CHECK: node -e "const d=require('fs').readFileSync('design-system/VISUAL-LAW.md','utf8');const need=['الدفعة الثانية','للمرة الثانية','ليس حجّة على قبوله','الموكاب عرضٌ لا زخرفة'];const miss=need.filter(n=>!d.includes(n));console.log(miss.length?'BATCH2_UNRECORDED '+miss.join(','):'BATCH2_RECORDED')"
   EXPECT: BATCH2_RECORDED
   EVIDENCE: BATCH2_RECORDED
+
+- [x] G13: The unfilled part of a measure is drawn as data, and the hatch is a structure rather than a wash
+  CHECK: node -e 'const f=require("fs");const css=f.readFileSync("src/madar/bridge.css","utf8");const c=f.readFileSync("src/madar/components/upload.tsx","utf8");const hatch=/\.madar-track \{[\s\S]*?repeating-linear-gradient\([\s\S]*?var\(--border\) 0 1px/.test(css);const hard=!/\.madar-track \{[\s\S]*?\n\}/.exec(css)[0].includes("%,");const used=(c.match(/className="madar-track"/g)||[]).length>=2;console.log(hatch&&hard&&used?"REMAINDER_IS_DATA":"REMAINDER_BLANK "+[hatch,hard,used].join())'
+  EXPECT: REMAINDER_IS_DATA
+  EVIDENCE: REMAINDER_IS_DATA
+
+- [x] G14: The one place a gradient is allowed carries a written reason, so the exemption is a decision and not a gap in the scan
+  CHECK: node -e 'const css=require("fs").readFileSync("src/madar/bridge.css","utf8");const reasoned=/deslop-ignore-next-line 06/.test(css)&&/hard stops, one token colour/.test(css);const clean=JSON.parse(require("child_process").execFileSync("node",[".claude/skills/kill-ai-slop/scripts/scan.mjs","src","--json"],{encoding:"utf8",maxBuffer:33554432})).findings.flatMap(x=>x.hits.filter(h=>h.file==="madar/bridge.css"&&x.id==="06")).length===0;console.log(reasoned&&clean?"EXEMPTION_REASONED":"EXEMPTION_BARE "+[reasoned,clean].join())'
+  EXPECT: EXEMPTION_REASONED
+  EVIDENCE: EXEMPTION_REASONED
+
+- [x] G15: The third batch's verdicts are recorded, including what was deliberately deferred rather than taken
+  CHECK: node -e "const d=require('fs').readFileSync('design-system/VISUAL-LAW.md','utf8');const need=['الدفعة الثالثة','مُلاحَظ لا مأخوذ بعد','مؤجَّل بتحفّظ','الجزء الفارغ من المقياس'];const miss=need.filter(n=>!d.includes(n));console.log(miss.length?'BATCH3_UNRECORDED '+miss.join(','):'BATCH3_RECORDED')"
+  EXPECT: BATCH3_RECORDED
+  EVIDENCE: BATCH3_RECORDED

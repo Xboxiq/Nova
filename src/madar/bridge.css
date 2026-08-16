@@ -190,6 +190,25 @@
   .madar-folder-scene { transform: none !important; }
 }
 
+/* The remainder of a measure is data, not background. Hatching it says "this
+   is the part still to go"; leaving it blank says "here is some empty box".
+   VISUAL-LAW.md §11. Hard stops only — this is a texture with structure, not a
+   wash, which is what separates it from the atmospheric gradients we refuse. */
+.madar-track {
+  background-color: var(--surface-2);
+  /* A repeating hard-stop hatch, not an atmospheric wash. Group 06 refuses
+     gradients used as mood; this has hard stops, one token colour, and it
+     marks the remaining part of a measure, so it carries information. The
+     scanner cannot tell the two apart by pattern, so the distinction is
+     recorded here rather than left to it. */
+  /* deslop-ignore-next-line 06 */
+  background-image: repeating-linear-gradient(
+    135deg,
+    var(--border) 0 1px,
+    transparent 1px 5px
+  );
+}
+
 /* A fill that grows from the reading edge. Scaling composites where animating
    width would lay out on every frame, and the origin has to follow direction
    because a progress bar that fills away from the text reads as draining. */
