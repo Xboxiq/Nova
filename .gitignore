@@ -7,3 +7,4 @@ node_modules/
 .idea/
 .unlazy-hook-state.json
 .claude/settings.local.json
+dist/

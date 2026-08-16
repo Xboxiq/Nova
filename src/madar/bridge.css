@@ -35,6 +35,8 @@
   /* accent and status */
   --accent: var(--nova-action);
   --accent-soft: var(--nova-action-soft);
+  /* accent at text weight: --accent is a fill and fails AA as type */
+  --accent-ink: var(--nova-action-ink);
   --on-accent: var(--nova-on-action);
   --success: var(--nova-success);
   --success-soft: var(--nova-success-soft);

@@ -53,7 +53,6 @@ interface AdvancedDemoProps {
 
 const labCopy = {
   ar: {
-    eyebrow: "مختبر البناء المتكيّف · V7",
     title: "أنظمة تتشكّل حول المهمة، لا حول القالب.",
     lead: "ثمانية أنماط أصلية تربط السياق بالقرار، والبيانات باللمس، والحالة بالاسترجاع؛ لتصبح الواجهة أداة عمل لا معرض مؤثرات.",
     principles: ["السياق قبل الأدوات", "التلاعب المباشر", "استمرارية مكانية", "استرجاع آمن"],
@@ -69,7 +68,6 @@ const labCopy = {
     },
   },
   en: {
-    eyebrow: "Adaptive build lab · V7",
     title: "Systems shaped around the task, not the template.",
     lead: "Eight authored patterns connect context to decisions, data to touch, and state to recovery—turning UI into a working instrument.",
     principles: ["Context before tools", "Direct manipulation", "Spatial continuity", "Safe recovery"],
@@ -92,7 +90,6 @@ export default function AdvancedPatternLab({ locale, onNotify }: AdvancedPattern
     <section className="advanced-lab" id="advanced" aria-labelledby="advanced-title">
       <div className="section-intro advanced-intro">
         <div>
-          <p className="eyebrow"><span />{copy.eyebrow}</p>
           <h2 id="advanced-title">{copy.title}</h2>
         </div>
         <p>{copy.lead}</p>

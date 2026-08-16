@@ -26,6 +26,11 @@ const PAIRS = [
   ["--nova-ink", "--nova-canvas"],
   ["--nova-ink-secondary", "--nova-surface"],
   ["--nova-ink-tertiary", "--nova-surface-quiet"],
+  // tertiary ink lands on every surface tier, not just the quiet one;
+  // testing one tier let a night-pack failure hide behind a gradient.
+  ["--nova-ink-tertiary", "--nova-surface"],
+  ["--nova-ink-tertiary", "--nova-surface-raised"],
+  ["--nova-ink-secondary", "--nova-surface-raised"],
   ["--nova-on-action", "--nova-action"],
   ["--nova-action-ink", "--nova-surface"],
   ["--nova-on-ink-block", "--nova-ink-block"],
@@ -129,10 +134,7 @@ const measureOverflow = (page) =>
     }, PAIRS);
 
     for (const [pair, ratio] of ratios) {
-      // The light pack's tertiary pair predates the merge and is tracked in
-      // AUDIT.md; every pack the merge introduced must clear AA.
-      const preExisting = theme === "light" && pair.startsWith("--nova-ink-tertiary");
-      if (ratio < AA && !preExisting) contrastFailures.push(`${theme} ${pair} ${ratio}`);
+      if (ratio < AA) contrastFailures.push(`${theme} ${pair} ${ratio}`);
     }
   }
   await ctx.close();

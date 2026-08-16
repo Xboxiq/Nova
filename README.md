@@ -79,6 +79,14 @@ src/
 
 للعمل المستقبلي أو إطلاق منصة جديدة، ابدأ من [دليل NOVA Design OS](./design-system/nova-design-os/README.md): مرجع معياري موسع يضم الهوية النهارية والليلية، Typography، Layout، Navigation، Cards، Admin، Charts، Motion، Mobile، Accessibility، RTL، معيار Anti-Slop، وقوالب جاهزة لوكلاء AI.
 
+## النشر على GitHub Pages
+
+المكتبة تُنشر آليًا عند كل دفعة إلى `main` عبر [`.github/workflows/pages.yml`](./.github/workflows/pages.yml)، والعنوان `https://xboxiq.github.io/nova/`.
+
+خطوة واحدة يدوية لمرة واحدة: من **Settings → Pages** في المستودع، اضبط المصدر على **GitHub Actions**. بدونها يبني الـworkflow بنجاح ويفشل في خطوة النشر وحدها.
+
+Pages يخدم المشروع من مسار فرعي لا من جذر النطاق، ولهذا `base: "./"` في `vite.config.ts`: بناء واحد يعمل من الجذر ومن أي مسار فرعي معًا. العطل هنا صامت — الصفحة ترجع 200 وتظهر بيضاء — فصار مُقاسًا: `npm run qa:pages` يخدم `dist/` تحت `/nova/` ويفشل على أي طلب 404 أو قسم كسول لا يُرسم. البناء يجري في الـworkflow من المصدر، فلا نسخة `dist/` محفوظة في Git.
+
 ## التحقق
 
 راجع [AUDIT.md](./AUDIT.md) لنتيجة الفحص الحالية وحدودها. باختصار: البناء وفحص TypeScript والتدقيق الأمني ناجحة، لا توجد مخالفات من Impeccable أو Axe، ولا overflow أفقي عند 390px، وقد فُحصت تفاعلات V7 الثمانية في Chromium فعليًا.

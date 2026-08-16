@@ -31,12 +31,7 @@ body {
   min-width: 320px;
   min-height: 100vh;
   overflow-x: clip;
-  background:
-    radial-gradient(ellipse 42rem 30rem at 90% -4%, color-mix(in srgb, var(--nova-expressive-sky) 20%, transparent), transparent 72%),
-    radial-gradient(ellipse 34rem 28rem at 4% 23%, color-mix(in srgb, var(--nova-expressive-mint) 11%, transparent), transparent 76%),
-    radial-gradient(ellipse 30rem 22rem at 65% 55%, color-mix(in srgb, var(--nova-expressive-coral) 5%, transparent), transparent 74%),
-    linear-gradient(180deg, color-mix(in srgb, var(--nova-canvas) 96%, var(--nova-expressive-frost)) 0%, var(--nova-canvas) 34rem),
-    var(--nova-canvas);
+  background: var(--nova-canvas);
   color: var(--nova-ink);
   transition: color var(--nova-motion-base) var(--nova-ease-standard), background-color var(--nova-motion-base) var(--nova-ease-standard);
 }
@@ -487,26 +482,6 @@ button:disabled {
   z-index: 2;
 }
 
-.eyebrow {
-  display: flex;
-  align-items: center;
-  gap: var(--nova-space-2);
-  margin: 0 0 var(--nova-space-5);
-  color: var(--nova-action-ink);
-  font-size: var(--nova-text-label-md);
-  font-weight: var(--nova-weight-bold);
-  letter-spacing: normal;
-}
-
-[dir="ltr"] .eyebrow { letter-spacing: 0.01em; }
-
-.eyebrow > span {
-  width: 22px;
-  height: 2px;
-  background: var(--nova-action);
-  border-radius: var(--nova-radius-pill);
-}
-
 .hero h1 {
   max-width: 12ch;
   margin: 0;
@@ -586,15 +561,9 @@ button:disabled {
   position: absolute;
   inset: 4% 2% 2%;
   z-index: -1;
-  background:
-    radial-gradient(ellipse 48% 44% at 18% 16%, color-mix(in srgb, var(--nova-expressive-mint) 82%, transparent), transparent 70%),
-    radial-gradient(ellipse 56% 48% at 84% 12%, color-mix(in srgb, var(--nova-expressive-sky) 76%, transparent), transparent 72%),
-    radial-gradient(ellipse 52% 46% at 66% 84%, color-mix(in srgb, var(--nova-expressive-frost) 90%, transparent), transparent 72%),
-    radial-gradient(ellipse 38% 36% at 10% 88%, color-mix(in srgb, var(--nova-expressive-coral) 44%, transparent), transparent 72%),
-    radial-gradient(ellipse 28% 22% at 54% 52%, color-mix(in srgb, var(--nova-expressive-amber) 30%, transparent), transparent 74%);
+  background: var(--nova-surface-quiet);
   border-radius: 48px;
-  filter: blur(44px) saturate(118%);
-  opacity: 0.78;
+  opacity: 0.6;
 }
 
 .stage-window {
@@ -767,11 +736,7 @@ button:disabled {
   min-height: 340px;
   padding: var(--nova-space-5);
   overflow: hidden;
-  background:
-    radial-gradient(ellipse 54% 42% at 10% 0%, color-mix(in srgb, var(--nova-expressive-mint) 28%, transparent), transparent 72%),
-    radial-gradient(ellipse 62% 42% at 100% 4%, color-mix(in srgb, var(--nova-expressive-frost) 56%, transparent), transparent 74%),
-    linear-gradient(158deg, color-mix(in srgb, var(--nova-surface) 96%, transparent), color-mix(in srgb, var(--nova-surface) 86%, var(--nova-expressive-sky))),
-    var(--nova-surface);
+  background: var(--nova-surface);
   border-radius: var(--nova-radius-card);
 }
 
@@ -965,10 +930,6 @@ button:disabled {
   margin-block-end: var(--nova-space-12);
 }
 
-.section-intro .eyebrow {
-  margin-block-end: var(--nova-space-3);
-}
-
 .section-intro h2 {
   max-width: 16ch;
   margin: 0;
@@ -1022,10 +983,7 @@ button:disabled {
 
 .specimen-type {
   grid-column: span 7;
-  background:
-    radial-gradient(ellipse 52% 48% at 94% -2%, color-mix(in srgb, var(--nova-expressive-frost) 68%, transparent), transparent 74%),
-    radial-gradient(ellipse 30% 36% at 76% 24%, color-mix(in srgb, var(--nova-expressive-mint) 12%, transparent), transparent 76%),
-    var(--nova-surface);
+  background: var(--nova-surface);
 }
 
 .type-sample {
@@ -1116,10 +1074,7 @@ button:disabled {
 
 .specimen-material {
   grid-column: span 5;
-  background:
-    radial-gradient(ellipse 58% 54% at 102% -4%, color-mix(in srgb, var(--nova-expressive-sky) 18%, transparent), transparent 74%),
-    radial-gradient(ellipse 46% 48% at -8% 108%, color-mix(in srgb, var(--nova-expressive-mint) 16%, transparent), transparent 76%),
-    linear-gradient(148deg, var(--nova-glass-strong) 0%, var(--nova-glass) 48%, color-mix(in srgb, var(--nova-glass) 76%, var(--nova-glass-caustic)) 100%);
+  background: var(--nova-surface);
 }
 
 .material-orbit {
@@ -1186,9 +1141,7 @@ button:disabled {
 
 .specimen-motion {
   grid-column: span 7;
-  background:
-    radial-gradient(circle at 10% 100%, color-mix(in srgb, var(--nova-expressive-mint) 20%, transparent), transparent 42%),
-    var(--nova-surface);
+  background: var(--nova-surface);
 }
 
 .motion-track {
@@ -1745,8 +1698,7 @@ button:disabled {
 }
 
 .principle-grid article:first-child { border-inline-start: 0; }
-.principle-grid article > span { color: var(--nova-action); font-size: var(--nova-text-label-sm); font-weight: var(--nova-weight-bold); }
-.principle-grid h3 { margin: var(--nova-space-16) 0 var(--nova-space-3); font-size: var(--nova-text-title-md); letter-spacing: normal; }
+.principle-grid h3 { margin: 0 0 var(--nova-space-3); font-size: var(--nova-text-title-md); letter-spacing: normal; }
 [dir="ltr"] .principle-grid h3 { letter-spacing: -0.03em; }
 .principle-grid p { max-width: 36ch; margin: 0; color: var(--nova-ink-secondary); font-size: var(--nova-text-body-md); line-height: 1.7; }
 
