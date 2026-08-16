@@ -34,12 +34,26 @@ Three skill sets are vendored under `.claude/skills/` so every session on this r
 - **unlazy** (`skills/unlazy`, MIT, Leonxlnx/unlazy @ ed9e8d2) governs when work is finished: write acceptance gates to a file before starting, prove each one with a runnable check, and report only against a full ledger. Use it for substantial work, never for a one-line fix.
 - Run them together on real changes. ponytail decides what to build, unlazy decides when you are done. Where they collide, ponytail loses: a gate is not satisfied by a smaller diff.
 
+Both are wired into `.claude/settings.json`, so they are enforced by the harness rather than by good intentions:
+
+| Event | Command | Effect |
+|---|---|---|
+| `statusLine` | `ponytail-statusline.sh` | Shows the active level, e.g. `[PONYTAIL]` or `[PONYTAIL:ULTRA]` |
+| `SessionStart` | `ponytail-activate.js` | Loads the ponytail ruleset at the configured level |
+| `SubagentStart` | `ponytail-subagent.js` | Gives every spawned subagent the same ruleset |
+| `UserPromptSubmit` | `ponytail-mode-tracker.js` | Tracks `/ponytail lite\|full\|ultra` and `stop ponytail` |
+| `Stop` | unlazy `stop-hook.mjs` | **Blocks ending the turn** while `GATES.md` or `gates/*.md` hold unmet gates |
+
+Paths use `$CLAUDE_PROJECT_DIR`, so the tracked file works on any machine.
+
 Rules for this repo:
 
 - A substantial change writes `GATES.md` first, with a `CHECK:` and `EXPECT:` line wherever an outcome can be proved by a command. Verify with `node .claude/skills/unlazy/scripts/gate-check.mjs GATES.md`.
+- The Stop hook is a real wall: with an unchecked box in `GATES.md` you cannot end the turn. Escape hatches are finishing the gate, or an honest `ABANDON: <id> <reason>` line. It releases itself after six consecutive blocks with no progress, so it never traps a stuck agent. Remove it with `node .claude/skills/unlazy/scripts/install-hooks.mjs --shared --uninstall`.
 - `npm run qa:madar` is the existing runnable check for the Madar surface: contrast across all packs, Axe, overflow, theme menu, runtime errors. Reuse it in gates instead of writing a new harness.
 - Every ponytail-review finding is either applied or refused with the reason recorded. A silently dropped finding is an unmet gate.
-- unlazy's Stop hook is **not** installed. It blocks ending a turn while gates are unmet; install it deliberately with `node .claude/skills/unlazy/scripts/install-hooks.mjs` and remove it with `--uninstall`.
+- `.claude/skills/ponytail/hooks/package.json` pins that directory to CommonJS. The root `package.json` sets `"type": "module"`, which would otherwise make Node parse the vendored hooks as ESM and crash every one of them. Do not delete it.
+- Set the default level with `PONYTAIL_DEFAULT_MODE` or `~/.config/ponytail/config.json`; `off` disables ponytail without uninstalling anything.
 
 ## Impeccable Full Mode
 
