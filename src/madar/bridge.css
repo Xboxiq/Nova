@@ -1,0 +1,162 @@
+/* Madar bridge — maps the Madar library's token names onto NOVA tokens.
+   Reference: design-system/madar/design.md §1 to §6.
+
+   This file declares no colors of its own. Every Madar name resolves to a
+   `--nova-*` token, so the whole Madar library follows whichever theme pack is
+   active on the document element (light, dark, mint, coral, sky, iris, night)
+   and there is exactly one source of truth for color. Geometry and motion
+   scales are kept because Madar components reference them by name; their
+   values are aligned with tokens.css rather than duplicated from the old
+   standalone app.
+
+   Glass level is set with `data-glass` on the document element. */
+
+:root {
+  /* type — Madar's Didone/calligraphic display roles resolve to the NOVA
+     self-hosted stack; no external font host is introduced. */
+  --font-latin: var(--nova-font-ui);
+  --font-mono: var(--nova-font-mono);
+  --font-display: var(--nova-font-display);
+  --font-display-ar: var(--nova-font-editorial-ar);
+
+  /* surfaces and ink */
+  --bg: var(--nova-canvas);
+  --bg-deep: var(--nova-canvas-deep);
+  --surface: var(--nova-surface);
+  --surface-2: var(--nova-surface-quiet);
+  --text: var(--nova-ink);
+  --text-2: var(--nova-ink-secondary);
+  --text-3: var(--nova-ink-tertiary);
+  --border: var(--nova-border);
+  --border-strong: var(--nova-border-strong);
+  --ink: var(--nova-ink-block);
+  --on-ink: var(--nova-on-ink-block);
+
+  /* accent and status */
+  --accent: var(--nova-action);
+  --accent-soft: var(--nova-action-soft);
+  --on-accent: var(--nova-on-action);
+  --success: var(--nova-success);
+  --success-soft: var(--nova-success-soft);
+  --warning: var(--nova-warning);
+  --warning-soft: var(--nova-warning-soft);
+  --danger: var(--nova-danger);
+  --danger-soft: var(--nova-danger-soft);
+  --info: var(--nova-info);
+  --info-soft: var(--nova-info-soft);
+
+  /* material */
+  --glass: var(--nova-glass);
+  --shadow-color: var(--nova-shadow-tint);
+  --shadow-1: 0 1px 2px oklch(from var(--shadow-color) l c h / 0.06);
+  --shadow-2: 0 2px 6px oklch(from var(--shadow-color) l c h / 0.07), 0 8px 24px oklch(from var(--shadow-color) l c h / 0.07);
+  --shadow-3: 0 4px 12px oklch(from var(--shadow-color) l c h / 0.10), 0 20px 48px oklch(from var(--shadow-color) l c h / 0.14);
+  --shadow-4: 0 8px 24px oklch(from var(--shadow-color) l c h / 0.14), 0 32px 80px oklch(from var(--shadow-color) l c h / 0.22);
+
+  /* spacing — 4px base, matched to the NOVA scale where the steps coincide */
+  --sp-1: 4px; --sp-2: var(--nova-space-2); --sp-3: var(--nova-space-3); --sp-4: var(--nova-space-4);
+  --sp-5: var(--nova-space-5); --sp-6: var(--nova-space-6); --sp-7: var(--nova-space-8); --sp-8: 40px;
+  --sp-9: var(--nova-space-12); --sp-10: var(--nova-space-16); --sp-11: var(--nova-space-20); --sp-12: 120px;
+
+  /* radius */
+  --r-xs: 8px;
+  --r-sm: 12px;
+  --r-md: var(--nova-radius-field);
+  --r-lg: 22px;
+  --r-xl: 30px;
+  --r-full: var(--nova-radius-pill);
+
+  /* motion */
+  --dur-1: 140ms;
+  --dur-2: 220ms;
+  --dur-3: 340ms;
+  --dur-4: 560ms;
+  --ease-out: var(--nova-ease-physical);
+  --ease-spring: cubic-bezier(0.34, 1.45, 0.64, 1);
+  --ease-in: var(--nova-ease-exit);
+
+  /* glass level default; overridden by data-glass below */
+  --glass-blur: 20px;
+  --glass-sat: 160%;
+  --glass-hl: var(--nova-glass-specular);
+}
+
+/* glass system — design.md §5 */
+[data-glass="g1"] { --glass-blur: 10px; --glass-sat: 140%; --glass-hl: transparent; }
+[data-glass="g2"] { --glass-blur: 20px; --glass-sat: 160%; --glass-hl: var(--nova-glass-edge); }
+[data-glass="g3"] { --glass-blur: 36px; --glass-sat: 180%; --glass-hl: var(--nova-glass-specular); }
+
+/* Madar surfaces opt into the library's own line height and Latin-first stack.
+   Scoped so the NOVA shell keeps its own typography. */
+.madar-surface {
+  font-family: var(--font-latin);
+  color: var(--text);
+}
+
+.madar-surface button,
+.madar-surface input,
+.madar-surface select,
+.madar-surface textarea {
+  font-family: inherit;
+}
+
+@keyframes floaty { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+@keyframes floatyTiltA { 0%, 100% { transform: rotate(-2deg) translateY(0); } 50% { transform: rotate(-2deg) translateY(-6px); } }
+@keyframes floatyTiltB { 0%, 100% { transform: rotate(1.5deg) translateY(0); } 50% { transform: rotate(1.5deg) translateY(-7px); } }
+@keyframes shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+@keyframes toastIn { from { opacity: 0; transform: translate(-50%, -16px); } to { opacity: 1; transform: translate(-50%, 0); } }
+@keyframes overlayIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes modalIn { from { opacity: 0; transform: scale(0.96) translateY(12px); } to { opacity: 1; transform: none; } }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes beacon { from { transform: scale(0.35); opacity: 0.85; } to { transform: scale(2.1); opacity: 0; } }
+@keyframes marqueeX { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes fluxSlide { from { background-position: 0 0; } to { background-position: 200% 0; } }
+@keyframes pulseDot { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.55; transform: scale(1.3); } }
+@keyframes tracePath { 0% { stroke-dashoffset: 300; } 55% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: -300; } }
+@keyframes burst { to { transform: translate(var(--dx), var(--dy)) rotate(var(--rot)) scale(0.15); opacity: 0; } }
+@keyframes drawLine { from { stroke-dashoffset: 240; } to { stroke-dashoffset: 0; } }
+@keyframes thinkDots { 0%, 100% { opacity: 0.25; } 50% { opacity: 1; } }
+@keyframes growBar { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+@keyframes growBarX { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes drainX { from { transform: scaleX(1); } to { transform: scaleX(0); } }
+@keyframes caretBlink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+@keyframes ekgTravel { from { offset-distance: 0%; } to { offset-distance: 100%; } }
+@keyframes meshDrift { 0%, 100% { background-position: 0% 0%, 100% 100%, 50% 50%; } 50% { background-position: 30% 20%, 70% 80%, 40% 60%; } }
+@keyframes shakeX { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-4px); } 40%, 80% { transform: translateX(4px); } }
+@keyframes spinReverse { to { transform: rotate(-360deg); } }
+@keyframes heroReveal { from { opacity: 0; transform: translateY(28px); filter: blur(12px); } to { opacity: 1; transform: none; filter: blur(0); } }
+@keyframes auroraDrift { 0%, 100% { transform: translate(0, 0) scale(1); } 33% { transform: translate(6%, -4%) scale(1.08); } 66% { transform: translate(-5%, 5%) scale(0.96); } }
+@keyframes sheen { from { transform: translateX(-120%) skewX(-18deg); } to { transform: translateX(220%) skewX(-18deg); } }
+
+/* Kinetics 99 — ambient and status loops, the only animations allowed to repeat */
+@keyframes k99-equalize { 0%, 100% { transform: scaleY(0.3); } 50% { transform: scaleY(1); } }
+@keyframes k99-signal { 0%, 100% { opacity: 0.28; } 50% { opacity: 1; } }
+@keyframes k99-wave { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
+@keyframes k99-ball { 0%, 100% { transform: translateY(-58px); animation-timing-function: cubic-bezier(0.3, 0, 0.6, 0.2); } 50% { transform: translateY(0); animation-timing-function: cubic-bezier(0.4, 0.8, 0.7, 1); } }
+@keyframes k99-squash { 0%, 40%, 60%, 100% { transform: scale(1, 1); } 50% { transform: scale(1.25, 0.72); } }
+@keyframes k99-cradle-l { 0%, 100% { transform: rotate(0deg); } 8% { transform: rotate(-32deg); } 45% { transform: rotate(0deg); } }
+@keyframes k99-cradle-r { 0%, 55%, 100% { transform: rotate(0deg); } 92% { transform: rotate(32deg); } }
+@keyframes k99-neon { 0%, 100% { filter: brightness(1) drop-shadow(0 0 4px var(--accent)); } 50% { filter: brightness(1.25) drop-shadow(0 0 14px var(--accent)); } }
+@keyframes k99-border { to { transform: rotate(1turn); } }
+@keyframes k99-battery { 0% { width: 8%; } 92%, 100% { width: 100%; } }
+@keyframes k99-shimmer-sweep { from { transform: translateX(-100%); } to { transform: translateX(200%); } }
+@keyframes k99-glitch-a { 0%, 100% { clip-path: inset(0 0 82% 0); transform: translateX(0); } 20% { clip-path: inset(20% 0 38% 0); transform: translateX(-3px); } 40% { clip-path: inset(62% 0 8% 0); transform: translateX(3px); } 60% { clip-path: inset(8% 0 70% 0); transform: translateX(-2px); } 80% { clip-path: inset(48% 0 24% 0); transform: translateX(2px); } }
+@keyframes k99-glitch-b { 0%, 100% { clip-path: inset(70% 0 12% 0); transform: translateX(0); } 25% { clip-path: inset(12% 0 60% 0); transform: translateX(3px); } 50% { clip-path: inset(50% 0 30% 0); transform: translateX(-3px); } 75% { clip-path: inset(30% 0 50% 0); transform: translateX(2px); } }
+@keyframes k99-textwave { 0%, 100% { transform: translateY(0); } 30% { transform: translateY(-7px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-1: 1ms;
+    --dur-2: 1ms;
+    --dur-3: 1ms;
+    --dur-4: 1ms;
+  }
+
+  .madar-surface *,
+  .madar-surface *::before,
+  .madar-surface *::after {
+    animation-duration: 1ms !important;
+    transition-duration: 1ms !important;
+  }
+}

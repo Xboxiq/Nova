@@ -3,26 +3,32 @@ import {
   PiArrowElbowDownLeft,
   PiMagnifyingGlass,
   PiSparkle,
+  PiStack,
   PiX,
 } from "react-icons/pi";
 import type { CatalogItem } from "../types";
+import type { MadarSection } from "../madar/sections";
 import type { Locale } from "../i18n";
 import { uiCopy } from "../i18n";
 
 interface CommandPaletteProps {
   open: boolean;
   items: CatalogItem[];
+  madarItems: MadarSection[];
   locale: Locale;
   onOpenChange: (open: boolean) => void;
   onSelect: (id: string) => void;
+  onSelectMadar: (id: string) => void;
 }
 
 export default function CommandPalette({
   open,
   items,
+  madarItems,
   locale,
   onOpenChange,
   onSelect,
+  onSelectMadar,
 }: CommandPaletteProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -55,6 +61,20 @@ export default function CommandPalette({
       )
       .slice(0, 8);
   }, [items, locale, query]);
+
+  const madarResults = useMemo(() => {
+    const normalized = query.trim().toLocaleLowerCase(locale === "ar" ? "ar" : "en");
+    if (!normalized) return madarItems.slice(0, 4);
+
+    return madarItems
+      .filter((item) =>
+        [item.title, item.titleAr, item.description, item.descriptionAr, ...item.tags]
+          .join(" ")
+          .toLocaleLowerCase(locale === "ar" ? "ar" : "en")
+          .includes(normalized),
+      )
+      .slice(0, 4);
+  }, [locale, madarItems, query]);
 
   return (
     <dialog
@@ -93,7 +113,7 @@ export default function CommandPalette({
         </label>
 
         <div className="command-results" role="listbox" aria-label={copy.components}>
-          {results.length ? results.map((item) => (
+          {results.map((item) => (
             <button
               key={item.id}
               type="button"
@@ -108,7 +128,27 @@ export default function CommandPalette({
               </span>
               <PiArrowElbowDownLeft aria-hidden="true" />
             </button>
-          )) : (
+          ))}
+
+          {madarResults.length > 0 && <p className="command-group">{copy.madarSections}</p>}
+          {madarResults.map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              role="option"
+              aria-selected="false"
+              onClick={() => onSelectMadar(item.id)}
+            >
+              <span className="command-result-icon" aria-hidden="true"><PiStack /></span>
+              <span>
+                <strong>{locale === "ar" ? item.titleAr : item.title}</strong>
+                <small>{locale === "ar" ? item.title : item.titleAr}</small>
+              </span>
+              <PiArrowElbowDownLeft aria-hidden="true" />
+            </button>
+          ))}
+
+          {results.length === 0 && madarResults.length === 0 && (
             <p className="command-empty">{copy.commandEmpty}</p>
           )}
         </div>

@@ -1,0 +1,64 @@
+/* Reusable hover/press/focus rituals — design.md §6.2 "the interaction contract".
+   Applied as classNames alongside inline token-based styles, standing in for
+   the prototype's style-hover/style-active pseudo-attributes. */
+
+.i-lift:hover { transform: translateY(-1px); }
+.i-lift-shadow:hover { transform: translateY(-1px); box-shadow: var(--shadow-2); }
+.i-lift2-shadow:hover { transform: translateY(-2px); box-shadow: var(--shadow-3); }
+.i-press-97:active { transform: scale(0.97); }
+.i-press-96:active { transform: scale(0.96); }
+.i-press-94:active { transform: scale(0.94); }
+.i-press-92:active { transform: scale(0.92); }
+.i-press-90:active { transform: scale(0.9); }
+
+.i-soft:hover { background: var(--accent-soft); }
+.i-soft-text:hover { background: var(--accent-soft); color: var(--text); }
+.i-surface2:hover { background: var(--surface-2); }
+.i-surface2-text:hover { background: var(--surface-2); color: var(--text); }
+.i-danger-soft:hover { background: var(--danger-soft); }
+.i-text:hover { color: var(--text); }
+
+.i-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-2); border-color: var(--border-strong); }
+.i-chevron:hover { transform: translateX(4px); }
+[dir='rtl'] .i-chevron:hover { transform: translateX(-4px); }
+.i-dock-icon:hover { transform: scale(1.28) translateY(-7px); }
+.i-cta:hover { transform: translateY(-3px); }
+.i-brightness:hover { filter: brightness(1.06); }
+
+.madar-surface button { transition: transform var(--dur-2) var(--ease-out); }
+
+.i-focus-ring:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent);
+}
+.i-input {
+  transition: box-shadow var(--dur-2), border-color var(--dur-2);
+}
+.i-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.i-input-danger:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--danger-soft);
+}
+
+.i-ignite:hover { filter: brightness(1.25) saturate(1.4); }
+.i-foil:hover { background-position: 100% 60%; }
+
+/* Button-in-Button haptic physics (high-end-visual-design skill §5.B) */
+.hero-cta:active { transform: scale(0.98); }
+.hero-cta:hover .hero-cta-icon { transform: translate(3px, -1px) scale(1.08); }
+[dir='rtl'] .hero-cta:hover .hero-cta-icon { transform: translate(-3px, -1px) scale(1.08); }
+.hero-navlink:hover { background: rgba(255,255,255,0.12) !important; color: #fff !important; }
+
+.madar-surface ::selection { background: var(--accent-soft); color: var(--text); }
+
+/* logical-direction chevrons flip automatically under [dir=rtl] via mirrored transform */
+.i-chevron-dir { transform: none; }
+[dir='rtl'] .i-chevron-dir { transform: scaleX(-1); }
+
+/* draw-from-start-edge origins (underline, segment loader, snackbar drain) */
+:root, [dir='ltr'] { --underline-origin: left; --dir-sign: 1; }
+[dir='rtl'] { --underline-origin: right; --dir-sign: -1; }

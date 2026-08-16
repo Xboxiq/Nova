@@ -2,6 +2,9 @@
 @import "./pattern-studio.css";
 @import "./advanced-lab.css";
 @import "./demos.css";
+@import "./madar/bridge.css";
+@import "./madar/interactions.css";
+@import "./madar-library.css";
 
 :root {
   font-family: var(--nova-font-ui);
@@ -270,6 +273,101 @@ button:disabled {
 .copy-source svg {
   width: 19px;
   height: 19px;
+}
+
+.theme-menu {
+  position: relative;
+}
+
+.theme-panel {
+  position: absolute;
+  inset-block-start: calc(100% + var(--nova-space-2));
+  inset-inline-end: 0;
+  z-index: var(--nova-layer-dropdown);
+  display: grid;
+  gap: var(--nova-space-2);
+  width: max-content;
+  min-width: 15rem;
+  padding: var(--nova-space-4);
+  border-radius: var(--nova-radius-card);
+}
+
+.theme-panel-heading {
+  display: flex;
+  gap: var(--nova-space-2);
+  align-items: center;
+  margin: 0;
+  color: var(--nova-ink-tertiary);
+  font-size: var(--nova-text-label-md);
+  font-weight: var(--nova-weight-semibold);
+}
+
+.theme-panel-heading svg {
+  width: 15px;
+  height: 15px;
+}
+
+.theme-pack-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--nova-space-1);
+}
+
+.theme-pack-list button,
+.theme-glass-list button {
+  display: flex;
+  gap: var(--nova-space-2);
+  align-items: center;
+  min-height: 36px;
+  padding-inline: var(--nova-space-3);
+  color: var(--nova-ink-secondary);
+  font-size: var(--nova-text-label-md);
+  font-weight: var(--nova-weight-semibold);
+  background: none;
+  border: 1px solid transparent;
+  border-radius: var(--nova-radius-control);
+  cursor: pointer;
+  transition: color var(--nova-motion-fast), background-color var(--nova-motion-fast), border-color var(--nova-motion-fast);
+}
+
+.theme-pack-list button:hover,
+.theme-glass-list button:hover {
+  color: var(--nova-ink);
+  background: var(--nova-state-hover);
+}
+
+.theme-pack-list button.active,
+.theme-glass-list button.active {
+  color: var(--nova-action-ink);
+  background: var(--nova-action-soft);
+  border-color: color-mix(in srgb, var(--nova-action) 35%, var(--nova-border));
+}
+
+.theme-swatch {
+  width: 14px;
+  height: 14px;
+  flex: none;
+  border: 1px solid var(--nova-border-strong);
+  border-radius: var(--nova-radius-pill);
+}
+
+.theme-glass-list {
+  display: flex;
+  gap: var(--nova-space-1);
+}
+
+.theme-glass-list button {
+  flex: 1;
+  justify-content: center;
+}
+
+.command-group {
+  margin: var(--nova-space-3) 0 var(--nova-space-1);
+  padding-inline: var(--nova-space-2);
+  color: var(--nova-ink-tertiary);
+  font-size: var(--nova-text-label-sm);
+  font-weight: var(--nova-weight-semibold);
+  letter-spacing: 0.04em;
 }
 
 .command-trigger {

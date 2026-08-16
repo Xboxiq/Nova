@@ -8,8 +8,9 @@ Apply these rules to every request that changes how NOVA looks, feels, moves, or
 2. Read `DESIGN.md`.
 3. Read `design-system/nova-ui/MASTER.md`.
 4. Read `design-system/nova-design-os/DESIGN.md` and the specialized files relevant to the task.
-5. If a page override exists under `design-system/nova-ui/pages/`, it overrides the master only for that page.
-6. Inspect the current React implementation, legacy HTML, and tokens before proposing a redesign.
+5. For anything touching the Madar library, read `design-system/madar/GUIDE.md` first, then `design-system/madar/design.md`.
+6. If a page override exists under `design-system/nova-ui/pages/`, it overrides the master only for that page.
+7. Inspect the current React implementation, legacy HTML, and tokens before proposing a redesign.
 
 ## Required Design Workflow
 
@@ -38,6 +39,11 @@ The user explicitly approved full mode for this private project. If the live bro
 - Keep `nova-ui-library.html` as a legacy reference without making it the source of truth.
 - Adapt external ideas into NOVA components and tokens instead of copying registry output verbatim.
 - Treat `design-system/nova-design-os/tokens/tokens.json` as the future portable token source and migrate deliberately; do not mix old and new token systems inside one component.
+- Color lives in exactly two files: `tokens.css` for the base set and the light and dark packs, and `tokens/theme-packs.css` for the Madar packs. `src/madar/bridge.css` only aliases Madar names onto `--nova-*` and must never declare a color.
+- The Madar library stays under `src/madar/`. Its showcase sections consume `src/madar/components`; they never re-implement a component, and they never own theme state.
+- Register a new Madar section in `src/madar/sections.ts` so search and the command palette can reach it.
+- Element-level CSS coming from Madar is scoped to `.madar-surface`. Do not add unscoped element selectors that reach the NOVA shell.
+- `archive/madar/` is a historical record. Never import from it and never build it.
 - Do not publish, upload, or sync components or themes externally without explicit user authorization.
 - Preserve unrelated user edits.
 
