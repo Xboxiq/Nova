@@ -66,10 +66,22 @@ await inputs.first().setInputFiles([
 
 if ((await panel.locator("li").count()) !== 2) failures.push("dropped files did not appear as rows");
 
+// The destination is a built object, not a drawing: it has named faces, and
+// the sheets only exist once files do.
+const built = await panel.locator('[data-folder-part="lid"]').count();
+if (!built) failures.push("the built folder has no lid face");
+if (!(await panel.locator('[data-folder-part="wall"]').count())) {
+  failures.push("the built folder has no walls, so it has no thickness");
+}
+if (!(await panel.locator('[data-folder-part="sheet"]').count())) {
+  failures.push("no sheet appeared in the folder when files landed");
+}
+
 // The lid is state-driven, so it must have left its shut angle while active.
-const lidOpen = await panel.locator("svg").nth(1).evaluate((el) => getComputedStyle(el).transform);
-if (lidOpen === "none" || /matrix\(1, 0, 0, 1, 0, 0\)/.test(lidOpen)) {
-  failures.push("folder lid did not open when files landed");
+const lidOpen = await panel.locator('[data-folder-part="lid"]').first()
+  .evaluate((el) => getComputedStyle(el).transform);
+if (lidOpen === "none" || /^matrix\(1, 0, 0, 1, 0, 0\)$/.test(lidOpen)) {
+  failures.push("folder lid did not move when files landed");
 }
 
 await page.waitForFunction(
@@ -82,7 +94,7 @@ const doneText = await panel.locator('[aria-live="polite"]').first().textContent
 if (!/اكتمل/.test(doneText ?? "")) failures.push(`completion not announced, got: ${doneText}`);
 
 // ── the failure path: a rejected file must end in a retry, not a stuck bar ──
-await inputs.nth(1).setInputFiles([
+await inputs.nth(2).setInputFiles([
   { name: "handoff.zip", mimeType: "application/zip", buffer: Buffer.alloc(60_000, 1) },
 ]);
 

@@ -130,4 +130,4 @@ export {
 } from './consequence';
 
 export { UploadFolder, simulatedUpload } from './upload';
-export type { UploadFolderProps, UploadItem, UploadPhase, Uploader } from './upload';
+export type { UploadFolderProps, UploadItem, UploadPhase, Uploader, FolderVariant } from './upload';

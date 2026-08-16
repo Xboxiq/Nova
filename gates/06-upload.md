@@ -86,3 +86,23 @@ gates are what stop any of it from arriving through the back door.
   CHECK: node -e "const f=require('fs');const need=['light-rtl','night-rtl','mint-ltr'].map(n=>'gates/screenshots/qa-upload-'+n+'.png');const miss=need.filter(n=>!f.existsSync(n));console.log(miss.length?'MISSING '+miss.join(','):'SHOTS_PRESENT')"
   EXPECT: SHOTS_PRESENT
   EVIDENCE: SHOTS_PRESENT
+
+- [x] G17: The destination is a built object — named faces with real thickness, not a drawing
+  CHECK: node -e "const f=require('fs');const c=f.readFileSync('src/madar/components/upload.tsx','utf8');const css=f.readFileSync('src/madar/bridge.css','utf8');const miss=['part=\"back\"','part=\"wall\"','part=\"lid\"','data-folder-part=\"sheet\"','translateZ','rotateY(90deg)'].filter(n=>!c.includes(n)).concat(css.includes('transform-style: preserve-3d')?[]:['preserve-3d']);console.log(miss.length?'NOT_BUILT '+miss.join(','):'BUILT_OBJECT')"
+  EXPECT: BUILT_OBJECT
+  EVIDENCE: BUILT_OBJECT
+
+- [x] G18: Faces are lit rather than painted — one material token, brightness from angle, no second palette
+  CHECK: node -e "const s=require('fs').readFileSync('src/madar/components/upload.tsx','utf8');const lit=/const LIGHT = \{[\s\S]*?\}/.exec(s)?.[0]??'';const numeric=/^[^:]*:\s*[0-9.]+,?$/;const rows=lit.split('\n').filter(l=>/:/.test(l)&&!/LIGHT/.test(l));const bad=rows.filter(l=>!numeric.test(l.trim()));console.log(bad.length?'PAINTED '+bad.join('|'):'LIT_'+rows.length+'_FACES')"
+  EXPECT: /^LIT_[1-9][0-9]*_FACES$/m
+  EVIDENCE: LIT_5_FACES
+
+- [x] G19: The same object is offered in three readings, so the built one has something to be judged against
+  CHECK: node -e "const f=require('fs');const c=f.readFileSync('src/madar/components/upload.tsx','utf8');const s=f.readFileSync('src/madar/showcase/sections/Upload.tsx','utf8');const ok=/'flat' \| 'solid' \| 'exploded'/.test(c)&&['flat','solid','exploded'].every(v=>s.includes('variant=\"'+v+'\"'));console.log(ok?'THREE_READINGS':'VARIANTS_INCOMPLETE')"
+  EXPECT: THREE_READINGS
+  EVIDENCE: THREE_READINGS
+
+- [x] G20: Pointer parallax is switched off when motion is reduced, rather than merely shortened
+  CHECK: node -e "const s=require('fs').readFileSync('src/madar/bridge.css','utf8');const block=/@media \(prefers-reduced-motion: reduce\) \{[\s\S]*?madar-folder-scene[^}]*\}/.test(s);console.log(block?'PARALLAX_OFF':'PARALLAX_LEFT_ON')"
+  EXPECT: PARALLAX_OFF
+  EVIDENCE: PARALLAX_OFF

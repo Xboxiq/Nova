@@ -102,15 +102,88 @@
   font-family: inherit;
 }
 
-/* Folder — the tab is drawn on one side of the SVG, so in RTL the whole object
-   mirrors and only its text mirrors back. Keeping the sides here rather than in
-   the component is what lets the component stay free of physical left/right. */
-.madar-folder-tab { position: absolute; inset-block-start: -3px; left: 2px; }
-.madar-folder-slot { position: absolute; left: 16px; right: 16px; bottom: 52px; height: 30px; }
+/* Folder — a lit object, not a picture of one.
 
-[dir="rtl"] .madar-folder { transform: scaleX(-1); }
-[dir="rtl"] .madar-folder-tab,
-[dir="rtl"] .madar-folder-slot { transform: scaleX(-1); }
+   The stage holds the camera, the mirror layer answers reading direction, and
+   the scene carries the pointer parallax. They are three elements rather than
+   one because each owns a different transform, and collapsing them would make
+   the RTL mirror fight the parallax.
+
+   Faces take their color from a single token and their brightness from their
+   angle to the light, so the object is lit rather than painted: one material,
+   many readings, and no second color system to keep in sync. */
+.madar-folder-stage {
+  position: relative;
+  perspective: 900px;
+  perspective-origin: 50% 34%;
+}
+
+.madar-folder-mirror {
+  transform-style: preserve-3d;
+}
+
+[dir="rtl"] .madar-folder-mirror { transform: scaleX(-1); }
+[dir="rtl"] .madar-folder-legend { transform: scaleX(-1); }
+
+.madar-folder-scene {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform var(--dur-4) var(--ease-spring);
+}
+
+/* The drawn variant is deliberately not a 3D scene. Inside preserve-3d its
+   parts are sorted by depth rather than by document order, which put the tab
+   and the count behind a lid they are supposed to sit in front of. */
+.madar-folder-plane {
+  position: relative;
+  transform-style: flat;
+}
+
+/* The drawn variant's tab rides the notch its silhouette already cuts, and its
+   slot shows what the lid is holding. Both sit in front of the lid, which is
+   what the flat stacking context above is for. */
+.madar-folder-plane .madar-folder-tab {
+  position: absolute;
+  inset-block-start: -3px;
+  left: 2px;
+  z-index: 2;
+}
+
+/* No z-index: the slot must stay behind the lid so only its top edge shows,
+   which is the whole point of a folder holding something. */
+.madar-folder-plane .madar-folder-slot {
+  position: absolute;
+  left: 16px;
+  right: 34px;
+  bottom: 66px;
+  height: 22px;
+}
+
+.madar-folder-face {
+  position: absolute;
+  background: var(--accent);
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  transition:
+    transform var(--dur-4) var(--ease-spring),
+    filter var(--dur-3) var(--ease-out);
+}
+
+/* The contact shadow is the object's weight. It tightens as the lid closes and
+   spreads as it opens, which is what stops the whole thing reading as a decal. */
+.madar-folder-contact {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--ink);
+  transition:
+    transform var(--dur-4) var(--ease-spring),
+    opacity var(--dur-3) var(--ease-out);
+}
+
+/* Pointer parallax is a courtesy, not the effect. Off when motion is reduced. */
+@media (prefers-reduced-motion: reduce) {
+  .madar-folder-scene { transform: none !important; }
+}
 
 /* A fill that grows from the reading edge. Scaling composites where animating
    width would lay out on every frame, and the origin has to follow direction

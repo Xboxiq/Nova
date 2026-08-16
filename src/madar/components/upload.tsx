@@ -61,86 +61,307 @@ const formatSize = (bytes: number) =>
       ? `${(bytes / 1024).toFixed(1)} KB`
       : `${(bytes / 1048576).toFixed(1)} MB`;
 
-/* ── Folder — the destination, drawn as an object with a lid.
+/* ── Folder — a lit object with thickness, not a picture of one.
 
-   Two panels and a tab, from the source's geometry. The lid's angle is the
-   component's state made visible: shut when empty, wide open while files
-   are landing, resting ajar once they are in. */
-function Folder({ open, count, label }: { open: number; count: number; label: string }) {
+   The scene is real CSS 3D: a back panel, three walls that give the body its
+   depth, a stack of sheets that grows with the file count, and a lid hinged on
+   the bottom edge. Every face draws its color from one token and its
+   brightness from the angle it presents to a single overhead light, so the
+   object is lit rather than painted — one material, no second palette to keep
+   in step with seven theme packs.
+
+   `variant` is the same object read three ways, because a design system should
+   show its own construction: `flat` is the drawn silhouette it started as,
+   `solid` is the built object, and `exploded` pulls the layers apart in space
+   the way a teardown does. The lid's angle carries state in all three.
+──────────────────────────────────────────────────────────────────────── */
+
+export type FolderVariant = 'flat' | 'solid' | 'exploded';
+
+const W = 132;
+const H = 100;
+const D = 16;       // body thickness
+const LID_H = 84;
+const TAB_W = 58;
+const TAB_H = 15;
+
+/* Face brightness is the lighting model: one light, above and slightly behind
+   the camera. The numbers are angles turned into values, not decoration. */
+const LIGHT = {
+  back: 0.80,
+  tab: 0.88,
+  bottomWall: 1.10,
+  sideWall: 0.92,
+  lid: 1.06,
+};
+
+function Face({
+  brightness, part, style, children,
+}: {
+  brightness: number;
+  /** Names the face so a check can read it directly instead of counting children. */
+  part: string;
+  style: React.CSSProperties;
+  children?: React.ReactNode;
+}) {
+  return (
+    <div
+      data-folder-part={part}
+      className="madar-folder-face"
+      style={{ filter: `brightness(${brightness})`, ...style }}
+    >
+      {children}
+    </div>
+  );
+}
+
+function Folder({
+  open, count, label, variant, tilt,
+}: {
+  open: number;
+  count: number;
+  label: string;
+  variant: FolderVariant;
+  tilt: { x: number; y: number };
+}) {
+  if (variant === 'flat') return <FlatFolder open={open} count={count} label={label} />;
+
+  const spread = variant === 'exploded' ? 1 : 0;
+  const sheets = Math.min(3, count);
+
+  // The teardown reads from an angle; the built object faces you.
+  const camX = (spread ? 34 : 14) + tilt.x;
+  const camY = (spread ? -12 : -15) + tilt.y;
+
   return (
     <div
       aria-hidden="true"
-      className="madar-folder"
-      style={{
-        position: 'relative', width: 118, height: 96, flex: 'none',
-        perspective: 520,
-      }}
+      className="madar-folder-stage"
+      style={{ width: W + 24, height: H + (spread ? 62 : 44), flex: 'none' }}
     >
-      {/* back panel, with the tab */}
-      <svg
-        viewBox="0 0 50 40"
-        style={{
-          position: 'absolute', inset: 0, width: '100%', height: '100%',
-          color: 'var(--accent-soft)',
-        }}
-      >
-        <path
-          d="M0 4C0 1.79086 1.79086 0 4 0H16.524C17.721 0 18.8415 0.54051 19.574 1.4673L22.426 5.0654C23.1585 5.99219 24.279 6.5327 25.476 6.5327H46C48.2091 6.5327 50 8.32356 50 10.5327V36C50 38.2091 48.2091 40 46 40H4C1.79086 40 0 38.2091 0 36V4Z"
-          fill="currentColor"
-          stroke="var(--accent)"
-          strokeWidth="0.75"
-        />
-      </svg>
+      <div className="madar-folder-mirror">
+        <div
+          className="madar-folder-scene"
+          style={{
+            width: W, height: H, margin: `${spread ? 40 : 26}px auto 0`,
+            transform: `rotateX(${camX}deg) rotateY(${camY}deg) scale(${spread ? 0.78 : 0.92})`,
+          }}
+        >
+          {/* the object's weight on the surface below it */}
+          <div
+            className="madar-folder-contact"
+            style={{
+              insetInlineStart: 16, top: H + 1, width: W - 32, height: 10,
+              filter: 'blur(7px)',
+              opacity: spread ? 0.08 : 0.24,
+              transform: `translateZ(-${D}px) scaleX(${1 + open * 0.1})`,
+            }}
+          />
 
-      {/* what is inside — it clears the lid's edge only once the lid lifts */}
-      <div
-        className="madar-folder-slot"
-        style={{
-          display: 'grid', placeItems: 'center',
-          borderRadius: 'var(--r-xs)', background: 'var(--surface)',
-          border: '1px solid var(--border-strong)',
-          boxShadow: 'var(--shadow-1)',
-          opacity: count ? 1 : 0,
-          transition: `opacity var(--dur-2) var(--ease-out)`,
-          fontSize: 14, fontWeight: 700, color: 'var(--accent-ink)',
-          fontVariantNumeric: 'tabular-nums',
-        }}
-      >
-        {count}
+          {/* back panel and its tab — one plane, the object's spine */}
+          <Face
+            part="back"
+            brightness={LIGHT.back}
+            style={{
+              inset: 0,
+              borderStartStartRadius: 'var(--r-sm)', borderStartEndRadius: 'var(--r-sm)',
+              transform: `translateZ(${-spread * 42}px)`,
+            }}
+          />
+          <Face
+            part="tab"
+            brightness={LIGHT.tab}
+            style={{
+              insetInlineStart: 6, top: -TAB_H + 4, width: TAB_W, height: TAB_H,
+              borderStartStartRadius: 'var(--r-xs)', borderStartEndRadius: 'var(--r-xs)',
+              transform: `translateZ(${-spread * 42}px)`,
+            }}
+          />
+
+          {/* the three walls that turn a rectangle into a body */}
+          <Face
+            part="wall"
+            brightness={LIGHT.bottomWall}
+            style={{
+              insetInlineStart: 0, top: H, width: W, height: D,
+              transformOrigin: 'top center',
+              transform: `rotateX(-90deg)`,
+              opacity: spread ? 0 : 1,
+              borderEndStartRadius: 'var(--r-xs)', borderEndEndRadius: 'var(--r-xs)',
+            }}
+          />
+          <Face
+            part="wall"
+            brightness={LIGHT.sideWall}
+            style={{
+              insetInlineStart: 0, top: 0, width: D, height: H,
+              transformOrigin: 'left center',
+              transform: `rotateY(90deg)`,
+              opacity: spread ? 0 : 1,
+            }}
+          />
+          <Face
+            part="wall"
+            brightness={LIGHT.sideWall}
+            style={{
+              insetInlineStart: W - D, top: 0, width: D, height: H,
+              transformOrigin: 'right center',
+              transform: `rotateY(-90deg)`,
+              opacity: spread ? 0 : 1,
+            }}
+          />
+
+          {spread === 1 && sheets === 0 && (
+            <div
+              data-folder-part="slot"
+              className="madar-folder-face"
+              style={{
+                insetInlineStart: 15, top: H - LID_H, width: W - 30, height: LID_H - 6,
+                background: 'var(--surface)',
+                opacity: 0.4,
+                border: '1px dashed var(--border-strong)',
+                borderRadius: 'var(--r-xs)',
+                transform: `translateZ(22px)`,
+              }}
+            />
+          )}
+
+          {/* the sheets — a stack that grows, each leaf catching less light */}
+          {Array.from({ length: sheets }, (_, i) => (
+            <div
+              key={i}
+              data-folder-part="sheet"
+              className="madar-folder-face"
+              style={{
+                insetInlineStart: 15 + i * 4, top: H - LID_H,
+                width: W - 30 - i * 8, height: LID_H - 6,
+                background: 'var(--surface)',
+                border: '1px solid var(--border)',
+                borderRadius: 'var(--r-xs)',
+                boxShadow: 'var(--shadow-1)',
+                filter: `brightness(${1 - i * 0.04})`,
+                transform: `translateZ(${5 + i * 3 + spread * (22 + i * 18)}px) translateY(${-open * (34 + i * 13)}px) rotateZ(${(i % 2 ? 1 : -1) * 1.1}deg)`,
+              }}
+            />
+          ))}
+
+          {/* the count, printed on the topmost sheet rather than floating */}
+          {count > 0 && (
+            <div
+              className="madar-folder-face"
+              style={{
+                insetInlineStart: 15 + (sheets - 1) * 4, top: H - LID_H,
+                width: W - 30 - (sheets - 1) * 8, height: LID_H - 6,
+                background: 'transparent', display: 'grid', placeItems: 'center',
+                transform: `translateZ(${6 + (sheets - 1) * 3 + spread * (22 + (sheets - 1) * 18)}px) translateY(${-open * (34 + (sheets - 1) * 13)}px)`,
+                fontSize: 19, fontWeight: 700, color: 'var(--accent-ink)',
+                fontVariantNumeric: 'tabular-nums',
+              }}
+            >
+              {count}
+            </div>
+          )}
+
+          {/* the lid — hinged at the bottom edge, its angle is the state */}
+          <Face
+            part="lid"
+            brightness={LIGHT.lid}
+            style={{
+              insetInlineStart: 0, top: H - LID_H, width: W, height: LID_H,
+              borderStartStartRadius: 'var(--r-sm)', borderStartEndRadius: 'var(--r-sm)',
+              boxShadow: 'inset 0 1px 0 var(--glass-hl)',
+              transformOrigin: 'bottom center',
+              transform: `translateZ(${D + spread * 76}px) rotateX(-${open * (spread ? 4 : 9)}deg)`,
+            }}
+          >
+            <span
+              className="madar-folder-legend"
+              style={{
+                position: 'absolute', insetInlineStart: 10, top: 9,
+                fontSize: 9, fontWeight: 700, letterSpacing: '0.14em',
+                color: 'var(--on-accent)', opacity: 0.85, whiteSpace: 'nowrap',
+              }}
+            >
+              {label}
+            </span>
+          </Face>
+        </div>
       </div>
+    </div>
+  );
+}
 
-      {/* front panel — the lid, hinged on its bottom edge */}
-      <svg
-        viewBox="0 0 50 34"
-        style={{
-          position: 'absolute', insetInline: 0, bottom: 0, width: '100%',
-          color: 'var(--accent)',
-          transformOrigin: 'bottom center',
-          transform: `rotateX(${open * 62}deg)`,
-          transition: `transform var(--dur-4) var(--ease-spring)`,
-        }}
-      >
-        <path
-          d="M0 4C0 1.79086 1.79086 0 4 0H46C48.2091 0 50 1.79086 50 4V30C50 32.2091 48.2091 34 46 34H4C1.79086 34 0 32.2091 0 30V4Z"
-          fill="currentColor"
-          fillOpacity="0.28"
-          stroke="var(--accent)"
-          strokeWidth="0.75"
-        />
-      </svg>
+/* ── FlatFolder — the drawn original, kept so the built object has something
+   to be compared against rather than only described. */
+function FlatFolder({ open, count, label }: { open: number; count: number; label: string }) {
+  return (
+    <div
+      aria-hidden="true"
+      className="madar-folder-stage"
+      style={{ width: W + 24, height: H + 44, flex: 'none' }}
+    >
+      <div className="madar-folder-mirror">
+        {/* the drawn original keeps the box it was drawn for: forcing it into
+            the built object's larger box made its lid swallow the count */}
+        <div className="madar-folder-plane" style={{ width: 118, height: 96, margin: '24px auto 0' }}>
+          <svg
+            viewBox="0 0 50 40"
+            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', color: 'var(--accent-soft)' }}
+          >
+            <path
+              d="M0 4C0 1.79086 1.79086 0 4 0H16.524C17.721 0 18.8415 0.54051 19.574 1.4673L22.426 5.0654C23.1585 5.99219 24.279 6.5327 25.476 6.5327H46C48.2091 6.5327 50 8.32356 50 10.5327V36C50 38.2091 48.2091 40 46 40H4C1.79086 40 0 38.2091 0 36V4Z"
+              fill="currentColor"
+              stroke="var(--accent)"
+              strokeWidth="0.75"
+            />
+          </svg>
 
-      {/* the label rides the tab the back panel already draws */}
-      <span
-        className="madar-folder-tab"
-        style={{
-          padding: '2px 8px', borderRadius: 'var(--r-xs)',
-          background: 'var(--surface)', border: '1px solid var(--border-strong)',
-          fontSize: 9, fontWeight: 700, letterSpacing: '0.08em',
-          color: 'var(--text-2)', whiteSpace: 'nowrap',
-        }}
-      >
-        {label}
-      </span>
+          <div
+            className="madar-folder-slot"
+            style={{
+              display: 'grid', placeItems: 'center',
+              borderRadius: 'var(--r-xs)', background: 'var(--surface)',
+              border: '1px solid var(--border-strong)', boxShadow: 'var(--shadow-1)',
+              opacity: count ? 1 : 0,
+              transition: `opacity var(--dur-2) var(--ease-out)`,
+              fontSize: 12, fontWeight: 700, color: 'var(--accent-ink)',
+              fontVariantNumeric: 'tabular-nums',
+            }}
+          >
+            {count}
+          </div>
+
+          <svg
+            viewBox="0 0 50 34"
+            style={{
+              position: 'absolute', insetInline: 0, bottom: 0, width: '100%',
+              color: 'var(--accent)', transformOrigin: 'bottom center',
+              transform: `rotateX(${open * 62}deg)`,
+              transition: `transform var(--dur-4) var(--ease-spring)`,
+            }}
+          >
+            <path
+              d="M0 4C0 1.79086 1.79086 0 4 0H46C48.2091 0 50 1.79086 50 4V30C50 32.2091 48.2091 34 46 34H4C1.79086 34 0 32.2091 0 30V4Z"
+              fill="currentColor"
+              fillOpacity="0.28"
+              stroke="var(--accent)"
+              strokeWidth="0.75"
+            />
+          </svg>
+
+          <span
+            className="madar-folder-tab madar-folder-legend"
+            style={{
+              padding: '2px 8px', borderRadius: 'var(--r-xs)',
+              background: 'var(--surface)', border: '1px solid var(--border-strong)',
+              fontSize: 9, fontWeight: 700, letterSpacing: '0.08em',
+              color: 'var(--text-2)', whiteSpace: 'nowrap',
+            }}
+          >
+            {label}
+          </span>
+        </div>
+      </div>
     </div>
   );
 }
@@ -241,6 +462,9 @@ export interface UploadFolderProps {
   tabLabel?: string;
   /** How each file is transferred. Defaults to a paced simulation. */
   upload?: Uploader;
+  /** How the destination is drawn: the built object, its teardown, or the
+   *  flat silhouette this started as. */
+  variant?: FolderVariant;
   onComplete?: (items: UploadItem[]) => void;
 }
 
@@ -249,10 +473,12 @@ export function UploadFolder({
   meta = '80 ميغابايت متاحة',
   tabLabel = 'FILES',
   upload = simulatedUpload,
+  variant = 'solid',
   onComplete,
 }: UploadFolderProps) {
   const [items, setItems] = useState<UploadItem[]>([]);
   const [over, setOver] = useState(false);
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const input = useRef<HTMLInputElement | null>(null);
   const files = useRef(new Map<number, File>());
   const controllers = useRef(new Map<number, AbortController>());
@@ -327,7 +553,17 @@ export function UploadFolder({
     <div
       onDragOver={(e) => { e.preventDefault(); setOver(true); }}
       onDragLeave={() => setOver(false)}
-      onDrop={(e) => { e.preventDefault(); setOver(false); add(e.dataTransfer.files); }}
+      onDrop={(e) => { e.preventDefault(); setOver(false); setTilt({ x: 0, y: 0 }); add(e.dataTransfer.files); }}
+      // Parallax is a courtesy, not the effect: a few degrees, so the object
+      // reads as sitting in space rather than printed on the card.
+      onPointerMove={(e) => {
+        const r = e.currentTarget.getBoundingClientRect();
+        setTilt({
+          x: (0.5 - (e.clientY - r.top) / r.height) * -9,
+          y: ((e.clientX - r.left) / r.width - 0.5) * 12,
+        });
+      }}
+      onPointerLeave={() => setTilt({ x: 0, y: 0 })}
       style={{
         display: 'flex', flexDirection: 'column', gap: 'var(--sp-5)',
         width: '100%', maxWidth: 460, padding: 'var(--sp-5)',
@@ -339,7 +575,7 @@ export function UploadFolder({
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--sp-5)' }}>
-        <Folder open={lid} count={items.length} label={tabLabel} />
+        <Folder open={lid} count={items.length} label={tabLabel} variant={variant} tilt={tilt} />
         <div style={{ minWidth: 0 }}>
           <h3 style={{ margin: 0, fontSize: 17, fontWeight: 600, color: 'var(--text)' }}>{title}</h3>
           <p style={{ margin: '6px 0 0', fontSize: 13, color: 'var(--text-3)' }}>{meta}</p>
