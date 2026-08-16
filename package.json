@@ -12,6 +12,7 @@
     "preview:mobile": "vite preview --host 0.0.0.0",
     "qa:madar": "node tools/qa/madar-qa.mjs",
     "qa:pages": "node tools/qa/pages-subpath.mjs",
+    "qa:upload": "node tools/qa/upload-qa.mjs",
     "slop": "node .claude/skills/kill-ai-slop/scripts/scan.mjs src"
   },
   "dependencies": {

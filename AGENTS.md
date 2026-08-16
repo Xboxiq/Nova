@@ -9,7 +9,8 @@ Apply these rules to every request that changes how NOVA looks, feels, moves, or
 3. Read `design-system/nova-ui/MASTER.md`.
 4. Read `design-system/nova-design-os/DESIGN.md` and the specialized files relevant to the task.
 5. For anything touching the Madar library, read `design-system/madar/GUIDE.md` first, then `design-system/madar/design.md`.
-6. If a page override exists under `design-system/nova-ui/pages/`, it overrides the master only for that page.
+6. Before drawing any object, icon, illustration or card material, read `design-system/VISUAL-LAW.md`. It is a law, not a guide: volume before shape, light from directly overhead because a lateral light inverts when the object mirrors for RTL, three shadows with three different jobs, unequal angles inside a straight container, and no detail that does not carry a state. Its gates run in `gates/07-visual-law.md`.
+7. If a page override exists under `design-system/nova-ui/pages/`, it overrides the master only for that page.
 7. Inspect the current React implementation, legacy HTML, and tokens before proposing a redesign.
 
 ## Required Design Workflow
