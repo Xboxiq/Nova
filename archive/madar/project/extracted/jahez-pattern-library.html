@@ -1,0 +1,1996 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jahez · مكتبة أنماط 21st.dev</title>
+<style>/* جاهز — Jahez Design System
+ * Entry point. Imports only — no rules here.
+ * Consumers link this single file to pick up the full system.
+ */
+
+/* Webfonts.
+ *
+ * Pulls four families from Google Fonts:
+ *   - IBM Plex Sans Arabic — primary Arabic + functional UI
+ *   - Inter Tight          — Latin sans, tighter than Inter
+ *   - Instrument Serif     — editorial serif for display sizes
+ *   - JetBrains Mono       — mono for numbers/IDs
+ *
+ * For offline/self-hosted, swap to local @font-face rules pointing
+ * at woff2 files in assets/fonts/.
+ */
+
+/* arabic */
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("c1835ee3-84fd-418e-96f1-b21feb13ef4e") format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC, U+102E0-102FB, U+10E60-10E7E, U+10EC2-10EC4, U+10EFC-10EFF, U+1EE00-1EE03, U+1EE05-1EE1F, U+1EE21-1EE22, U+1EE24, U+1EE27, U+1EE29-1EE32, U+1EE34-1EE37, U+1EE39, U+1EE3B, U+1EE42, U+1EE47, U+1EE49, U+1EE4B, U+1EE4D-1EE4F, U+1EE51-1EE52, U+1EE54, U+1EE57, U+1EE59, U+1EE5B, U+1EE5D, U+1EE5F, U+1EE61-1EE62, U+1EE64, U+1EE67-1EE6A, U+1EE6C-1EE72, U+1EE74-1EE77, U+1EE79-1EE7C, U+1EE7E, U+1EE80-1EE89, U+1EE8B-1EE9B, U+1EEA1-1EEA3, U+1EEA5-1EEA9, U+1EEAB-1EEBB, U+1EEF0-1EEF1;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("def9fad9-fb05-4754-b1b6-418762bf81de") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("6edd6885-999d-4c18-9ddb-a92671bc4305") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("8d636253-a88f-4465-af24-2c5bfb1f337b") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* arabic */
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("f447fab1-bb37-4b9b-9651-2cb319e4bd22") format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC, U+102E0-102FB, U+10E60-10E7E, U+10EC2-10EC4, U+10EFC-10EFF, U+1EE00-1EE03, U+1EE05-1EE1F, U+1EE21-1EE22, U+1EE24, U+1EE27, U+1EE29-1EE32, U+1EE34-1EE37, U+1EE39, U+1EE3B, U+1EE42, U+1EE47, U+1EE49, U+1EE4B, U+1EE4D-1EE4F, U+1EE51-1EE52, U+1EE54, U+1EE57, U+1EE59, U+1EE5B, U+1EE5D, U+1EE5F, U+1EE61-1EE62, U+1EE64, U+1EE67-1EE6A, U+1EE6C-1EE72, U+1EE74-1EE77, U+1EE79-1EE7C, U+1EE7E, U+1EE80-1EE89, U+1EE8B-1EE9B, U+1EEA1-1EEA3, U+1EEA5-1EEA9, U+1EEAB-1EEBB, U+1EEF0-1EEF1;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("2503828b-f1c7-49db-943c-8784de0ba096") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("ab4e3e5c-baa6-4a1a-a763-31886dd3c8a3") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("55acf548-b204-49fb-9d5b-a3ef4c084f0b") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* arabic */
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("46c6a38c-fe93-43f2-baa7-930af6ca35d1") format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC, U+102E0-102FB, U+10E60-10E7E, U+10EC2-10EC4, U+10EFC-10EFF, U+1EE00-1EE03, U+1EE05-1EE1F, U+1EE21-1EE22, U+1EE24, U+1EE27, U+1EE29-1EE32, U+1EE34-1EE37, U+1EE39, U+1EE3B, U+1EE42, U+1EE47, U+1EE49, U+1EE4B, U+1EE4D-1EE4F, U+1EE51-1EE52, U+1EE54, U+1EE57, U+1EE59, U+1EE5B, U+1EE5D, U+1EE5F, U+1EE61-1EE62, U+1EE64, U+1EE67-1EE6A, U+1EE6C-1EE72, U+1EE74-1EE77, U+1EE79-1EE7C, U+1EE7E, U+1EE80-1EE89, U+1EE8B-1EE9B, U+1EEA1-1EEA3, U+1EEA5-1EEA9, U+1EEAB-1EEBB, U+1EEF0-1EEF1;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("2393b04a-a1f1-4a9f-8a1e-81466752ab6f") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("4e57f80b-0d3e-4be0-a9cc-e9ef89a4f186") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("ce554f99-a429-474a-bdeb-778dd57b7605") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* arabic */
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("34025dcf-ca1a-4889-800e-dd59a323a4f7") format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC, U+102E0-102FB, U+10E60-10E7E, U+10EC2-10EC4, U+10EFC-10EFF, U+1EE00-1EE03, U+1EE05-1EE1F, U+1EE21-1EE22, U+1EE24, U+1EE27, U+1EE29-1EE32, U+1EE34-1EE37, U+1EE39, U+1EE3B, U+1EE42, U+1EE47, U+1EE49, U+1EE4B, U+1EE4D-1EE4F, U+1EE51-1EE52, U+1EE54, U+1EE57, U+1EE59, U+1EE5B, U+1EE5D, U+1EE5F, U+1EE61-1EE62, U+1EE64, U+1EE67-1EE6A, U+1EE6C-1EE72, U+1EE74-1EE77, U+1EE79-1EE7C, U+1EE7E, U+1EE80-1EE89, U+1EE8B-1EE9B, U+1EEA1-1EEA3, U+1EEA5-1EEA9, U+1EEAB-1EEBB, U+1EEF0-1EEF1;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("be4fad64-8f0c-4557-950c-a3fa78c9e5c7") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("705b85fb-1e9d-4600-9032-b49d957bda29") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("425feda4-299d-4c5b-91ff-db09d4c34578") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* arabic */
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("809a8842-4948-430c-b4b1-8c86c08f700b") format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC, U+102E0-102FB, U+10E60-10E7E, U+10EC2-10EC4, U+10EFC-10EFF, U+1EE00-1EE03, U+1EE05-1EE1F, U+1EE21-1EE22, U+1EE24, U+1EE27, U+1EE29-1EE32, U+1EE34-1EE37, U+1EE39, U+1EE3B, U+1EE42, U+1EE47, U+1EE49, U+1EE4B, U+1EE4D-1EE4F, U+1EE51-1EE52, U+1EE54, U+1EE57, U+1EE59, U+1EE5B, U+1EE5D, U+1EE5F, U+1EE61-1EE62, U+1EE64, U+1EE67-1EE6A, U+1EE6C-1EE72, U+1EE74-1EE77, U+1EE79-1EE7C, U+1EE7E, U+1EE80-1EE89, U+1EE8B-1EE9B, U+1EEA1-1EEA3, U+1EEA5-1EEA9, U+1EEAB-1EEBB, U+1EEF0-1EEF1;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("538aa48f-8e2f-4622-ae72-ec87dc3f14d3") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("e018b90b-5b1f-40fb-9f3f-210c143ba861") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("57a16611-faf3-4679-bccd-c808d9454b3c") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Instrument Serif';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("1ec64a3d-6a06-4b6e-8d84-c9a4e95599e9") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Instrument Serif';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("d4703306-8b5b-4c92-8900-d4ddac52d4e2") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Instrument Serif';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("e673264c-feb7-4d79-9fe7-bfa6491e8420") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Instrument Serif';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("6d758a7e-4aa7-4982-b32f-9207ecdde809") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("08f82800-c69d-4b56-84cf-a6f05ab8df13") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("3134509c-4f03-4ecb-a186-7382c0d1670d") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("8450de81-2594-4d87-b4d0-cc983005ef1a") format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("ee48d7d4-f0a7-47de-b2c7-17d6e1f6a788") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("11d8f9d1-23a2-48cc-9f10-55e1bb681339") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("60482b25-dd18-4e38-910f-cc022b098866") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("39a15bf6-5381-419b-a84d-eee2d03a445b") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("08f82800-c69d-4b56-84cf-a6f05ab8df13") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("3134509c-4f03-4ecb-a186-7382c0d1670d") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("8450de81-2594-4d87-b4d0-cc983005ef1a") format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("ee48d7d4-f0a7-47de-b2c7-17d6e1f6a788") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("11d8f9d1-23a2-48cc-9f10-55e1bb681339") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("60482b25-dd18-4e38-910f-cc022b098866") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("39a15bf6-5381-419b-a84d-eee2d03a445b") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("08f82800-c69d-4b56-84cf-a6f05ab8df13") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("3134509c-4f03-4ecb-a186-7382c0d1670d") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("8450de81-2594-4d87-b4d0-cc983005ef1a") format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("ee48d7d4-f0a7-47de-b2c7-17d6e1f6a788") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("11d8f9d1-23a2-48cc-9f10-55e1bb681339") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("60482b25-dd18-4e38-910f-cc022b098866") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("39a15bf6-5381-419b-a84d-eee2d03a445b") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("08f82800-c69d-4b56-84cf-a6f05ab8df13") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("3134509c-4f03-4ecb-a186-7382c0d1670d") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("8450de81-2594-4d87-b4d0-cc983005ef1a") format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("ee48d7d4-f0a7-47de-b2c7-17d6e1f6a788") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("11d8f9d1-23a2-48cc-9f10-55e1bb681339") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("60482b25-dd18-4e38-910f-cc022b098866") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("39a15bf6-5381-419b-a84d-eee2d03a445b") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("d670f9bb-b574-4a97-8ef6-efe0fc496038") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("39b18551-17d8-4603-a532-d0d368d003f1") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("cf3f02d1-2a3b-4a72-aca7-2f636f7c6d32") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("df6b92df-9bf6-492f-a50e-3a374668ecfe") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("fffed14a-0979-4e73-9bd1-322b4d4810bc") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("f5029867-a235-4f44-802a-d65c6c00395f") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("d670f9bb-b574-4a97-8ef6-efe0fc496038") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("39b18551-17d8-4603-a532-d0d368d003f1") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("cf3f02d1-2a3b-4a72-aca7-2f636f7c6d32") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("df6b92df-9bf6-492f-a50e-3a374668ecfe") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("fffed14a-0979-4e73-9bd1-322b4d4810bc") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("f5029867-a235-4f44-802a-d65c6c00395f") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("d670f9bb-b574-4a97-8ef6-efe0fc496038") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("39b18551-17d8-4603-a532-d0d368d003f1") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("cf3f02d1-2a3b-4a72-aca7-2f636f7c6d32") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("df6b92df-9bf6-492f-a50e-3a374668ecfe") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("fffed14a-0979-4e73-9bd1-322b4d4810bc") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("f5029867-a235-4f44-802a-d65c6c00395f") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+
+/* Colors — calibrated against the reference images (Nati wallet, Maze, AI Edge,
+ * EigenExplorer, Choose-plan, Wallet steps).
+ *
+ * Two layers:
+ *   1. Palette  — raw scales. Never used directly by components.
+ *   2. Semantic — what components actually reference.
+ *
+ * Key principle: BRIGHT FLAT BRAND, not gradient mesh. The bright sky blue
+ * is the headline color. Squircle accents are saturated and used liberally.
+ */
+
+:root {
+  /* ──────────────────────────────────────────────────────────────
+   * NEUTRALS — Warm cream
+   * Page sits on a warm off-grey (Nati wallet outer container).
+   * Cards on the page are pure white.
+   * ────────────────────────────────────────────────────────────── */
+  --cream-0:    #FFFFFF;
+  --cream-25:   #FBFAF7;
+  --cream-50:   #F4F2EC;    /* warm card-on-cream */
+  --cream-100:  #EBEAE6;    /* page background (Nati wallet outer frame) */
+  --cream-150:  #DEDCD6;    /* sunken surfaces, ghost orbs */
+  --cream-200:  #C9C6BD;    /* hairline border on cream */
+  --cream-300:  #A8A5A0;
+  --cream-400:  #79766F;
+  --cream-500:  #5B5853;    /* secondary text */
+  --cream-600:  #3F3D38;
+  --cream-700:  #29272A;
+  --cream-800:  #1A1916;
+  --cream-900:  #0A0A09;    /* primary text */
+  --ink:        #0A0A0B;    /* deep black for primary pill */
+  --ink-soft:   #1A1A1D;    /* raised dark surface */
+
+  /* ──────────────────────────────────────────────────────────────
+   * BRAND — Bright Sky Blue (Nati wallet hero)
+   * Flat, vivid, used as a solid fill (not a mesh).
+   * The 500 is the canonical brand.
+   * ────────────────────────────────────────────────────────────── */
+  --sky-50:   #EAF4FF;
+  --sky-100:  #CCE3FF;
+  --sky-200:  #99C7FF;
+  --sky-300:  #66ACFF;
+  --sky-400:  #3D95FF;
+  --sky-500:  #1E88FF;     /* canonical brand */
+  --sky-600:  #1670E0;
+  --sky-700:  #0E58B4;
+  --sky-800:  #0B438A;
+  --sky-900:  #082C5C;
+
+  /* Brand fill — used directly on HeroCard.
+     A nearly-flat sky with a barely-visible radial highlight,
+     not a 4-stop mesh. */
+  --brand-fill: radial-gradient(120% 80% at 30% 20%,
+                  #4FA3FF 0%,
+                  #1E88FF 55%,
+                  #1670E0 100%);
+
+  /* Brand halo — the glow that bleeds below a HeroCard onto the floor. */
+  --brand-halo: 0 30px 80px rgba(30, 136, 255, 0.45);
+
+  /* ──────────────────────────────────────────────────────────────
+   * SQUIRCLE ACCENT PALETTE — the Maze-pattern icon container colors.
+   * Each comes with a -fill (the saturated body), -shadow (colored ambient),
+   * and -tint (a soft light bg for that color, used on selected rows).
+   * ────────────────────────────────────────────────────────────── */
+
+  /* Orange */
+  --sq-orange-fill:   linear-gradient(180deg, #FF8A4A 0%, #F36A1F 100%);
+  --sq-orange-shadow: 0 4px 10px rgba(243, 106, 31, 0.35);
+  --sq-orange-tint:   #FFEFE3;
+
+  /* Green */
+  --sq-green-fill:    linear-gradient(180deg, #2DCB7E 0%, #15976A 100%);
+  --sq-green-shadow:  0 4px 10px rgba(21, 151, 106, 0.35);
+  --sq-green-tint:    #E2F7EC;
+
+  /* Blue (matches brand) */
+  --sq-blue-fill:     linear-gradient(180deg, #4FA3FF 0%, #1670E0 100%);
+  --sq-blue-shadow:   0 4px 10px rgba(22, 112, 224, 0.35);
+  --sq-blue-tint:     #E4F0FF;
+
+  /* Purple */
+  --sq-purple-fill:   linear-gradient(180deg, #B287FF 0%, #7C4DFF 100%);
+  --sq-purple-shadow: 0 4px 10px rgba(124, 77, 255, 0.35);
+  --sq-purple-tint:   #EFE7FF;
+
+  /* Pink */
+  --sq-pink-fill:     linear-gradient(180deg, #FF6EB4 0%, #E13E8C 100%);
+  --sq-pink-shadow:   0 4px 10px rgba(225, 62, 140, 0.35);
+  --sq-pink-tint:     #FFE4F0;
+
+  /* Amber (warning) */
+  --sq-amber-fill:    linear-gradient(180deg, #FFCC4D 0%, #E89A0C 100%);
+  --sq-amber-shadow:  0 4px 10px rgba(232, 154, 12, 0.35);
+  --sq-amber-tint:    #FFF3D6;
+
+  /* Red (danger) */
+  --sq-red-fill:      linear-gradient(180deg, #FF6B5C 0%, #E2382B 100%);
+  --sq-red-shadow:    0 4px 10px rgba(226, 56, 43, 0.35);
+  --sq-red-tint:      #FFE2DE;
+
+  /* Teal */
+  --sq-teal-fill:     linear-gradient(180deg, #3DD9D9 0%, #0FA3A3 100%);
+  --sq-teal-shadow:   0 4px 10px rgba(15, 163, 163, 0.35);
+  --sq-teal-tint:     #DDF6F6;
+
+  /* Ink (neutral dark — for "more" actions) */
+  --sq-ink-fill:      linear-gradient(180deg, #3C3C3F 0%, #0A0A0B 100%);
+  --sq-ink-shadow:    0 4px 10px rgba(10, 10, 11, 0.40);
+  --sq-ink-tint:      var(--cream-100);
+
+  /* Silver (neutral light — for inactive plan orbs etc.) */
+  --sq-silver-fill:   linear-gradient(180deg, #F4F2EC 0%, #C9C6BD 100%);
+  --sq-silver-shadow: 0 4px 10px rgba(46, 44, 39, 0.18);
+  --sq-silver-tint:   var(--cream-50);
+
+  /* ──────────────────────────────────────────────────────────────
+   * AVATAR RING BACKGROUNDS (Nati wallet style)
+   * Soft pastel rings under the memoji circle.
+   * ────────────────────────────────────────────────────────────── */
+  --avatar-peach:    #FFD9C2;
+  --avatar-mint:     #C8F0D6;
+  --avatar-cream:    #F7E8C8;
+  --avatar-tan:      #F0D8A8;
+  --avatar-lavender: #DCD2FA;
+  --avatar-pink:     #FFD0E1;
+  --avatar-sky:      #C8DEFF;
+
+  /* ──────────────────────────────────────────────────────────────
+   * SEMANTIC palettes
+   * ────────────────────────────────────────────────────────────── */
+
+  /* Success — emerald */
+  --success-50:  #E8F8EF;
+  --success-100: #C8EFD5;
+  --success-500: #15B66A;
+  --success-600: #0F9354;
+  --success-700: #0A6F40;
+
+  /* Warning — amber */
+  --warning-50:  #FFF6E5;
+  --warning-100: #FFE6B3;
+  --warning-500: #F0A521;
+  --warning-600: #C8830C;
+  --warning-700: #9A6308;
+
+  /* Danger — red */
+  --danger-50:  #FFEEEC;
+  --danger-100: #FFD2CC;
+  --danger-500: #EF4438;
+  --danger-600: #D02D23;
+  --danger-700: #A01F18;
+
+  /* Info — cyan */
+  --info-50:  #E5F6FF;
+  --info-100: #B8E5FF;
+  --info-500: #1AA7F0;
+  --info-600: #0E83C0;
+  --info-700: #0A6294;
+
+
+  /* ══════════════════════════════════════════════════════════════
+   * SEMANTIC ALIASES
+   * ══════════════════════════════════════════════════════════════ */
+
+  /* Surfaces */
+  --surface-page:      var(--cream-100);   /* warm off-grey (Nati outer frame) */
+  --surface-frame:     var(--cream-50);    /* outer card frame */
+  --surface-card:      var(--cream-0);     /* pure white inner card */
+  --surface-raised:    var(--cream-25);
+  --surface-sunken:    var(--cream-150);
+  --surface-overlay:   var(--cream-0);
+  --surface-inverse:   var(--ink);
+  --surface-inverse-raised: var(--ink-soft);
+  --surface-brand:     var(--sky-500);
+
+  /* Text */
+  --text-primary:    var(--cream-900);
+  --text-secondary:  var(--cream-500);
+  --text-tertiary:   var(--cream-400);
+  --text-disabled:   var(--cream-300);
+  --text-inverse:    var(--cream-0);
+  --text-inverse-secondary: rgba(255, 255, 255, 0.72);
+  --text-brand:      var(--sky-600);
+  --text-link:       var(--sky-600);
+
+  /* Borders */
+  --border-subtle:   rgba(10, 10, 9, 0.06);
+  --border-default:  rgba(10, 10, 9, 0.08);
+  --border-strong:   rgba(10, 10, 9, 0.12);
+  --border-focus:    var(--sky-500);
+  --border-brand:    var(--sky-500);
+  --border-on-dark:  rgba(255, 255, 255, 0.12);
+
+  /* Order lifecycle states — squircle tones (string keys, not values) */
+  --state-draft-tone:     silver; /* @kind other */
+  --state-pending-tone:   amber;  /* @kind other */
+  --state-preparing-tone: blue;   /* @kind other */
+  --state-prepared-tone:  green;  /* @kind other */
+  --state-archived-tone:  ink;    /* @kind other */
+
+  /* Order lifecycle pill bg/fg */
+  --state-draft-bg:        var(--cream-150);
+  --state-draft-fg:        var(--cream-700);
+  --state-pending-bg:      var(--sq-amber-tint);
+  --state-pending-fg:      var(--warning-700);
+  --state-preparing-bg:    var(--sq-blue-tint);
+  --state-preparing-fg:    var(--sky-700);
+  --state-prepared-bg:     var(--sq-green-tint);
+  --state-prepared-fg:     var(--success-700);
+  --state-archived-bg:     var(--cream-150);
+  --state-archived-fg:     var(--cream-500);
+
+  /* Payment states */
+  --pay-unpaid-fg:    var(--danger-700);
+  --pay-unpaid-bg:    var(--sq-red-tint);
+  --pay-partial-fg:   var(--warning-700);
+  --pay-partial-bg:   var(--sq-amber-tint);
+  --pay-paid-fg:      var(--success-700);
+  --pay-paid-bg:      var(--sq-green-tint);
+  --pay-pending-fg:   var(--info-700);
+  --pay-pending-bg:   var(--sq-blue-tint);
+
+  /* Feedback */
+  --feedback-success-fg:    var(--success-700);
+  --feedback-success-bg:    var(--success-50);
+  --feedback-success-border: var(--success-100);
+
+  --feedback-warning-fg:    var(--warning-700);
+  --feedback-warning-bg:    var(--warning-50);
+  --feedback-warning-border: var(--warning-100);
+
+  --feedback-danger-fg:     var(--danger-700);
+  --feedback-danger-bg:     var(--danger-50);
+  --feedback-danger-border: var(--danger-100);
+
+  --feedback-info-fg:       var(--info-700);
+  --feedback-info-bg:       var(--info-50);
+  --feedback-info-border:   var(--info-100);
+
+  /* Profit colors */
+  --profit-positive: var(--success-600);
+  --profit-neutral:  var(--cream-500);
+  --profit-negative: var(--danger-600);
+
+  /* Chart palette */
+  --chart-1: var(--sky-500);
+  --chart-2: var(--success-500);
+  --chart-3: var(--warning-500);
+  --chart-4: #7C4DFF;
+  --chart-5: #E13E8C;
+  --chart-6: var(--danger-500);
+
+  /* Interactive tints */
+  --hover-tint:     rgba(10, 10, 9, 0.04);
+  --press-tint:     rgba(10, 10, 9, 0.08);
+  --hover-on-dark:  rgba(255, 255, 255, 0.08);
+  --press-on-dark:  rgba(255, 255, 255, 0.14);
+
+  /* Focus ring */
+  --focus-ring:        0 0 0 4px rgba(30, 136, 255, 0.22);
+  --focus-ring-danger: 0 0 0 4px rgba(239, 68, 56, 0.22);
+}
+
+/* Typography — bold-sans-first, calibrated against references.
+ *
+ * THE BIG CHANGE FROM v1: huge numbers (KPI hero, balance) are now
+ * BOLD SANS by default (Inter Tight 700, -0.03em). Serif (Instrument
+ * Serif) stays available as an OPT-IN display class for editorial moments.
+ *
+ * Hierarchy: hero numbers > Arabic functional > Latin label > mono ID
+ */
+
+:root {
+  /* Font families */
+  --font-sans-en:    "Inter Tight", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  --font-sans:       "IBM Plex Sans Arabic", "Inter Tight", -apple-system, system-ui, sans-serif;
+  --font-display:    "Inter Tight", "IBM Plex Sans Arabic", -apple-system, system-ui, sans-serif;
+  --font-display-serif: "Instrument Serif", Georgia, serif;
+  --font-mono:       "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  /* Weights */
+  --fw-regular:  400; /* @kind font */
+  --fw-medium:   500; /* @kind font */
+  --fw-semibold: 600; /* @kind font */
+  --fw-bold:     700; /* @kind font */
+
+  /* ──────────────────────────────────────────────────────────────
+   * Type scale — comfortable for Arabic, big enough for hero numbers
+   * ────────────────────────────────────────────────────────────── */
+
+  --text-display-3xl: 72px;
+  --text-display-2xl: 56px;
+  --text-display-xl:  44px;
+  --text-display-lg:  36px;
+
+  --text-h1: 28px;
+  --text-h2: 22px;
+  --text-h3: 18px;
+  --text-h4: 16px;
+
+  --text-body-lg: 16px;
+  --text-body:    14px;
+  --text-body-sm: 13px;
+  --text-caption: 12px;
+  --text-micro:   11px;
+
+  /* Line heights — Arabic-tuned */
+  --lh-tight:   1.05; /* @kind other */
+  --lh-snug:    1.25; /* @kind other */
+  --lh-normal:  1.55; /* @kind other */
+  --lh-relaxed: 1.7;  /* @kind other */
+
+  /* Letter-spacing */
+  --ls-tighter: -0.035em; /* @kind other */
+  --ls-tight:   -0.015em; /* @kind other */
+  --ls-normal:  0;        /* @kind other */
+  --ls-wide:    0.02em;   /* @kind other */
+  --ls-caps:    0.06em;   /* @kind other */
+
+  /* ──────────────────────────────────────────────────────────────
+   * Composed text styles
+   * Display = BOLD SANS by default. Use --type-display-serif-* for editorial.
+   * ────────────────────────────────────────────────────────────── */
+
+  --type-display-3xl: var(--fw-bold) var(--text-display-3xl) / var(--lh-tight) var(--font-display); /* @kind font */
+  --type-display-2xl: var(--fw-bold) var(--text-display-2xl) / var(--lh-tight) var(--font-display); /* @kind font */
+  --type-display-xl:  var(--fw-bold) var(--text-display-xl)  / var(--lh-tight) var(--font-display); /* @kind font */
+  --type-display-lg:  var(--fw-bold) var(--text-display-lg)  / var(--lh-snug)  var(--font-display); /* @kind font */
+
+  /* Serif display — OPT-IN for editorial moments */
+  --type-display-serif-2xl: var(--fw-regular) var(--text-display-2xl) / var(--lh-tight) var(--font-display-serif); /* @kind font */
+  --type-display-serif-xl:  var(--fw-regular) var(--text-display-xl)  / var(--lh-tight) var(--font-display-serif); /* @kind font */
+  --type-display-serif-lg:  var(--fw-regular) var(--text-display-lg)  / var(--lh-snug)  var(--font-display-serif); /* @kind font */
+
+  /* Mono display — for technical/financial-data screens (EigenExplorer pattern) */
+  --type-display-mono-2xl: var(--fw-bold) var(--text-display-2xl) / var(--lh-tight) var(--font-mono); /* @kind font */
+  --type-display-mono-xl:  var(--fw-bold) var(--text-display-xl)  / var(--lh-tight) var(--font-mono); /* @kind font */
+
+  /* Headings */
+  --type-h1: var(--fw-bold)     var(--text-h1) / var(--lh-snug) var(--font-sans); /* @kind font */
+  --type-h2: var(--fw-semibold) var(--text-h2) / var(--lh-snug) var(--font-sans); /* @kind font */
+  --type-h3: var(--fw-semibold) var(--text-h3) / var(--lh-snug) var(--font-sans); /* @kind font */
+  --type-h4: var(--fw-semibold) var(--text-h4) / var(--lh-snug) var(--font-sans); /* @kind font */
+
+  /* Body */
+  --type-body-lg: var(--fw-regular) var(--text-body-lg) / var(--lh-normal) var(--font-sans); /* @kind font */
+  --type-body:    var(--fw-regular) var(--text-body)    / var(--lh-normal) var(--font-sans); /* @kind font */
+  --type-body-sm: var(--fw-regular) var(--text-body-sm) / var(--lh-normal) var(--font-sans); /* @kind font */
+  --type-caption: var(--fw-medium)  var(--text-caption) / var(--lh-normal) var(--font-sans); /* @kind font */
+  --type-micro:   var(--fw-medium)  var(--text-micro)   / var(--lh-normal) var(--font-sans); /* @kind font */
+
+  --type-eyebrow: var(--fw-semibold) var(--text-micro) / var(--lh-normal) var(--font-sans-en); /* @kind font */
+
+  --type-mono:    var(--fw-medium) var(--text-body) / var(--lh-normal) var(--font-mono); /* @kind font */
+  --type-mono-lg: var(--fw-medium) var(--text-body-lg) / var(--lh-normal) var(--font-mono); /* @kind font */
+}
+
+.num,
+.tabular {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+/* Editorial serif — opt-in via class */
+.display-serif {
+  font-family: var(--font-display-serif);
+  font-weight: var(--fw-regular);
+  letter-spacing: var(--ls-tight);
+}
+
+/* Spacing.
+ *
+ * 4px base. Components compose these, never raw px values.
+ * Use semantic aliases (--gutter-*, --pad-*) when a token has a clear role.
+ */
+
+:root {
+  --space-0:   0;
+  --space-px:  1px;
+  --space-0_5: 2px;
+  --space-1:   4px;
+  --space-1_5: 6px;
+  --space-2:   8px;
+  --space-2_5: 10px;
+  --space-3:   12px;
+  --space-3_5: 14px;
+  --space-4:   16px;
+  --space-5:   20px;
+  --space-6:   24px;
+  --space-7:   28px;
+  --space-8:   32px;
+  --space-10:  40px;
+  --space-12:  48px;
+  --space-14:  56px;
+  --space-16:  64px;
+  --space-20:  80px;
+  --space-24:  96px;
+  --space-32:  128px;
+
+  /* Semantic aliases — common roles */
+  --pad-card:        var(--space-5);      /* default card padding */
+  --pad-card-lg:     var(--space-6);
+  --pad-card-sm:     var(--space-4);
+  --pad-input-x:     var(--space-3);
+  --pad-input-y:     var(--space-2_5);
+  --pad-button-x:    var(--space-4);
+  --pad-button-y:    var(--space-2_5);
+
+  --gutter-xs:       var(--space-2);
+  --gutter-sm:       var(--space-3);
+  --gutter-md:       var(--space-4);
+  --gutter-lg:       var(--space-6);
+  --gutter-xl:       var(--space-8);
+
+  --stack-xs:        var(--space-1);
+  --stack-sm:        var(--space-2);
+  --stack-md:        var(--space-4);
+  --stack-lg:        var(--space-6);
+  --stack-xl:        var(--space-10);
+
+  /* Layout */
+  --sidebar-width:       260px;
+  --sidebar-width-sm:    72px;   /* collapsed */
+  --topbar-height:       60px;
+  --container-max:       1280px;
+  --container-narrow:    720px;
+}
+
+/* Corner radii — heavier, softer.
+ *
+ * Pushed up significantly from the previous scale.
+ * Cards now sit at 24px (was 12px), hero surfaces at 32px (was 16px).
+ * Buttons go full-pill by default.
+ */
+
+:root {
+  --radius-none: 0;
+  --radius-xs:    4px;
+  --radius-sm:    8px;
+  --radius-md:   12px;    /* inputs, small chips */
+  --radius-lg:   18px;    /* small cards, dropdowns */
+  --radius-xl:   24px;    /* default cards */
+  --radius-2xl:  32px;    /* hero cards, sheets */
+  --radius-3xl:  40px;    /* large hero surfaces, mobile sheet pulls */
+  --radius-pill: 9999px;  /* buttons, pills, avatars */
+  --radius-full: 9999px;  /* alias */
+}
+
+/* Elevation — "Liquid Soft" shadow system.
+ *
+ * Three flavors:
+ *  - Soft drop shadows (ambient diffused, warm-tinted)
+ *  - Inset highlights (suggest sculpted depth on raised surfaces)
+ *  - Composed recipes (card-rest, card-hover, hero, glass, orb)
+ *
+ * Always use the composed recipes from components. Raw shadows below
+ * are building blocks.
+ */
+
+:root {
+  /* ──────────────────────────────────────────────────────────────
+   * Raw ambient drop shadows (warm-tinted, diffused)
+   * ────────────────────────────────────────────────────────────── */
+  --shadow-xs:
+    0 1px 2px rgba(46, 44, 39, 0.04);
+
+  --shadow-sm:
+    0 1px 2px rgba(46, 44, 39, 0.04),
+    0 2px 6px rgba(46, 44, 39, 0.05);
+
+  --shadow-md:
+    0 2px 4px rgba(46, 44, 39, 0.04),
+    0 8px 18px rgba(46, 44, 39, 0.07);
+
+  --shadow-lg:
+    0 4px 8px rgba(46, 44, 39, 0.05),
+    0 16px 36px rgba(46, 44, 39, 0.09);
+
+  --shadow-xl:
+    0 8px 16px rgba(46, 44, 39, 0.06),
+    0 28px 60px rgba(46, 44, 39, 0.12);
+
+  --shadow-2xl:
+    0 16px 32px rgba(46, 44, 39, 0.08),
+    0 48px 96px rgba(46, 44, 39, 0.18);
+
+  /* ──────────────────────────────────────────────────────────────
+   * Inset highlights — top-edge shimmer that suggests sculpted depth.
+   * Always combine with a drop shadow for full effect.
+   * ────────────────────────────────────────────────────────────── */
+  --inset-hi-top:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+
+  --inset-hi-top-strong:
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.04);
+
+  --inset-hi-glass:
+    inset 0 1px 0 rgba(255, 255, 255, 0.65),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+
+  --inset-hi-dark:
+    inset 0 1px 0 rgba(255, 255, 255, 0.10),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.4);
+
+  /* Press / sunken — looks pushed in */
+  --inset-press:
+    inset 0 1px 3px rgba(46, 44, 39, 0.12),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.04);
+
+  --inset-press-dark:
+    inset 0 1px 4px rgba(0, 0, 0, 0.5),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+
+  /* ──────────────────────────────────────────────────────────────
+   * Glow shadows — colored ambient halos
+   * Used on hero cards and active orb states.
+   * ────────────────────────────────────────────────────────────── */
+  --glow-brand:
+    0 8px 24px rgba(59, 87, 240, 0.28),
+    0 2px 6px rgba(59, 87, 240, 0.18);
+
+  --glow-success:
+    0 8px 24px rgba(26, 182, 104, 0.24),
+    0 2px 6px rgba(26, 182, 104, 0.14);
+
+  --glow-warning:
+    0 8px 24px rgba(240, 165, 33, 0.24),
+    0 2px 6px rgba(240, 165, 33, 0.14);
+
+  --glow-danger:
+    0 8px 24px rgba(240, 68, 56, 0.24),
+    0 2px 6px rgba(240, 68, 56, 0.14);
+
+  /* ──────────────────────────────────────────────────────────────
+   * COMPOSED RECIPES — use these from components
+   * ────────────────────────────────────────────────────────────── */
+
+  /* Cards — soft floating surfaces */
+  --shadow-card:
+    0 1px 2px rgba(46, 44, 39, 0.04),
+    0 8px 18px rgba(46, 44, 39, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+
+  --shadow-card-hover:
+    0 2px 4px rgba(46, 44, 39, 0.06),
+    0 16px 32px rgba(46, 44, 39, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+
+  /* Hero cards — gradient-mesh surfaces with bright halo */
+  --shadow-hero:
+    0 12px 32px rgba(46, 44, 39, 0.18),
+    0 2px 8px rgba(46, 44, 39, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.32),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.10);
+
+  /* Glass surfaces — frosted */
+  --shadow-glass:
+    0 8px 28px rgba(46, 44, 39, 0.10),
+    0 1px 2px rgba(46, 44, 39, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+
+  --shadow-glass-dark:
+    0 8px 28px rgba(0, 0, 0, 0.4),
+    0 1px 2px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+
+  /* Buttons */
+  --shadow-button-light:
+    0 1px 2px rgba(46, 44, 39, 0.05),
+    0 2px 6px rgba(46, 44, 39, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.04);
+
+  --shadow-button-dark:
+    0 1px 2px rgba(0, 0, 0, 0.3),
+    0 4px 12px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.4);
+
+  --shadow-button-brand:
+    0 1px 2px rgba(46, 44, 39, 0.06),
+    0 6px 14px rgba(59, 87, 240, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.18);
+
+  --shadow-button-press:
+    inset 0 2px 4px rgba(0, 0, 0, 0.12),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.06);
+
+  /* Orb — 3D sphere shadow recipe (ambient halo + tight contact) */
+  --shadow-orb-sm:
+    0 2px 4px rgba(0, 0, 0, 0.12),
+    0 4px 8px rgba(0, 0, 0, 0.08);
+
+  --shadow-orb-md:
+    0 4px 8px rgba(0, 0, 0, 0.14),
+    0 8px 24px rgba(0, 0, 0, 0.12);
+
+  --shadow-orb-lg:
+    0 8px 16px rgba(0, 0, 0, 0.16),
+    0 24px 48px rgba(0, 0, 0, 0.18);
+
+  /* Floating action / hero CTAs */
+  --shadow-fab:
+    0 4px 8px rgba(46, 44, 39, 0.12),
+    0 16px 32px rgba(46, 44, 39, 0.18);
+
+  /* Bar elevation (sidebar, topbar) — hairline only */
+  --shadow-bar:
+    0 1px 0 0 var(--border-subtle);
+
+  /* Focus ring */
+  --ring-focus:    0 0 0 4px rgba(59, 87, 240, 0.18);
+  --ring-selected: 0 0 0 2px var(--brand-500);
+  --ring-danger:   0 0 0 4px rgba(240, 68, 56, 0.18);
+}
+
+/* Glass — frosted surface recipes.
+ *
+ * Tokens for iOS 26/27 Liquid Glass-style surfaces. Use these on
+ * elements that sit ON TOP OF colorful or photographic content.
+ * Glass over plain white is wasted — always pair with a tinted backdrop.
+ *
+ * Usage pattern:
+ *   .glass {
+ *     background: var(--glass-light-bg);
+ *     backdrop-filter: var(--glass-blur-md);
+ *     -webkit-backdrop-filter: var(--glass-blur-md);
+ *     box-shadow: var(--shadow-glass);
+ *     border: 1px solid var(--glass-light-border);
+ *   }
+ */
+
+:root {
+  /* ──────────────────────────────────────────────────────────────
+   * Backdrop filters — blur + saturation boost
+   * Saturation > 1 keeps colored bgs lively under the glass.
+   * ────────────────────────────────────────────────────────────── */
+  --glass-blur-xs: blur(8px)  saturate(1.4); /* @kind other */
+  --glass-blur-sm: blur(12px) saturate(1.5); /* @kind other */
+  --glass-blur-md: blur(20px) saturate(1.6); /* @kind other */
+  --glass-blur-lg: blur(32px) saturate(1.8); /* @kind other */
+  --glass-blur-xl: blur(48px) saturate(1.8); /* @kind other */
+
+  /* ──────────────────────────────────────────────────────────────
+   * Glass backgrounds — RGBA tints
+   *
+   * "light"  → for use over colored/dark backgrounds, frosted white
+   * "dark"   → for use over light backgrounds, frosted ink
+   * "warm"   → cream-tinted glass (subtle, for sidebar over cream page)
+   * ────────────────────────────────────────────────────────────── */
+
+  /* Light glass — frosted white */
+  --glass-light-bg:        rgba(255, 255, 255, 0.55);
+  --glass-light-bg-soft:   rgba(255, 255, 255, 0.42);
+  --glass-light-bg-strong: rgba(255, 255, 255, 0.72);
+  --glass-light-border:    rgba(255, 255, 255, 0.7);
+  --glass-light-divider:   rgba(255, 255, 255, 0.25);
+
+  /* Dark glass — frosted ink */
+  --glass-dark-bg:         rgba(20, 20, 24, 0.55);
+  --glass-dark-bg-soft:    rgba(20, 20, 24, 0.40);
+  --glass-dark-bg-strong:  rgba(20, 20, 24, 0.75);
+  --glass-dark-border:     rgba(255, 255, 255, 0.12);
+  --glass-dark-divider:    rgba(255, 255, 255, 0.08);
+
+  /* Warm glass — for sidebar/topbar over cream page */
+  --glass-warm-bg:         rgba(251, 250, 247, 0.72);
+  --glass-warm-bg-strong:  rgba(251, 250, 247, 0.86);
+  --glass-warm-border:     rgba(46, 44, 39, 0.06);
+
+  /* ──────────────────────────────────────────────────────────────
+   * Inset highlight recipes — give glass surfaces their sculpted feel
+   * ────────────────────────────────────────────────────────────── */
+  --glass-inset-light:
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+
+  --glass-inset-dark:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+
+  /* ──────────────────────────────────────────────────────────────
+   * Composed glass surfaces — one-shot tokens
+   * ────────────────────────────────────────────────────────────── */
+
+  /* Sidebar / topbar that sit over the page bg */
+  --glass-bar-light:        rgba(251, 250, 247, 0.78);
+  --glass-bar-dark:         rgba(14, 14, 16, 0.78);
+
+  /* Modal / sheet backdrops (overlay under glass dialog) */
+  --glass-backdrop:         rgba(14, 14, 16, 0.32);
+  --glass-backdrop-strong:  rgba(14, 14, 16, 0.5);
+
+  /* Pill button glass — for "ghost" actions */
+  --glass-pill-light-bg:    rgba(255, 255, 255, 0.6);
+  --glass-pill-light-hover: rgba(255, 255, 255, 0.8);
+  --glass-pill-dark-bg:     rgba(255, 255, 255, 0.10);
+  --glass-pill-dark-hover:  rgba(255, 255, 255, 0.18);
+
+  /* Tint overlays — add a color wash UNDER the blur (set as background-image) */
+  --glass-tint-cool: radial-gradient(at 20% 20%, rgba(140, 170, 255, 0.35) 0%, transparent 60%);
+  --glass-tint-warm: radial-gradient(at 30% 30%, rgba(255, 200, 160, 0.30) 0%, transparent 60%);
+  --glass-tint-aurora: radial-gradient(at 30% 20%, rgba(195, 160, 255, 0.30) 0%, transparent 60%);
+}
+
+/* ──────────────────────────────────────────────────────────────
+ * Browser fallback — when backdrop-filter is unsupported,
+ * fall back to opaque surfaces so content remains legible.
+ * ────────────────────────────────────────────────────────────── */
+@supports not (backdrop-filter: blur(1px)) {
+  :root {
+    --glass-light-bg:        rgba(255, 255, 255, 0.96);
+    --glass-light-bg-soft:   rgba(255, 255, 255, 0.92);
+    --glass-light-bg-strong: rgba(255, 255, 255, 0.98);
+    --glass-dark-bg:         rgba(20, 20, 24, 0.96);
+    --glass-warm-bg:         rgba(251, 250, 247, 0.96);
+    --glass-bar-light:       rgba(251, 250, 247, 0.96);
+    --glass-bar-dark:        rgba(14, 14, 16, 0.96);
+  }
+}
+
+/* Motion.
+ *
+ * Fast, snappy, Apple-flavored easing. Most UI transitions
+ * sit in the 120–180ms range — long enough to be felt, short
+ * enough to disappear when you're moving fast.
+ *
+ * Avoid bounce/spring easing in workflow UIs — it slows users down.
+ * Reserve longer durations for modals and toasts only.
+ */
+
+:root {
+  /* Durations */
+  --dur-instant: 80ms;   /* @kind other */
+  --dur-fast:    120ms;  /* @kind other */
+  --dur-base:    180ms;  /* @kind other */
+  --dur-slow:    240ms;  /* @kind other */
+  --dur-modal:   320ms;  /* @kind other */
+
+  /* Easings */
+  --ease-out:        cubic-bezier(0.2, 0.8, 0.2, 1);  /* @kind other */
+  --ease-in-out:     cubic-bezier(0.4, 0, 0.2, 1);  /* @kind other */
+  --ease-in:         cubic-bezier(0.4, 0, 1, 1);  /* @kind other */
+  --ease-emphasized: cubic-bezier(0.2, 0, 0, 1);  /* @kind other */
+
+  /* Composed (shorthand for common patterns) */
+  --transition-base:  all var(--dur-base) var(--ease-out);  /* @kind other */
+  --transition-fast:  all var(--dur-fast) var(--ease-out);  /* @kind other */
+  --transition-color: color var(--dur-fast) var(--ease-out),
+                      background-color var(--dur-fast) var(--ease-out),
+                      border-color var(--dur-fast) var(--ease-out);  /* @kind other */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-instant: 0ms;  /* @kind other */
+    --dur-fast:    0ms;  /* @kind other */
+    --dur-base:    0ms;  /* @kind other */
+    --dur-slow:    0ms;  /* @kind other */
+    --dur-modal:   0ms;  /* @kind other */
+  }
+}
+
+/* Z-index layers.
+ * Centralized so stacking is predictable and editable in one place.
+ */
+
+:root {
+  --z-base:     0;    /* @kind other */
+  --z-raised:   1;    /* @kind other */
+  --z-dropdown: 100;  /* @kind other */
+  --z-sticky:   200;  /* @kind other */
+  --z-fixed:    300;  /* @kind other */
+  --z-overlay:  400;  /* @kind other */
+  --z-modal:    500;  /* @kind other */
+  --z-popover:  600;  /* @kind other */
+  --z-toast:    700;  /* @kind other */
+  --z-tooltip:  800;  /* @kind other */
+}
+
+/* Minimal reset + body defaults.
+ * Keeps consumer pages predictable without imposing strong opinions.
+ * Sets RTL-friendly defaults; LTR consumers can override at root.
+ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font: var(--type-body);
+  color: var(--text-primary);
+  background: var(--surface-page);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Allow [dir="rtl"] to flow naturally; layouts should use logical CSS
+ * properties (margin-inline-start, padding-inline, inset-inline-end). */
+
+h1, h2, h3, h4, h5, h6, p, ul, ol, figure, blockquote {
+  margin: 0;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+input, select, textarea {
+  font: inherit;
+  color: inherit;
+}
+
+a {
+  color: var(--text-link);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+img, svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* Focus ring — applied via :focus-visible to skip mouse clicks */
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Selection */
+::selection {
+  background: var(--indigo-100);
+  color: var(--indigo-900);
+}
+
+</style>
+<style>
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background: var(--surface-page);
+    color: var(--text-primary);
+    font: var(--type-body);
+  }
+  /* #root must not intercept the grid — let its children be the grid items */
+  #root { display: contents; }
+  .layout {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    grid-template-rows: 100vh;
+  }
+
+  /* ── Sidebar ─────────────────────────────────────────── */
+  .side {
+    background: var(--surface-card);
+    border-inline-end: 1px solid var(--border-subtle);
+    overflow-y: auto;
+    padding: 22px 16px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .brand { display: flex; align-items: center; gap: 10px; padding: 4px 8px 16px; }
+  .brand__mark { width: 38px; height: 38px; flex: 0 0 auto; }
+  .brand__t { font: 700 16px var(--font-sans); color: var(--text-primary); }
+  .brand__s { font: 500 11px var(--font-sans); color: var(--text-tertiary); margin-top: 1px; }
+
+  .side__group { font: var(--type-eyebrow); color: var(--text-tertiary); letter-spacing: var(--ls-caps); text-transform: uppercase; padding: 14px 10px 6px; }
+
+  .navitem {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 10px; border-radius: var(--radius-md);
+    cursor: pointer; border: 0; background: transparent; width: 100%; text-align: start;
+    transition: background var(--dur-fast) var(--ease-out);
+  }
+  .navitem:hover { background: var(--cream-100); }
+  .navitem--active { background: var(--cream-100); }
+  .navitem--active .navitem__t { color: var(--text-primary); font-weight: 700; }
+  .navitem__num { font-family: var(--font-mono); font-size: 11px; font-weight: 600; color: var(--text-tertiary); width: 20px; flex: 0 0 auto; }
+  .navitem__t { flex: 1; font: 600 13px var(--font-sans); color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .dot { width: 8px; height: 8px; border-radius: 999px; flex: 0 0 auto; }
+  .dot--ok { background: var(--success-500); }
+  .dot--ready { background: var(--warning-500); }
+  .dot--ref { background: var(--cream-400); }
+
+  /* ── Main ────────────────────────────────────────────── */
+  .main { overflow-y: auto; }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 40px 40px 96px; }
+
+  .intro { padding: 4px 0 28px; border-bottom: 1px solid var(--border-subtle); margin-bottom: 32px; }
+  .intro h1 { font: 700 30px var(--font-sans); letter-spacing: -0.02em; }
+  .intro p { font: var(--type-body-lg); color: var(--text-secondary); margin-top: 10px; max-width: 60ch; line-height: 1.6; }
+  .legend { display: flex; gap: 18px; flex-wrap: wrap; margin-top: 18px; }
+  .legend span { display: inline-flex; align-items: center; gap: 7px; font: 500 12px var(--font-sans); color: var(--text-secondary); }
+
+  /* ── Pattern detail ──────────────────────────────────── */
+  .pat__head { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 6px; }
+  .pat__num { font-family: var(--font-mono); font-size: 13px; font-weight: 600; color: var(--text-tertiary); margin-top: 8px; }
+  .pat__titles { flex: 1; }
+  .pat__name { font: 700 24px var(--font-sans); letter-spacing: -0.01em; }
+  .pat__ar { font: 500 15px var(--font-sans); color: var(--text-secondary); margin-top: 2px; }
+  .badge { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 999px; font: 600 12px var(--font-sans); white-space: nowrap; margin-top: 6px; }
+  .badge--ok { background: var(--success-50); color: var(--success-700); border: 1px solid var(--success-100); }
+  .badge--ready { background: var(--warning-50); color: var(--warning-700); border: 1px solid var(--warning-100); }
+  .badge--ref { background: var(--cream-150); color: var(--text-secondary); border: 1px solid var(--border-subtle); }
+
+  .meta-row { display: flex; gap: 8px; flex-wrap: wrap; margin: 14px 0 4px; }
+  .chip { font: 600 11px var(--font-mono); padding: 4px 10px; border-radius: 999px; background: var(--cream-100); color: var(--text-secondary); border: 1px solid var(--border-subtle); }
+
+  .sec { margin-top: 26px; }
+  .sec__label { font: var(--type-eyebrow); color: var(--text-tertiary); letter-spacing: var(--ls-caps); text-transform: uppercase; margin-bottom: 10px; }
+  .prose { font: var(--type-body-lg); color: var(--text-secondary); line-height: 1.65; }
+  .prose strong { color: var(--text-primary); font-weight: 600; }
+
+  /* Demo stage */
+  .demo {
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-2xl);
+    background:
+      linear-gradient(var(--surface-card), var(--surface-card)) padding-box,
+      repeating-conic-gradient(var(--cream-100) 0% 25%, transparent 0% 50%) 0 / 22px 22px;
+    background-color: var(--surface-card);
+    padding: 36px 28px;
+    display: grid;
+    place-items: center;
+    min-height: 180px;
+    box-shadow: var(--shadow-card);
+  }
+
+  /* Code viewer */
+  .code {
+    margin-top: 10px;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    border: 1px solid var(--cream-700);
+    background: #0E0E10;
+  }
+  .code__bar { display: flex; align-items: center; gap: 4px; padding: 8px 10px; background: #1A1A1D; border-bottom: 1px solid #000; }
+  .code__tab { font: 600 12px var(--font-sans); color: #8A8A95; padding: 5px 12px; border-radius: 8px; cursor: pointer; border: 0; background: transparent; }
+  .code__tab--active { color: #fff; background: rgba(255,255,255,0.08); }
+  .code__copy { margin-inline-start: auto; font: 600 11px var(--font-sans); color: #8A8A95; padding: 5px 12px; border-radius: 8px; cursor: pointer; border: 1px solid rgba(255,255,255,0.12); background: transparent; transition: color .15s, border-color .15s; }
+  .code__copy:hover { color: #fff; border-color: rgba(255,255,255,0.3); }
+  .code pre {
+    margin: 0; padding: 18px 20px; overflow-x: auto;
+    direction: ltr; text-align: left;
+    font-family: var(--font-mono); font-size: 12.5px; line-height: 1.65;
+    color: #E4E4E7; tab-size: 2;
+  }
+  .code pre::-webkit-scrollbar { height: 8px; }
+  .code pre::-webkit-scrollbar-thumb { background: #3C3C3F; border-radius: 999px; }
+
+  .where {
+    margin-top: 12px;
+    background: var(--brand-50, #EEF1FF);
+    border: 1px solid var(--brand-100, #DBE2FF);
+    border-radius: var(--radius-xl);
+    padding: 16px 18px;
+    display: flex; gap: 12px;
+  }
+  .where__icon { width: 34px; height: 34px; flex: 0 0 auto; border-radius: 10px; background: linear-gradient(180deg,#4FA3FF,#1670E0); color: #fff; display: grid; place-items: center; box-shadow: inset 0 1px 0 rgba(255,255,255,0.3); }
+  .where__t { font: 500 14px/1.55 var(--font-sans); color: var(--text-primary); }
+  .where__t b { color: var(--brand-700, #2434A3); }
+
+  @media (max-width: 860px) {
+    .layout { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+    .side { max-height: 40vh; }
+  }
+</style>
+<script src="1dfa6fc7-918f-44a1-881f-6a927308a469" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="d894bfdf-788d-4d4b-807d-b4fcefe7861c" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="75b0a9e0-5dc2-47c5-a8f3-c9d73490b7cd" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="17d1e781-e604-42be-92d2-5beecd4d99e3"></script>
+<script type="text/babel" src="749c8008-4f11-47c3-9b1e-f734c4ae5c42"></script>
+<script type="text/babel" src="12de42e3-a1f8-4afd-98e4-e451f7af31cb"></script>
+<script type="text/babel" src="6b9ed491-94db-46bb-83b3-232829c013f4"></script>
+<script type="text/babel" src="a6100046-6281-454d-bb4f-4114d5855513"></script>
+<script type="text/babel" src="b8ad50c9-2499-4d71-9de7-20638ba9efbe"></script>
+<script type="text/babel" src="f4fc091e-29aa-4822-b43d-401db18ebd67"></script>
+<script type="text/babel" src="561eeeec-dfc9-4c64-8cbc-3a799004e211"></script>
+<script type="text/babel" src="fd49cd8e-e3ed-4ab6-b156-918b3df60ce8"></script>
+<script type="text/babel" src="0a3db839-83f2-452f-b821-41dbbe36c4c6"></script>
+</head>
+<body>
+<div id="root"></div>
+
+
+
+<script type="text/babel">
+const META = [
+  {
+    key: "dynamic-island", num: "38", name: "Dynamic Island", ar: "جزيرة ديناميكية",
+    status: "ready", category: "Animation · morph pill", origin: "starc007",
+    concept: "حبّة سوداء برأس الشاشة تتحول بين أحوال مختلفة (اتصال / موسيقى / مؤقّت). التقنية: حاوية واحدة بـ<strong>width transition</strong> مع عرض شرطي للمحتوى وتأثير <strong>pop</strong> عند الدخول. الأيقونية التي تعرّف على iOS 16+.",
+    where: "لإشعارات حية في تطبيق المندوبة: <b>حالة التجهيز الحيّة</b>، <b>اتصال وارد من المسؤول</b>، <b>مؤقّت التسليم</b>. تظهر فوق أي شاشة دون التعارض مع المحتوى.",
+  },
+  {
+    key: "swipeable-list", num: "39", name: "Swipeable List", ar: "قائمة بالسحب",
+    status: "ready", category: "List · swipe actions", origin: "starc007",
+    concept: "صفوف تعرض إجراءات عند السحب يمينًا/يسارًا. التقنية: تتبّع <strong>offset</strong> أفقي عبر mouse/touch، طبقات إجراء تطلّ من الجانبين، وصف قابل للسحب يتحرّك بـtranslateX مع عتبة إطلاق.",
+    where: "أساسي لـ<b>قائمة طلباتي</b> في تطبيق المندوبة: تثبيت/إرجاء/حذف الطلب بسحبة واحدة، بدل الدخول للتفاصيل.",
+  },
+  {
+    key: "ai-planning", num: "40", name: "Agent Planning", ar: "جدول الوكيل",
+    status: "ready", category: "Data · expandable timeline", origin: "arunjdass",
+    concept: "timeline عمودية بخطوات قابلة للتوسيع، لكل خطوة حالة (success/active/error/pending) ومحتوى متدرج. التقنية: <strong>grid-template-rows 0fr ↔ 1fr</strong> للتوسيع السلس بدون max-height. خط ربط عمودي بتدرج لوني حسب التقدّم.",
+    where: "أعمق من StepProgress لأنها <b>تحمل محتوى تفصيلي تحت كل خطوة</b>. مثالي لـ<b>سجلّ تجهيز الطلب</b> في لوحة الإدمن (كل مرحلة تفتح لتعرض التفاصيل والأخطاء والمدة).",
+  },
+  {
+    key: "apple-color-picker", num: "41", name: "Apple Color Picker", ar: "ملتقط الألوان",
+    status: "ready", category: "Form · color input", origin: "pulseawan",
+    concept: "بطاقة iOS تضم معاينة اللون الحالي + <strong>hue slider</strong> بوأس متدرج + شبكة swatches تتفاعل بـscale + colored ring. ألوان iOS الرسمية كـpresets.",
+    where: "لإعداد المنتجات (<b>تحديد لون الفئة</b>)، تخصيص لون المندوبة في التعريف، أو تخصيص لون المحفظة في الإعدادات.",
+  },
+  {
+    key: "progressive-flux-loader", num: "42", name: "Progressive Flux Loader", ar: "شريط التقدّم بالمراحل",
+    status: "ready", category: "Data · phased progress", origin: "ruixen.ui",
+    concept: "شريط تقدّم بتدرج <strong>متحرّك (background-position)</strong> حتّى عند التوقف، مع <strong>علامات مراحل</strong> في الشريط وتسميات أسفلها، تبرز حين تعبُرها النسبة. أعمق من شريط خام.",
+    where: "<b>رفع صور المنتجات</b>، معالجة التقارير المالية، <b>تجهيز الطلب</b> بـأربع مراحل (تجهيز → تغليف → تحميل → تسليم).",
+  },
+  { key: "heroui-toolbar", num: "43", name: "Toolbar", ar: "شريط أدوات", status: "ready", category: "Action · grouped buttons", origin: "hero_ui", concept: "تجميع أزرار تبديل (غامق/مائل/تحتي) وأزرار إجراء مفصولة بخط عمودي. كل مجموعة تدير حالتها.", where: "<b>محرّر الملاحظات</b> على الطلب، أو تنسيق توصيف المنتج في إدارة الكتالوج." },
+  { key: "be-ui-create-menu", num: "44", name: "Create Menu", ar: "قائمة إنشاء", status: "ready", category: "Nav · expanding menu", origin: "starc007", concept: "زر + يدور 45° عند الضغط، تنفتح قائمة جانبية بعناصر تظهر بتأخير متدرج (stagger). تدوير الزر يجعل الفعل واضحًا.", where: "بديل جميل لـ<b>FAB</b> في الرأس: إنشاء طلب/منتج/ملاحظة بخطوة واحدة." },
+  { key: "be-ui-expandable-tabs", num: "45", name: "Expandable Tabs + Panels", ar: "تبويبات بلوحات محتوى", status: "ready", category: "Nav · tabs + content", origin: "starc007", concept: "تبويبات عليا + لوحة محتوى تتغير حسب التبويب النشط. تختلف عن TabsExpandable في أنها تعرض روابط فرعية تحت كل تبويب.", where: "<b>الإعدادات</b> بأقسام (حسابي / الإشعارات / الدفع / الصلاحيات) وتحت كل واحد فروعه." },
+  { key: "beui-tabs", num: "46", name: "Tabs Variants (3)", ar: "ثلاث أنماط تبويب", status: "ready", category: "Nav · tabs", origin: "starc007", concept: "ثلاثة علاجات بصرية للتبويبات: <strong>pill</strong> (حبّة)، <strong>segment</strong> (شريط مجزّأ)، <strong>underline</strong> (خط تحتي متحرّك). الأخير يتتبّع الزر النشط عبر ref ويحرّك الخط.", where: "خيارات بديلة لـ<b>SegmentedPill</b> و<b>TabsExpandable</b> حسب سياق الشاشة." },
+  { key: "be-ui-text-animation", num: "47", name: "Text Shimmer", ar: "تلألؤ نصي", status: "ready", category: "Display · text effect", origin: "starc007", concept: "تدرج متحرّك مقصوص على النص عبر <strong>background-clip: text</strong>. بسيط لكن مؤثّر لحالات التحميل.", where: "تكرار لـ<b>AnimatedShinyText</b> الموجود — حالات التحميل البسيطة، عناوين إعلانات." },
+  { key: "blur-reveal-deck", num: "48", name: "Blur Reveal Deck", ar: "درج إعلانات بضبابية", status: "ready", category: "Carousel · stack + blur", origin: "y.lamfadelpro", concept: "بطاقات متراكبة، العلوية تظهر بـ<strong>blur-in</strong> عند التفعيل، والسفلية تطلّ بلمسة عمق. تتدوّر عبر أسهم أو سحب.", where: "لـ<b>onboarding</b> تطبيق المندوبة — عرض ميزات النظام بثلاثة أو أربعة بطاقات." },
+  { key: "ai-loaders", num: "49", name: "AI Loaders (5)", ar: "خمس أنماط تحميل", status: "ready", category: "Feedback · loaders", origin: "arunjdass", concept: "خمسة أنماط لحالات التحميل: <strong>Shimmer text · Dots · Loading line · Spinner · Pulse ring</strong>. تشتغل بـkeyframes صغيرة.", where: "في حالات التحميل المختلفة: <b>الحساب الجاري</b>، <b>رفع صور</b>، <b>انتظار تأكيد</b>." },
+  { key: "the-dialog", num: "50", name: "Confirm Dialog", ar: "حوار تأكيد", status: "ready", category: "Feedback · modal", origin: "felipemenezes098", concept: "نموذج تأكيد بأيقونة دائرية عليا + عنوان + وصف + زرين. خلفية معتمة تغلق عند النقر عليها.", where: "لأي إجراء حسّاس: <b>نشر تغييرات</b>، <b>حذف منتج</b>، <b>أرشفة طلب</b>." },
+  { key: "folder-components", num: "51", name: "Folder", ar: "أيقونة مجلد", status: "ready", category: "Display · illustration", origin: "urmauur", concept: "مجلد ثلاثي الأبعاد بثلاث طبقات: الجسم الخلفي + اللسان العلوي + الواجهة الأمامية. تدرجات مختلفة حسب الفئة.", where: "لتصنيف المنتجات إلى <b>فئات</b>، أو لـ<b>الأرشيف</b> بتواريخ مفصولة." },
+  { key: "file-card-collections", num: "52", name: "File Cards", ar: "بطاقات الملفات", status: "ready", category: "Display · file UI", origin: "urmauur", concept: "بطاقة ملف بـ<strong>زاوية مطوية</strong> ملوّنة حسب الصيغة (PDF أحمر، DOC أزرق، XLS أخضر). الزاوية مثلث بحدود border-style.", where: "لـ<b>مرفقات الطلب</b> (إيصال دفع، صورة منتج، فاتورة)." },
+  { key: "interactive-logs-table", num: "53", name: "Logs Table", ar: "جدول سجلّات تفاعلي", status: "ready", category: "Data · expandable rows", origin: "moumensoliman", concept: "جدول بسطور تتوسّع لإظهار التفاصيل عند النقر، مع حبّات حالة ملوّنة (200/404). يستخدم خدعة grid-template-rows.", where: "لـ<b>سجل نشاط المسؤول</b> في لوحة الإدمن — رؤية سريعة للطلبات والتعديلات." },
+  { key: "team-section-block", num: "54", name: "Team Section", ar: "قسم الفريق", status: "ready", category: "Marketing · grid", origin: "moumensoliman", concept: "بطاقة تجمع أعضاء الفريق بصورة رمزية + اسم + دور + زر متابعة. صفوف مفصولة بحدود خفيفة.", where: "صفحة <b>من نحن</b> أو <b>إدارة الفريق</b> في إعدادات المسؤول." },
+  { key: "day-picker", num: "55", name: "Day Picker", ar: "ملتقط الأيام", status: "ready", category: "Form · weekday select", origin: "0xUrvish", concept: "صف أيام الأسبوع (حبّات دائرية)، المختار يأخذ <strong>scale + colored fill + halo</strong>. دعم اختيار متعدد.", where: "لتحديد <b>أيام التوصيل الأسبوعية</b> للمندوبة، أو أيام العمل في إعدادات النظام." },
+  { key: "bucket", num: "56", name: "Bucket", ar: "سلة ثلاثية", status: "ready", category: "Display · illustration", origin: "0xUrvish", concept: "رسم سلة ثلاثية الأبعاد بـCSS: الجسم بحواف إهليجية، حافة علوية، مقبض بحدود دائرية، وعناصر داخلية تتراصف. ديناميكي عدديًا.", where: "لتصور <b>الرصيد</b> أو المخزون بطريقة مرحة، لحالات empty-state لـأرشيف فارغ." },
+  { key: "animated-state-icons", num: "57", name: "Animated State Icons", ar: "أيقونات حالة متحرّكة", status: "ready", category: "Display · icons", origin: "dev.yadhakim", concept: "أيقونة تتحوّل من حد إلى تعبئة عند التفعيل، مع تأثير scale-pop بـ<strong>cubic-bezier مطّاطي</strong> + تعبئة خلفية خفيفة.", where: "لـ<b>التثبيت، الإعجاب، الإشارة كمفضّل</b> — تفاعلات صغيرة تعطي الواجهة روحًا." },
+  { key: "heroui-time-field", num: "58", name: "Time Field", ar: "حقل الوقت", status: "ready", category: "Form · time input", origin: "hero_ui", concept: "مقاطع ساعات/دقائق مفصولة، كل واحد يصعد/ينزل بأسهم أو عجلة، مع تدوير عند الحدود. أدقّ من input[type=time].", where: "لـ<b>ساعة الإغلاق اليومية</b> في إعدادات المتجر، أو <b>وقت تسليم الطلب المتوقّع</b>." },
+  { key: "heroui-modal", num: "59", name: "Welcome Modal", ar: "نموذج ترحيبي", status: "ready", category: "Feedback · modal", origin: "larsen66", concept: "نموذج إلى إلى جانب خلفية backdrop-blur، له <strong>بئر أيقونة علوي</strong> بتدرج لوني + عنوان + وصف + زر عريض. أجمل من dialog عادي.", where: "لـ<b>شاشة الترحيب</b> أول دخول، <b>إعلان ميزة جديدة</b>، أو تأكيد إتمام إجراء مهم." },
+  { key: "glass-button", num: "60", name: "Glass Button", ar: "زر زجاجي", status: "ready", category: "Button · frosted", origin: "easemize", concept: "حبّة مجمّدة بسيطة (blur + saturate، بلا تشويه SVG) — سيبلنغ أخفّ من liquid-glass الكامل في LiquidButton.", where: "فوق أي خلفية ملوّنة/صورة حين لا تحتاج الانكسار الكامل — استخدام أسرع وأخفّ." },
+  { key: "color-gradient-palettes", num: "74", name: "Curated Gradient Palettes", ar: "لوحات تدرّج منسّقة", status: "ready", category: "Color · swatches", origin: "jahez-original", concept: "شبكة من ٨ وصفات تدرّج مسمّاة (Sunset Punch، Arctic Mint، Royal Velvet…)؛ <strong>الضغط ينسخ CSS مباشرة</strong>. مرجع سريع بدل اختراع تدرّج من الصفر.", where: "اختيار لون لـHeroCard أو GradientCard جديد بدون تجريب وإخطاء." },
+  { key: "color-duotone-overlay", num: "75", name: "Duotone Photo Overlay", ar: "تغطية ثنائية اللون للصور", status: "ready", category: "Color · photo treatment", origin: "jahez-original", concept: "تحويل أي صورة للونين فقط عبر طبقتي ـ<strong>mix-blend-mode: luminosity</strong> ثم <strong>screen</strong>؛ بدون معالجة صورة خارجية.", where: "صور المنتج/الفريق في صفحات تسويقية، توحيد لون الصور مع هويّة العلامة التجارية." },
+  { key: "color-text-gradient", num: "76", name: "Gradient Headline Text", ar: "نص عنوان متدرّج", status: "ready", category: "Color · typography", origin: "jahez-original", concept: "عنوان مقصوص بتدرّج ثابت عبر <strong>background-clip: text</strong>؛ بدون حركة، للعناوين الكبيرة الثابتة (عكس AnimatedShinyText المتحرّك).", where: "عناوين hero أو marketing، حيث الحركة المستمرّة قد تشتت الانتباه." },
+  { key: "card-bento-grid", num: "77", name: "Bento Grid Layout", ar: "شبكة بنتو غير متماثلة", status: "ready", category: "Card · dashboard grid", origin: "jahez-original", concept: "شبكة بتتبّع <strong>grid-column: span N</strong> مختلفة لكل بطاقة؛ تنوّع بصري بدل شبكة موحّدة الحجم.", where: "لوحات KPI مختلطة الأهميّة، صفحات ميزات بتركيب غير متساوٍ." },
+  { key: "card-masonry", num: "78", name: "Masonry Columns", ar: "أعمدة متداخلة (Masonry)", status: "ready", category: "Card · gallery layout", origin: "jahez-original", concept: "تخطيط بنمط Pinterest عبر <strong>column-count</strong> الخالص CSS فقط؛ بدون أي JS لحساب التخطيط.", where: "معرض صور/منتجات بارتفاعات مختلفة، لوحة إلهام بصرية." },
+  { key: "card-tilt-stack", num: "79", name: "Tilted 3D Card Stack", ar: "رزمة بطاقات ثلاثية مائلة", status: "ready", category: "Card · 3D fan", origin: "jahez-original", concept: "بطاقات متراكبة تتفرّق لأعلى وتميل بـ<strong>perspective + rotateX</strong> عند المرور — مثل محفظة بطاقات حقيقية.", where: "عرض بطاقات دفع/ائتمان، محفظة مستندات، معاينة متعدّدة بعمق." },
+  { key: "card-metric-sparkline", num: "80", name: "Metric Card + Sparkline", ar: "بطاقة مؤشّر مع مخطّ مصغّر", status: "ready", category: "Card · data viz", origin: "jahez-original", concept: "بطاقة KPI مع مخطّ اتجاه SVG محسوب يدويًا من نقاط البيانات — بدون مكتبة رسوم بيانية.", where: "لوحات الإدمن/التحليلات المالية، أي مكان يحتاج رقم + اتجاه بدون رسم بياني معقّد." },
+  { key: "card-split-image", num: "81", name: "Split Image/Text Card", ar: "بطاقة منقسمة (صورة/نص)", status: "ready", category: "Card · hover zoom", origin: "jahez-original", concept: "عمود صورة يُكبّر قليلًا عند المرور؛ الرابط ينزلق قليلًا. لمسة تفاعل هادئة لبطاقات المحتوى.", where: "بطاقات مقال/دراسة حالة، قوائم مدوّنات أو موارد تعليمية." },
+  { key: "icon-orbit-ring", num: "82", name: "Icon Orbit Ring", ar: "حلقة أيقونات مدارية", status: "ready", category: "Icon · orbit layout", origin: "jahez-original", concept: "أيقونات موزّعة حسابيًا حول مركز؛ حلقة تدور وكل أيقونة تدور عكسيًا لتبقى منتصبة دومًا.", where: "شاشات ربط خدمات/تكاملات، قسم ميزات متمركز حول قيمة أساسية." },
+  { key: "icon-cluster-network", num: "83", name: "Icon Cluster Network", ar: "شبكة أيقونات مترابطة", status: "ready", category: "Icon · network diagram", origin: "jahez-original", concept: "خطوط SVG من مركز ثابت إلى كل عقدة؛ رسم بياني خفيف للتكاملات/الاتصالات.", where: "شاشة تكاملات أو ربط خدمات، onboarding يشرح العلاقات بين الأجزاء." },
+  { key: "icon-avatar-stack", num: "84", name: "Overlapping Avatar Stack", ar: "رزمة صور متداخلة + الزائد", status: "ready", category: "Icon · avatar group", origin: "jahez-original", concept: "دوائر متداخلة بفاصل أبيض + رقاقة تفيض «+N» للباقي. نمط مألوف لعرض فريق أو مشاركين.", where: "من شارك في طلب/مستند، أعضاء فريق في لوحة إدارة." },
+  { key: "icon-marquee-row", num: "85", name: "Infinite Icon Marquee", ar: "شريط أيقونات متحرّك لانهائي", status: "ready", category: "Icon · marquee", origin: "jahez-original", concept: "قائمة مكررة تتحرّك أفقيًا بلا نهاية عبر <strong>translateX(-50%)</strong> مع تلاشٍ بالحواف؛ بدون أي JS للحركة.", where: "شريط شعارات العملاء/التكاملات في صفحات تسويقية أو لوحات about." },
+  { key: "hero-mesh-glow", num: "62", name: "Aurora Mesh Hero", ar: "هيرو بتدرّج أورورا", status: "ready", category: "Hero · animated mesh", origin: "jahez-original", concept: "خلفية هيرو من طبقات <strong>radial-gradient</strong> متعددة تنزلق ببطء عبر background-position، مع كرتين ضبابيتين تطفوان على مسارات float مستقلة. عمق بلا صخب.", where: "لأي <b>صفحة هبوط</b> أو شاشة ترحيب تحتاج خلفية حيّة دون فيديو أو صور." },
+  { key: "hero-spotlight", num: "63", name: "Cursor Spotlight Hero", ar: "هيرو بضوء يتبع المؤشر", status: "ready", category: "Hero · interactive", origin: "jahez-original", concept: "تدرّج شعاعي يعاد توسيطه عند كل <strong>mousemove</strong> ليتبع موضع المؤشر فوق شبكة نقطية خافتة. إحساس \u00abاستوديو تقني\u00bb.", where: "صفحات المنتج التقنية، شاشات العرض التفاعلية، أقسام \u00abجرّبي بنفسك\u00bb." },
+  { key: "hero-glass-split", num: "64", name: "Glass Split Hero", ar: "هيرو زجاجي منقسم", status: "ready", category: "Hero · glass card", origin: "jahez-original", concept: "خلفية تدرّج ساطعة مع <strong>بطاقة زجاجية</strong> عائمة قرب الأسفل تحمل رقمًا/إحصائية بارزة. يجمع بين حيوية الألوان ووضوح القراءة.", where: "لوحات نتائج فصلية، إعلانات إطلاق، أرقام أداء بارزة." },
+  { key: "bar-floating-nav", num: "65", name: "Floating Compact Nav", ar: "شريط تنقّل عائم يتقلّص", status: "ready", category: "Bar · scroll-aware nav", origin: "jahez-original", concept: "شريط تنقّل بيضاوي عائم يتقلّص padding/gap/font عند تجاوز عتبة سكرول معيّنة، عبر <strong>انتقال موحّد 320ms</strong> على كل الخصائص.", where: "أي موقع تسويقي أو تطبيق ويب يريد شريطًا أنيقًا لا يحتلّ مساحة دائمة." },
+  { key: "bar-status-strip", num: "66", name: "Live Status Strip", ar: "شريط حالة حيّة", status: "ready", category: "Bar · announcement", origin: "jahez-original", concept: "شريط رفيع بلون داكن مع <strong>نقطة نابضة</strong> (pulse keyframes) ورسالة حالة، قابل للإغلاق.", where: "إعلان حالة الخدمة، رسالة صيانة، تنبيه نظامي عابر أعلى الصفحة." },
+  { key: "bar-cmdk", num: "67", name: "Command Bar (⌘K)", ar: "شريط أوامر", status: "ready", category: "Bar · search trigger", origin: "jahez-original", concept: "حقل بحث بمظهر \u00abمُحفّز لوحة أوامر\u00bb: أيقونة + نص خافت + <strong>kbd hint</strong> + حلقة تركيز عند النقر/التركيز.", where: "محفّز فتح Command Palette، أو حقل بحث عام في أعلى أي تطبيق." },
+  { key: "dock-macos", num: "68", name: "macOS Magnifying Dock", ar: "دوك بتكبير آبل", status: "ready", category: "Dock · magnification", origin: "jahez-original", concept: "صف أيقونات زجاجي؛ حجم كل أيقونة يعتمد على <strong>مسافتها عن العنصر المُحوَّم</strong> (0/±1/±2)، فتنتفخ الأيقونة القريبة وترتفع قليلًا — تأثير Dock الشهير في macOS.", where: "شريط تطبيقات سريع، لوحة اختصارات، عارض أدوات مفضّلة." },
+  { key: "dock-mobile-glass", num: "69", name: "Mobile Glass Dock", ar: "دوك جوّال زجاجي", status: "ready", category: "Dock · bottom nav", origin: "jahez-original", concept: "شريط سفلي زجاجي بـ٤ تبويبات، مع <strong>زر CTA دائري مرتفع</strong> يخترق الحافة العلوية للشريط بحدود بيضاء.", where: "تطبيقات الجوّال ذات إجراء رئيسي واحد (إنشاء/إضافة) وسط شريط التنقّل." },
+  { key: "dock-side-rail", num: "70", name: "Sliding Pill Side Rail", ar: "رفّ جانبي بحبّة منزلقة", status: "ready", category: "Dock · vertical rail", origin: "jahez-original", concept: "رفّ أيقونات عمودي داكن؛ حبّة ملوّنة تنزلق خلف الأيقونة النشطة عبر <strong>top transition</strong> بدل إعادة رسم.", where: "لوحات تحكّم كثيفة الشاشات، محرّرات، أدوات إنتاجية بعدة أوضاع." },
+  { key: "glass-navbar", num: "71", name: "Progressive Glass Navbar", ar: "شريط علوي زجاجي تدريجي", status: "ready", category: "Glass · navbar", origin: "jahez-original", concept: "شريط شفّاف فوق صورة/تدرّج الهيرو، <strong>يتجمّد تدريجيًا</strong> (blur + خلفية + ظل) بمجرّد تجاوز نقطة سكرول معيّنة.", where: "أي صفحة تسويقية بخلفية هيرو غامقة يحتاج شريطها البقاء مقروءًا بعد السكرول." },
+  { key: "glass-tooltip", num: "72", name: "Frosted Tooltip", ar: "تلميح زجاجي", status: "ready", category: "Glass · popover", origin: "jahez-original", concept: "تلميح منبثق مجمّد (backdrop-blur) مع <strong>سهم مثلّث CSS</strong> متطابق اللون، يظهر عند hover/focus.", where: "شرح سريع لأيقونة أو حقل، معاينة مصغّرة قبل النقر." },
+  { key: "glass-sidebar", num: "73", name: "Frosted Sidebar Over Color", ar: "شريط جانبي زجاجي فوق لون", status: "ready", category: "Glass · sidebar", origin: "jahez-original", concept: "رفّ تنقّل زجاجي يجلس مباشرة فوق خلفية ملوّنة/متدرّجة لمساحة العمل، بدل الرفوف الرمادية التقليدية.", where: "تطبيقات مساحة عمل ملوّنة (لوحات، أدوات تصميم) تريد هويّة بصرية أقوى من الرمادي المعتاد." },
+  { key: "ai-gen", num: "61", name: "AI Gen Button", ar: "زر توليد بالذكاء", status: "ready", category: "Button · animated gradient", origin: "designali-in", concept: "تدرّج متعدد الألوان متحرّك (sliding background-position) + ظل ملوّن + أيقونة شرارة. أبسط من generate-button رقم 01.", where: "جاهز ليس منتج AI — لكنه بديل بصري لزر <b>«حساب الأرباح تلقائيًا»</b> لو أُريد لمسة احتفالية." },
+  {
+    key: "generate-button", num: "01", name: "Animated Generate Button", ar: "زر التوليد المتحرك",
+    status: "ref", category: "Button · CSS conic", origin: "moazamtrade",
+    concept: "حلقة <strong>conic-gradient</strong> تدور خلف زر داكن، مع أيقونة شرارة ونص. الإحساس: «النظام يعمل الآن». التقنية: عنصر زائف أكبر من الزر يدور عبر keyframes، والزر الداخلي يغطي المركز فيظهر إطار متوهّج فقط.",
+    where: "جاهز ليس منتج AI، لكن نفس التأثير يصلح لزر <b>«توليد التقرير المالي»</b> أو <b>«بحتساب الأرباح الآن»</b> أثناء المعالجة.",
+  },
+  {
+    key: "liquid-glass-button", num: "02", name: "Liquid Glass Button", ar: "زر الزجاج السائل",
+    status: "ok", category: "Button · backdrop refraction", origin: "designali-in",
+    concept: "زر زجاجي يُحني (refract) ما خلفه عبر <strong>feDisplacementMap</strong> فوق blur + saturate — وليس مجرد ضبابية. حافة لونية طيفية + لمعة متحركة. مطبّق بالكامل في النظام كـ <strong>LiquidButton</strong> و<strong>LiquidGlass</strong>.",
+    where: "مطبّق: <b>LiquidButton variant=\"liquid-glass\"</b> + سطح <b>LiquidGlass</b> الكامل. استخدمه فوق الـ HeroCard أو الصور فقط.",
+  },
+  {
+    key: "display-cards", num: "03", name: "Display Cards", ar: "البطاقات المتراكبة",
+    status: "ready", category: "Card · 3D stack", origin: "Codehagen",
+    concept: "ثلاث بطاقات متراكبة بإزاحة ودوران طفيف، تتفرّق (fan out) عند المرور عبر <strong>transform</strong> مع easing ناعم. عمق بصري بمساحة صغيرة.",
+    where: "مثالي لمعاينة <b>«بخر الطلبات»</b> على لوحة الإدمن — رصّة بطاقات تتفتّح عند المرور، بدل قائمة مسطّحة.",
+  },
+  {
+    key: "gradient-card", num: "04", name: "Gradient Card", ar: "بطاقة التدرّج الحي",
+    status: "ready", category: "Card · animated mesh", origin: "jatin-yadav05",
+    concept: "سطح <strong>gradient mesh</strong> متحرك (background-position) + طبقة <strong>noise</strong> عبر SVG fractalNoise + إطار داخلي مضيء. الفكرة المكتملة لـ gradient-card مع الحبيبات.",
+    where: "لبطاقة <b>KPI</b> واحدة بارزة على لوحة الإدمن (صافي الربح) — تعطي حيوية دون mesh تسويقي صاخب.",
+  },
+  {
+    key: "expandable-tabs", num: "05", name: "Expandable Tabs", ar: "التبويبات المتمدّدة",
+    status: "ok", category: "Nav · magnetic tabs", origin: "victorwelander",
+    concept: "تبويب غير نشط = أيقونة فقط؛ التبويب النشط يتمدّد ليُظهر الـ label عبر <strong>max-width + padding</strong> transition. إحساس «مغناطيسي» إذ يمتص المساحة من جيرانه. مطبّق كـ <strong>TabsExpandable</strong>.",
+    where: "مطبّق: <b>TabsExpandable</b> — شريط التنقّل السفلي في تطبيق المندوبة (طلباتي / جديد / رصيدي).",
+  },
+  {
+    key: "glowing-ai-chat", num: "06", name: "Glowing AI Chat Assistant", ar: "شريط متوهّج",
+    status: "ref", category: "Input · animated halo", origin: "muhammad-binsalman",
+    concept: "حقل إدخال بإطار <strong>متدرّج متوهّج</strong> (عنصر مضبّب خلفي يتحرّك)، نبضة هادئة. يوحي بـ «ذكاء/استماع».",
+    where: "ليس AI في جاهز — لكنه مثالي لشريط <b>«بحث ذكي»</b> أو <b>«مساعد التجهيز»</b> مستقبلاً.",
+  },
+  {
+    key: "liquid-metal-button", num: "07", name: "Liquid Metal Button", ar: "زر المعدن السائل",
+    status: "ok", category: "Button · chrome conic", origin: "johuniq",
+    concept: "تدرّج <strong>conic chrome</strong> (فضي/معدني) مع مسحة لمعان دوّارة. للحظات الفاخرة. مطبّق كـ <strong>LiquidButton variant=\"liquid-metal\"</strong>.",
+    where: "مطبّق: محجوز للحظات الـ tier — <b>إجراءات المدير فقط</b>، أو CTA «بترقية الحساب».",
+  },
+  {
+    key: "squishy-pricing", num: "08", name: "Squishy Pricing", ar: "بطاقات الباقات المرنة",
+    status: "ready", category: "Select · elastic", origin: "vaib215",
+    concept: "بطاقات اختيار <strong>تنكمش (squish)</strong> عند الضغط وتكبر مرنًا عند الاختيار عبر easing مطّاطي <code>cubic-bezier(.34,1.56,.64,1)</code>.",
+    where: "لاختيار <b>صلاحيات المستخدم</b> (أساسي / متقدّم / مدير) في إدارة المستخدمين — لمسة مرحة لقرار وظيفي.",
+  },
+  {
+    key: "testimonial-slider", num: "09", name: "Testimonial Slider", ar: "شريط الاقتباسات",
+    status: "ref", category: "Carousel · auto-advance", origin: "rf-rifat",
+    concept: "مسار <strong>translateX</strong> ينتقل تلقائيًا، نقاط مؤشّر متحرّكة، صور رمزية. كاروسيل بسيط بمؤقّت.",
+    where: "تسويقي بطبعه — لكن يصلح لشاشة <b>«اقتباسات المندوبات»</b> في onboarding أو صفحة «بعن جاهز».",
+  },
+  {
+    key: "progress-indicator", num: "10", name: "Progress Indicator", ar: "مؤشّر التقدّم",
+    status: "ok", category: "Data · step timeline", origin: "anurag-mishra22",
+    concept: "خطوات متّصلة بمؤشّرات + تعبئة الرابط مع التقدّم + نبضة على الخطوة النشطة. مطبّق كـ <strong>StepProgress</strong> بكرات orb ثلاثية الأبعاد.",
+    where: "مطبّق: <b>StepProgress</b> — دورة حياة الطلب (بانتظار → قيد التجهيز → جاهز → مؤرشف).",
+  },
+  {
+    key: "slide-button", num: "11", name: "Slide Button", ar: "زر السحب للتأكيد",
+    status: "ok", category: "Form · swipe confirm", origin: "reuno-ui",
+    concept: "مقبض يُسحب عبر مسار للتأكيد؛ يلتزم بعد تجاوز عتبة، ويرتدّ إن لم يصل. يمنع التأكيد العرضي. مطبّق كـ <strong>SlideToConfirm</strong> (RTL-aware).",
+    where: "مطبّق: <b>SlideToConfirm</b> — تأكيد <b>التسليم النقدي</b>، أرشفة الطلب، الحذف النهائي.",
+  },
+  { key: "range-bar", num: "300", name: "Range Bar", ar: "شريط المدى", status: "ready", category: "Data · horizontal range", origin: "attio", concept: "نقطة—شريط ممتلئ—نقطة يعرض مدى زمنيًا لكل صف. تطبيق حرفي لبطاقة Attio Deals.", where: "لعرض <b>مدة التجهيز</b> أو عمر الطلب في جدول الإدمن." },
+  { key: "metric-ring", num: "301", name: "Metric Ring", ar: "حلقة المؤشّر", status: "ready", category: "Data · circular progress", origin: "flyingpress", concept: "حلقة SVG بقيمة+وحدة بالمنتصف، تسمية تحتها، شارة حالة. تطبيق حرفي.", where: "لمؤشّر <b>الأداء</b> أو دقة التجهيز في لوحة الإدمن." },
+  { key: "sync-progress-panel", num: "302", name: "Sync Progress Panel", ar: "لوحة مزامنة", status: "ready", category: "Feedback · glass upload", origin: "reference-app", concept: "لوحة زجاجية: أيقونة ملف+اسم+حجم، شريط تقدّم+نسبة، زر إلغاء، شارة سحابة طافية فوق الحافة.", where: "لرفع ملف طلبات أو مزامنة الأرشيف." },
+  { key: "pulse-radar", num: "303", name: "Pulse Radar", ar: "رادار نابض", status: "ready", category: "Display · radiating rings", origin: "great-support", concept: "حلقات متحدّة المركز تتمدّد وتخفت خلف أيقونة مركزية، بتأخير متتالٍ.", where: "لإشعار <b>الدعم الحيّ</b> أو استقبال اتصال في لوحة الدعم." },
+  { key: "reaction-bar", num: "304", name: "Reaction Bar", ar: "شريط التفاعلات", status: "ready", category: "Social · emoji chips", origin: "maze", concept: "رقاقات إيموجي+عدد تحت تعليق، زر إضافة متقطّع.", where: "لتفاعل الفريق مع ملاحظات الطلب." },
+  { key: "comment-thread", num: "305", name: "Comment Thread", ar: "خيط التعليقات", status: "ready", category: "Social · nested replies", origin: "reference-app", concept: "تعليق جذري + رد مزاح + مؤشّر «تكتب الآن» بثلاث نقاط نابضة.", where: "لمناقشات الطلب بين المندوبة والمجهّزة." },
+  { key: "live-cursor-label", num: "306", name: "Live Cursor Label", ar: "مؤشّر حيّ ملوّن", status: "ready", category: "Collab · presence", origin: "reference-app", concept: "مؤشّر SVG ملوّن + بطاقة اسم صغيرة ملاصقة لطرفه، للتعاون الحي.", where: "لعرض من يشاهد نفس الشاشة الآن (لوحة إدمن جماعية)." },
+  { key: "converging-tree", num: "307", name: "Converging Tree To Action", ar: "شجرة تتقارب لإجراء", status: "ready", category: "Social · invite flow", origin: "send-invite", concept: "مسارات SVG منحنية تصل صورًا متعدّدة بزر إجراء واحد.", where: "لدعوة <b>مندوبات جديدات</b> أو مشاركين للطلب." },
+  { key: "connected-action-orb", num: "308", name: "Connected Action Orb", ar: "كرة إجراء متّصلة", status: "ready", category: "Display · network diagram", origin: "eigenexplorer", concept: "زر دائري عائم أخضر/أحمر تتّصل به خطوط SVG منحنية من عقد ملوّنة مع نقاط اتصال. الأكثر تميّزًا.", where: "لوحات <b>الشبكات/التكامل</b> التقنية أو إجراءً مركزيًا واحدًا لحالة ما." },
+  { key: "orb-radio-selector", num: "309", name: "Orb Radio Selector", ar: "راديو بكرة زجاجيّة", status: "ready", category: "Form · plan picker", origin: "choose-your-plan", concept: "مجموعة اختيار مؤشّرها كرة زجاجيّة 3D بدل نقطة مسطحة.", where: "لاختيار <b>باقات الصلاحيات</b> في إدارة المستخدمين." },
+  { key: "status-checklist-row", num: "310", name: "Status Checklist Row", ar: "صف الحالات", status: "ready", category: "Data · pass/fail rows", origin: "contractflow", concept: "صفوف بختم أخضر ✓ أو مثلّث أحمر تحذيري جنب نص.", where: "لمراجعة بنود <b>الطلب</b> أو العقود قبل التأكيد." },
+  { key: "pinned-note-card", num: "311", name: "Pinned Note Card", ar: "بطاقة ملاحظة مثبّتة", status: "ready", category: "Display · corkboard", origin: "stillwork", concept: "بطاقة مائلة بدبّوس علوي وظل «لوح فلّين». مميّز جدًا.", where: "لملاحظة تذكيريّة داخل طلب أو لوحة التجهيز." },
+  { key: "noise-dot-card", num: "312", name: "Noise Dot Card", ar: "بطاقة نسيج نقطي", status: "ready", category: "Display · dark texture", origin: "reference-app", concept: "بطاقة داكنة بنسيج نقطي + حدّ متوهّج بنفسجي.", where: "لوضع مظلم أو بطاقة مميّزة في الإعدادات." },
+  { key: "workflow-step-connector", num: "313", name: "Workflow Step Connector", ar: "رابط خطوات سير العمل", status: "ready", category: "Data · stage flow", origin: "instantly", concept: "بطاقات مراحل متصلة عموديًا بخط، مع كبسولة «وقت الانتظار» عائمة في المنتصف.", where: "لعرض <b>مراحل الطلب</b> أو تدفق متعدّد الخطوات." },
+  { key: "onboarding-checklist-card", num: "314", name: "Onboarding Checklist Card", ar: "بطاقة البدء الإرشاديّ", status: "ready", category: "Onboarding · steps", origin: "reference-app", concept: "بطاقة «ابدئي الآن» بخطوات متصلة، تظليل الخطوة الحالية، وتذييل بالخطة/التقدّم.", where: "لشاشة <b>البدء السريع</b> لمستخدم جديد." },
+  { key: "diagonal-stripe-edge", num: "315", name: "Diagonal Stripe Edge", ar: "نسيج خطوط مائلة", status: "ready", category: "Texture · background", origin: "reference-app", concept: "repeating-linear-gradient بزاوية 45° لنسيج خلفية خفيف.", where: "لحواف الصفحات أو أقسام مميّزة." },
+  { key: "numbered-feature-list", num: "316", name: "Numbered Feature List", ar: "قائمة مُرقّمة", status: "ready", category: "Layout · text list", origin: "reference-marketing", concept: "أرقام سيريف ضخمة باهتة (01/02/03) بجانب نص قصير.", where: "لشرح خطوات أو ميزات بشكل تحريري." },
+  { key: "big-stat-row", num: "317", name: "Big Stat Row", ar: "صف إحصائيّات ضخمة", status: "ready", category: "Layout · stats", origin: "reference-marketing", concept: "3 أرقام مونو ضخمة + تسمية، مفصولة بخط رأسي.", where: "لصف إحصائيّات بارزة أعلى لوحة الإدمن." },
+  { key: "inline-headline-chip", num: "318", name: "Inline Headline Chip", ar: "رقاقة داخل العنوان", status: "ready", category: "Layout · headline", origin: "reference-marketing", concept: "رقاقة ملوّنة تجلس داخل جملة العنوان الكبيرة، تحمل أيقونة صغيرة.", where: "لعناوين hero مميّزة." },
+  { key: "config-chip-row", num: "319", name: "Config Chip Row", ar: "صف إعدادات", status: "ready", category: "Form · settings row", origin: "reference-app", concept: "تسمية بداية السطر + قيمة ككبسولة بنهايته.", where: "لشاشة <b>الإعدادات</b>." },
+  { key: "footer-newsletter", num: "320", name: "Footer With Newsletter", ar: "تذييل مع نشرة بريديّة", status: "ready", category: "Layout · footer", origin: "reference-marketing", concept: "أعمدة روابط + صف التقاط بريد أسفل.", where: "لصفحات تسويقية." },
+  { key: "popover", num: "400", name: "Popover", ar: "نافذة منبثقة", status: "ready", category: "Overlay · anchored panel", origin: "sshahaider", concept: "لوحة عائمة تفتح بجانب زر التفعيل، تغلق عند النقر خارجها عبر مستمع document. سهم مثلث صغير يربطها بالزر.", where: "قالب عام لأي محتوى سياقي قصير يحتاج إلى إظهار/إخفاء بالنقر في أي مشروع." },
+  { key: "heroui-select", num: "401", name: "HeroUI Select", ar: "قائمة اختيار مخصّصة", status: "ready", category: "Form · select", origin: "hero_ui", concept: "بديل مصمّم لـ select المتصفح، بحواف يتلوّن عند الفتح + علامة صح للخيار المختار.", where: "أي نموذج يحتاج لاختيار واحد بتصميم أجمل من select المتصفح." },
+  { key: "heroui-dropdown", num: "402", name: "HeroUI Dropdown", ar: "قائمة إجراءات", status: "ready", category: "Nav · action menu", origin: "hero_ui", concept: "قائمة إجراءات منبثقة بزر ‹⋯›، عناصر بأيقونات وحالة خطر مميّزة.", where: "قائمة سياق لأي صف جدول أو بطاقة." },
+  { key: "card-8", num: "403", name: "Card 8", ar: "بطاقة بشعار متداخل", status: "ready", category: "Card · banner + badge", origin: "kavikatiyar", concept: "لافتة متدرّجة أعلى البطاقة مع شارة دائرية تتداخل مع الجسم النصيّ.", where: "أي بطاقة ميزة/منتج عامة." },
+  { key: "assignee-user", num: "404", name: "Assignee User", ar: "محدّد المسؤول", status: "ready", category: "Form · people picker", origin: "ln-dev7", concept: "زر بصورة رمزية+اسم يفتح قائمة أشخاص للاختيار.", where: "أي نظام يحتاج تعيين شخص مسؤول عن مهمة/عنصر." },
+  { key: "heroui-alert-dialog", num: "405", name: "HeroUI Alert Dialog", ar: "حوار تنبيه حاسم", status: "ready", category: "Feedback · destructive confirm", origin: "hero_ui", concept: "حوار تأكيد لإجراء خطير، أيقونة تحذير حمراء دائرية فوق العنوان.", where: "أي إجراء حذف/إلغاء لا يمكن التراجع عنه." },
+  { key: "avatar-notifications", num: "406", name: "Avatar Notifications", ar: "صورة مع إشعار", status: "ready", category: "Display · badge cluster", origin: "ruixen.ui", concept: "شارة عدد/حالة اتصال/تنبيه تطفو فوق حافة صورة رمزيّة.", where: "قائمة مستخدمين أو فريق مع حالات حيّة." },
+  { key: "timeline", num: "407", name: "Timeline", ar: "خط زمنيّ", status: "ready", category: "Display · vertical timeline", origin: "aceternity", concept: "محطّات متصلة بخط، كل محطّة بسنة/عنوان/وصف. مكوّن Aceternity المميّز.", where: "صفحات «من نحن» أو سجل أحداث/إصدارات." },
+  { key: "message-dock", num: "408", name: "Message Dock", ar: "رسو الرسائل", status: "ready", category: "Form · chat composer", origin: "isaiahbjork", concept: "مركّب رسالة عائم بحواف مرن + زر إرسال يتلوّن عند وجود نص.", where: "أي واجهة دردشة/دعم فني." },
+  { key: "button-with-kbd", num: "409", name: "Button with Kbd", ar: "زر باختصار لوحة المفاتيح", status: "ready", category: "Button · keyboard hint", origin: "originui", concept: "زر يعرض اختصار لوحة المفاتيح بعنصر <code>&lt;kbd&gt;</code> منفصل.", where: "أي إجراء له اختصار لوحة مفاتيح." },
+  { key: "spotlight-button", num: "410", name: "Spotlight Button", ar: "زر البقعة الضوئيّة", status: "ready", category: "Button · cursor-follow", origin: "waleedkibhen", concept: "هالة ضوء دائرية تتبع المؤشّر داخل الزر عبر onMouseMove.", where: "أزرار CTA داكنة تحتاج لمسة تفاعل خفيّة." },
+  { key: "liquid-glass-v2", num: "411", name: "Liquid Glass (v2)", ar: "زجاج سائل — نسخة ثانية", status: "ready", category: "Display · droplet glass", origin: "suraj-xd", concept: "كبسولة زجاجيّة بيضاوية الشكل بملمس مزدوج (فاتح أعلى/داكن أسفل) تعطي إحساس قطرة منتفخة — أكثر تقوسًا من LiquidGlass الأصلي.", where: "بديل بصري للزجاج الأصلي في أي مشروع." },
+  { key: "flow-hover-button", num: "412", name: "Flow Hover Button", ar: "زر التدفّق المستمر", status: "ready", category: "Button · animated gradient", origin: "vaib215", concept: "تدرّج أفقي ثلاثي الألوان يتدفّق باستمرار عبر background-position.", where: "CTA بصري حيّ بدون الحاجة لتفاعل ماوس." },
+  { key: "discover-button", num: "413", name: "Discover Button", ar: "زر استكشاف", status: "ready", category: "Button · hover morph", origin: "0xUrvish", concept: "أيقونة دائرية تدور 45° عند المرور بإيزينج مطّاطي.", where: "زر استكشاف/تصفّح عام." },
+  { key: "animated-radio", num: "414", name: "Animated Radio", ar: "راديو متحرّك", status: "ready", category: "Form · sliding segmented", origin: "jatin-yadav05", concept: "مؤشّر أبيض ينزلق بين الأزرار بقياس offsetLeft/offsetWidth من refs. مختلف عن LiquidRadio/OrbRadioSelector.", where: "مجموعة اختيار قصيرة من 3-4 خيارات متساوية." },
+];
+
+const STATUS = {
+  ok:    { cls: "ok",    label: "مطبّق في النظام" },
+  ready: { cls: "ready", label: "جاهز للإضافة — الكود هنا" },
+  ref:   { cls: "ref",   label: "مرجعي · لإعادة التوظيف" },
+};
+
+function CopyBtn({ text }) {
+  const [state, setState] = React.useState("idle"); // idle | done | failed
+  return (
+    <button className="code__copy" onClick={() => {
+      const ok = () => { setState("done"); setTimeout(() => setState("idle"), 1400); };
+      const fail = () => { setState("failed"); setTimeout(() => setState("idle"), 1400); };
+      try {
+        if (navigator.clipboard?.writeText) {
+          navigator.clipboard.writeText(text).then(ok).catch(fail);
+        } else {
+          fail();
+        }
+      } catch (e) { fail(); }
+    }}>{state === "done" ? "✓ نُسخ" : state === "failed" ? "تعذّر النسخ" : "نسخ"}</button>
+  );
+}
+
+function CodeViewer({ usage, source }) {
+  const [tab, setTab] = React.useState("usage");
+  const text = tab === "usage" ? usage : source;
+  return (
+    <div className="code">
+      <div className="code__bar">
+        <button className={"code__tab" + (tab === "usage" ? " code__tab--active" : "")} onClick={() => setTab("usage")}>الاستخدام</button>
+        <button className={"code__tab" + (tab === "source" ? " code__tab--active" : "")} onClick={() => setTab("source")}>الكود الكامل</button>
+        <CopyBtn text={text} />
+      </div>
+      <pre>{text}</pre>
+    </div>
+  );
+}
+
+function PatternDetail({ meta }) {
+  const reg = (window.JAHEZ_PATTERNS || {})[meta.key] || {};
+  const Demo = reg.Demo;
+  const st = STATUS[meta.status];
+  return (
+    <div>
+      <div className="pat__head">
+        <span className="pat__num">{meta.num}</span>
+        <div className="pat__titles">
+          <div className="pat__name">{meta.name}</div>
+          <div className="pat__ar">{meta.ar}</div>
+        </div>
+        <span className={"badge badge--" + st.cls}>
+          <span className={"dot dot--" + st.cls}></span>{st.label}
+        </span>
+      </div>
+
+      <div className="meta-row">
+        <span className="chip">{meta.category}</span>
+        <span className="chip">21st.dev/{meta.origin}</span>
+      </div>
+
+      <div className="sec">
+        <div className="sec__label">الفكرة · التحليل</div>
+        <p className="prose" dangerouslySetInnerHTML={{ __html: meta.concept }} />
+      </div>
+
+      <div className="sec">
+        <div className="sec__label">معاينة حية</div>
+        <div className="demo">{Demo ? <Demo /> : <em style={{ color: "var(--text-tertiary)" }}>جارٍ التحميل…</em>}</div>
+      </div>
+
+      <div className="sec">
+        <div className="sec__label">الكود</div>
+        <CodeViewer usage={reg.usage || "// —"} source={reg.source || "// —"} />
+      </div>
+
+      <div className="where">
+        <span className="where__icon">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2 4 7v10l8 5 8-5V7Z"/><path d="m4 7 8 5 8-5"/><path d="M12 22V12"/></svg>
+        </span>
+        <div className="where__t" dangerouslySetInnerHTML={{ __html: "<b>أين يُستخدم في جاهز:</b> " + meta.where }} />
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  const [sel, setSel] = React.useState(META[0].key);
+  const ALL = React.useMemo(function () { return META.concat(window.JAHEZ_META_2 || []); }, []);
+  const current = ALL.find(m => m.key === sel);
+  const groups = [
+    { label: "مطبّق في النظام", items: ALL.filter(m => m.status === "ok") },
+    { label: "جاهز للإضافة", items: ALL.filter(m => m.status === "ready") },
+    { label: "مرجعي", items: ALL.filter(m => m.status === "ref") },
+  ];
+
+  return (
+    <div className="layout">
+      <aside className="side">
+        <div className="brand">
+          <img className="brand__mark" src="../assets/logo/symbol.svg" alt="" />
+          <div>
+            <div className="brand__t">مكتبة الأنماط</div>
+            <div className="brand__s">21st.dev → Jahez · {ALL.length} نمط</div>
+          </div>
+        </div>
+        {groups.map(g => (
+          <div key={g.label}>
+            <div className="side__group">{g.label} · {g.items.length}</div>
+            {g.items.map(m => (
+              <button key={m.key} className={"navitem" + (m.key === sel ? " navitem--active" : "")} onClick={() => setSel(m.key)}>
+                <span className="navitem__num">{m.num}</span>
+                <span className={"dot dot--" + STATUS[m.status].cls}></span>
+                <span className="navitem__t">{m.ar}</span>
+              </button>
+            ))}
+          </div>
+        ))}
+      </aside>
+
+      <main className="main">
+        <div className="wrap">
+          <div className="intro">
+            <h1>مكتبة الأنماط المرجعية</h1>
+            <p>تحليل كامل لكل نمط من المصادر المرجعية — الفكرة، معاينة حية، والكود الجاهز للنسخ. كل نمط مكتفٍ ذاتيًا: انسخ الكود وطبّقه مباشرةً دون الحاجة للرابط الأصلي.</p>
+            <p style={{ marginTop: 8, fontSize: 14, color: "var(--text-tertiary)" }}>الكود في تبويب «الكود الكامل» مكتوب بقيم خام محمولة (ألوان وخطوط مباشرة، بلا متغيّرات جاهز) — صالح للنسخ إلى أي مشروع آخر. أما المعاينات الحيّة فتستخدم مكوّنات جاهز حيث توفّرت.</p>
+            <div className="legend">
+              <span><span className="dot dot--ok"></span>مطبّق في النظام</span>
+              <span><span className="dot dot--ready"></span>جاهز للإضافة — الكود هنا</span>
+              <span><span className="dot dot--ref"></span>مرجعي · لإعادة التوظيف</span>
+            </div>
+          </div>
+          {current && <PatternDetail meta={current} />}
+        </div>
+      </main>
+    </div>
+  );
+}
+
+function mount() {
+  if (!window.JAHEZ_PATTERNS) return setTimeout(mount, 40);
+  ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+}
+mount();
+</script>
+
+
+</body></html>

@@ -1,0 +1,282 @@
+/* NOVA theme packs — the Madar color families (design-system/madar/design.md §2)
+   expressed in the NOVA token namespace.
+
+   These are not a second token system. Every pack overrides the same
+   `--nova-*` names declared in tokens.css, so a component written against NOVA
+   tokens renders correctly under `light`, `dark`, `mint`, `coral`, `sky`,
+   `iris`, and `night` without knowing which pack is active. Geometry, type,
+   motion, layering, and container tokens are inherited from tokens.css and are
+   never re-declared here.
+
+   Set the pack with `data-theme` on the document element. Madar's own token
+   names are aliased onto these values in src/madar/bridge.css. */
+
+[data-theme="mint"] {
+  color-scheme: light;
+
+  --nova-canvas: oklch(0.973 0.010 180);
+  --nova-canvas-deep: oklch(0.948 0.014 180);
+  --nova-surface: oklch(0.998 0.002 180);
+  --nova-surface-quiet: oklch(0.962 0.010 180);
+  --nova-surface-raised: oklch(0.986 0.006 180);
+  --nova-ink: oklch(0.26 0.030 215);
+  --nova-ink-secondary: oklch(0.47 0.022 215);
+  --nova-ink-tertiary: oklch(0.525 0.020 215);
+  --nova-ink-block: oklch(0.27 0.030 215);
+  --nova-on-ink-block: oklch(0.97 0.008 180);
+  --nova-border: oklch(0.905 0.012 190);
+  --nova-border-strong: oklch(0.82 0.018 190);
+
+  --nova-action: oklch(0.72 0.130 172);
+  --nova-action-hover: oklch(0.68 0.130 172);
+  --nova-action-pressed: oklch(0.62 0.128 172);
+  --nova-action-soft: oklch(0.72 0.130 172 / 0.13);
+  --nova-action-ink: oklch(0.47 0.098 172);
+  --nova-on-action: oklch(0.20 0.040 200);
+  --nova-focus: oklch(0.58 0.120 178);
+
+  --nova-success: oklch(0.53 0.130 158);
+  --nova-success-soft: oklch(0.68 0.145 158 / 0.14);
+  --nova-warning: oklch(0.52 0.120 80);
+  --nova-warning-soft: oklch(0.78 0.140 80 / 0.16);
+  --nova-danger: oklch(0.53 0.180 27);
+  --nova-danger-soft: oklch(0.62 0.185 27 / 0.13);
+  --nova-info: oklch(0.53 0.125 245);
+  --nova-info-soft: oklch(0.68 0.130 245 / 0.14);
+
+  --nova-scrim: oklch(0.30 0.030 200 / 0.46);
+  --nova-glass: oklch(0.99 0.004 180 / 0.62);
+  --nova-glass-strong: oklch(0.99 0.004 180 / 0.80);
+  --nova-glass-edge: oklch(1 0 0 / 0.88);
+  --nova-glass-edge-shade: oklch(0.45 0.050 200 / 0.16);
+  --nova-glass-specular: oklch(1 0 0 / 0.92);
+  --nova-glass-caustic: oklch(0.72 0.130 172 / 0.18);
+  --nova-state-hover: oklch(0.72 0.130 172 / 0.09);
+  --nova-state-pressed: oklch(0.62 0.128 172 / 0.15);
+  --nova-state-selected: oklch(0.72 0.130 172 / 0.16);
+  --nova-shadow-tint: oklch(0.45 0.050 200);
+  --nova-glass-shadow:
+    0 1px 0 oklch(1 0 0 / 0.64) inset,
+    0 -1px 0 oklch(0.45 0.050 200 / 0.10) inset,
+    0 18px 46px oklch(0.45 0.050 200 / 0.12),
+    0 3px 12px oklch(0.45 0.050 200 / 0.08);
+  --nova-shadow-sm: 0 1px 2px oklch(0.45 0.050 200 / 0.06), 0 8px 24px oklch(0.45 0.050 200 / 0.07);
+  --nova-shadow-md: 0 4px 12px oklch(0.45 0.050 200 / 0.10), 0 20px 48px oklch(0.45 0.050 200 / 0.14);
+  --nova-shadow-lg: 0 8px 24px oklch(0.45 0.050 200 / 0.14), 0 32px 80px oklch(0.45 0.050 200 / 0.22);
+}
+
+[data-theme="coral"] {
+  color-scheme: light;
+
+  --nova-canvas: oklch(0.972 0.011 70);
+  --nova-canvas-deep: oklch(0.947 0.015 70);
+  --nova-surface: oklch(0.998 0.002 70);
+  --nova-surface-quiet: oklch(0.961 0.011 70);
+  --nova-surface-raised: oklch(0.986 0.006 70);
+  --nova-ink: oklch(0.27 0.028 45);
+  --nova-ink-secondary: oklch(0.48 0.022 45);
+  --nova-ink-tertiary: oklch(0.525 0.020 45);
+  --nova-ink-block: oklch(0.28 0.028 45);
+  --nova-on-ink-block: oklch(0.97 0.009 70);
+  --nova-border: oklch(0.905 0.014 65);
+  --nova-border-strong: oklch(0.82 0.020 65);
+
+  --nova-action: oklch(0.55 0.170 38);
+  --nova-action-hover: oklch(0.51 0.165 38);
+  --nova-action-pressed: oklch(0.47 0.160 38);
+  --nova-action-soft: oklch(0.70 0.150 38 / 0.13);
+  --nova-action-ink: oklch(0.50 0.155 38);
+  --nova-on-action: oklch(0.99 0.005 70);
+  --nova-focus: oklch(0.53 0.170 38);
+
+  --nova-success: oklch(0.53 0.130 158);
+  --nova-success-soft: oklch(0.68 0.145 158 / 0.14);
+  --nova-warning: oklch(0.52 0.120 80);
+  --nova-warning-soft: oklch(0.78 0.140 80 / 0.16);
+  --nova-danger: oklch(0.53 0.180 27);
+  --nova-danger-soft: oklch(0.62 0.185 27 / 0.13);
+  --nova-info: oklch(0.53 0.125 245);
+  --nova-info-soft: oklch(0.68 0.130 245 / 0.14);
+
+  --nova-scrim: oklch(0.30 0.030 50 / 0.46);
+  --nova-glass: oklch(0.99 0.004 70 / 0.62);
+  --nova-glass-strong: oklch(0.99 0.004 70 / 0.80);
+  --nova-glass-edge: oklch(1 0 0 / 0.88);
+  --nova-glass-edge-shade: oklch(0.45 0.050 50 / 0.16);
+  --nova-glass-specular: oklch(1 0 0 / 0.92);
+  --nova-glass-caustic: oklch(0.70 0.150 38 / 0.18);
+  --nova-state-hover: oklch(0.55 0.170 38 / 0.09);
+  --nova-state-pressed: oklch(0.47 0.160 38 / 0.15);
+  --nova-state-selected: oklch(0.55 0.170 38 / 0.16);
+  --nova-shadow-tint: oklch(0.45 0.050 50);
+  --nova-glass-shadow:
+    0 1px 0 oklch(1 0 0 / 0.64) inset,
+    0 -1px 0 oklch(0.45 0.050 50 / 0.10) inset,
+    0 18px 46px oklch(0.45 0.050 50 / 0.12),
+    0 3px 12px oklch(0.45 0.050 50 / 0.08);
+  --nova-shadow-sm: 0 1px 2px oklch(0.45 0.050 50 / 0.06), 0 8px 24px oklch(0.45 0.050 50 / 0.07);
+  --nova-shadow-md: 0 4px 12px oklch(0.45 0.050 50 / 0.10), 0 20px 48px oklch(0.45 0.050 50 / 0.14);
+  --nova-shadow-lg: 0 8px 24px oklch(0.45 0.050 50 / 0.14), 0 32px 80px oklch(0.45 0.050 50 / 0.22);
+}
+
+[data-theme="sky"] {
+  color-scheme: light;
+
+  --nova-canvas: oklch(0.972 0.010 235);
+  --nova-canvas-deep: oklch(0.947 0.014 235);
+  --nova-surface: oklch(0.998 0.002 235);
+  --nova-surface-quiet: oklch(0.961 0.010 235);
+  --nova-surface-raised: oklch(0.986 0.005 235);
+  --nova-ink: oklch(0.26 0.032 250);
+  --nova-ink-secondary: oklch(0.47 0.024 250);
+  --nova-ink-tertiary: oklch(0.525 0.021 250);
+  --nova-ink-block: oklch(0.27 0.032 250);
+  --nova-on-ink-block: oklch(0.97 0.008 235);
+  --nova-border: oklch(0.902 0.014 235);
+  --nova-border-strong: oklch(0.82 0.020 235);
+
+  --nova-action: oklch(0.52 0.170 245);
+  --nova-action-hover: oklch(0.48 0.165 245);
+  --nova-action-pressed: oklch(0.44 0.160 245);
+  --nova-action-soft: oklch(0.66 0.150 245 / 0.13);
+  --nova-action-ink: oklch(0.48 0.160 245);
+  --nova-on-action: oklch(0.99 0.005 235);
+  --nova-focus: oklch(0.50 0.170 245);
+
+  --nova-success: oklch(0.53 0.130 158);
+  --nova-success-soft: oklch(0.68 0.145 158 / 0.14);
+  --nova-warning: oklch(0.52 0.120 80);
+  --nova-warning-soft: oklch(0.78 0.140 80 / 0.16);
+  --nova-danger: oklch(0.53 0.180 27);
+  --nova-danger-soft: oklch(0.62 0.185 27 / 0.13);
+  --nova-info: oklch(0.53 0.125 245);
+  --nova-info-soft: oklch(0.68 0.130 245 / 0.14);
+
+  --nova-scrim: oklch(0.28 0.032 250 / 0.46);
+  --nova-glass: oklch(0.99 0.004 235 / 0.62);
+  --nova-glass-strong: oklch(0.99 0.004 235 / 0.80);
+  --nova-glass-edge: oklch(1 0 0 / 0.88);
+  --nova-glass-edge-shade: oklch(0.42 0.050 250 / 0.16);
+  --nova-glass-specular: oklch(1 0 0 / 0.92);
+  --nova-glass-caustic: oklch(0.66 0.150 245 / 0.18);
+  --nova-state-hover: oklch(0.52 0.170 245 / 0.09);
+  --nova-state-pressed: oklch(0.44 0.160 245 / 0.15);
+  --nova-state-selected: oklch(0.52 0.170 245 / 0.16);
+  --nova-shadow-tint: oklch(0.42 0.050 250);
+  --nova-glass-shadow:
+    0 1px 0 oklch(1 0 0 / 0.64) inset,
+    0 -1px 0 oklch(0.42 0.050 250 / 0.10) inset,
+    0 18px 46px oklch(0.42 0.050 250 / 0.12),
+    0 3px 12px oklch(0.42 0.050 250 / 0.08);
+  --nova-shadow-sm: 0 1px 2px oklch(0.42 0.050 250 / 0.06), 0 8px 24px oklch(0.42 0.050 250 / 0.07);
+  --nova-shadow-md: 0 4px 12px oklch(0.42 0.050 250 / 0.10), 0 20px 48px oklch(0.42 0.050 250 / 0.14);
+  --nova-shadow-lg: 0 8px 24px oklch(0.42 0.050 250 / 0.14), 0 32px 80px oklch(0.42 0.050 250 / 0.22);
+}
+
+[data-theme="iris"] {
+  color-scheme: light;
+
+  --nova-canvas: oklch(0.971 0.012 300);
+  --nova-canvas-deep: oklch(0.946 0.016 300);
+  --nova-surface: oklch(0.998 0.002 300);
+  --nova-surface-quiet: oklch(0.960 0.012 300);
+  --nova-surface-raised: oklch(0.985 0.006 300);
+  --nova-ink: oklch(0.27 0.030 295);
+  --nova-ink-secondary: oklch(0.48 0.024 295);
+  --nova-ink-tertiary: oklch(0.525 0.021 295);
+  --nova-ink-block: oklch(0.28 0.030 295);
+  --nova-on-ink-block: oklch(0.97 0.009 300);
+  --nova-border: oklch(0.903 0.015 300);
+  --nova-border-strong: oklch(0.82 0.022 300);
+
+  --nova-action: oklch(0.56 0.190 293);
+  --nova-action-hover: oklch(0.52 0.190 293);
+  --nova-action-pressed: oklch(0.47 0.180 293);
+  --nova-action-soft: oklch(0.62 0.150 293 / 0.13);
+  --nova-action-ink: oklch(0.47 0.180 293);
+  --nova-on-action: oklch(0.99 0.005 300);
+  --nova-focus: oklch(0.54 0.190 293);
+
+  --nova-success: oklch(0.53 0.130 158);
+  --nova-success-soft: oklch(0.68 0.145 158 / 0.14);
+  --nova-warning: oklch(0.52 0.120 80);
+  --nova-warning-soft: oklch(0.78 0.140 80 / 0.16);
+  --nova-danger: oklch(0.53 0.180 27);
+  --nova-danger-soft: oklch(0.62 0.185 27 / 0.13);
+  --nova-info: oklch(0.53 0.125 245);
+  --nova-info-soft: oklch(0.68 0.130 245 / 0.14);
+
+  --nova-scrim: oklch(0.28 0.030 295 / 0.46);
+  --nova-glass: oklch(0.99 0.004 300 / 0.62);
+  --nova-glass-strong: oklch(0.99 0.004 300 / 0.80);
+  --nova-glass-edge: oklch(1 0 0 / 0.88);
+  --nova-glass-edge-shade: oklch(0.42 0.060 295 / 0.16);
+  --nova-glass-specular: oklch(1 0 0 / 0.92);
+  --nova-glass-caustic: oklch(0.62 0.150 293 / 0.18);
+  --nova-state-hover: oklch(0.56 0.190 293 / 0.09);
+  --nova-state-pressed: oklch(0.47 0.180 293 / 0.15);
+  --nova-state-selected: oklch(0.56 0.190 293 / 0.16);
+  --nova-shadow-tint: oklch(0.42 0.060 295);
+  --nova-glass-shadow:
+    0 1px 0 oklch(1 0 0 / 0.64) inset,
+    0 -1px 0 oklch(0.42 0.060 295 / 0.10) inset,
+    0 18px 46px oklch(0.42 0.060 295 / 0.12),
+    0 3px 12px oklch(0.42 0.060 295 / 0.08);
+  --nova-shadow-sm: 0 1px 2px oklch(0.42 0.060 295 / 0.06), 0 8px 24px oklch(0.42 0.060 295 / 0.07);
+  --nova-shadow-md: 0 4px 12px oklch(0.42 0.060 295 / 0.10), 0 20px 48px oklch(0.42 0.060 295 / 0.14);
+  --nova-shadow-lg: 0 8px 24px oklch(0.42 0.060 295 / 0.14), 0 32px 80px oklch(0.42 0.060 295 / 0.22);
+}
+
+[data-theme="night"] {
+  color-scheme: dark;
+
+  --nova-canvas: oklch(0.285 0.048 274);
+  --nova-canvas-deep: oklch(0.245 0.045 274);
+  --nova-surface: oklch(0.335 0.048 274);
+  --nova-surface-quiet: oklch(0.305 0.046 274);
+  --nova-surface-raised: oklch(0.385 0.045 274);
+  --nova-ink: oklch(0.955 0.010 270);
+  --nova-ink-secondary: oklch(0.780 0.022 270);
+  --nova-ink-tertiary: oklch(0.680 0.026 270);
+  --nova-ink-block: oklch(0.955 0.010 270);
+  --nova-on-ink-block: oklch(0.25 0.045 274);
+  --nova-border: oklch(0.415 0.045 274);
+  --nova-border-strong: oklch(0.50 0.045 274);
+
+  --nova-action: oklch(0.82 0.125 172);
+  --nova-action-hover: oklch(0.86 0.120 172);
+  --nova-action-pressed: oklch(0.76 0.125 172);
+  --nova-action-soft: oklch(0.82 0.125 172 / 0.16);
+  --nova-action-ink: oklch(0.86 0.110 172);
+  --nova-on-action: oklch(0.22 0.050 274);
+  --nova-focus: oklch(0.84 0.120 172);
+
+  --nova-success: oklch(0.76 0.145 158);
+  --nova-success-soft: oklch(0.76 0.145 158 / 0.16);
+  --nova-warning: oklch(0.84 0.140 80);
+  --nova-warning-soft: oklch(0.84 0.140 80 / 0.16);
+  --nova-danger: oklch(0.76 0.175 27);
+  --nova-danger-soft: oklch(0.76 0.175 27 / 0.16);
+  --nova-info: oklch(0.76 0.130 245);
+  --nova-info-soft: oklch(0.76 0.130 245 / 0.16);
+
+  --nova-scrim: oklch(0.12 0.050 274 / 0.62);
+  --nova-glass: oklch(0.34 0.050 274 / 0.55);
+  --nova-glass-strong: oklch(0.36 0.050 274 / 0.76);
+  --nova-glass-edge: oklch(0.95 0.010 270 / 0.20);
+  --nova-glass-edge-shade: oklch(0.12 0.050 274 / 0.46);
+  --nova-glass-specular: oklch(0.95 0.010 270 / 0.30);
+  --nova-glass-caustic: oklch(0.82 0.125 172 / 0.20);
+  --nova-state-hover: oklch(0.82 0.125 172 / 0.10);
+  --nova-state-pressed: oklch(0.76 0.125 172 / 0.18);
+  --nova-state-selected: oklch(0.82 0.125 172 / 0.18);
+  --nova-shadow-tint: oklch(0.12 0.050 274);
+  --nova-glass-shadow:
+    0 1px 0 oklch(0.95 0.010 270 / 0.15) inset,
+    0 -1px 0 oklch(0.12 0.050 274 / 0.34) inset,
+    0 22px 64px oklch(0.12 0.050 274 / 0.38),
+    0 4px 16px oklch(0.12 0.050 274 / 0.24);
+  --nova-shadow-sm: 0 1px 2px oklch(0.12 0.050 274 / 0.18), 0 10px 28px oklch(0.12 0.050 274 / 0.18);
+  --nova-shadow-md: 0 18px 54px oklch(0.12 0.050 274 / 0.28);
+  --nova-shadow-lg: 0 30px 96px oklch(0.12 0.050 274 / 0.44);
+}

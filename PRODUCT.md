@@ -2,7 +2,7 @@
 
 ## Product
 
-NOVA UI is an Arabic-first React component library and interactive pattern gallery delivered as a Vite and TypeScript project.
+NOVA UI is an Arabic-first React component library and interactive pattern gallery delivered as a Vite and TypeScript project. It carries two merged libraries on one token system: the NOVA catalog of 72 patterns, and the Madar library of 29 sections.
 
 ## Audience
 
@@ -12,7 +12,7 @@ NOVA UI is an Arabic-first React component library and interactive pattern galle
 
 ## Primary Jobs
 
-1. Find a component quickly through search, filters, and sections.
+1. Find a component quickly through search, filters, sections, and the command palette across both libraries.
 2. Preview real interactions in a fast local development environment.
 3. Copy or adapt a component while retaining its source reference.
 4. Verify responsive, RTL, LTR, light, and dark behavior.
@@ -24,6 +24,8 @@ NOVA UI is an Arabic-first React component library and interactive pattern galle
 - No authentication, backend, data persistence, or live payment processing.
 - Support starts at 320px and is explicitly checked at 390px, 768px, 1024px, and 1440px.
 - Arabic RTL is the default. English LTR must remain available.
+- Seven theme packs and three glass levels share one token namespace. A component must render correctly in all of them without knowing which is active.
+- `archive/madar/` is a historical record of the Madar handoff bundle. It is never imported and never built.
 - Every control must work with keyboard input and show a visible focus state.
 - External component sources are inspiration and attribution. Final code must fit NOVA tokens and architecture.
 
@@ -38,7 +40,7 @@ NOVA UI is an Arabic-first React component library and interactive pattern galle
 - A successful TypeScript check and production build with zero console errors.
 - No horizontal overflow on mobile.
 - Working loading, empty, error, success, and disabled states where relevant.
-- WCAG AA contrast for text and interactive controls.
+- WCAG AA contrast for text and interactive controls, measured in every theme pack a change touches.
 - Reduced-motion support for non-essential animation.
 - Search, filtering, theme, direction, copy actions, and demos remain functional.
 - Each third-party-inspired pattern retains a direct source reference.

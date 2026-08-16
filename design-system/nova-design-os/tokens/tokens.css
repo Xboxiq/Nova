@@ -3,14 +3,18 @@
   color-scheme: light;
 
   --nova-canvas: #f3f7f8;
+  --nova-canvas-deep: #e6eef0;
   --nova-surface: #ffffff;
   --nova-surface-quiet: #eaf0f2;
   --nova-surface-raised: #fbfdfd;
   --nova-ink: #10242e;
   --nova-ink-secondary: #455e68;
   --nova-ink-tertiary: #5d747d;
+  --nova-ink-block: #16303c;
+  --nova-on-ink-block: #f3fafb;
   --nova-border: #d6e1e4;
   --nova-border-strong: #b8c9ce;
+  --nova-shadow-tint: #17454f;
 
   --nova-action: #0068d9;
   --nova-action-hover: #005ec6;
@@ -56,14 +60,18 @@
   color-scheme: dark;
 
   --nova-canvas: #0d1b22;
+  --nova-canvas-deep: #081418;
   --nova-surface: #122833;
   --nova-surface-quiet: #19343f;
   --nova-surface-raised: #21414f;
   --nova-ink: #f3fafb;
   --nova-ink-secondary: #c0d0d4;
   --nova-ink-tertiary: #91a8af;
+  --nova-ink-block: #f3fafb;
+  --nova-on-ink-block: #0d1b22;
   --nova-border: #294955;
   --nova-border-strong: #3d6270;
+  --nova-shadow-tint: #01090d;
 
   --nova-action: #70b7ff;
   --nova-action-hover: #89c4ff;
@@ -104,14 +112,18 @@
     color-scheme: dark;
 
     --nova-canvas: #0d1b22;
+    --nova-canvas-deep: #081418;
     --nova-surface: #122833;
     --nova-surface-quiet: #19343f;
     --nova-surface-raised: #21414f;
     --nova-ink: #f3fafb;
     --nova-ink-secondary: #c0d0d4;
     --nova-ink-tertiary: #91a8af;
+    --nova-ink-block: #f3fafb;
+    --nova-on-ink-block: #0d1b22;
     --nova-border: #294955;
     --nova-border-strong: #3d6270;
+    --nova-shadow-tint: #01090d;
     --nova-action: #70b7ff;
     --nova-action-hover: #89c4ff;
     --nova-action-pressed: #57a7f6;

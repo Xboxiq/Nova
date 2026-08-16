@@ -1,0 +1,204 @@
+/* Madar surface inside the NOVA shell: the family rail, the section picker,
+   and the stage the Madar sections render into. Colors come from NOVA tokens
+   only; the Madar library's own names are aliased in src/madar/bridge.css. */
+
+.madar-section {
+  width: min(calc(100% - var(--nova-space-6)), var(--nova-content-wide));
+  margin-inline: auto;
+  padding-block: var(--nova-section-space-compact);
+  scroll-margin-block-start: calc(var(--nova-topbar) + var(--nova-space-8));
+}
+
+.madar-controls {
+  display: grid;
+  grid-template-columns: minmax(0, 20rem) minmax(0, 1fr);
+  gap: var(--nova-space-6);
+  align-items: start;
+  margin-block-start: var(--nova-space-8);
+}
+
+.madar-families {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nova-space-1);
+  padding: var(--nova-space-3);
+  background: color-mix(in srgb, var(--nova-surface) 76%, transparent);
+  border: 1px solid var(--nova-border);
+  border-radius: var(--nova-radius-card);
+}
+
+.madar-families button {
+  display: flex;
+  gap: var(--nova-space-3);
+  align-items: center;
+  justify-content: space-between;
+  min-height: var(--nova-hit-min);
+  padding-inline: var(--nova-space-4);
+  color: var(--nova-ink-secondary);
+  font-size: var(--nova-text-body-sm);
+  font-weight: var(--nova-weight-semibold);
+  text-align: start;
+  background: none;
+  border: none;
+  border-radius: var(--nova-radius-control);
+  cursor: pointer;
+  transition: color var(--nova-motion-fast), background-color var(--nova-motion-fast);
+}
+
+.madar-families button:hover {
+  color: var(--nova-ink);
+  background: var(--nova-state-hover);
+}
+
+.madar-families button.active {
+  color: var(--nova-action-ink);
+  background: var(--nova-action-soft);
+}
+
+.madar-families small {
+  color: var(--nova-ink-tertiary);
+  font-size: var(--nova-text-label-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.madar-families button.active small {
+  color: var(--nova-action-ink);
+}
+
+.madar-picker {
+  padding: var(--nova-space-4);
+  background: color-mix(in srgb, var(--nova-surface) 76%, transparent);
+  border: 1px solid var(--nova-border);
+  border-radius: var(--nova-radius-card);
+}
+
+.madar-picker-heading {
+  display: flex;
+  gap: var(--nova-space-2);
+  align-items: center;
+  margin: 0 0 var(--nova-space-3);
+  color: var(--nova-ink-tertiary);
+  font-size: var(--nova-text-label-md);
+  font-weight: var(--nova-weight-semibold);
+}
+
+.madar-picker-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: var(--nova-space-2);
+}
+
+.madar-picker-list button {
+  display: flex;
+  gap: var(--nova-space-3);
+  align-items: center;
+  justify-content: space-between;
+  min-height: var(--nova-hit-min);
+  padding: var(--nova-space-3) var(--nova-space-4);
+  color: var(--nova-ink);
+  text-align: start;
+  background: var(--nova-surface);
+  border: 1px solid var(--nova-border);
+  border-radius: var(--nova-radius-field);
+  cursor: pointer;
+  transition:
+    color var(--nova-motion-fast),
+    background-color var(--nova-motion-fast),
+    border-color var(--nova-motion-fast),
+    transform var(--nova-motion-instant);
+}
+
+.madar-picker-list button:hover {
+  border-color: var(--nova-border-strong);
+  transform: translateY(-1px);
+}
+
+.madar-picker-list button:active {
+  transform: translateY(0);
+  transition-duration: var(--nova-motion-instant);
+}
+
+.madar-picker-list button.active {
+  background: var(--nova-action-soft);
+  border-color: color-mix(in srgb, var(--nova-action) 35%, var(--nova-border));
+}
+
+.madar-picker-list strong {
+  display: block;
+  font-size: var(--nova-text-body-sm);
+  font-weight: var(--nova-weight-semibold);
+}
+
+.madar-picker-list small {
+  display: -webkit-box;
+  margin-block-start: 2px;
+  overflow: hidden;
+  color: var(--nova-ink-secondary);
+  font-size: var(--nova-text-label-md);
+  font-weight: var(--nova-weight-regular);
+  line-height: 1.45;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.madar-picker-list svg {
+  flex: none;
+  color: var(--nova-ink-tertiary);
+}
+
+[dir="rtl"] .madar-picker-list svg {
+  transform: scaleX(-1);
+}
+
+.madar-stage {
+  margin-block-start: var(--nova-space-6);
+  padding-block-end: var(--nova-space-8);
+  overflow: hidden;
+  background: var(--nova-canvas);
+  border: 1px solid var(--nova-border);
+  border-radius: var(--nova-radius-feature);
+}
+
+.madar-stage:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--nova-focus) 74%, transparent);
+  outline-offset: 2px;
+}
+
+/* Madar sections are authored at desktop width; keep them from pushing the
+   page into horizontal overflow on small screens. */
+.madar-stage > * {
+  max-width: 100%;
+}
+
+.madar-loading {
+  padding: var(--nova-space-12) var(--nova-space-6);
+  color: var(--nova-ink-tertiary);
+  font-size: var(--nova-text-body-sm);
+  text-align: center;
+}
+
+@media (width <= 60rem) {
+  .madar-controls {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .madar-families {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .madar-families button {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+}
+
+@media (width <= 48rem) {
+  .madar-stage {
+    border-radius: var(--nova-radius-card);
+  }
+
+  .madar-picker-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

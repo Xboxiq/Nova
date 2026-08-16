@@ -3,10 +3,12 @@ import {
   PiArrowDown,
   PiCheckCircleFill,
   PiCommand,
+  PiDrop,
   PiGridFour,
   PiListDashes,
   PiMagnifyingGlass,
   PiMoonStars,
+  PiPalette,
   PiSparkle,
   PiSun,
   PiTranslate,
@@ -19,19 +21,44 @@ import MobileDock from "./components/MobileDock";
 import PatternStudio from "./components/PatternStudio";
 import SystemShowcase from "./components/SystemShowcase";
 import { catalog, categories } from "./data/catalog";
+import { madarSections } from "./madar/sections";
+import {
+  DARK_THEMES,
+  GLASS_LEVELS,
+  THEMES,
+  isGlassLevel,
+  isThemeName,
+  type GlassLevel,
+  type ThemeName,
+} from "./madar/theme/themes";
 import type { Locale } from "./i18n";
 import { uiCopy } from "./i18n";
 import type { CategoryId } from "./types";
 
 const Gallery = lazy(() => import("./components/Gallery"));
+const MadarLibrary = lazy(() => import("./components/MadarLibrary"));
 
-type Theme = "light" | "dark";
 type GalleryView = "grid" | "compact";
 
-function getInitialTheme(): Theme {
+const THEME_COLOR: Record<ThemeName, string> = {
+  light: "#F3F7F8",
+  dark: "#0D1B22",
+  mint: "#F1F8F7",
+  coral: "#FAF4F0",
+  sky: "#F1F5FA",
+  iris: "#F5F2FA",
+  night: "#242540",
+};
+
+function getInitialTheme(): ThemeName {
   const stored = window.localStorage.getItem("nova-theme");
-  if (stored === "light" || stored === "dark") return stored;
+  if (isThemeName(stored)) return stored;
   return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
+
+function getInitialGlass(): GlassLevel {
+  const stored = window.localStorage.getItem("nova-glass");
+  return isGlassLevel(stored) ? stored : "g2";
 }
 
 function getInitialLocale(): Locale {
@@ -40,22 +67,49 @@ function getInitialLocale(): Locale {
 }
 
 function App() {
-  const [theme, setTheme] = useState<Theme>(getInitialTheme);
+  const [theme, setTheme] = useState<ThemeName>(getInitialTheme);
+  const [glass, setGlass] = useState<GlassLevel>(getInitialGlass);
+  const [themeMenuOpen, setThemeMenuOpen] = useState(false);
   const [locale, setLocale] = useState<Locale>(getInitialLocale);
   const [category, setCategory] = useState<CategoryId | "all">("all");
+  const [madarSection, setMadarSection] = useState(madarSections[0].id);
   const [query, setQuery] = useState("");
   const [view, setView] = useState<GalleryView>("grid");
   const [toast, setToast] = useState("");
   const [commandOpen, setCommandOpen] = useState(false);
   const searchRef = useRef<HTMLInputElement>(null);
+  const themeMenuRef = useRef<HTMLDivElement>(null);
   const copy = uiCopy[locale];
+  const isDarkTheme = DARK_THEMES.includes(theme);
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
-    document.documentElement.style.colorScheme = theme;
-    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", theme === "light" ? "#F3F7F8" : "#0D1B22");
+    document.documentElement.style.colorScheme = isDarkTheme ? "dark" : "light";
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", THEME_COLOR[theme]);
     window.localStorage.setItem("nova-theme", theme);
-  }, [theme]);
+  }, [isDarkTheme, theme]);
+
+  useEffect(() => {
+    document.documentElement.dataset.glass = glass;
+    window.localStorage.setItem("nova-glass", glass);
+  }, [glass]);
+
+  useEffect(() => {
+    if (!themeMenuOpen) return;
+
+    const close = (event: Event) => {
+      if (event.type === "keydown" && (event as KeyboardEvent).key !== "Escape") return;
+      if (event.type === "pointerdown" && themeMenuRef.current?.contains(event.target as Node)) return;
+      setThemeMenuOpen(false);
+    };
+
+    document.addEventListener("pointerdown", close);
+    document.addEventListener("keydown", close);
+    return () => {
+      document.removeEventListener("pointerdown", close);
+      document.removeEventListener("keydown", close);
+    };
+  }, [themeMenuOpen]);
 
   useEffect(() => {
     const direction = locale === "ar" ? "rtl" : "ltr";
@@ -114,7 +168,15 @@ function App() {
     window.requestAnimationFrame(() => searchRef.current?.focus());
   };
 
-  const toggleTheme = () => setTheme((value) => (value === "light" ? "dark" : "light"));
+  const toggleTheme = () => setTheme((value) => (DARK_THEMES.includes(value) ? "light" : "dark"));
+
+  const jumpToMadarSection = (id: string) => {
+    setMadarSection(id);
+    setCommandOpen(false);
+    window.requestAnimationFrame(() => {
+      document.getElementById("madar")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  };
 
   const jumpToComponent = (id: string) => {
     const item = catalog.find((entry) => entry.id === id);
@@ -148,6 +210,7 @@ function App() {
           <a href="#components">{copy.components}</a>
           <a href="#workbench">{copy.studio}</a>
           <a href="#advanced">{locale === "ar" ? "الابتكار" : "Innovation"}</a>
+          <a href="#madar">{copy.madar}</a>
           <a href="#system">{copy.system}</a>
         </nav>
 
@@ -168,11 +231,63 @@ function App() {
           <button
             className="icon-button"
             type="button"
-            aria-label={theme === "light" ? copy.switchToDark : copy.switchToLight}
+            aria-label={isDarkTheme ? copy.switchToLight : copy.switchToDark}
             onClick={toggleTheme}
           >
-            {theme === "light" ? <PiMoonStars /> : <PiSun />}
+            {isDarkTheme ? <PiSun /> : <PiMoonStars />}
           </button>
+          <div className="theme-menu" ref={themeMenuRef}>
+            <button
+              className="icon-button"
+              type="button"
+              aria-label={copy.themeLabel}
+              aria-expanded={themeMenuOpen}
+              aria-haspopup="true"
+              onClick={() => setThemeMenuOpen((value) => !value)}
+            >
+              <PiPalette />
+            </button>
+            {themeMenuOpen && (
+            <div className="theme-panel nova-glass" role="group" aria-label={copy.themeLabel}>
+              <p className="theme-panel-heading">{copy.themePacks}</p>
+              <div className="theme-pack-list" role="radiogroup" aria-label={copy.themePacks}>
+                {THEMES.map((pack) => (
+                  <button
+                    key={pack.name}
+                    type="button"
+                    role="radio"
+                    aria-checked={theme === pack.name}
+                    className={theme === pack.name ? "active" : ""}
+                    onClick={() => setTheme(pack.name)}
+                  >
+                    <span className="theme-swatch" style={{ background: pack.swatch }} aria-hidden="true" />
+                    {locale === "ar" ? pack.labelAr : pack.label}
+                  </button>
+                ))}
+              </div>
+
+              <p className="theme-panel-heading">
+                <PiDrop aria-hidden="true" />
+                {copy.glassLabel}
+              </p>
+              <div className="theme-glass-list" role="radiogroup" aria-label={copy.glassLabel}>
+                {GLASS_LEVELS.map((level) => (
+                  <button
+                    key={level.level}
+                    type="button"
+                    role="radio"
+                    aria-checked={glass === level.level}
+                    aria-label={locale === "ar" ? level.labelAr : level.label}
+                    className={glass === level.level ? "active" : ""}
+                    onClick={() => setGlass(level.level)}
+                  >
+                    {level.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+            )}
+          </div>
           <a className="primary-link top-cta" href="#components">
             {copy.explore}
             <PiArrowDown aria-hidden="true" />
@@ -298,6 +413,16 @@ function App() {
           </div>
         </section>
 
+        <Suspense fallback={<p className="madar-loading">{copy.madarLoading}</p>}>
+          <MadarLibrary
+            locale={locale}
+            theme={theme}
+            glass={glass}
+            activeSection={madarSection}
+            onSectionChange={setMadarSection}
+          />
+        </Suspense>
+
         <section className="principles" id="principles" aria-labelledby="principles-title">
           <div className="section-intro">
             <div>
@@ -321,7 +446,15 @@ function App() {
       </footer>
 
       <MobileDock locale={locale} onSearch={() => setCommandOpen(true)} />
-      <CommandPalette open={commandOpen} items={catalog} locale={locale} onOpenChange={setCommandOpen} onSelect={jumpToComponent} />
+      <CommandPalette
+        open={commandOpen}
+        items={catalog}
+        madarItems={madarSections}
+        locale={locale}
+        onOpenChange={setCommandOpen}
+        onSelect={jumpToComponent}
+        onSelectMadar={jumpToMadarSection}
+      />
 
       <div className={`toast nova-glass ${toast ? "show" : ""}`} role="status" aria-live="polite">
         <PiCheckCircleFill aria-hidden="true" />

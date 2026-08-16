@@ -57,6 +57,29 @@ Reading this as: an Arabic-first component library for designers and frontend de
 
 Semantic green, orange, red, and blue are reserved for status and data. They do not replace the primary accent.
 
+### Theme packs
+
+`light` and `dark` are declared in `design-system/nova-design-os/tokens/tokens.css`. Five further packs come from the Madar families and are declared in `design-system/nova-design-os/tokens/theme-packs.css`:
+
+| Pack | Scheme | Accent hue | Intent |
+|---|---|---|---|
+| `mint` | light | teal | calm, operational surfaces |
+| `coral` | light | warm orange | energetic, consumer-facing surfaces |
+| `sky` | light | blue | neutral product default |
+| `iris` | light | violet | creative and editorial surfaces |
+| `night` | dark | teal on indigo | a dark pack that is lifted, not black |
+
+Every pack overrides the same `--nova-*` names. A component written against NOVA tokens renders correctly in all seven without knowing which is active. A pack never introduces a token name of its own, and geometry, type, motion, and layering are inherited rather than re-declared.
+
+Material depth is a separate axis: `data-glass` selects `g1`, `g2`, or `g3`, which drive blur, saturation, and highlight strength only.
+
+### Adding a pack
+
+1. Add one `[data-theme="name"]` block to `theme-packs.css` declaring the NOVA color tokens.
+2. Register the pack in `src/madar/theme/themes.ts` with its label, Arabic label, and swatch.
+3. Add its canvas color to `THEME_COLOR` in `src/App.tsx` so the mobile browser chrome matches.
+4. Measure the contrast pairs in `AUDIT.md` before shipping it.
+
 ## Typography
 
 - Apple platforms use the system `SF Pro Text` and `SF Pro Display` through `-apple-system` and `BlinkMacSystemFont`.
@@ -158,7 +181,9 @@ Use inline errors for forms, contextual toasts for transient actions, and skelet
 - Keep component metadata separate from interactive demo renderers so the 72-pattern catalog remains searchable and maintainable.
 - Use local React state for isolated demonstrations and shared context only for global theme and direction.
 - Lazy-load the gallery surface and keep source attribution visible for every pattern.
-- Preserve `nova-ui-library.html` only as a legacy reference.
+- The Madar library lives under `src/madar/` and is registered through `src/madar/sections.ts`. Each section is a separate lazy chunk so the initial load stays flat as the library grows.
+- Theme pack, glass level, and direction are owned by the app shell and applied once on the document element. Madar reads that state; it never owns it.
+- Preserve `nova-ui-library.html` only as a legacy reference, and `archive/madar/` only as a historical record.
 
 ## Laws of UX Application
 

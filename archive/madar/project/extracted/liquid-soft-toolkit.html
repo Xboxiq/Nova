@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Liquid Soft — Visual Language Kit</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    background: #EBEAE6;
+    color: #0A0A09;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  }
+  #root { display: contents; }
+  .layout { display: grid; grid-template-columns: 300px 1fr; grid-template-rows: 100vh; }
+
+  /* Sidebar */
+  .side { background: #fff; border-inline-end: 1px solid rgba(10,10,9,0.08); overflow-y: auto; padding: 22px 16px 40px; display: flex; flex-direction: column; gap: 4px; }
+  .brand { display: flex; align-items: center; gap: 10px; padding: 4px 8px 16px; }
+  .brand__mark { width: 38px; height: 38px; border-radius: 11px; background: radial-gradient(120% 80% at 30% 20%, #4FA3FF 0%, #1E88FF 55%, #1670E0 100%); flex: 0 0 auto; box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), 0 4px 10px rgba(22,112,224,0.35); }
+  .brand__t { font: 700 16px / 1.2 inherit; color: #0A0A09; }
+  .brand__s { font: 500 11px / 1.3 inherit; color: #79766F; margin-top: 2px; }
+  .side__group { font: 700 10px / 1 inherit; color: #79766F; letter-spacing: 0.06em; text-transform: uppercase; padding: 16px 10px 6px; }
+  .navitem { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 8px; cursor: pointer; border: 0; background: transparent; width: 100%; text-align: start; transition: background 120ms ease; font: inherit; }
+  .navitem:hover { background: #F4F2EC; }
+  .navitem--active { background: #EAF4FF; }
+  .navitem--active .navitem__t { color: #0A0A09; font-weight: 700; }
+  .navitem__dot { width: 8px; height: 8px; border-radius: 999px; flex: 0 0 auto; }
+  .navitem__t { flex: 1; font: 600 13px / 1.3 inherit; color: #3F3D38; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* Main */
+  .main { overflow-y: auto; }
+  .wrap { max-width: 920px; margin: 0 auto; padding: 40px 40px 96px; }
+  .intro { padding: 4px 0 28px; border-bottom: 1px solid rgba(10,10,9,0.08); margin-bottom: 32px; }
+  .intro h1 { font: 700 30px / 1.25 inherit; letter-spacing: -0.02em; margin: 0; }
+  .intro p { font: 500 16px / 1.6 inherit; color: #3F3D38; margin-top: 10px; max-width: 64ch; }
+  .pillrow { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+  .pillrow span { font: 600 11px / 1 inherit; padding: 5px 11px; border-radius: 999px; background: #F4F2EC; color: #3F3D38; }
+
+  .pat__head { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 6px; }
+  .pat__num { font-family: ui-monospace, "SF Mono", monospace; font-size: 13px; font-weight: 600; color: #79766F; margin-top: 8px; }
+  .pat__name { font: 700 24px / 1.25 inherit; letter-spacing: -0.01em; }
+  .pat__ar { font: 500 15px / 1.4 inherit; color: #5B5853; margin-top: 2px; }
+  .meta-row { display: flex; gap: 8px; flex-wrap: wrap; margin: 14px 0 4px; }
+  .chip { font: 600 11px ui-monospace, monospace; padding: 4px 10px; border-radius: 999px; background: #F4F2EC; color: #3F3D38; border: 1px solid rgba(10,10,9,0.08); }
+  .sec { margin-top: 26px; }
+  .sec__label { font: 700 10px / 1 inherit; color: #79766F; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 10px; }
+  .prose { font: 500 16px / 1.65 inherit; color: #3F3D38; }
+  .prose b, .prose strong { color: #0A0A09; }
+
+  .demo {
+    border: 1px solid rgba(10,10,9,0.08);
+    border-radius: 24px;
+    background: #fff;
+    padding: 36px 28px;
+    display: grid;
+    place-items: center;
+    min-height: 180px;
+    box-shadow: 0 1px 2px rgba(46,44,39,0.05), 0 8px 18px rgba(46,44,39,0.06);
+  }
+
+  .code { margin-top: 10px; border-radius: 16px; overflow: hidden; border: 1px solid #29272A; background: #0A0A0B; }
+  .code__bar { display: flex; align-items: center; gap: 4px; padding: 8px 10px; background: #1A1A1D; border-bottom: 1px solid #000; }
+  .code__tab { font: 600 12px / 1 inherit; color: #8A8A95; padding: 5px 12px; border-radius: 8px; cursor: pointer; border: 0; background: transparent; }
+  .code__tab--active { color: #fff; background: rgba(255,255,255,0.08); }
+  .code__copy { margin-inline-start: auto; font: 600 11px / 1 inherit; color: #8A8A95; padding: 5px 12px; border-radius: 8px; cursor: pointer; border: 1px solid rgba(255,255,255,0.12); background: transparent; }
+  .code__copy:hover { color: #fff; border-color: rgba(255,255,255,0.3); }
+  .code pre { margin: 0; padding: 18px 20px; overflow-x: auto; direction: ltr; text-align: left; font-family: ui-monospace, "SF Mono", monospace; font-size: 12.5px; line-height: 1.65; color: #E4E4E7; }
+  .code pre::-webkit-scrollbar { height: 8px; }
+  .code pre::-webkit-scrollbar-thumb { background: #3C3C3F; border-radius: 999px; }
+
+  @media (max-width: 860px) {
+    .layout { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+    .side { max-height: 40vh; }
+  }
+</style>
+<script src="846d93ee-5acc-415a-a109-5011380d72d5" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="70eacbb6-9fb6-4da8-afa0-781706dc8ac0" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="7b8e6e79-ada3-40b6-887f-af3275112aaf" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+
+
+
+<script type="text/babel">
+const { useState, useRef, useEffect, useId } = React;
+
+/* ════════════════════════════════════════════════════════════════════
+ * Shared style helpers (raw hex — no external token dependency)
+ * ════════════════════════════════════════════════════════════════════ */
+const SQ = {
+  orange: { fill: "linear-gradient(180deg, #FF8A4A 0%, #F36A1F 100%)", shadow: "0 4px 10px rgba(243,106,31,0.35)", tint: "#FFEFE3" },
+  green:  { fill: "linear-gradient(180deg, #2DCB7E 0%, #15976A 100%)", shadow: "0 4px 10px rgba(21,151,106,0.35)", tint: "#E2F7EC" },
+  blue:   { fill: "linear-gradient(180deg, #4FA3FF 0%, #1670E0 100%)", shadow: "0 4px 10px rgba(22,112,224,0.35)", tint: "#E4F0FF" },
+  purple: { fill: "linear-gradient(180deg, #B287FF 0%, #7C4DFF 100%)", shadow: "0 4px 10px rgba(124,77,255,0.35)", tint: "#EFE7FF" },
+  pink:   { fill: "linear-gradient(180deg, #FF6EB4 0%, #E13E8C 100%)", shadow: "0 4px 10px rgba(225,62,140,0.35)", tint: "#FFE4F0" },
+  amber:  { fill: "linear-gradient(180deg, #FFCC4D 0%, #E89A0C 100%)", shadow: "0 4px 10px rgba(232,154,12,0.35)", tint: "#FFF3D6" },
+  red:    { fill: "linear-gradient(180deg, #FF6B5C 0%, #E2382B 100%)", shadow: "0 4px 10px rgba(226,56,43,0.35)", tint: "#FFE2DE" },
+  teal:   { fill: "linear-gradient(180deg, #3DD9D9 0%, #0FA3A3 100%)", shadow: "0 4px 10px rgba(15,163,163,0.35)", tint: "#DDF6F6" },
+  ink:    { fill: "linear-gradient(180deg, #3C3C3F 0%, #0A0A0B 100%)", shadow: "0 4px 10px rgba(10,10,11,0.40)",  tint: "#EBEAE6" },
+  silver: { fill: "linear-gradient(180deg, #F4F2EC 0%, #C9C6BD 100%)", shadow: "0 4px 10px rgba(46,44,39,0.18)",  tint: "#FBFAF7" },
+};
+
+function SquircleIcon({ tone = "blue", size = 36, flat, children }) {
+  const t = SQ[tone] || SQ.blue;
+  const radius = Math.max(7, Math.round(size * 0.3));
+  return (
+    <span style={{
+      width: size, height: size, borderRadius: radius, background: t.fill,
+      boxShadow: ["inset 0 1px 0 rgba(255,255,255,0.35)", "inset 0 -1px 0 rgba(0,0,0,0.18)", flat ? null : t.shadow].filter(Boolean).join(", "),
+      display: "inline-grid", placeItems: "center", color: "#fff", flex: "0 0 auto",
+    }}>
+      <span style={{ width: Math.round(size * 0.5), height: Math.round(size * 0.5), display: "inline-flex" }}>{children}</span>
+    </span>
+  );
+}
+
+function Orb({ fillTop = "#6FB3FF", fillMid = "#1E88FF", fillDeep = "#0E58B4", halo = "0 0 24px 2px rgba(30,136,255,0.4)", size = 40, children }) {
+  const hlOffset = Math.round(size * 0.18), hlSize = Math.max(2, Math.round(size * 0.42)), contact = Math.max(2, Math.round(size * 0.3));
+  return (
+    <span style={{
+      position: "relative", width: size, height: size, borderRadius: "50%",
+      background: `radial-gradient(at 28% 26%, ${fillTop} 0%, ${fillMid} 55%, ${fillDeep} 100%)`,
+      boxShadow: [
+        `inset ${hlOffset}px ${hlOffset}px ${hlSize}px rgba(255,255,255,0.55)`,
+        `inset -${Math.round(hlOffset*0.6)}px -${Math.round(hlOffset*0.6)}px ${contact}px rgba(0,0,0,0.28)`,
+        `inset 0 0 0 1px rgba(255,255,255,0.18)`, halo,
+      ].join(", "),
+      display: "inline-grid", placeItems: "center", color: "#fff", fontWeight: 700, flex: "0 0 auto",
+    }}>
+      <span aria-hidden="true" style={{ position: "absolute", top: Math.round(size*0.08), insetInlineStart: Math.round(size*0.14), width: Math.round(size*0.32), height: Math.round(size*0.18), borderRadius: "50%", background: "radial-gradient(at 50% 50%, rgba(255,255,255,0.9) 0%, transparent 70%)", filter: "blur(0.5px)" }} />
+      {children != null && <span style={{ position: "relative", fontSize: Math.max(10, Math.round(size*0.36)) }}>{children}</span>}
+    </span>
+  );
+}
+
+function CopyBtn({ text }) {
+  const [done, setDone] = useState(false);
+  return <button className="code__copy" onClick={() => { try { navigator.clipboard.writeText(text); } catch(e){} setDone(true); setTimeout(()=>setDone(false), 1400); }}>{done ? "✓ نُسخ" : "نسخ"}</button>;
+}
+function CodeViewer({ usage, source }) {
+  const [tab, setTab] = useState("usage");
+  const text = tab === "usage" ? usage : source;
+  return (
+    <div className="code">
+      <div className="code__bar">
+        <button className={"code__tab" + (tab==="usage"?" code__tab--active":"")} onClick={()=>setTab("usage")}>الاستخدام</button>
+        <button className={"code__tab" + (tab==="source"?" code__tab--active":"")} onClick={()=>setTab("source")}>الكود الكامل</button>
+        <CopyBtn text={text} />
+      </div>
+      <pre>{text}</pre>
+    </div>
+  );
+}
+
+/* ════════════════════════════════════════════════════════════════════
+ * DEMOS — one per foundation entry
+ * ════════════════════════════════════════════════════════════════════ */
+
+// 01 — Neutral & ink scale
+function NeutralScaleDemo() {
+  const stops = ["#FFFFFF","#FBFAF7","#F4F2EC","#EBEAE6","#DEDCD6","#C9C6BD","#A8A5A0","#79766F","#5B5853","#3F3D38","#29272A","#1A1916","#0A0A09"];
+  return <div style={{ display: "flex", gap: 4, flexWrap: "wrap", justifyContent: "center" }}>
+    {stops.map(c => <div key={c} style={{ width: 52, textAlign: "center" }}>
+      <div style={{ width: 52, height: 52, borderRadius: 10, background: c, border: "1px solid rgba(0,0,0,0.08)" }} />
+      <div style={{ fontSize: 9, fontFamily: "monospace", color: "#79766F", marginTop: 4 }}>{c}</div>
+    </div>)}
+  </div>;
+}
+
+// 02 — Bright flat brand + halo
+function BrandHaloDemo() {
+  return <div style={{
+    width: 260, height: 140, borderRadius: 24, position: "relative",
+    background: "radial-gradient(120% 80% at 30% 20%, #4FA3FF 0%, #1E88FF 55%, #1670E0 100%)",
+    boxShadow: "0 30px 60px rgba(30,136,255,0.45), inset 0 1px 0 rgba(255,255,255,0.3)",
+    display: "flex", alignItems: "flex-end", padding: 18,
+  }}>
+    <span style={{ color: "#fff", fontWeight: 700, fontSize: 14 }}>Signature Blue · #1E88FF</span>
+  </div>;
+}
+
+// 03 — Squircle accent palette
+function SquirclePaletteDemo() {
+  return <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 16 }}>
+    {Object.entries(SQ).map(([name, t]) => <div key={name} style={{ textAlign: "center" }}>
+      <SquircleIcon tone={name} size={48}><svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="4 12 9 17 20 6"/></svg></SquircleIcon>
+      <div style={{ fontSize: 10, fontWeight: 600, marginTop: 6, color: "#3F3D38" }}>{name}</div>
+    </div>)}
+  </div>;
+}
+
+// 04 — Glass tint & blur recipes
+function GlassTintDemo() {
+  return <div style={{
+    padding: 24, borderRadius: 20, display: "flex", gap: 14,
+    background: "radial-gradient(at 20% 20%, #4FA3FF, transparent 55%), radial-gradient(at 80% 70%, #7C4DFF, transparent 55%), linear-gradient(135deg, #1670E0, #6B47C9)",
+  }}>
+    {[
+      { label: "light/sm", bg: "rgba(255,255,255,0.55)", blur: "blur(12px) saturate(1.5)", color: "#0A0A09" },
+      { label: "light/lg", bg: "rgba(255,255,255,0.18)", blur: "blur(20px) saturate(1.6)", color: "#fff" },
+      { label: "dark", bg: "rgba(255,255,255,0.10)", blur: "blur(16px) saturate(1.4)", color: "#fff" },
+    ].map(c => <div key={c.label} style={{
+      width: 84, height: 84, borderRadius: 16, background: c.bg, backdropFilter: c.blur, WebkitBackdropFilter: c.blur,
+      border: "1px solid rgba(255,255,255,0.3)", display: "grid", placeItems: "center", color: c.color, fontSize: 10, fontWeight: 700,
+    }}>{c.label}</div>)}
+  </div>;
+}
+
+// 05 — Pill buttons (ink/white/brand/soft/ghost)
+function PillButtonsDemo() {
+  const base = { height: 44, paddingInline: 20, borderRadius: 999, font: "600 14px inherit", cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 8 };
+  return <div style={{ display: "flex", gap: 10, flexWrap: "wrap", justifyContent: "center" }}>
+    <button style={{ ...base, border: "1px solid rgba(0,0,0,0.4)", background: "linear-gradient(180deg,#2A2A2E,#0A0A0B)", color: "#fff", boxShadow: "0 4px 12px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.14)" }}>Ink</button>
+    <button style={{ ...base, border: "1px solid rgba(10,10,9,0.08)", background: "linear-gradient(180deg,#fff,#F4F2EC)", color: "#0A0A09", boxShadow: "0 2px 6px rgba(46,44,39,0.07), inset 0 1px 0 rgba(255,255,255,0.9)" }}>White</button>
+    <button style={{ ...base, border: "1px solid rgba(0,0,0,0.06)", background: "linear-gradient(180deg,#4FA3FF,#1670E0)", color: "#fff", boxShadow: "0 6px 14px rgba(22,112,224,0.32), inset 0 1px 0 rgba(255,255,255,0.28)" }}>Brand</button>
+    <button style={{ ...base, border: "1px solid rgba(10,10,9,0.06)", background: "#F4F2EC", color: "#3F3D38" }}>Soft</button>
+    <button style={{ ...base, border: "1px solid transparent", background: "transparent", color: "#3F3D38" }}>Ghost</button>
+  </div>;
+}
+
+// 06 — Glass buttons
+function GlassButtonsDemo() {
+  return <div style={{ padding: 24, borderRadius: 20, display: "flex", gap: 12, background: "radial-gradient(at 30% 30%, #FF7B50, transparent 60%), radial-gradient(at 70% 70%, #7C4DFF, transparent 60%), linear-gradient(135deg, #1670E0, #6B47C9)" }}>
+    <button style={{ padding: "12px 22px", borderRadius: 999, border: "1px solid rgba(255,255,255,0.4)", background: "rgba(255,255,255,0.6)", backdropFilter: "blur(10px) saturate(1.5)", color: "#0A0A09", fontWeight: 600, cursor: "pointer" }}>Glass Light</button>
+    <button style={{ padding: "12px 22px", borderRadius: 999, border: "1px solid rgba(255,255,255,0.18)", background: "rgba(255,255,255,0.12)", backdropFilter: "blur(12px) saturate(1.4)", color: "#fff", fontWeight: 600, cursor: "pointer" }}>Glass Dark</button>
+  </div>;
+}
+
+// 07 — Liquid Glass (true refraction)
+function LiquidGlassDemo() {
+  const filterId = "lqg-" + (useId ? useId().replace(/:/g,"") : "x");
+  useEffect(() => {
+    if (document.getElementById(filterId)) return;
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.id = filterId; svg.style.cssText = "position:absolute;width:0;height:0;";
+    svg.innerHTML = `<filter id="f-${filterId}" x="-30%" y="-30%" width="160%" height="160%"><feTurbulence type="fractalNoise" baseFrequency="0.012 0.014" numOctaves="2" seed="5" result="t"/><feGaussianBlur in="t" stdDeviation="1.5" result="tb"/><feDisplacementMap in="SourceGraphic" in2="tb" scale="38" xChannelSelector="R" yChannelSelector="G"/></filter>`;
+    document.body.appendChild(svg);
+  }, []);
+  return <div style={{ padding: 24, borderRadius: 20, background: "radial-gradient(at 20% 25%, #4FA3FF, transparent 55%), radial-gradient(at 80% 30%, #B287FF, transparent 55%), linear-gradient(180deg, #1670E0, #6B47C9)" }}>
+    <div style={{
+      padding: "16px 24px", borderRadius: 22, color: "#fff", fontWeight: 700, textAlign: "center",
+      background: "rgba(255,255,255,0.18)", border: "1px solid rgba(255,255,255,0.38)",
+      backdropFilter: `blur(14px) saturate(1.7) url(#f-${filterId})`, WebkitBackdropFilter: "blur(14px) saturate(1.7)",
+      boxShadow: "inset 0 1.5px 0 rgba(255,255,255,0.55), 0 0 0 1px rgba(255,80,200,0.14), 0 12px 28px rgba(10,10,11,0.22)",
+    }}>refracts the backdrop</div>
+  </div>;
+}
+
+// 08 — Liquid metal
+function LiquidMetalDemo() {
+  return <button style={{
+    padding: "13px 26px", borderRadius: 999, border: "1px solid rgba(10,10,11,0.35)", cursor: "pointer", fontWeight: 700, fontSize: 14, color: "#0A0A0B",
+    background: "conic-gradient(from 180deg at 50% 50%, #C8C8D0 0%, #FFF 12%, #8A8A95 35%, #4D4D55 55%, #FFF 70%, #B0B0B8 90%, #C8C8D0 100%)",
+    boxShadow: "0 1px 0 rgba(255,255,255,0.6) inset, 0 8px 20px rgba(46,44,39,0.2)",
+  }}>Liquid Metal</button>;
+}
+
+// 09 — Squircle icon container (standalone deep dive)
+function SquircleSizesDemo() {
+  return <div style={{ display: "flex", gap: 14, alignItems: "center" }}>
+    {[22,28,36,48,64].map(s => <SquircleIcon key={s} tone="blue" size={s}><svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14M5 12h14"/></svg></SquircleIcon>)}
+  </div>;
+}
+
+// 10 — 3D specular orb
+function OrbDemo() {
+  const tones = [
+    { top:"#6FB3FF", mid:"#1E88FF", deep:"#0E58B4", halo:"0 0 24px 2px rgba(30,136,255,0.4)" },
+    { top:"#6BE5A8", mid:"#15B66A", deep:"#0A6F40", halo:"0 0 24px 2px rgba(21,182,106,0.4)" },
+    { top:"#FFE08A", mid:"#F0A521", deep:"#9A6308", halo:"0 0 24px 2px rgba(240,165,33,0.4)" },
+    { top:"#FFFFFF", mid:"#DEDCD6", deep:"#79766F", halo:"0 4px 12px rgba(46,44,39,0.2)" },
+    { top:"#4A4A4D", mid:"#1A1A1D", deep:"#0A0A0B", halo:"0 4px 14px rgba(10,10,11,0.4)" },
+  ];
+  return <div style={{ display: "flex", gap: 18 }}>
+    {tones.map((t,i) => <Orb key={i} size={56} fillTop={t.top} fillMid={t.mid} fillDeep={t.deep} halo={t.halo}>{i+1}</Orb>)}
+  </div>;
+}
+
+// 11 — Verified burst-star badge
+function burstPath() {
+  const cx=32, cy=32, pts=12, rOut=30, rIn=24, p=[];
+  for (let i=0;i<pts*2;i++){ const r=i%2===0?rOut:rIn; const a=(Math.PI/pts)*i-Math.PI/2; p.push(`${i===0?"M":"L"}${(cx+Math.cos(a)*r).toFixed(2)},${(cy+Math.sin(a)*r).toFixed(2)}`); }
+  p.push("Z"); return p.join(" ");
+}
+function VerifiedBadgeDemo() {
+  const path = burstPath();
+  const tones = [
+    { fill: "linear-gradient(180deg,#4ADE80,#15976A)", glow: "rgba(21,151,106,0.45)" },
+    { fill: "linear-gradient(180deg,#FFCC4D,#C8830C)", glow: "rgba(200,131,12,0.45)" },
+    { fill: "conic-gradient(from 180deg at 50% 50%, #FFE7AC, #FFC65C 25%, #C8830C 50%, #FFC65C 75%, #FFE7AC)", glow: "rgba(200,131,12,0.45)" },
+  ];
+  return <div style={{ display: "flex", gap: 24 }}>
+    {tones.map((t,i) => {
+      const id = "burst" + i;
+      return <span key={i} style={{ position: "relative", width: 56, height: 56, filter: `drop-shadow(0 4px 10px ${t.glow})` }}>
+        <svg width="0" height="0" style={{ position: "absolute" }}><defs><clipPath id={id} clipPathUnits="objectBoundingBox"><path d={path} transform="scale(0.015625)" /></clipPath></defs></svg>
+        <span style={{ position: "absolute", inset: 0, background: t.fill, clipPath: `url(#${id})` }} />
+        <span style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center" }}>
+          <svg viewBox="0 0 24 24" width="55%" height="55%" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="4 12 9 17 20 6"/></svg>
+        </span>
+      </span>;
+    })}
+  </div>;
+}
+
+// 12 — Glass card
+function GlassCardDemo() {
+  return <div style={{ padding: 28, borderRadius: 20, background: "radial-gradient(at 20% 25%, #4FA3FF, transparent 55%), radial-gradient(at 80% 70%, #7C4DFF, transparent 55%), linear-gradient(135deg, #1670E0, #6B47C9)" }}>
+    <div style={{ width: 240, padding: 20, borderRadius: 22, background: "rgba(255,255,255,0.55)", backdropFilter: "blur(20px) saturate(1.6)", border: "1px solid rgba(255,255,255,0.7)", boxShadow: "0 8px 28px rgba(46,44,39,0.1), inset 0 1px 0 rgba(255,255,255,0.55)" }}>
+      <div style={{ fontWeight: 700, fontSize: 15, color: "#0A0A09" }}>Frosted panel</div>
+      <div style={{ fontSize: 12, color: "#3F3D38", marginTop: 4 }}>Only over color/photo</div>
+    </div>
+  </div>;
+}
+
+// 13 — Hero card (flat + halo)
+function HeroCardDemo() {
+  return <div style={{
+    width: 260, padding: 22, borderRadius: 28, color: "#fff", position: "relative",
+    background: "radial-gradient(120% 80% at 30% 20%, #4FA3FF 0%, #1E88FF 55%, #1670E0 100%)",
+    boxShadow: "0 30px 60px rgba(30,136,255,0.4), inset 0 1px 0 rgba(255,255,255,0.3)",
+  }}>
+    <div style={{ fontSize: 11, fontWeight: 700, opacity: 0.8, letterSpacing: "0.06em", textTransform: "uppercase" }}>BALANCE</div>
+    <div style={{ fontSize: 34, fontWeight: 800, marginTop: 6, fontFamily: "ui-monospace, monospace" }}>$12,480</div>
+  </div>;
+}
+
+// 14 — Glow card (halo CTA strip)
+function GlowCardDemo() {
+  return <div style={{ position: "relative", width: 240, borderRadius: 24, background: "#fff", boxShadow: "0 1px 2px rgba(46,44,39,0.04), 0 12px 28px rgba(46,44,39,0.1)" }}>
+    <div aria-hidden="true" style={{ position: "absolute", left: 12, right: 12, bottom: -24, height: 64, background: "radial-gradient(at 50% 0%, rgba(94,120,255,0.65) 0%, transparent 70%)", filter: "blur(20px)" }} />
+    <div style={{ position: "relative", padding: 18 }}>
+      <div style={{ fontWeight: 700, fontSize: 15 }}>Upgrade plan</div>
+      <div style={{ fontSize: 12, color: "#5B5853", marginTop: 4 }}>Unlock everything</div>
+    </div>
+    <div style={{ position: "relative", height: 56, background: "linear-gradient(180deg,#5E78FF,#3B57F0 80%,#6B8AFF)", borderRadius: "0 0 24px 24px", display: "grid", placeItems: "center", color: "#fff", fontWeight: 700, fontSize: 13 }}>Continue →</div>
+  </div>;
+}
+
+// 15 — Aurora card (volumetric dark)
+function AuroraCardDemo() {
+  return <div style={{ position: "relative", width: 240, minHeight: 180, borderRadius: 26, background: "#0E0E10", overflow: "hidden", padding: 22, color: "#fff" }}>
+    <span aria-hidden="true" style={{ position: "absolute", bottom: "-25%", insetInline: "-15%", height: "85%", background: "radial-gradient(ellipse at 50% 90%, #A78BFF 0%, #5A2BD9 28%, transparent 60%)", filter: "blur(28px)", opacity: 0.92 }} />
+    <div style={{ position: "relative", textAlign: "center", paddingTop: 30 }}>
+      <div style={{ fontWeight: 700, fontSize: 17 }}>Volumetric glow</div>
+      <div style={{ fontSize: 12, color: "rgba(255,255,255,0.66)", marginTop: 6 }}>Rises from below</div>
+    </div>
+  </div>;
+}
+
+// 16 — Memoji avatar
+function AvatarDemo() {
+  const rings = ["#FFD9C2","#C8F0D6","#F7E8C8","#DCD2FA","#C8DEFF"];
+  const faces = ["linear-gradient(135deg,#FFA37D,#E5613A)","linear-gradient(135deg,#8FD0FF,#1670E0)","linear-gradient(135deg,#A6E8C0,#2DCB7E)","linear-gradient(135deg,#B287FF,#7C4DFF)","linear-gradient(135deg,#FFCC4D,#E89A0C)"];
+  return <div style={{ display: "flex", gap: 14 }}>
+    {rings.map((r,i) => <span key={i} style={{ width: 52, height: 52, borderRadius: 999, background: r, display: "grid", placeItems: "center" }}>
+      <span style={{ width: 38, height: 38, borderRadius: 999, background: faces[i], boxShadow: "inset 0 1px 2px rgba(255,255,255,0.4), inset 0 -1px 1px rgba(0,0,0,0.18)" }} />
+    </span>)}
+  </div>;
+}
+
+// 17 — Illustrations (bucket + folder)
+function IllustrationsDemo() {
+  return <div style={{ display: "flex", gap: 36, alignItems: "flex-end" }}>
+    <div style={{ position: "relative", width: 90, height: 100 }}>
+      <div style={{ position: "absolute", inset: "16px 6px 0", borderRadius: "10px 10px 28px 28px / 10px 10px 48px 48px", background: "linear-gradient(180deg,#94A3B8,#475569)", boxShadow: "inset 0 -8px 16px rgba(0,0,0,0.25)" }} />
+      <div style={{ position: "absolute", top: 10, insetInline: 3, height: 14, borderRadius: "50%", background: "linear-gradient(180deg,#CBD5E1,#94A3B8)" }} />
+      {[0,1,2].map(i => <div key={i} style={{ position: "absolute", bottom: 12, insetInlineStart: 16 + i*20, width: 18, height: 18, borderRadius: 4, background: ["#FFCC4D","#FF7B50","#7C4DFF"][i], transform: `rotate(${(i*17)%30-15}deg)` }} />)}
+    </div>
+    <div style={{ position: "relative", width: 64, height: 50 }}>
+      <div style={{ position: "absolute", inset: "8px 0 0", background: "linear-gradient(180deg,#FFCC4D,#E89A0C)", borderRadius: "0 8px 8px 8px", boxShadow: "0 4px 10px rgba(46,44,39,0.18)" }} />
+      <div style={{ position: "absolute", top: 0, left: 0, width: 26, height: 10, background: "#E89A0C", borderRadius: "8px 8px 0 0" }} />
+      <div style={{ position: "absolute", inset: "14px 0 0", background: "linear-gradient(180deg,#FFCC4Dcc,#E89A0C)", borderRadius: "4px 8px 8px 8px" }} />
+    </div>
+  </div>;
+}
+
+// 18 — Type pairing + motion
+function TypeMotionDemo() {
+  return <div style={{ display: "flex", flexDirection: "column", gap: 14, width: "100%" }}>
+    <div style={{ fontFamily: "Georgia, serif", fontSize: 40, fontWeight: 400, letterSpacing: "-0.03em" }}>Display Serif</div>
+    <div style={{ fontWeight: 800, fontSize: 22, letterSpacing: "-0.02em" }}>Bold Sans Heading</div>
+    <div style={{ fontSize: 14, color: "#5B5853" }}>Functional sans body text for UI labels and descriptions.</div>
+    <div style={{ fontFamily: "ui-monospace, monospace", fontSize: 14, fontVariantNumeric: "tabular-nums" }}>$12,480.00 · #A1B2C3</div>
+    <div style={{ display: "flex", gap: 8, marginTop: 4 }}>
+      {["120ms","180ms","320ms"].map(d => <span key={d} style={{ fontSize: 11, fontFamily: "monospace", padding: "4px 10px", borderRadius: 999, background: "#F4F2EC" }}>{d} · ease-out</span>)}
+    </div>
+  </div>;
+}
+
+/* ════════════════════════════════════════════════════════════════════
+ * META — sections + entries
+ * ════════════════════════════════════════════════════════════════════ */
+const META = [
+  { key:"neutrals", num:"01", group:"الألوان والتدرّجات", name:"Neutral Scale", ar:"المقياس المحايد", Demo:NeutralScaleDemo,
+    concept:"مقياس كريمي دافئ من <strong>#FFFFFF</strong> إلى <strong>#0A0A09</strong> — لا رمادي بارد. الصفحة على 100، البطاقات بيضاء، النص الأساسي على 900.",
+    usage:`background: #EBEAE6; /* page */\ncolor: #0A0A09; /* primary text */`,
+    source:`const neutrals = {\n  0:"#FFFFFF", 25:"#FBFAF7", 50:"#F4F2EC", 100:"#EBEAE6",\n  150:"#DEDCD6", 200:"#C9C6BD", 300:"#A8A5A0", 400:"#79766F",\n  500:"#5B5853", 600:"#3F3D38", 700:"#29272A", 800:"#1A1916", 900:"#0A0A09",\n};` },
+
+  { key:"brand", num:"02", group:"الألوان والتدرّجات", name:"Flat Brand + Halo", ar:"اللون الأساسي المسطّح", Demo:BrandHaloDemo,
+    concept:"لون أساسي <strong>مسطّح زاهٍ</strong> (لا mesh متعدد الألوان) مع توهج خفيف في الزاوية العلوية وهالة ملوّنة تبليد أسفل البطاقة. التقنية: radial-gradient بسيط + box-shadow ملوّن خارجي.",
+    usage:`<div style={{ background: brandFill, boxShadow: brandHalo }}>…</div>`,
+    source:`const brandFill = "radial-gradient(120% 80% at 30% 20%, #4FA3FF 0%, #1E88FF 55%, #1670E0 100%)";\nconst brandHalo = "0 30px 60px rgba(30,136,255,0.45)";` },
+
+  { key:"squircle-palette", num:"03", group:"الألوان والتدرّجات", name:"Squircle Accent Palette", ar:"لوحة الأيقونات المربّعة", Demo:SquirclePaletteDemo,
+    concept:"عشر ألوان مشبّعة، كل واحد بثلاث صيغ: <strong>fill</strong> (تدرّج للجسم)، <strong>shadow</strong> (ظل محيطي ملوّن)، <strong>tint</strong> (خلفية فاتحة لنفس اللون). هذا هو نظام الأيقونات الأساسي.",
+    usage:`<SquircleIcon tone="blue" size={36}><Icon/></SquircleIcon>`,
+    source:`const SQ = {\n  orange: { fill:"linear-gradient(180deg,#FF8A4A,#F36A1F)", shadow:"0 4px 10px rgba(243,106,31,.35)", tint:"#FFEFE3" },\n  green:  { fill:"linear-gradient(180deg,#2DCB7E,#15976A)", shadow:"0 4px 10px rgba(21,151,106,.35)", tint:"#E2F7EC" },\n  blue:   { fill:"linear-gradient(180deg,#4FA3FF,#1670E0)", shadow:"0 4px 10px rgba(22,112,224,.35)", tint:"#E4F0FF" },\n  purple: { fill:"linear-gradient(180deg,#B287FF,#7C4DFF)", shadow:"0 4px 10px rgba(124,77,255,.35)", tint:"#EFE7FF" },\n  pink:   { fill:"linear-gradient(180deg,#FF6EB4,#E13E8C)", shadow:"0 4px 10px rgba(225,62,140,.35)", tint:"#FFE4F0" },\n  amber:  { fill:"linear-gradient(180deg,#FFCC4D,#E89A0C)", shadow:"0 4px 10px rgba(232,154,12,.35)", tint:"#FFF3D6" },\n  red:    { fill:"linear-gradient(180deg,#FF6B5C,#E2382B)", shadow:"0 4px 10px rgba(226,56,43,.35)",  tint:"#FFE2DE" },\n  teal:   { fill:"linear-gradient(180deg,#3DD9D9,#0FA3A3)", shadow:"0 4px 10px rgba(15,163,163,.35)", tint:"#DDF6F6" },\n  ink:    { fill:"linear-gradient(180deg,#3C3C3F,#0A0A0B)", shadow:"0 4px 10px rgba(10,10,11,.40)",   tint:"#EBEAE6" },\n  silver: { fill:"linear-gradient(180deg,#F4F2EC,#C9C6BD)", shadow:"0 4px 10px rgba(46,44,39,.18)",   tint:"#FBFAF7" },\n};\n\nfunction SquircleIcon({ tone="blue", size=36, flat, children }) {\n  const t = SQ[tone];\n  return (\n    <span style={{ width:size, height:size, borderRadius:Math.round(size*0.3),\n      background:t.fill,\n      boxShadow:["inset 0 1px 0 rgba(255,255,255,.35)","inset 0 -1px 0 rgba(0,0,0,.18)", flat?null:t.shadow].filter(Boolean).join(","),\n      display:"inline-grid", placeItems:"center", color:"#fff" }}>\n      <span style={{ width:size*0.5, height:size*0.5 }}>{children}</span>\n    </span>\n  );\n}` },
+
+  { key:"glass-tints", num:"04", group:"الألوان والتدرّجات", name:"Glass Tints & Blur", ar:"درجات الزجاج", Demo:GlassTintDemo,
+    concept:"ثلاث وصفات زجاج: <strong>light/sm</strong> (فاتح فوق ملوّن)، <strong>light/lg</strong> (شفّاف جدًا)، <strong>dark</strong> (مجمّد غامق فوق فاتح). يُستخدم backdrop-filter دائمًا مع saturate لإبقاء الألوان حيّة تحت الزجاج.",
+    usage:`background: rgba(255,255,255,0.55);\nbackdrop-filter: blur(12px) saturate(1.5);`,
+    source:`const glass = {\n  light_sm: { bg:"rgba(255,255,255,0.55)", blur:"blur(12px) saturate(1.5)" },\n  light_lg: { bg:"rgba(255,255,255,0.18)", blur:"blur(20px) saturate(1.6)" },\n  dark:     { bg:"rgba(255,255,255,0.10)", blur:"blur(16px) saturate(1.4)" },\n};\n// Always pair with a colorful/photographic backdrop — glass over\n// plain white does nothing.` },
+
+  { key:"pill-buttons", num:"05", group:"الأزرار", name:"Pill Button System", ar:"نظام الأزرار الحبّية", Demo:PillButtonsDemo,
+    concept:"خمس درجات على نفس الشكل (pill، 9999px): <strong>ink</strong> أساسي على خلفية فاتحة، <strong>white</strong> أساسي على خلفية داكنة/ملوّنة، <strong>brand</strong> للأكشن الأبرز فقط، <strong>soft</strong> لأكشن ثانوي هادئ، <strong>ghost</strong> نص فقط.",
+    usage:`<button className="pill pill-ink">Save</button>`,
+    source:`.pill { height:44px; padding-inline:20px; border-radius:9999px; font-weight:600; cursor:pointer; }\n.pill-ink   { background:linear-gradient(180deg,#2A2A2E,#0A0A0B); color:#fff;\n              box-shadow:0 4px 12px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.14); }\n.pill-white { background:linear-gradient(180deg,#fff,#F4F2EC); color:#0A0A09;\n              box-shadow:0 2px 6px rgba(46,44,39,.07), inset 0 1px 0 rgba(255,255,255,.9); }\n.pill-brand { background:linear-gradient(180deg,#4FA3FF,#1670E0); color:#fff;\n              box-shadow:0 6px 14px rgba(22,112,224,.32), inset 0 1px 0 rgba(255,255,255,.28); }\n.pill-soft  { background:#F4F2EC; color:#3F3D38; }\n.pill-ghost { background:transparent; color:#3F3D38; }` },
+
+  { key:"glass-buttons", num:"06", group:"الأزرار", name:"Glass Buttons", ar:"الأزرار الزجاجية", Demo:GlassButtonsDemo,
+    concept:"حبّة مجمّدة بسيطة (blur فقط، بلا تشويه) — أخفّ من liquid-glass الكامل. <strong>light</strong> فوق ملوّن داكن، <strong>dark</strong> فوق فاتح. استخدم فقط فوق خلفية ملوّنة أو صورة.",
+    usage:`<button className="glass-light">Action</button>`,
+    source:`.glass-light { padding:12px 22px; border-radius:9999px; color:#0A0A09;\n  background:rgba(255,255,255,0.6); backdrop-filter:blur(10px) saturate(1.5);\n  border:1px solid rgba(255,255,255,0.4); }\n.glass-dark { padding:12px 22px; border-radius:9999px; color:#fff;\n  background:rgba(255,255,255,0.12); backdrop-filter:blur(12px) saturate(1.4);\n  border:1px solid rgba(255,255,255,0.18); }` },
+
+  { key:"liquid-glass", num:"07", group:"الأزرار", name:"Liquid Glass (true refraction)", ar:"الزجاج السائل الحقيقي", Demo:LiquidGlassDemo,
+    concept:"زجاج Apple الحقيقي: <strong>feTurbulence + feDisplacementMap</strong> يُحني الخلفية فعليًا تحت السطح، وليس مجرد blur. أضِف حافة طيفية خفيفة (وردي/سماوي) للمسة الواقعية.",
+    usage:`backdropFilter: "blur(14px) saturate(1.7) url(#warp)";`,
+    source:`// Inject once into <body>:\nconst svg = \`<svg width="0" height="0"><filter id="warp"\n    x="-30%" y="-30%" width="160%" height="160%">\n  <feTurbulence type="fractalNoise" baseFrequency="0.012 0.014"\n    numOctaves="2" seed="5" result="t"/>\n  <feGaussianBlur in="t" stdDeviation="1.5" result="tb"/>\n  <feDisplacementMap in="SourceGraphic" in2="tb" scale="38"\n    xChannelSelector="R" yChannelSelector="G"/>\n</filter></svg>\`;\n\n// Then on any element:\n.liquid-glass {\n  background: rgba(255,255,255,0.18);\n  border: 1px solid rgba(255,255,255,0.38);\n  backdrop-filter: blur(14px) saturate(1.7) url(#warp);\n  box-shadow: inset 0 1.5px 0 rgba(255,255,255,.55),\n              0 0 0 1px rgba(255,80,200,.14),   /* chromatic edge */\n              0 0 0 2px rgba(120,200,255,.10),\n              0 12px 28px rgba(10,10,11,.22);\n}` },
+
+  { key:"liquid-metal", num:"08", group:"الأزرار", name:"Liquid Metal", ar:"المعدن السائل", Demo:LiquidMetalDemo,
+    concept:"تدرّج <strong>conic-gradient</strong> كرومي يحاكي معدنًا مصقولًا، مع مسحة لمعان دوّارة اختيارية (background-position animation). للحظات premium فقط — لا تستخدمه كزر افتراضي.",
+    usage:`<button className="liquid-metal">Upgrade</button>`,
+    source:`.liquid-metal {\n  padding:13px 26px; border-radius:9999px; color:#0A0A0B;\n  border:1px solid rgba(10,10,11,0.35);\n  background:conic-gradient(from 180deg at 50% 50%,\n    #C8C8D0 0%, #FFF 12%, #8A8A95 35%, #4D4D55 55%,\n    #FFF 70%, #B0B0B8 90%, #C8C8D0 100%);\n  box-shadow:0 1px 0 rgba(255,255,255,.6) inset, 0 8px 20px rgba(46,44,39,.2);\n}` },
+
+  { key:"squircle-sizes", num:"09", group:"الأيقونات", name:"Squircle Icon Container", ar:"حاوية الأيقونة المربّعة", Demo:SquircleSizesDemo,
+    concept:"الحاوية المعيارية لكل أيقونة في النظام — مربّع بزوايا دائرية (ليس دائرة، ليس مربّعًا حادًا). خمس مقاسات: 22 / 28 / 36 / 48 / 64. الأيقونة الداخلية دائمًا 50% من الحجم.",
+    usage:`<SquircleIcon tone="blue" size={36}><PlusIcon/></SquircleIcon>`,
+    source:`// See entry 03 for the full SquircleIcon source.\nconst sizes = [22, 28, 36, 48, 64]; // px` },
+
+  { key:"orb", num:"10", group:"الأيقونات", name:"3D Specular Orb", ar:"الكرة الزجاجية ثلاثية الأبعاد", Demo:OrbDemo,
+    concept:"كرة بثلاث طبقات: <strong>تعبئة شعاعية</strong> (radial-gradient فاتح→غامق)، <strong>هلال لامع</strong> (inset shadow أبيض في الزاوية العلوية)، <strong>هالة ملوّنة</strong> خارجية. تُستخدم لمؤشرات الحالة وخطوات التقدّم واختيار الخطط.",
+    usage:`<Orb fillTop="#6FB3FF" fillMid="#1E88FF" fillDeep="#0E58B4" halo="0 0 24px 2px rgba(30,136,255,.4)" size={56}>1</Orb>`,
+    source:`function Orb({ fillTop, fillMid, fillDeep, halo, size=40, children }) {\n  const o = Math.round(size*0.18), hl = Math.max(2,Math.round(size*0.42)), c = Math.max(2,Math.round(size*0.3));\n  return (\n    <span style={{ position:"relative", width:size, height:size, borderRadius:"50%",\n      background:\`radial-gradient(at 28% 26%, \${fillTop} 0%, \${fillMid} 55%, \${fillDeep} 100%)\`,\n      boxShadow:[\n        \`inset \${o}px \${o}px \${hl}px rgba(255,255,255,.55)\`,\n        \`inset -\${Math.round(o*0.6)}px -\${Math.round(o*0.6)}px \${c}px rgba(0,0,0,.28)\`,\n        "inset 0 0 0 1px rgba(255,255,255,.18)", halo,\n      ].join(","),\n      display:"inline-grid", placeItems:"center", color:"#fff" }}>\n      <span aria-hidden style={{ position:"absolute", top:size*0.08, insetInlineStart:size*0.14,\n        width:size*0.32, height:size*0.18, borderRadius:"50%",\n        background:"radial-gradient(at 50% 50%, rgba(255,255,255,.9), transparent 70%)" }}/>\n      {children}\n    </span>\n  );\n}` },
+
+  { key:"verified-badge", num:"11", group:"الأيقونات", name:"Burst-Star Verification Seal", ar:"ختم التحقّق النجمي", Demo:VerifiedBadgeDemo,
+    concept:"شكل نجمي بـ١٢ سنًّا (12-point burst) مُولّد رياضيًا ومُستخدم كـ clipPath. أضِف تدرّجًا ولمعة داخلية وهالة لونية. مثالي لشارات «موثّق» أو «Premium» أو تحذيرات.",
+    usage:`<VerifiedBadge tone="verified" size={48} />`,
+    source:`function burstPath() {\n  const cx=32, cy=32, pts=12, rOut=30, rIn=24, p=[];\n  for (let i=0;i<pts*2;i++){\n    const r = i%2===0 ? rOut : rIn;\n    const a = (Math.PI/pts)*i - Math.PI/2;\n    p.push(\`\${i===0?"M":"L"}\${(cx+Math.cos(a)*r).toFixed(2)},\${(cy+Math.sin(a)*r).toFixed(2)}\`);\n  }\n  p.push("Z"); return p.join(" ");\n}\n// Render the path as an SVG clipPath (objectBoundingBox, scale 1/64),\n// fill the clipped <span> with any gradient, add a glyph on top.` },
+
+  { key:"glass-card", num:"12", group:"البطاقات والأسطح", name:"Glass Card", ar:"بطاقة زجاجية", Demo:GlassCardDemo,
+    concept:"سطح مجمّد (backdrop-blur) بحدّ لامع داخلي. يُستخدم فقط فوق محتوى ملوّن أو صورة — فوق الأبيض العادي لا تأثير له، استخدم Card بدلًا منه.",
+    usage:`<div className="glass-card">…</div>`,
+    source:`.glass-card {\n  padding:20px; border-radius:22px;\n  background:rgba(255,255,255,0.55);\n  backdrop-filter:blur(20px) saturate(1.6);\n  border:1px solid rgba(255,255,255,0.7);\n  box-shadow:0 8px 28px rgba(46,44,39,.1), inset 0 1px 0 rgba(255,255,255,.55);\n}` },
+
+  { key:"hero-card", num:"13", group:"البطاقات والأسطح", name:"Hero Card", ar:"بطاقة البطل", Demo:HeroCardDemo,
+    concept:"سطح بلون أساسي مسطّح + هالة خارجية ملوّنة. استخدمه <strong>مرّة واحدة فقط</strong> في كل شاشة — للرصيد أو الإحصائية الأهم.",
+    usage:`<div className="hero-card">…</div>`,
+    source:`.hero-card {\n  padding:22px; border-radius:28px; color:#fff;\n  background:radial-gradient(120% 80% at 30% 20%, #4FA3FF 0%, #1E88FF 55%, #1670E0 100%);\n  box-shadow:0 30px 60px rgba(30,136,255,.4), inset 0 1px 0 rgba(255,255,255,.3);\n}` },
+
+  { key:"glow-card", num:"14", group:"البطاقات والأسطح", name:"Glow Card", ar:"بطاقة بشريط متوهّج", Demo:GlowCardDemo,
+    concept:"بطاقة بيضاء عادية في الأعلى + شريط ملوّن سفلي يحوي CTA + هالة تبليد خارج حدود البطاقة (overflow: visible). البطاقة نفسها هي الدعوة للعمل.",
+    usage:`<GlowCard tone="sapphire" cta={<button>Continue</button>}>…</GlowCard>`,
+    source:`// Outer wrapper: position relative, overflow visible.\n// Halo: absolute, bottom:-28px, blur(24px), behind content (z-index:0).\n// Bottom strip: colored gradient bar with its own border-radius + CTA.\nconst bar  = "linear-gradient(180deg,#5E78FF,#3B57F0 80%,#6B8AFF)";\nconst halo = "radial-gradient(at 50% 0%, rgba(94,120,255,.65) 0%, transparent 70%)";` },
+
+  { key:"aurora-card", num:"15", group:"البطاقات والأسطح", name:"Aurora Card", ar:"بطاقة الشفق القطبي", Demo:AuroraCardDemo,
+    concept:"قاعدة داكنة (#0E0E10) مع توهّج حجمي (radial ellipse) يصعد من الأسفل، بالإضافة لطبقة grain خفيفة (fractalNoise). يعطي عمقًا دراميًا لبطاقات «ميزة جديدة» أو الترقية.",
+    usage:`<AuroraCard tone="violet" title="…" />`,
+    source:`.aurora-card {\n  position:relative; background:#0E0E10; border-radius:26px;\n  padding:22px; color:#fff; overflow:hidden;\n}\n.aurora-card::before {\n  content:""; position:absolute; bottom:-25%; inset-inline:-15%; height:85%;\n  background:radial-gradient(ellipse at 50% 90%, #A78BFF 0%, #5A2BD9 28%, transparent 60%);\n  filter:blur(28px); opacity:.92;\n}` },
+
+  { key:"avatar", num:"16", group:"الصور الرمزية والرسوم", name:"Memoji Avatar", ar:"الصورة الرمزية", Demo:AvatarDemo,
+    concept:"حلقة باستيل ناعمة تحيط بدائرة أصغر بتدرّج لوني مشبّع + لمعة داخلية. يُختار اللون بشكل ثابت حسب اسم المستخدم (hash). لا صور حقيقية — كلها أشكال CSS.",
+    usage:`<Avatar name="Sara" ring />`,
+    source:`const rings = ["#FFD9C2","#C8F0D6","#F7E8C8","#DCD2FA","#C8DEFF"];\nconst faces = ["linear-gradient(135deg,#FFA37D,#E5613A)", /* … */];\n// pick ring[i] and face[i] deterministically from a hash of the name\nfunction Avatar({ name, ring }) {\n  const i = hash(name) % rings.length;\n  return (\n    <span style={{ width:52, height:52, borderRadius:999, background:rings[i],\n      display:"grid", placeItems:"center" }}>\n      <span style={{ width:38, height:38, borderRadius:999, background:faces[i],\n        boxShadow:"inset 0 1px 2px rgba(255,255,255,.4), inset 0 -1px 1px rgba(0,0,0,.18)" }}/>\n    </span>\n  );\n}` },
+
+  { key:"illustrations", num:"17", group:"الصور الرمزية والرسوم", name:"CSS Illustrations", ar:"رسوم بـCSS فقط", Demo:IllustrationsDemo,
+    concept:"رسوم بسيطة بطبقات div مطلقة الموضع — لا SVG معقّد، لا صور. <strong>سلّة</strong>: جسم بحواف إهليجية + حافة دائرية + عناصر دوّارة داخلية. <strong>مجلد</strong>: ثلاث طبقات (خلفية + لسان + واجهة).",
+    usage:`<Bucket items={[…]} /> <Folder label="Files" color="#FFCC4D" />`,
+    source:`// Bucket body: borderRadius "10px 10px 28px 28px / 10px 10px 48px 48px"\n// (elliptical bottom via the slash syntax) + inset shadow for depth.\n// Folder: 3 absolutely-positioned divs — back (offset down), tab (top-left),\n// front (offset further down, lighter tint) — each border-radius'd corners only\n// where visible.` },
+
+  { key:"type-motion", num:"18", group:"الطباعة والحركة", name:"Type Pairing & Motion", ar:"إقران الخطوط والحركة", Demo:TypeMotionDemo,
+    concept:"إقران ثلاثي: <strong>سيريف للعرض</strong> (أرقام كبيرة، عناوين بطولية) + <strong>سانس عريض للعناوين</strong> + <strong>سانس عادي للنص الوظيفي</strong> + <strong>مونو للأرقام/الأكواد</strong> (دائمًا tabular-nums). الحركة: مدد قصيرة (120-320ms) بـease-out، بلا bounce.",
+    usage:`font-variant-numeric: tabular-nums;\ntransition: all 180ms cubic-bezier(0.2, 0.8, 0.2, 1);`,
+    source:`const type = {\n  displaySerif: "400 40px/1.1 Georgia, serif",\n  headingSans: "800 22px/1.25 system-ui",\n  bodySans:    "500 14px/1.5 system-ui",\n  mono:        "500 14px/1.4 ui-monospace, monospace",\n};\nconst motion = {\n  fast: "120ms", base: "180ms", slow: "320ms",\n  ease: "cubic-bezier(0.2, 0.8, 0.2, 1)", // no bounce, no spring\n};` },
+];
+
+function App() {
+  const [sel, setSel] = useState(META[0].key);
+  const current = META.find(m => m.key === sel);
+  const groups = [...new Set(META.map(m => m.group))].map(g => ({ label: g, items: META.filter(m => m.group === g) }));
+
+  return (
+    <div className="layout">
+      <aside className="side">
+        <div className="brand">
+          <span className="brand__mark"></span>
+          <div>
+            <div className="brand__t">Liquid Soft</div>
+            <div className="brand__s">Visual Language Kit · {META.length} عنصر</div>
+          </div>
+        </div>
+        {groups.map(g => (
+          <div key={g.label}>
+            <div className="side__group">{g.label}</div>
+            {g.items.map(m => (
+              <button key={m.key} className={"navitem" + (m.key===sel?" navitem--active":"")} onClick={()=>setSel(m.key)}>
+                <span className="navitem__dot" style={{ background: "linear-gradient(135deg,#4FA3FF,#1670E0)" }}></span>
+                <span className="navitem__t">{m.ar}</span>
+              </button>
+            ))}
+          </div>
+        ))}
+      </aside>
+      <main className="main">
+        <div className="wrap">
+          <div className="intro">
+            <h1>Liquid Soft — Visual Language Kit</h1>
+            <p>مصدر بصري مستقلّ وعام — لا يعتمد على نظام جاهز. كل عنصر هنا قيمة خام (hex مباشر) قابلة للنسخ في أي مشروع: ألوان، تدرّجات، أزرار، أيقونات، بطاقات، رسوم، طباعة وحركة بنفس اللغة البصرية المميّزة.</p>
+            <div className="pillrow"><span>Flat brand + halo</span><span>Squircle icons</span><span>3D specular orbs</span><span>True liquid glass</span><span>Volumetric aurora</span><span>Memoji avatars</span></div>
+          </div>
+          {current && (
+            <div>
+              <div className="pat__head">
+                <span className="pat__num">{current.num}</span>
+                <div>
+                  <div className="pat__name">{current.name}</div>
+                  <div className="pat__ar">{current.ar}</div>
+                </div>
+              </div>
+              <div className="meta-row"><span className="chip">{current.group}</span></div>
+              <div className="sec"><div className="sec__label">المفهوم</div><p className="prose" dangerouslySetInnerHTML={{ __html: current.concept }} /></div>
+              <div className="sec"><div className="sec__label">معاينة حيّة</div><div className="demo"><current.Demo/></div></div>
+              <div className="sec"><div className="sec__label">الكود</div><CodeViewer usage={current.usage} source={current.source} /></div>
+            </div>
+          )}
+        </div>
+      </main>
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+
+
+</body></html>
