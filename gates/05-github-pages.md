@@ -14,8 +14,13 @@ The first deploy proved that assumption was too generous. With the source still
 on "Deploy from a branch", the workflow ran every step green — including
 `deploy-pages` — and the live URL served the repository root: `README.md`,
 `package.json` and `AGENTS.md` all returned 200, and `index.html` pointed at
-`/src/main.tsx`, so the page rendered blank. A green deploy step is not proof
-that the site works, which is what G6 exists to fix.
+`/src/main.tsx`, so the page rendered blank.
+
+The second deploy showed why: the push starts *two* publishers. The Actions
+deployment went live at 18:51:43 — the runner fetched the URL and saw the build
+— and at 18:51:44 the legacy branch build replaced it with the repository root.
+So an immediate check is not proof either; it reads the one second in which the
+right answer is true. G6 waits past that window before believing the result.
 
 - [x] G1: The build emits relative asset URLs, so one artifact serves from root or from any subpath
   CHECK: node -e "const h=require('fs').readFileSync('dist/index.html','utf8');const abs=[...h.matchAll(/(?:src|href)=\"(\/[^\"]*)\"/g)].map(m=>m[1]);console.log(abs.length?'ABSOLUTE_URLS '+abs.join(','):'RELATIVE_URLS')"

@@ -40,20 +40,24 @@ jobs:
       - id: deploy
         uses: actions/deploy-pages@v4
 
-      # A green deploy step is not proof the site works. If Pages is still set
-      # to "Deploy from a branch", this job succeeds while the live URL serves
-      # the repository root — an index.html pointing at `/src/main.tsx`, which
-      # renders blank. Fetch the deployed page and insist it is the build.
+      # A green deploy step is not proof the site works, and neither is an
+      # immediate fetch. While Pages is still set to "Deploy from a branch",
+      # the same push also starts a legacy branch build; the deployment goes
+      # live, then the branch build replaces it a second later with the
+      # repository root — an index.html pointing at `/src/main.tsx`, which
+      # renders blank. So wait past that window, then insist on the build.
       - name: Verify the deployed page is the build
         run: |
-          for i in 1 2 3 4 5 6; do
-            html=$(curl -fsSL "${{ steps.deploy.outputs.page_url }}" || true)
+          sleep 60
+          for i in 1 2 3 4 5; do
+            html=$(curl -fsSL -H 'Cache-Control: no-cache' "${{ steps.deploy.outputs.page_url }}" || true)
             case "$html" in
               *'./assets/'*) echo "Live page serves the build."; exit 0 ;;
             esac
-            echo "Attempt $i: not the build yet, waiting for the CDN."
-            sleep 10
+            echo "Attempt $i: the live page is not the build."
+            sleep 20
           done
           echo "::error::${{ steps.deploy.outputs.page_url }} is not serving dist/."
+          echo "::error::A branch build is overwriting the deployment."
           echo "::error::Set Settings -> Pages -> Source to 'GitHub Actions'."
           exit 1
