@@ -1745,8 +1745,7 @@ button:disabled {
 }
 
 .principle-grid article:first-child { border-inline-start: 0; }
-.principle-grid article > span { color: var(--nova-action); font-size: var(--nova-text-label-sm); font-weight: var(--nova-weight-bold); }
-.principle-grid h3 { margin: var(--nova-space-16) 0 var(--nova-space-3); font-size: var(--nova-text-title-md); letter-spacing: normal; }
+.principle-grid h3 { margin: 0 0 var(--nova-space-3); font-size: var(--nova-text-title-md); letter-spacing: normal; }
 [dir="ltr"] .principle-grid h3 { letter-spacing: -0.03em; }
 .principle-grid p { max-width: 36ch; margin: 0; color: var(--nova-ink-secondary); font-size: var(--nova-text-body-md); line-height: 1.7; }
 

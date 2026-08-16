@@ -50,7 +50,6 @@ export default function HeroPreview({ locale }: HeroPreviewProps) {
                 <div className="stage-bars" aria-hidden="true">
                   {bars.map((height, index) => <i key={index} style={{ height: `${height}%` }} />)}
                 </div>
-                <footer><span>01</span><span>02</span><span>03</span><span>04</span></footer>
               </section>
 
               <div className="stage-side">

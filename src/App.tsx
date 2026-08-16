@@ -431,10 +431,10 @@ function App() {
             <p>{copy.principlesLead}</p>
           </div>
           <div className="principle-grid">
-            <article><span>01</span><h3>{copy.principleOne}</h3><p>{copy.principleOneBody}</p></article>
-            <article><span>02</span><h3>{copy.principleTwo}</h3><p>{copy.principleTwoBody}</p></article>
-            <article><span>03</span><h3>{copy.principleThree}</h3><p>{copy.principleThreeBody}</p></article>
-            <article><span>04</span><h3>{copy.principleFour}</h3><p>{copy.principleFourBody}</p></article>
+            <article><h3>{copy.principleOne}</h3><p>{copy.principleOneBody}</p></article>
+            <article><h3>{copy.principleTwo}</h3><p>{copy.principleTwoBody}</p></article>
+            <article><h3>{copy.principleThree}</h3><p>{copy.principleThreeBody}</p></article>
+            <article><h3>{copy.principleFour}</h3><p>{copy.principleFourBody}</p></article>
           </div>
         </section>
       </main>

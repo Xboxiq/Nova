@@ -16,14 +16,15 @@ Apply these rules to every request that changes how NOVA looks, feels, moves, or
 
 1. State a one-line Design Read.
 2. State `DESIGN_VARIANCE`, `MOTION_INTENSITY`, and `VISUAL_DENSITY`.
-3. Use `ui-ux-pro-max` for design-system research, accessibility rules, and stack guidance.
+3. Take design-system, accessibility, and token questions to `design-system/nova-design-os/` and `design-system/madar/design.md`. This repo's system is decided and measured; do not import a generic palette or guideline library to answer a question it already answers.
 4. Use `design-taste-frontend` for landing pages, portfolios, and redesign critique. Do not apply its marketing-only rules blindly to dense product UI.
-5. Search with `21st-cli-use` before hand-writing a common React or shadcn pattern.
-6. Use `21st-ai` only when the user asks for generated variants or rapid visual exploration.
+5. Search 21st.dev before hand-writing a common React pattern, and keep the source link on whatever you adapt.
+6. Adapt external gallery output onto NOVA tokens; never paste it verbatim.
 7. Treat Awesome DESIGN.md as comparative research. Extract principles, never clone a brand.
 8. Use Laws of UX to justify interaction decisions.
 9. Use React Icons only in React projects. Choose one icon family per surface.
-10. Use the installed `apple-design` skill for direct manipulation, interruptible motion, material hierarchy, and native-feeling mobile behavior.
+10. Use `apple-design` for direct manipulation, interruptible motion, material hierarchy, and native-feeling mobile behavior.
+11. Use `review-animations` on a motion diff and `improve-animations` when the ask is a motion roadmap. `animation-vocabulary` settles what an effect is called before it gets a name in the docs.
 11. Run `design-system/nova-design-os/11-ANTI-SLOP.md` and the checklist in `DESIGN.md` before delivery.
 
 ## Project Skills
@@ -57,7 +58,7 @@ Rules for this repo:
 
 ## Impeccable Full Mode
 
-Use the full project-local Impeccable payload in `tools/impeccable/` for context, audit, critique, layout, typography, accessibility, and polish guidance.
+Use the project-local Impeccable payload in `.claude/skills/impeccable/` for context, audit, critique, layout, typography, accessibility, and polish guidance. It sits under `.claude/skills/` because that is the only path Claude Code loads skills from; it spent the project's first weeks stranded under `tools/` and never ran once.
 
 The user explicitly approved full mode for this private project. If the live browser editor is used, bind it to localhost, keep it active only during the reviewed session, and stop it immediately after use. Never expose it to a shared interface or network.
 
@@ -71,6 +72,8 @@ The user explicitly approved full mode for this private project. If the live bro
 - Color lives in exactly two files: `tokens.css` for the base set and the light and dark packs, and `tokens/theme-packs.css` for the Madar packs. `src/madar/bridge.css` only aliases Madar names onto `--nova-*` and must never declare a color.
 - The Madar library stays under `src/madar/`. Its showcase sections consume `src/madar/components`; they never re-implement a component, and they never own theme state.
 - Register a new Madar section in `src/madar/sections.ts` so search and the command palette can reach it, and add its id to `PACK_SECTIONS` in `tools/qa/madar-qa.mjs` so the Axe and overflow gates actually exercise it.
+- **Anti-slop is a gate, not a value.** `npm run slop` runs the `kill-ai-slop` scanner over `src/`. Every hit is either fixed or given a recorded verdict in `design-system/ANTI-SLOP-PASS.md`; a hit with no verdict is unfinished work. The scanner's own warning holds: it is a starting map, not gospel, so confirm each hit by reading the code before touching it. The governing split is in `design-system/madar/GUIDE.md`: component defaults that ship into products stay clean, showcase documentation vocabulary is exempt.
+- A skill is installed only when it serves work this repo does and does not compete with a decision already committed in `nova-design-os`. The record of what was taken and rejected is `design-system/SKILLS.md`.
 - Anything imported from an external gallery is triaged against the existing exports first and recorded in `design-system/madar/SOURCES-UIVERSE.md`: what was added with its author, and what was rejected with the component that already covers it. Ideas are adapted onto tokens; no third-party CSS is copied verbatim.
 - Element-level CSS coming from Madar is scoped to `.madar-surface`. Do not add unscoped element selectors that reach the NOVA shell.
 - `archive/madar/` is a historical record. Never import from it and never build it.
