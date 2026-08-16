@@ -125,6 +125,12 @@
 [dir="rtl"] .madar-folder-mirror { transform: scaleX(-1); }
 [dir="rtl"] .madar-folder-legend { transform: scaleX(-1); }
 
+/* An element that carries its own inline transform cannot be counter-mirrored
+   by a class — the inline rule wins outright. It composes the flip in itself
+   through this variable instead. */
+.madar-folder-scene { --madar-mirror: 1; }
+[dir="rtl"] .madar-folder-scene { --madar-mirror: -1; }
+
 .madar-folder-scene {
   position: relative;
   transform-style: preserve-3d;
@@ -161,7 +167,6 @@
 
 .madar-folder-face {
   position: absolute;
-  background: var(--accent);
   transform-style: preserve-3d;
   backface-visibility: hidden;
   transition:

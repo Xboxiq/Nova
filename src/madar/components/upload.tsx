@@ -92,11 +92,11 @@ const TAB_H = 15;
    reading direction. See design-system/VISUAL-LAW.md §2. The two side walls
    therefore carry the same value; nothing here is brighter on one side. */
 const LIGHT = {
-  back: 0.80,
-  tab: 0.88,
-  bottomWall: 1.10,
-  sideWall: 0.92,
-  lid: 1.06,
+  back: 0.86,
+  tab: 0.94,
+  bottomWall: 1.09,
+  sideWall: 0.95,
+  lid: 1.05,
 };
 
 function Face({
@@ -112,7 +112,16 @@ function Face({
     <div
       data-folder-part={part}
       className="madar-folder-face"
-      style={{ filter: `brightness(${brightness})`, ...style }}
+      style={{
+        // VISUAL-LAW.md §9: the containers in the references are neutral and
+        // the colour belongs to what they hold. An object painted in the action
+        // colour competes with the action button beside it, so the body is a
+        // material that reads by light instead of by fill.
+        background: 'var(--surface-2)',
+        border: '1px solid var(--border)',
+        filter: `brightness(${brightness})`,
+        ...style,
+      }}
     >
       {children}
     </div>
@@ -303,14 +312,15 @@ function Folder({
           {/* the count, printed on the topmost sheet rather than floating */}
           {count > 0 && (
             <div
-              className="madar-folder-face"
+              data-folder-part="count"
+              className="madar-folder-face madar-folder-legend"
               style={{
                 insetInlineStart: 15 + (sheets - 1) * 4, top: H - LID_H,
                 width: W - 30 - (sheets - 1) * 8, height: LID_H - 6,
                 background: 'transparent',
                 display: 'grid', justifyItems: 'center', alignItems: 'start',
                 paddingBlockStart: 13,
-                transform: `translateZ(${6 + (sheets - 1) * 3 + spread * (22 + (sheets - 1) * 18)}px) translateY(${-open * (48 + (sheets - 1) * 15)}px) rotateZ(${SLIP_TILT[Math.max(0, sheets - 1)]}deg)`,
+                transform: `translateZ(${6 + (sheets - 1) * 3 + spread * (22 + (sheets - 1) * 18)}px) translateY(${-open * (48 + (sheets - 1) * 15)}px) rotateZ(${SLIP_TILT[Math.max(0, sheets - 1)]}deg) scaleX(var(--madar-mirror))`,
                 fontSize: 20, fontWeight: 700, color: 'var(--accent-ink)',
                 fontVariantNumeric: 'tabular-nums',
               }}
@@ -366,7 +376,7 @@ function Folder({
               style={{
                 position: 'absolute', insetInlineStart: 10, top: 9,
                 fontSize: 9, fontWeight: 700, letterSpacing: '0.14em',
-                color: 'var(--on-accent)', opacity: 0.85, whiteSpace: 'nowrap',
+                color: 'var(--text-2)', whiteSpace: 'nowrap',
               }}
             >
               {label}

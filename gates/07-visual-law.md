@@ -52,3 +52,18 @@ so these gates cover both the written rule and its reference implementation in
   CHECK: node -e "const s=require('fs').readFileSync('src/madar/components/upload.tsx','utf8');const raw=[...s.matchAll(/#[0-9a-fA-F]{3,8}\b|\b(?:rgba?|hsla?|oklch)\(/g)].map(m=>m[0]);console.log(raw.length?'RAW_COLOR '+[...new Set(raw)].join(','):'TOKENS_ONLY')"
   EXPECT: TOKENS_ONLY
   EVIDENCE: TOKENS_ONLY
+
+- [x] G10: Colour is distributed the way the references distribute it — the object is a neutral material, not a swatch of the action colour
+  CHECK: node -e "const f=require('fs');const c=f.readFileSync('src/madar/components/upload.tsx','utf8');const face=/background: 'var\(--surface-2\)',\s*\n\s*border: '1px solid var\(--border\)',/.test(c);const law=f.readFileSync('design-system/VISUAL-LAW.md','utf8').includes('الحاوية محايدة');console.log(face&&law?'MATERIAL_NOT_SWATCH':'ACCENT_AS_BODY '+[face,law].join())"
+  EXPECT: MATERIAL_NOT_SWATCH
+  EVIDENCE: MATERIAL_NOT_SWATCH
+
+- [x] G11: Text does not mirror with the object it sits on, even when it carries its own transform
+  CHECK: node -e 'const f=require("fs");const css=f.readFileSync("src/madar/bridge.css","utf8");const c=f.readFileSync("src/madar/components/upload.tsx","utf8");const varSet=/rtl.\] \.madar-folder-scene \{ --madar-mirror: -1; \}/.test(css)&&/\.madar-folder-scene \{ --madar-mirror: 1; \}/.test(css);const used=/scaleX\(var\(--madar-mirror\)\)/.test(c);const legend=/madar-folder-legend/.test(c);console.log(varSet&&used&&legend?"TEXT_UNMIRRORED":"TEXT_MIRRORS "+[varSet,used,legend].join())'
+  EXPECT: TEXT_UNMIRRORED
+  EVIDENCE: TEXT_UNMIRRORED
+
+- [x] G12: The second batch's repeated refusal is on record, so sending a reference twice is not mistaken for accepting it
+  CHECK: node -e "const d=require('fs').readFileSync('design-system/VISUAL-LAW.md','utf8');const need=['الدفعة الثانية','للمرة الثانية','ليس حجّة على قبوله','الموكاب عرضٌ لا زخرفة'];const miss=need.filter(n=>!d.includes(n));console.log(miss.length?'BATCH2_UNRECORDED '+miss.join(','):'BATCH2_RECORDED')"
+  EXPECT: BATCH2_RECORDED
+  EVIDENCE: BATCH2_RECORDED
