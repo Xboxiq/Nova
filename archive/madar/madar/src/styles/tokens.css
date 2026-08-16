@@ -1,0 +1,170 @@
+/* MADAR — مدار — design token system
+   Ported from Showcase.dc.html + design.md §1-§6.
+   Semantic tokens only. Components must never reference raw oklch values. */
+
+:root {
+  --font-latin: 'Instrument Sans', 'IBM Plex Sans Arabic', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  /* high-contrast Didone display for editorial-luxury moments (Latin) +
+     a calligraphic Arabic display, both large-size only */
+  --font-display: 'Bodoni Moda', 'Aref Ruqaa', var(--font-latin);
+  --font-display-ar: 'Aref Ruqaa', 'Bodoni Moda', var(--font-latin);
+
+  /* spacing — 4px base */
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-5: 20px;
+  --sp-6: 24px; --sp-7: 32px; --sp-8: 40px; --sp-9: 48px; --sp-10: 64px;
+  --sp-11: 80px; --sp-12: 120px;
+
+  /* radius */
+  --r-xs: 8px; --r-sm: 12px; --r-md: 16px; --r-lg: 22px; --r-xl: 30px; --r-full: 999px;
+
+  /* motion */
+  --dur-1: 140ms; --dur-2: 220ms; --dur-3: 340ms; --dur-4: 560ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.45, 0.64, 1);
+  --ease-in: cubic-bezier(0.55, 0, 1, 0.45);
+}
+
+html, body { margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  font-family: var(--font-latin);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  background: var(--bg);
+  color: var(--text);
+  transition: background var(--dur-3) var(--ease-out), color var(--dur-3);
+}
+
+[dir='rtl'] { letter-spacing: 0 !important; }
+[dir='rtl'] body, [dir='rtl'] { line-height: 1.1; }
+
+/* ── Theme packs — design.md §2 ───────────────────────────────────────── */
+[data-theme='mint'] {
+  --bg: oklch(0.973 0.010 180); --bg-deep: oklch(0.948 0.014 180);
+  --surface: oklch(0.998 0.002 180); --surface-2: oklch(0.962 0.010 180);
+  --text: oklch(0.26 0.030 215); --text-2: oklch(0.47 0.022 215); --text-3: oklch(0.64 0.015 215);
+  --border: oklch(0.905 0.012 190); --border-strong: oklch(0.82 0.018 190);
+  --accent: oklch(0.72 0.130 172); --accent-soft: oklch(0.72 0.130 172 / 0.13);
+  --on-accent: oklch(0.20 0.04 200); --ink: oklch(0.27 0.030 215); --on-ink: oklch(0.97 0.008 180);
+  --glass: oklch(0.99 0.004 180 / 0.62); --shadow-color: oklch(0.45 0.05 200);
+  --success: oklch(0.60 0.145 158); --success-soft: oklch(0.68 0.145 158 / 0.14);
+  --warning: oklch(0.60 0.140 80); --warning-soft: oklch(0.78 0.140 80 / 0.16);
+  --danger: oklch(0.58 0.185 27); --danger-soft: oklch(0.62 0.185 27 / 0.13);
+  --info: oklch(0.60 0.130 245); --info-soft: oklch(0.68 0.130 245 / 0.14);
+}
+[data-theme='coral'] {
+  --bg: oklch(0.972 0.011 70); --bg-deep: oklch(0.947 0.015 70);
+  --surface: oklch(0.998 0.002 70); --surface-2: oklch(0.961 0.011 70);
+  --text: oklch(0.27 0.028 45); --text-2: oklch(0.48 0.022 45); --text-3: oklch(0.65 0.015 45);
+  --border: oklch(0.905 0.014 65); --border-strong: oklch(0.82 0.020 65);
+  --accent: oklch(0.70 0.150 38); --accent-soft: oklch(0.70 0.150 38 / 0.13);
+  --on-accent: oklch(0.99 0.005 70); --ink: oklch(0.28 0.028 45); --on-ink: oklch(0.97 0.009 70);
+  --glass: oklch(0.99 0.004 70 / 0.62); --shadow-color: oklch(0.45 0.05 50);
+  --success: oklch(0.60 0.145 158); --success-soft: oklch(0.68 0.145 158 / 0.14);
+  --warning: oklch(0.60 0.140 80); --warning-soft: oklch(0.78 0.140 80 / 0.16);
+  --danger: oklch(0.58 0.185 27); --danger-soft: oklch(0.62 0.185 27 / 0.13);
+  --info: oklch(0.60 0.130 245); --info-soft: oklch(0.68 0.130 245 / 0.14);
+}
+[data-theme='sky'] {
+  --bg: oklch(0.972 0.010 235); --bg-deep: oklch(0.947 0.014 235);
+  --surface: oklch(0.998 0.002 235); --surface-2: oklch(0.961 0.010 235);
+  --text: oklch(0.26 0.032 250); --text-2: oklch(0.47 0.024 250); --text-3: oklch(0.64 0.016 250);
+  --border: oklch(0.902 0.014 235); --border-strong: oklch(0.82 0.020 235);
+  --accent: oklch(0.66 0.150 245); --accent-soft: oklch(0.66 0.150 245 / 0.13);
+  --on-accent: oklch(0.99 0.005 235); --ink: oklch(0.27 0.032 250); --on-ink: oklch(0.97 0.008 235);
+  --glass: oklch(0.99 0.004 235 / 0.62); --shadow-color: oklch(0.42 0.05 250);
+  --success: oklch(0.60 0.145 158); --success-soft: oklch(0.68 0.145 158 / 0.14);
+  --warning: oklch(0.60 0.140 80); --warning-soft: oklch(0.78 0.140 80 / 0.16);
+  --danger: oklch(0.58 0.185 27); --danger-soft: oklch(0.62 0.185 27 / 0.13);
+  --info: oklch(0.60 0.130 245); --info-soft: oklch(0.68 0.130 245 / 0.14);
+}
+[data-theme='iris'] {
+  --bg: oklch(0.971 0.012 300); --bg-deep: oklch(0.946 0.016 300);
+  --surface: oklch(0.998 0.002 300); --surface-2: oklch(0.960 0.012 300);
+  --text: oklch(0.27 0.030 295); --text-2: oklch(0.48 0.024 295); --text-3: oklch(0.65 0.016 295);
+  --border: oklch(0.903 0.015 300); --border-strong: oklch(0.82 0.022 300);
+  --accent: oklch(0.62 0.150 293); --accent-soft: oklch(0.62 0.150 293 / 0.13);
+  --on-accent: oklch(0.99 0.005 300); --ink: oklch(0.28 0.030 295); --on-ink: oklch(0.97 0.009 300);
+  --glass: oklch(0.99 0.004 300 / 0.62); --shadow-color: oklch(0.42 0.06 295);
+  --success: oklch(0.60 0.145 158); --success-soft: oklch(0.68 0.145 158 / 0.14);
+  --warning: oklch(0.60 0.140 80); --warning-soft: oklch(0.78 0.140 80 / 0.16);
+  --danger: oklch(0.58 0.185 27); --danger-soft: oklch(0.62 0.185 27 / 0.13);
+  --info: oklch(0.60 0.130 245); --info-soft: oklch(0.68 0.130 245 / 0.14);
+}
+[data-theme='night'] {
+  --bg: oklch(0.285 0.048 274); --bg-deep: oklch(0.245 0.045 274);
+  --surface: oklch(0.335 0.048 274); --surface-2: oklch(0.385 0.045 274);
+  --text: oklch(0.955 0.010 270); --text-2: oklch(0.780 0.022 270); --text-3: oklch(0.620 0.028 270);
+  --border: oklch(0.415 0.045 274); --border-strong: oklch(0.50 0.045 274);
+  --accent: oklch(0.82 0.125 172); --accent-soft: oklch(0.82 0.125 172 / 0.16);
+  --on-accent: oklch(0.22 0.05 274); --ink: oklch(0.955 0.010 270); --on-ink: oklch(0.25 0.045 274);
+  --glass: oklch(0.34 0.05 274 / 0.55); --shadow-color: oklch(0.12 0.05 274);
+  --success: oklch(0.76 0.145 158); --success-soft: oklch(0.76 0.145 158 / 0.16);
+  --warning: oklch(0.84 0.140 80); --warning-soft: oklch(0.84 0.140 80 / 0.16);
+  --danger: oklch(0.72 0.185 27); --danger-soft: oklch(0.72 0.185 27 / 0.16);
+  --info: oklch(0.76 0.130 245); --info-soft: oklch(0.76 0.130 245 / 0.16);
+}
+
+/* elevation — always tinted with --shadow-color, never pure black (design.md §4.3) */
+[data-theme] {
+  --shadow-1: 0 1px 2px oklch(from var(--shadow-color) l c h / 0.06);
+  --shadow-2: 0 2px 6px oklch(from var(--shadow-color) l c h / 0.07), 0 8px 24px oklch(from var(--shadow-color) l c h / 0.07);
+  --shadow-3: 0 4px 12px oklch(from var(--shadow-color) l c h / 0.10), 0 20px 48px oklch(from var(--shadow-color) l c h / 0.14);
+  --shadow-4: 0 8px 24px oklch(from var(--shadow-color) l c h / 0.14), 0 32px 80px oklch(from var(--shadow-color) l c h / 0.22);
+}
+
+/* glass system — design.md §5. Pick one level per project; Showcase lets you compare all three. */
+[data-glass='g1'] { --glass-blur: 10px; --glass-sat: 140%; --glass-hl: transparent; }
+[data-glass='g2'] { --glass-blur: 20px; --glass-sat: 160%; --glass-hl: rgba(255,255,255,0.25); }
+[data-glass='g3'] { --glass-blur: 36px; --glass-sat: 180%; --glass-hl: rgba(255,255,255,0.35); }
+
+@keyframes floaty { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+@keyframes floatyTiltA { 0%, 100% { transform: rotate(-2deg) translateY(0); } 50% { transform: rotate(-2deg) translateY(-6px); } }
+@keyframes floatyTiltB { 0%, 100% { transform: rotate(1.5deg) translateY(0); } 50% { transform: rotate(1.5deg) translateY(-7px); } }
+@keyframes shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+@keyframes toastIn { from { opacity: 0; transform: translate(-50%, -16px); } to { opacity: 1; transform: translate(-50%, 0); } }
+@keyframes overlayIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes modalIn { from { opacity: 0; transform: scale(0.96) translateY(12px); } to { opacity: 1; transform: none; } }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes beacon { from { transform: scale(0.35); opacity: 0.85; } to { transform: scale(2.1); opacity: 0; } }
+@keyframes marqueeX { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes fluxSlide { from { background-position: 0 0; } to { background-position: 200% 0; } }
+@keyframes pulseDot { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.55; transform: scale(1.3); } }
+@keyframes tracePath { 0% { stroke-dashoffset: 300; } 55% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: -300; } }
+@keyframes burst { to { transform: translate(var(--dx), var(--dy)) rotate(var(--rot)) scale(0.15); opacity: 0; } }
+@keyframes drawLine { from { stroke-dashoffset: 240; } to { stroke-dashoffset: 0; } }
+@keyframes thinkDots { 0%, 100% { opacity: 0.25; } 50% { opacity: 1; } }
+@keyframes growBar { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+@keyframes growBarX { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes drainX { from { transform: scaleX(1); } to { transform: scaleX(0); } }
+@keyframes caretBlink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+@keyframes ekgTravel { from { offset-distance: 0%; } to { offset-distance: 100%; } }
+@keyframes meshDrift { 0%, 100% { background-position: 0% 0%, 100% 100%, 50% 50%; } 50% { background-position: 30% 20%, 70% 80%, 40% 60%; } }
+@keyframes shakeX { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-4px); } 40%, 80% { transform: translateX(4px); } }
+@keyframes spinReverse { to { transform: rotate(-360deg); } }
+@keyframes heroReveal { from { opacity: 0; transform: translateY(28px); filter: blur(12px); } to { opacity: 1; transform: none; filter: blur(0); } }
+@keyframes auroraDrift { 0%, 100% { transform: translate(0, 0) scale(1); } 33% { transform: translate(6%, -4%) scale(1.08); } 66% { transform: translate(-5%, 5%) scale(0.96); } }
+@keyframes sheen { from { transform: translateX(-120%) skewX(-18deg); } to { transform: translateX(220%) skewX(-18deg); } }
+
+/* ── Kinetics 99 completion — ambient/status loops (allowed to repeat) ── */
+@keyframes k99-equalize { 0%,100% { transform: scaleY(0.3); } 50% { transform: scaleY(1); } }
+@keyframes k99-signal { 0%,100% { opacity: 0.28; } 50% { opacity: 1; } }
+@keyframes k99-wave { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
+@keyframes k99-ball { 0%,100% { transform: translateY(-58px); animation-timing-function: cubic-bezier(0.3,0,0.6,0.2); } 50% { transform: translateY(0); animation-timing-function: cubic-bezier(0.4,0.8,0.7,1); } }
+@keyframes k99-squash { 0%,40%,60%,100% { transform: scale(1,1); } 50% { transform: scale(1.25,0.72); } }
+@keyframes k99-cradle-l { 0%,100% { transform: rotate(0deg); } 8% { transform: rotate(-32deg); } 45% { transform: rotate(0deg); } }
+@keyframes k99-cradle-r { 0%,55%,100% { transform: rotate(0deg); } 92% { transform: rotate(32deg); } }
+@keyframes k99-neon { 0%,100% { filter: brightness(1) drop-shadow(0 0 4px var(--accent)); } 50% { filter: brightness(1.25) drop-shadow(0 0 14px var(--accent)); } }
+@keyframes k99-border { to { transform: rotate(1turn); } }
+@keyframes k99-battery { 0% { width: 8%; } 92%,100% { width: 100%; } }
+@keyframes k99-shimmer-sweep { from { transform: translateX(-100%); } to { transform: translateX(200%); } }
+@keyframes k99-glitch-a { 0%,100% { clip-path: inset(0 0 82% 0); transform: translateX(0); } 20% { clip-path: inset(20% 0 38% 0); transform: translateX(-3px); } 40% { clip-path: inset(62% 0 8% 0); transform: translateX(3px); } 60% { clip-path: inset(8% 0 70% 0); transform: translateX(-2px); } 80% { clip-path: inset(48% 0 24% 0); transform: translateX(2px); } }
+@keyframes k99-glitch-b { 0%,100% { clip-path: inset(70% 0 12% 0); transform: translateX(0); } 25% { clip-path: inset(12% 0 60% 0); transform: translateX(3px); } 50% { clip-path: inset(50% 0 30% 0); transform: translateX(-3px); } 75% { clip-path: inset(30% 0 50% 0); transform: translateX(2px); } }
+@keyframes k99-textwave { 0%,100% { transform: translateY(0); } 30% { transform: translateY(-7px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 1ms !important; transition-duration: 1ms !important; }
+}
