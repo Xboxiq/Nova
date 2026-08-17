@@ -184,6 +184,16 @@ export const madarSections: MadarSection[] = [
     component: load("DataDisplay", () => import("./showcase/sections/DataDisplay")),
   },
   {
+    id: "madar-energy",
+    title: "Energy",
+    titleAr: "الطاقة",
+    family: "surfaces",
+    description: "A meter read as an instrument, consumption against its own normal, and the tariff ladder.",
+    descriptionAr: "عدّاد يُقرأ كجهاز، واستهلاك مقابل معتاده، وسُلّم الشرائح.",
+    tags: ["energy", "meter", "kwh", "tariff", "طاقة", "عدّاد", "استهلاك"],
+    component: load("Energy", () => import("./showcase/sections/Energy")),
+  },
+  {
     id: "madar-library-vault",
     title: "Library Vault",
     titleAr: "خزانة المكتبة",
