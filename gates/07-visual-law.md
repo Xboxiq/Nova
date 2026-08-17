@@ -82,3 +82,13 @@ so these gates cover both the written rule and its reference implementation in
   CHECK: node -e "const d=require('fs').readFileSync('design-system/VISUAL-LAW.md','utf8');const need=['الدفعة الثالثة','مُلاحَظ لا مأخوذ بعد','مؤجَّل بتحفّظ','الجزء الفارغ من المقياس'];const miss=need.filter(n=>!d.includes(n));console.log(miss.length?'BATCH3_UNRECORDED '+miss.join(','):'BATCH3_RECORDED')"
   EXPECT: BATCH3_RECORDED
   EVIDENCE: BATCH3_RECORDED
+
+- [x] G16: The light leak is bound to a state — the class and its colour arrive together, never as a default
+  CHECK: node -e 'const f=require("fs");const css=f.readFileSync("src/madar/bridge.css","utf8");const c=f.readFileSync("src/madar/components/upload.tsx","utf8");const noDefault=/\.madar-leak::after \{[\s\S]*?\}/.exec(css)[0].includes("var(--madar-leak-color)")&&!/--madar-leak-color:\s*var\(--accent\)/.test(css);const gated=/className=\{filed \? .madar-leak. : undefined\}/.test(c);const coloured=/filed \? \{ \[.--madar-leak-color/.test(c);console.log(noDefault&&gated&&coloured?"LEAK_IS_STATE":"LEAK_IS_DECOR "+[noDefault,gated,coloured].join())'
+  EXPECT: LEAK_IS_STATE
+  EVIDENCE: LEAK_IS_STATE
+
+- [x] G17: The fourth batch is analysed at technique level, and the over-broad refusal it corrected is recorded as a correction
+  CHECK: node -e "const f=require('fs');const a=f.readFileSync('design-system/VISUAL-ANALYSIS-04.md','utf8');const l=f.readFileSync('design-system/VISUAL-LAW.md','utf8');const need=['تسريب الضوء','الملمس ذو البنية','قصاصة من المنتج','النقد المرسوم','الضابط يعيش على الوصلة'];const miss=need.filter(n=>!a.includes(n));const fixed=l.includes('تصحيح لحكم سابق')&&l.includes('هل يحمل النوعُ نفسه اللونَ نفسه');console.log(miss.length||!fixed?'BATCH4_INCOMPLETE '+miss.join(',')+' fixed='+fixed:'BATCH4_ANALYSED')"
+  EXPECT: BATCH4_ANALYSED
+  EVIDENCE: BATCH4_ANALYSED
