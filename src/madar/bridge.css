@@ -209,6 +209,25 @@
   );
 }
 
+/* Light from inside the composition. VISUAL-LAW.md §12: a saturated band at
+   one declared edge whose light spills a little past the shape. It differs
+   from the atmospheric wash we refuse in having a position, a falloff, and a
+   state — the colour is the state's colour, and with no state there is no
+   leak. Bound through a variable so the caller must name the colour it is
+   reporting rather than inheriting a decorative default. */
+.madar-leak::after {
+  content: "";
+  position: absolute;
+  inset-inline: 12%;
+  bottom: -7px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--madar-leak-color);
+  filter: blur(13px);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
 /* A fill that grows from the reading edge. Scaling composites where animating
    width would lay out on every frame, and the origin has to follow direction
    because a progress bar that fills away from the text reads as draining. */

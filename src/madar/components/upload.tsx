@@ -625,6 +625,9 @@ export function UploadFolder({
     ? items.reduce((sum, x) => sum + (x.phase === 'done' ? 1 : x.progress), 0) / items.length
     : 0;
 
+  // Everything has settled and nothing was rejected: the folder is filed.
+  const filed = !active && !failed && items.length > 0;
+
   // The lid answers the state: shut when empty, wide while landing, ajar after.
   const lid = !items.length ? 0 : active || over ? 1 : 0.42;
 
@@ -646,6 +649,7 @@ export function UploadFolder({
 
   return (
     <div
+      className={filed ? 'madar-leak' : undefined}
       onDragOver={(e) => { e.preventDefault(); setOver(true); }}
       onDragLeave={() => setOver(false)}
       onDrop={(e) => { e.preventDefault(); setOver(false); setTilt({ x: 0, y: 0 }); add(e.dataTransfer.files); }}
@@ -660,6 +664,10 @@ export function UploadFolder({
       }}
       onPointerLeave={() => setTilt({ x: 0, y: 0 })}
       style={{
+        // §12: the leak's colour is the state's colour, so it is set here with
+        // the state rather than defaulted in the stylesheet.
+        ...(filed ? { ['--madar-leak-color' as string]: 'var(--success)' } : null),
+        position: 'relative',
         display: 'flex', flexDirection: 'column', gap: 'var(--sp-5)',
         width: '100%', maxWidth: 460, padding: 'var(--sp-5)',
         borderRadius: 'var(--r-xl)',
@@ -670,7 +678,7 @@ export function UploadFolder({
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--sp-5)' }}>
-        <Folder open={lid} count={items.length} label={tabLabel} variant={variant} tilt={tilt} filed={!active && !failed && items.length > 0} />
+        <Folder open={lid} count={items.length} label={tabLabel} variant={variant} tilt={tilt} filed={filed} />
         <div style={{ minWidth: 0 }}>
           <h3 style={{ margin: 0, fontSize: 17, fontWeight: 600, color: 'var(--text)' }}>{title}</h3>
           <p style={{ margin: '6px 0 0', fontSize: 13, color: 'var(--text-3)' }}>{meta}</p>
