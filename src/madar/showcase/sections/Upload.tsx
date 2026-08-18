@@ -28,8 +28,8 @@ function Cell({ title, note, children }: { title: string; note: string; children
   return (
     <div
       style={{
-        background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 22,
-        padding: 24, boxShadow: 'var(--shadow-1)', display: 'flex', flexDirection: 'column', gap: 18,
+        background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6,
+        padding: 24, display: 'flex', flexDirection: 'column', gap: 18,
       }}
     >
       <div>

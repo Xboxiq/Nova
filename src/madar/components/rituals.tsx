@@ -22,7 +22,7 @@ export interface SelfDrawingIconProps {
 export function SelfDrawingIcon({ paths, size = 26, pathLength = 60, durationMs = 750 }: SelfDrawingIconProps) {
   const [hov, setHov] = useState(false);
   return (
-    <span onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)} style={{ display: 'inline-flex', padding: 12, borderRadius: 14, background: 'var(--accent-soft)', cursor: 'pointer' }}>
+    <span onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)} style={{ display: 'inline-flex', padding: 12, borderRadius: 6, background: 'var(--accent-soft)', cursor: 'pointer' }}>
       <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
         {/* idle ghost so the resting tile reads complete (§16.3 rule 2) */}
         {paths.map((d, i) => <path key={`g${i}`} d={d} style={{ opacity: hov ? 0 : 0.3, transition: 'opacity 200ms' }} />)}
@@ -47,7 +47,7 @@ export function IconOrbitRing({ icons, size = 150, period = 22 }: { icons: React
   return (
     <span style={{ position: 'relative', width: size, height: size, display: 'grid', placeItems: 'center', flex: 'none' }}>
       <span style={{ position: 'absolute', inset: 14, borderRadius: '50%', border: '1px dashed var(--border-strong)' }} />
-      <span style={{ width: 44, height: 44, borderRadius: 14, background: 'var(--accent)', color: 'var(--on-accent)', display: 'grid', placeItems: 'center', boxShadow: 'var(--shadow-2)', zIndex: 1 }}>
+      <span style={{ width: 44, height: 44, borderRadius: 6, background: 'var(--accent)', color: 'var(--on-accent)', display: 'grid', placeItems: 'center', zIndex: 1 }}>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z" /></svg>
       </span>
       <span style={{ position: 'absolute', inset: 0, animation: `spin ${period}s linear infinite` }}>
@@ -55,7 +55,7 @@ export function IconOrbitRing({ icons, size = 150, period = 22 }: { icons: React
           const a = (i / icons.length) * 360;
           return (
             <span key={i} style={{ position: 'absolute', top: '50%', left: '50%', transform: `rotate(${a}deg) translateY(${-r}px)` }}>
-              <span style={{ display: 'grid', placeItems: 'center', width: 32, height: 32, marginTop: -16, marginLeft: -16, borderRadius: 10, background: 'var(--surface)', border: '1px solid var(--border)', boxShadow: 'var(--shadow-1)', color: 'var(--text-2)', transform: `rotate(${-a}deg)`, animation: `spinReverse ${period}s linear infinite` }}>
+              <span style={{ display: 'grid', placeItems: 'center', width: 32, height: 32, marginTop: -16, marginLeft: -16, borderRadius: 6, background: 'var(--surface)', border: '1px solid var(--border)', color: 'var(--text-2)', transform: `rotate(${-a}deg)`, animation: `spinReverse ${period}s linear infinite` }}>
                 {icon}
               </span>
             </span>
@@ -91,7 +91,7 @@ export function AnimatedStateIcon({ state }: { state: 'loading' | 'success' | 'e
 export function BlueprintCard({ children }: { children: React.ReactNode }) {
   const [hov, setHov] = useState(false);
   return (
-    <div onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)} style={{ position: 'relative', borderRadius: 16, border: '1px solid var(--border)', background: 'var(--surface)', boxShadow: 'var(--shadow-1)', overflow: 'hidden', cursor: 'pointer' }}>
+    <div onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)} style={{ position: 'relative', borderRadius: 6, border: '1px solid var(--border)', background: 'var(--surface)', overflow: 'hidden', cursor: 'pointer' }}>
       <span aria-hidden style={{
         position: 'absolute', inset: 0, opacity: hov ? 1 : 0, transition: 'opacity 400ms',
         background: 'repeating-linear-gradient(0deg, color-mix(in srgb, var(--info) 10%, transparent) 0 1px, transparent 1px 20px), repeating-linear-gradient(90deg, color-mix(in srgb, var(--info) 10%, transparent) 0 1px, transparent 1px 20px)',
@@ -106,7 +106,7 @@ export function BlueprintCard({ children }: { children: React.ReactNode }) {
 export function ApertureCard({ cover, children }: { cover: React.ReactNode; children: React.ReactNode }) {
   const [hov, setHov] = useState(false);
   return (
-    <div onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)} style={{ position: 'relative', borderRadius: 18, overflow: 'hidden', border: '1px solid var(--border)', background: 'var(--surface)', cursor: 'pointer', minHeight: 150 }}>
+    <div onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)} style={{ position: 'relative', borderRadius: 6, overflow: 'hidden', border: '1px solid var(--border)', background: 'var(--surface)', cursor: 'pointer', minHeight: 150 }}>
       <div style={{ padding: 20 }}>{children}</div>
       <div style={{
         position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', background: 'var(--ink)', color: 'var(--on-ink)',
@@ -123,9 +123,9 @@ export function BreakerCard({ title, description, defaultOn = false }: { title: 
   const [on, setOn] = useState(defaultOn);
   return (
     <div style={{
-      borderRadius: 18, padding: 20, border: on ? '1px solid var(--accent)' : '1px solid var(--border)',
+      borderRadius: 6, padding: 20, border: on ? '1px solid var(--accent)' : '1px solid var(--border)',
       background: on ? 'color-mix(in srgb, var(--accent) 10%, var(--surface))' : 'var(--surface)',
-      boxShadow: on ? '0 8px 28px color-mix(in srgb, var(--accent) 22%, transparent)' : 'var(--shadow-1)',
+      boxShadow: 'none',
       transition: 'background 450ms, border-color 450ms, box-shadow 450ms',
     }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 14 }}>
@@ -133,8 +133,8 @@ export function BreakerCard({ title, description, defaultOn = false }: { title: 
           <div style={{ fontSize: 15, fontWeight: 600, color: on ? 'var(--text)' : 'var(--text-2)', transition: 'color 300ms' }}>{title}</div>
           <div style={{ fontSize: 12.5, color: 'var(--text-3)', marginTop: 3 }}>{description}</div>
         </div>
-        <button role="switch" aria-checked={on} onClick={() => setOn((v) => !v)} style={{ position: 'relative', width: 48, height: 28, borderRadius: 999, border: 'none', padding: 0, cursor: 'pointer', flex: 'none', background: on ? 'var(--accent)' : 'var(--border-strong)', transition: 'background 300ms' }}>
-          <span style={{ position: 'absolute', top: 2.5, insetInlineStart: on ? 22.5 : 2.5, width: 23, height: 23, borderRadius: '50%', background: '#fff', boxShadow: '0 1px 3px rgba(0,0,0,0.25)', transition: `inset-inline-start 380ms ${SPRING}` }} />
+        <button role="switch" aria-checked={on} onClick={() => setOn((v) => !v)} style={{ position: 'relative', width: 48, height: 28, borderRadius: 6, border: 'none', padding: 0, cursor: 'pointer', flex: 'none', background: on ? 'var(--accent)' : 'var(--border-strong)', transition: 'background 300ms' }}>
+          <span style={{ position: 'absolute', top: 2.5, insetInlineStart: on ? 22.5 : 2.5, width: 23, height: 23, borderRadius: '50%', background: '#fff', transition: `inset-inline-start 380ms ${SPRING}` }} />
         </button>
       </div>
     </div>
@@ -170,7 +170,7 @@ export function MeterDial({ value, max = 100, label, size = 120 }: { value: numb
 export function TiltedStack3D({ layers }: { layers: [React.ReactNode, React.ReactNode, React.ReactNode] }) {
   const [hov, setHov] = useState(false);
   const card = (i: number): React.CSSProperties => ({
-    position: 'absolute', insetInline: 0, top: 0, borderRadius: 16, padding: '14px 18px', height: 74,
+    position: 'absolute', insetInline: 0, top: 0, borderRadius: 6, padding: '14px 18px', height: 74,
     background: i === 0 ? 'var(--surface)' : i === 1 ? 'var(--surface-2)' : 'var(--bg-deep)',
     border: '1px solid var(--border)', boxShadow: hov ? 'var(--shadow-3)' : 'var(--shadow-1)',
     transform: hov
@@ -194,11 +194,11 @@ export function FolderCard({ name, meta, chip }: { name: React.ReactNode; meta: 
   const [hov, setHov] = useState(false);
   return (
     <div onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)} style={{ position: 'relative', width: 190, cursor: 'pointer' }}>
-      <div style={{ position: 'absolute', top: 0, insetInlineStart: 0, width: 74, height: 26, borderRadius: '10px 10px 0 0', background: 'color-mix(in srgb, var(--accent) 28%, var(--surface-2))', border: '1px solid var(--border)', borderBottom: 'none' }} />
-      <div style={{ position: 'relative', marginTop: 12, height: 96, borderRadius: '4px 14px 14px 14px', background: 'color-mix(in srgb, var(--accent) 18%, var(--surface-2))', border: '1px solid var(--border)', overflow: 'hidden' }}>
+      <div style={{ position: 'absolute', top: 0, insetInlineStart: 0, width: 74, height: 26, borderRadius: '6px 6px 0 0', background: 'color-mix(in srgb, var(--accent) 28%, var(--surface-2))', border: '1px solid var(--border)', borderBottom: 'none' }} />
+      <div style={{ position: 'relative', marginTop: 12, height: 96, borderRadius: '4px 6px 6px 6px', background: 'color-mix(in srgb, var(--accent) 18%, var(--surface-2))', border: '1px solid var(--border)', overflow: 'hidden' }}>
         <div style={{
-          position: 'absolute', insetInline: 8, bottom: 0, height: 66, borderRadius: '10px 10px 0 0',
-          background: 'var(--surface)', border: '1px solid var(--border)', borderBottom: 'none', boxShadow: 'var(--shadow-1)', padding: '10px 12px',
+          position: 'absolute', insetInline: 8, bottom: 0, height: 66, borderRadius: '6px 6px 0 0',
+          background: 'var(--surface)', border: '1px solid var(--border)', borderBottom: 'none', padding: '10px 12px',
           transform: hov ? 'translateY(-8px)' : 'none', transition: `transform 380ms ${SPRING}`,
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>

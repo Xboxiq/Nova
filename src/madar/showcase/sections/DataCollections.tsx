@@ -9,7 +9,7 @@ import type { KanbanColumn, TreeNode } from '../../components';
 /* A titled panel so every demo reads as one library artifact. */
 function Panel({ title, note, children, span = 1 }: { title: string; note?: string; children: ReactNode; span?: number }) {
   return (
-    <div style={{ gridColumn: `span ${span}`, background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 20, padding: 22, boxShadow: 'var(--shadow-1)', display: 'flex', flexDirection: 'column', gap: 16, minWidth: 0 }}>
+    <div style={{ gridColumn: `span ${span}`, background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, padding: 22, display: 'flex', flexDirection: 'column', gap: 16, minWidth: 0 }}>
       <div>
         <div style={{ fontSize: 14.5, fontWeight: 700, letterSpacing: '-0.01em' }}>{title}</div>
         {note && <div style={{ fontSize: 12, color: 'var(--text-3)', marginTop: 3 }}>{note}</div>}

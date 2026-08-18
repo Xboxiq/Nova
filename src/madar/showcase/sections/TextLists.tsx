@@ -9,7 +9,7 @@ export function TextLists() {
       </SectionHeader>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 20, alignItems: 'start' }}>
         {/* dia text + skills */}
-        <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 22, padding: 26, boxShadow: 'var(--shadow-1)' }}>
+        <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, padding: 26, }}>
           <div style={{ fontSize: 13.5, fontWeight: 500, color: 'var(--text-2)', marginBottom: 14 }}>Dia text — key words ignite (hover them)</div>
           <DiaText>
             We build <Ignite>calm platforms</Ignite> where every surface speaks <Ignite shift={-1}>two languages</Ignite> from birth.
@@ -20,7 +20,7 @@ export function TextLists() {
         </div>
 
         {/* listbox + activity dropdown */}
-        <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 22, padding: 24, boxShadow: 'var(--shadow-1)' }}>
+        <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, padding: 24, }}>
           <div style={{ fontSize: 13.5, fontWeight: 500, color: 'var(--text-2)', marginBottom: 12 }}>Listbox — icon tile + title + description (click)</div>
           <ListBox options={[
             { title: 'Public', description: 'Anyone with the link can view', icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9" /><path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9S14.5 18.4 12 21c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3z" /></svg> },

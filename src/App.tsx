@@ -58,9 +58,11 @@ function getInitialTheme(): ThemeName {
   return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 }
 
+/* g0 by the owner's ruling on anti-slop-ui #8: the product surface is solid, and
+   glass is something a reader turns on rather than something they land in. */
 function getInitialGlass(): GlassLevel {
   const stored = window.localStorage.getItem("nova-glass");
-  return isGlassLevel(stored) ? stored : "g2";
+  return isGlassLevel(stored) ? stored : "g0";
 }
 
 function getInitialLocale(): Locale {

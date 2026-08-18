@@ -3,7 +3,7 @@ import { useState } from 'react';
 const spring = 'cubic-bezier(0.34,1.45,0.64,1)';
 
 export const inputStyle: React.CSSProperties = {
-  height: 44, borderRadius: 12, border: '1px solid var(--border-strong)', background: 'var(--surface-2)',
+  height: 44, borderRadius: 6, border: '1px solid var(--border-strong)', background: 'var(--surface-2)',
   color: 'var(--text)', padding: '0 14px', fontFamily: 'inherit', fontSize: 15, width: '100%', minWidth: 0, boxSizing: 'border-box',
 };
 
@@ -66,10 +66,10 @@ export function Stepper({ steps, step, defaultStep = 0, onChange, backLabel = 'B
         <div key={cur} style={{ animation: 'fadeUp 340ms cubic-bezier(0.22,1,0.36,1)' }}>{steps[cur].content}</div>
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 20, paddingTop: 18, borderTop: '1px solid var(--border)' }}>
-        {cur > 0 ? <button onClick={() => go(cur - 1)} className="i-soft-text" style={{ height: 40, padding: '0 18px', borderRadius: 999, border: 'none', background: 'transparent', color: 'var(--text-2)', fontFamily: 'inherit', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>{backLabel}</button> : <span />}
+        {cur > 0 ? <button onClick={() => go(cur - 1)} className="i-soft-text" style={{ height: 40, padding: '0 18px', borderRadius: 6, border: 'none', background: 'transparent', color: 'var(--text-2)', fontFamily: 'inherit', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>{backLabel}</button> : <span />}
         {!last
-          ? <button onClick={() => go(cur + 1)} className="i-lift i-press-97" style={{ height: 40, padding: '0 22px', borderRadius: 999, border: 'none', background: 'var(--ink)', color: 'var(--on-ink)', fontFamily: 'inherit', fontSize: 14, fontWeight: 600, cursor: 'pointer', transition: 'transform 220ms' }}>{nextLabel}</button>
-          : <button onClick={() => (onFinish ? onFinish() : go(0))} className="i-lift" style={{ height: 40, padding: '0 22px', borderRadius: 999, border: 'none', background: 'var(--accent)', color: 'var(--on-accent)', fontFamily: 'inherit', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>{doneLabel}</button>}
+          ? <button onClick={() => go(cur + 1)} className="i-lift i-press-97" style={{ height: 40, padding: '0 22px', borderRadius: 6, border: 'none', background: 'var(--ink)', color: 'var(--on-ink)', fontFamily: 'inherit', fontSize: 14, fontWeight: 600, cursor: 'pointer', transition: 'transform 220ms' }}>{nextLabel}</button>
+          : <button onClick={() => (onFinish ? onFinish() : go(0))} className="i-lift" style={{ height: 40, padding: '0 22px', borderRadius: 6, border: 'none', background: 'var(--accent)', color: 'var(--on-accent)', fontFamily: 'inherit', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>{doneLabel}</button>}
       </div>
     </div>
   );
@@ -100,7 +100,7 @@ export function TypeCardPicker({ options, value, defaultValue = 0, onChange }: T
             onClick={() => { if (value === undefined) setInternal(i); onChange?.(i); }}
             aria-pressed={on}
             style={{
-              flex: 1, display: 'flex', alignItems: 'center', gap: 10, padding: '12px 14px', borderRadius: 12, cursor: 'pointer',
+              flex: 1, display: 'flex', alignItems: 'center', gap: 10, padding: '12px 14px', borderRadius: 6, cursor: 'pointer',
               fontFamily: 'inherit', fontSize: 13.5, fontWeight: on ? 600 : 500, textAlign: 'start',
               border: on ? '1.5px solid var(--accent)' : '1px solid var(--border-strong)',
               background: on ? 'var(--accent-soft)' : 'var(--surface)',
@@ -123,8 +123,8 @@ export function TypeCardPicker({ options, value, defaultValue = 0, onChange }: T
 ──────────────────────────────────────────────────────────────────────── */
 export function Fieldset({ legend, children }: { legend: React.ReactNode; children: React.ReactNode }) {
   return (
-    <fieldset style={{ border: '1px solid var(--border-strong)', borderRadius: 16, padding: '18px 18px 20px', margin: 0, minInlineSize: 0 }}>
-      <legend style={{ padding: '3px 12px', marginInlineStart: 6, borderRadius: 999, background: 'var(--accent-soft)', color: 'var(--accent)', fontSize: 12, fontWeight: 700, letterSpacing: '0.04em' }}>{legend}</legend>
+    <fieldset style={{ border: '1px solid var(--border-strong)', borderRadius: 6, padding: '18px 18px 20px', margin: 0, minInlineSize: 0 }}>
+      <legend style={{ padding: '3px 12px', marginInlineStart: 6, borderRadius: 6, background: 'var(--accent-soft)', color: 'var(--accent)', fontSize: 12, fontWeight: 700, letterSpacing: '0.04em' }}>{legend}</legend>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>{children}</div>
     </fieldset>
   );
@@ -149,7 +149,7 @@ export function NumberField({ value, defaultValue = 0, min = 0, max = 99, step =
   const v = value ?? internal;
   const set = (n: number) => { const c = Math.max(min, Math.min(n, max)); if (value === undefined) setInternal(c); onChange?.(c); };
   return (
-    <div style={{ display: 'inline-flex', alignItems: 'center', borderRadius: 12, border: '1px solid var(--border-strong)', background: 'var(--surface-2)', overflow: 'hidden' }}>
+    <div style={{ display: 'inline-flex', alignItems: 'center', borderRadius: 6, border: '1px solid var(--border-strong)', background: 'var(--surface-2)', overflow: 'hidden' }}>
       <button aria-label="Decrease" onClick={() => set(v - step)} disabled={v <= min} className="i-soft-text i-press-90" style={{ width: 38, height: 40, border: 'none', background: 'none', color: 'var(--text-2)', cursor: v <= min ? 'not-allowed' : 'pointer', opacity: v <= min ? 0.4 : 1, fontFamily: 'inherit', fontSize: 16, fontWeight: 600, transition: 'background 140ms' }}>−</button>
       <span style={{ minWidth: 44, textAlign: 'center', fontSize: 15, fontWeight: 700, fontVariantNumeric: 'tabular-nums', borderInline: '1px solid var(--border)', lineHeight: '40px' }}>{v}</span>
       <button aria-label="Increase" onClick={() => set(v + step)} disabled={v >= max} className="i-soft-text i-press-90" style={{ width: 38, height: 40, border: 'none', background: 'none', color: 'var(--text-2)', cursor: v >= max ? 'not-allowed' : 'pointer', opacity: v >= max ? 0.4 : 1, fontFamily: 'inherit', fontSize: 16, fontWeight: 600, transition: 'background 140ms' }}>+</button>
@@ -192,13 +192,13 @@ export function Autocomplete({ options, placeholder = 'Search…', onSelect, ico
         style={inputStyle}
       />
       {open && matches.length > 0 && (
-        <div style={{ position: 'absolute', insetInline: 0, top: 'calc(100% + 8px)', zIndex: 20, borderRadius: 14, border: '1px solid var(--border)', background: 'var(--surface)', boxShadow: 'var(--shadow-3)', padding: 6 }}>
+        <div style={{ position: 'absolute', insetInline: 0, top: 'calc(100% + 8px)', zIndex: 20, borderRadius: 6, border: '1px solid var(--border)', background: 'var(--surface)', padding: 6 }}>
           {matches.map((m, i) => (
             <div
               key={m}
               onMouseDown={() => { setQ(m); setOpen(false); onSelect?.(m); }}
               className={i === 0 ? undefined : 'i-surface2'}
-              style={{ display: 'flex', alignItems: 'center', gap: 10, height: 38, borderRadius: 9, padding: '0 12px', fontSize: 14, cursor: 'pointer', background: i === 0 ? 'var(--accent-soft)' : undefined, color: i === 0 ? undefined : 'var(--text-2)' }}
+              style={{ display: 'flex', alignItems: 'center', gap: 10, height: 38, borderRadius: 6, padding: '0 12px', fontSize: 14, cursor: 'pointer', background: i === 0 ? 'var(--accent-soft)' : undefined, color: i === 0 ? undefined : 'var(--text-2)' }}
             >
               {icon && <span style={{ display: 'inline-flex', color: i === 0 ? 'var(--accent)' : 'currentColor' }}>{icon}</span>}
               <span>{bold(m)}</span>
@@ -229,15 +229,14 @@ export interface UnsavedChangesBarProps {
 export function UnsavedChangesBar({ visible, message = 'Unsaved changes', resetLabel = 'Reset', saveLabel = 'Save', onReset, onSave }: UnsavedChangesBarProps) {
   return (
     <div style={{
-      display: 'flex', alignItems: 'center', gap: 12, padding: '10px 10px 10px 18px', borderRadius: 999,
-      background: 'oklch(0.2 0.03 274)', color: 'oklch(0.95 0.005 270)', boxShadow: 'var(--shadow-3)',
-      transform: visible ? 'translateY(0)' : 'translateY(16px)', opacity: visible ? 1 : 0, pointerEvents: visible ? 'auto' : 'none',
+      display: 'flex', alignItems: 'center', gap: 12, padding: '10px 10px 10px 18px', borderRadius: 6,
+      background: 'oklch(0.2 0.03 274)', color: 'oklch(0.95 0.005 270)',      transform: visible ? 'translateY(0)' : 'translateY(16px)', opacity: visible ? 1 : 0, pointerEvents: visible ? 'auto' : 'none',
       transition: `transform 480ms ${spring}, opacity 300ms`,
     }}>
       <span style={{ width: 7, height: 7, borderRadius: '50%', background: 'oklch(0.84 0.14 80)', flex: 'none' }} />
       <span style={{ fontSize: 13, fontWeight: 500 }}>{message}</span>
-      <button onClick={onReset} style={{ height: 30, padding: '0 13px', borderRadius: 999, border: 'none', background: 'rgba(255,255,255,0.12)', color: 'inherit', fontFamily: 'inherit', fontSize: 12.5, fontWeight: 600, cursor: 'pointer' }}>{resetLabel}</button>
-      <button onClick={onSave} className="i-lift" style={{ height: 30, padding: '0 15px', borderRadius: 999, border: 'none', background: '#fff', color: '#111', fontFamily: 'inherit', fontSize: 12.5, fontWeight: 600, cursor: 'pointer' }}>{saveLabel}</button>
+      <button onClick={onReset} style={{ height: 30, padding: '0 13px', borderRadius: 6, border: 'none', background: 'rgba(255,255,255,0.12)', color: 'inherit', fontFamily: 'inherit', fontSize: 12.5, fontWeight: 600, cursor: 'pointer' }}>{resetLabel}</button>
+      <button onClick={onSave} className="i-lift" style={{ height: 30, padding: '0 15px', borderRadius: 6, border: 'none', background: '#fff', color: '#111', fontFamily: 'inherit', fontSize: 12.5, fontWeight: 600, cursor: 'pointer' }}>{saveLabel}</button>
     </div>
   );
 }

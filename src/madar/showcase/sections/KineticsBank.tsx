@@ -7,7 +7,7 @@ import {
 } from '../../components';
 
 function Card({ children }: { children: React.ReactNode }) {
-  return <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 22, padding: 24, boxShadow: 'var(--shadow-1)', display: 'flex', flexDirection: 'column', gap: 20 }}>{children}</div>;
+  return <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, padding: 24, display: 'flex', flexDirection: 'column', gap: 20 }}>{children}</div>;
 }
 function Rule() { return <div style={{ height: 1, background: 'var(--border)' }} />; }
 function Hint({ children, mb = 12 }: { children: React.ReactNode; mb?: number }) {
@@ -20,7 +20,7 @@ function UndoDemo() {
     <div>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
         <span style={{ fontSize: 13.5, fontWeight: 500, color: 'var(--text-2)' }}>Undo snackbar — 3s visible window</span>
-        <button onClick={() => setVisible(true)} className="i-soft" style={{ height: 30, padding: '0 14px', borderRadius: 999, border: '1px solid var(--border-strong)', background: 'var(--surface)', color: 'var(--text)', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>Delete item</button>
+        <button onClick={() => setVisible(true)} className="i-soft" style={{ height: 30, padding: '0 14px', borderRadius: 6, border: '1px solid var(--border-strong)', background: 'var(--surface)', color: 'var(--text)', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>Delete item</button>
       </div>
       <div style={{ display: 'grid', placeItems: 'center', minHeight: 64 }}>
         <UndoSnackbar visible={visible} message="تم حذف الدرس" undoLabel="تراجع" onUndo={() => setVisible(false)} onExpire={() => setVisible(false)} />
@@ -64,7 +64,7 @@ export function KineticsBank() {
             <Hint>Drag to dismiss — fling past 100px, else spring back</Hint>
             <DragToDismissCard>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                <span style={{ width: 34, height: 34, borderRadius: 10, background: 'var(--accent-soft)', color: 'var(--accent)', display: 'grid', placeItems: 'center', flex: 'none' }}>
+                <span style={{ width: 34, height: 34, borderRadius: 6, background: 'var(--accent-soft)', color: 'var(--accent)', display: 'grid', placeItems: 'center', flex: 'none' }}>
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9.5a6 6 0 0 1 12 0c0 4.5 1.8 5.5 1.8 5.5H4.2S6 14 6 9.5z" /><path d="M10 18.5a2 2 0 0 0 4 0" /></svg>
                 </span>
                 <span style={{ flex: 1 }}>
@@ -134,7 +134,7 @@ export function KineticsBank() {
             <Hint>Stagger entrance — 90ms apart, once, on scroll into view</Hint>
             <Stagger>
               {['Design tokens locked', 'Motion curves tuned', 'RTL verified'].map((s) => (
-                <div key={s} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', borderRadius: 12, background: 'var(--surface-2)', fontSize: 13, fontWeight: 600 }}>
+                <div key={s} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', borderRadius: 6, background: 'var(--surface-2)', fontSize: 13, fontWeight: 600 }}>
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--success)" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round"><path d="M5 13l4 4L19 7" /></svg>
                   {s}
                 </div>

@@ -9,7 +9,7 @@ import {
 /* A uniform cell so each of the 24 completion patterns reads as one catalogued tile. */
 function Cell({ name, en, children }: { name: string; en: string; children: React.ReactNode }) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 14, background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 18, padding: 20, boxShadow: 'var(--shadow-1)', minHeight: 176 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 14, background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, padding: 20, minHeight: 176 }}>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
         <span style={{ fontSize: 13.5, fontWeight: 700, letterSpacing: '-0.01em' }}>{name}</span>
         <span style={{ fontSize: 11, color: 'var(--text-3)', fontFamily: 'var(--font-mono)' }}>{en}</span>

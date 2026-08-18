@@ -8,7 +8,7 @@ function RitualCard({ onEnter, onLeave, title, desc, children }: { onEnter: () =
     <div
       onMouseEnter={onEnter} onMouseLeave={onLeave}
       className="i-card"
-      style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 22, padding: '28px 20px', boxShadow: 'var(--shadow-1)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14, cursor: 'pointer', transition: 'transform 340ms cubic-bezier(0.22,1,0.36,1), box-shadow 340ms' }}
+      style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, padding: '28px 20px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14, cursor: 'pointer', transition: 'transform 340ms cubic-bezier(0.22,1,0.36,1), box-shadow 340ms' }}
     >
       <div style={{ position: 'relative', width: 64, height: 64, display: 'grid', placeItems: 'center' }}>{children}</div>
       <div style={{ textAlign: 'center' }}>
@@ -40,7 +40,7 @@ export function IconLab() {
         {/* ORBIT */}
         <RitualCard onEnter={() => setHov('orbit')} onLeave={() => setHov(null)} title="Orbit" desc="Electron speeds up on hover">
           <div style={{ position: 'absolute', inset: 0, animation: `spin ${hov === 'orbit' ? 1 : 4.2}s linear infinite` }}>
-            <span style={{ position: 'absolute', top: 0, left: '50%', marginLeft: -3, width: 6, height: 6, borderRadius: '50%', background: 'var(--accent)', boxShadow: '0 0 8px var(--accent)' }} />
+            <span style={{ position: 'absolute', top: 0, left: '50%', marginLeft: -3, width: 6, height: 6, borderRadius: '50%', background: 'var(--accent)', }} />
           </div>
           <div style={{ position: 'absolute', inset: 6, borderRadius: '50%', border: '1px dashed var(--border-strong)' }} />
           <div style={{ width: 40, height: 40, borderRadius: '50%', display: 'grid', placeItems: 'center', background: `color-mix(in srgb, var(--accent) ${hov === 'orbit' ? 16 : 10}%, transparent)`, transform: hov === 'orbit' ? 'scale(1.1)' : 'none', transition: `transform 320ms ${spring}, background 250ms` }}>

@@ -46,12 +46,12 @@ export function PublishButton({
       onClick={click}
       className="i-press-97"
       style={{
-        width, height: 44, borderRadius: 999, border: 'none', fontFamily: 'inherit', fontSize: 14.5, fontWeight: 600,
+        width, height: 44, borderRadius: 6, border: 'none', fontFamily: 'inherit', fontSize: 14.5, fontWeight: 600,
         cursor: state === 'idle' ? 'pointer' : 'default',
         display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8,
         background: state === 'done' ? 'var(--success)' : 'var(--ink)',
         color: state === 'done' ? '#fff' : 'var(--on-ink)',
-        boxShadow: state === 'done' ? '0 8px 20px oklch(0.68 0.145 158 / 0.35)' : 'var(--shadow-1)',
+        boxShadow: 'none',
         transition: 'background 340ms, box-shadow 340ms, transform 140ms',
       }}
     >
@@ -95,13 +95,13 @@ export function CopyCodeButton({ code, confirmMs = 1800 }: CopyCodeButtonProps) 
   };
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, borderRadius: 12, background: 'oklch(0.22 0.03 274)', padding: '12px 14px' }} dir="ltr">
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, borderRadius: 6, background: 'oklch(0.22 0.03 274)', padding: '12px 14px' }} dir="ltr">
       <code style={{ fontFamily: 'var(--font-mono)', fontSize: 12.5, color: 'oklch(0.85 0.02 270)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{code}</code>
       <button
         aria-label={copied ? 'Copied' : 'Copy'}
         onClick={click}
         className="i-press-92"
-        style={{ flex: 'none', width: 32, height: 32, borderRadius: 9, border: '1px solid rgba(255,255,255,0.14)', background: copied ? 'rgba(255,255,255,0.16)' : 'rgba(255,255,255,0.08)', color: 'oklch(0.9 0.01 270)', cursor: 'pointer', display: 'grid', placeItems: 'center', transition: 'background 220ms' }}
+        style={{ flex: 'none', width: 32, height: 32, borderRadius: 6, border: '1px solid rgba(255,255,255,0.14)', background: copied ? 'rgba(255,255,255,0.16)' : 'rgba(255,255,255,0.08)', color: 'oklch(0.9 0.01 270)', cursor: 'pointer', display: 'grid', placeItems: 'center', transition: 'background 220ms' }}
       >
         {copied
           ? <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="oklch(0.78 0.14 158)" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round"><path d="M5 13l4 4L19 7" /></svg>
@@ -153,7 +153,7 @@ export function ShatterButton({ children, onAction }: ShatterButtonProps) {
       <button
         onClick={click}
         style={{
-          height: 44, padding: '0 24px', borderRadius: 999, border: 'none', background: 'var(--ink)', color: 'var(--on-ink)',
+          height: 44, padding: '0 24px', borderRadius: 6, border: 'none', background: 'var(--ink)', color: 'var(--on-ink)',
           fontFamily: 'inherit', fontSize: 14.5, fontWeight: 600, cursor: 'pointer', position: 'relative',
           transform: shatter ? 'scale(0.86)' : 'none', opacity: shatter ? 0.35 : 1,
           transition: `transform 620ms ${spring}, opacity 300ms`,

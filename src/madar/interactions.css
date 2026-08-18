@@ -3,8 +3,8 @@
    the prototype's style-hover/style-active pseudo-attributes. */
 
 .i-lift:hover { transform: translateY(-1px); }
-.i-lift-shadow:hover { transform: translateY(-1px); box-shadow: var(--shadow-2); }
-.i-lift2-shadow:hover { transform: translateY(-2px); box-shadow: var(--shadow-3); }
+.i-lift-shadow:hover { transform: translateY(-1px); }
+.i-lift2-shadow:hover { transform: translateY(-2px); }
 .i-press-97:active { transform: scale(0.97); }
 .i-press-96:active { transform: scale(0.96); }
 .i-press-94:active { transform: scale(0.94); }
@@ -18,7 +18,7 @@
 .i-danger-soft:hover { background: var(--danger-soft); }
 .i-text:hover { color: var(--text); }
 
-.i-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-2); border-color: var(--border-strong); }
+.i-card:hover { transform: translateY(-3px); border-color: var(--border-strong); }
 .i-chevron:hover { transform: translateX(4px); }
 [dir='rtl'] .i-chevron:hover { transform: translateX(-4px); }
 .i-dock-icon:hover { transform: scale(1.28) translateY(-7px); }

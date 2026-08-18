@@ -8,7 +8,7 @@ import {
    behind it — the #1 lesson from the 2026 trends research). */
 function GlassStage({ children, minHeight = 260 }: { children: React.ReactNode; minHeight?: number }) {
   return (
-    <div style={{ position: 'relative', borderRadius: 24, overflow: 'hidden', minHeight, padding: 24, border: '1px solid rgba(255,255,255,0.08)', background: 'radial-gradient(120% 100% at 20% 0%, oklch(from var(--accent) 0.5 0.2 h), oklch(0.2 0.06 274) 55%, oklch(0.14 0.05 274))' }}>
+    <div style={{ position: 'relative', borderRadius: 6, overflow: 'hidden', minHeight, padding: 24, border: '1px solid rgba(255,255,255,0.08)', background: 'radial-gradient(120% 100% at 20% 0%, oklch(from var(--accent) 0.5 0.2 h), oklch(0.2 0.06 274) 55%, oklch(0.14 0.05 274))' }}>
       <span aria-hidden style={{ position: 'absolute', top: '-20%', insetInlineEnd: '-6%', width: 360, height: 360, borderRadius: '50%', background: 'radial-gradient(circle, oklch(from var(--accent) 0.62 0.2 calc(h + 40) / 0.8), transparent 62%)', filter: 'blur(60px)', animation: 'auroraDrift 20s ease-in-out infinite' }} />
       <div style={{ position: 'relative', zIndex: 2 }}>{children}</div>
     </div>
@@ -37,23 +37,23 @@ export function Trends2026() {
         </GlassStage>
 
         {/* progressive blur over content */}
-        <div style={{ position: 'relative', borderRadius: 24, overflow: 'hidden', border: '1px solid var(--border)', background: 'var(--surface)', boxShadow: 'var(--shadow-1)', maxHeight: 320 }}>
+        <div style={{ position: 'relative', borderRadius: 6, overflow: 'hidden', border: '1px solid var(--border)', background: 'var(--surface)', maxHeight: 320 }}>
           <div style={{ padding: 20, paddingBottom: 90, height: 320, overflow: 'hidden' }}>
             <div style={{ fontSize: 13.5, fontWeight: 600, color: 'var(--text-2)', marginBottom: 12 }}>Progressive blur — يتدرّج نحو الحافة</div>
             {['طلب #8842 · سارة العلي', 'طلب #8841 · Omar Khalid', 'طلب #8840 · ريم القحطاني', 'طلب #8839 · Adam Darwish', 'طلب #8838 · لينا عزيز', 'طلب #8837 · Yousef', 'طلب #8836 · نورة'].map((r, i) => (
-              <div key={r} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '11px 12px', borderRadius: 10, background: i % 2 ? 'var(--surface-2)' : 'transparent', fontSize: 13 }}>
+              <div key={r} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '11px 12px', borderRadius: 6, background: i % 2 ? 'var(--surface-2)' : 'transparent', fontSize: 13 }}>
                 <span>{r}</span><span style={{ fontVariantNumeric: 'tabular-nums', color: 'var(--text-3)' }}>{199 - i * 7} SAR</span>
               </div>
             ))}
           </div>
           <ProgressiveBlur side="bottom" height={100} />
           <div style={{ position: 'absolute', insetInline: 0, bottom: 0, display: 'grid', placeItems: 'center', height: 70, zIndex: 4 }}>
-            <button className="i-lift i-press-97" style={{ height: 38, padding: '0 20px', borderRadius: 999, border: 'none', background: 'var(--ink)', color: 'var(--on-ink)', fontFamily: 'inherit', fontSize: 13, fontWeight: 600, cursor: 'pointer', boxShadow: 'var(--shadow-2)' }}>عرض الكل</button>
+            <button className="i-lift i-press-97" style={{ height: 38, padding: '0 20px', borderRadius: 6, border: 'none', background: 'var(--ink)', color: 'var(--on-ink)', fontFamily: 'inherit', fontSize: 13, fontWeight: 600, cursor: 'pointer', }}>عرض الكل</button>
           </div>
         </div>
 
         {/* anticipatory AI dashboard */}
-        <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 24, padding: 20, boxShadow: 'var(--shadow-1)' }}>
+        <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, padding: 20, }}>
           <div style={{ fontSize: 13.5, fontWeight: 600, color: 'var(--text-2)', marginBottom: 14 }}>Anticipatory AI — أين أنت / الناقص / التالي / لماذا</div>
           <AnticipatoryDashboard
             status={{ label: 'أين أنت', value: '68%', detail: 'اكتمال إعداد المتجر' }}
@@ -64,7 +64,7 @@ export function Trends2026() {
         </div>
 
         {/* prompt-first canvas */}
-        <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 24, padding: 20, boxShadow: 'var(--shadow-1)' }}>
+        <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, padding: 20, }}>
           <div style={{ fontSize: 13.5, fontWeight: 600, color: 'var(--text-2)', marginBottom: 14 }}>Prompt-first canvas — الواجهة تتولّد</div>
           <PromptCanvas />
         </div>

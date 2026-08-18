@@ -53,11 +53,11 @@ export function LiquidGlassCard({ children, style }: { children: React.ReactNode
       onPointerEnter={() => setHov(true)}
       onPointerLeave={() => { setHov(false); setP({ x: 0.5, y: 0.5 }); }}
       style={{
-        position: 'relative', borderRadius: 22, overflow: 'hidden', padding: 20, color: '#fff',
+        position: 'relative', borderRadius: 6, overflow: 'hidden', padding: 20, color: '#fff',
         background: 'rgba(255,255,255,0.10)',
         backdropFilter: 'blur(22px) saturate(180%)', WebkitBackdropFilter: 'blur(22px) saturate(180%)',
         border: '1px solid rgba(255,255,255,0.18)',
-        boxShadow: `${-dx * 30}px ${16 - dy * 20}px 50px -18px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.35)`,
+        boxShadow: `inset 0 1px 0 rgba(255,255,255,0.35)`,
         transform: hov ? `perspective(900px) rotateX(${-dy * 6}deg) rotateY(${dx * 8}deg)` : 'none',
         transformStyle: 'preserve-3d',
         transition: hov ? 'box-shadow 120ms linear' : `transform 500ms ${SPRING}, box-shadow 400ms`,
@@ -78,8 +78,8 @@ export function GlassSegmented({ options, defaultIndex = 0, onChange }: { option
   const [sel, setSel] = useState(defaultIndex);
   const w = 100 / options.length;
   return (
-    <div style={{ position: 'relative', display: 'inline-flex', padding: 4, borderRadius: 999, background: 'rgba(255,255,255,0.10)', backdropFilter: 'blur(16px) saturate(160%)', WebkitBackdropFilter: 'blur(16px) saturate(160%)', border: '1px solid rgba(255,255,255,0.2)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.25)' }}>
-      <span style={{ position: 'absolute', top: 4, bottom: 4, insetInlineStart: `calc(${sel * w}% + 4px)`, width: `calc(${w}% - 8px)`, borderRadius: 999, background: 'rgba(255,255,255,0.9)', boxShadow: '0 2px 8px rgba(0,0,0,0.25)', transition: `inset-inline-start 420ms ${GLIDE}` }} />
+    <div style={{ position: 'relative', display: 'inline-flex', padding: 4, borderRadius: 6, background: 'rgba(255,255,255,0.10)', backdropFilter: 'blur(16px) saturate(160%)', WebkitBackdropFilter: 'blur(16px) saturate(160%)', border: '1px solid rgba(255,255,255,0.2)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.25)' }}>
+      <span style={{ position: 'absolute', top: 4, bottom: 4, insetInlineStart: `calc(${sel * w}% + 4px)`, width: `calc(${w}% - 8px)`, borderRadius: 6, background: 'rgba(255,255,255,0.9)', transition: `inset-inline-start 420ms ${GLIDE}` }} />
       {options.map((o, i) => (
         <button key={o} onClick={() => { setSel(i); onChange?.(i); }} style={{ position: 'relative', zIndex: 1, minWidth: 88, height: 34, padding: '0 16px', border: 'none', background: 'none', cursor: 'pointer', fontFamily: 'inherit', fontSize: 13, fontWeight: 600, color: i === sel ? '#0b0b12' : 'rgba(255,255,255,0.85)', transition: 'color 300ms' }}>{o}</button>
       ))}
@@ -107,27 +107,27 @@ export function AnticipatoryDashboard({ status, gap, next, why }: AnticipatoryDa
   return (
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
       {/* where you are */}
-      <div style={{ borderRadius: 16, border: '1px solid var(--border)', background: 'var(--surface)', padding: 16, boxShadow: 'var(--shadow-1)' }}>
+      <div style={{ borderRadius: 6, border: '1px solid var(--border)', background: 'var(--surface)', padding: 16, }}>
         <div style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: '0.08em', color: 'var(--text-3)' }}>أين أنت الآن</div>
         <div style={{ fontSize: 24, fontWeight: 700, letterSpacing: '-0.01em', margin: '6px 0 2px', fontVariantNumeric: 'tabular-nums' }}>{status.value}</div>
         {status.detail && <div style={{ fontSize: 12, color: 'var(--text-3)' }}>{status.detail}</div>}
       </div>
       {/* what's missing */}
-      <div style={{ borderRadius: 16, border: `1px solid var(--${gap.tone ?? 'warning'})`, background: `var(--${gap.tone ?? 'warning'}-soft)`, padding: 16 }}>
+      <div style={{ borderRadius: 6, border: `1px solid var(--${gap.tone ?? 'warning'})`, background: `var(--${gap.tone ?? 'warning'}-soft)`, padding: 16 }}>
         <div style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: '0.08em', color: `var(--${gap.tone ?? 'warning'})` }}>ما الناقص</div>
         <div style={{ fontSize: 15, fontWeight: 700, margin: '6px 0 2px' }}>{gap.value}</div>
         {gap.detail && <div style={{ fontSize: 12, color: 'var(--text-2)' }}>{gap.detail}</div>}
       </div>
       {/* what to do next — spans full width, the primary action */}
-      <div style={{ gridColumn: '1 / -1', display: 'flex', alignItems: 'center', gap: 14, borderRadius: 16, padding: 16, background: 'var(--ink)', color: 'var(--on-ink)' }}>
-        <span style={{ width: 38, height: 38, borderRadius: 12, background: 'var(--accent)', color: 'var(--on-accent)', display: 'grid', placeItems: 'center', flex: 'none' }}>
+      <div style={{ gridColumn: '1 / -1', display: 'flex', alignItems: 'center', gap: 14, borderRadius: 6, padding: 16, background: 'var(--ink)', color: 'var(--on-ink)' }}>
+        <span style={{ width: 38, height: 38, borderRadius: 6, background: 'var(--accent)', color: 'var(--on-accent)', display: 'grid', placeItems: 'center', flex: 'none' }}>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z" /></svg>
         </span>
         <span style={{ flex: 1, minWidth: 0 }}>
           <span style={{ display: 'block', fontSize: 10.5, fontWeight: 700, letterSpacing: '0.08em', opacity: 0.6 }}>الخطوة التالية</span>
           <span style={{ display: 'block', fontSize: 14.5, fontWeight: 600 }}>{next.label}</span>
         </span>
-        <button onClick={next.onAction} className="i-press-97" style={{ height: 36, padding: '0 16px', borderRadius: 999, border: 'none', background: 'var(--on-ink)', color: 'var(--ink)', fontFamily: 'inherit', fontSize: 13, fontWeight: 600, cursor: 'pointer', flex: 'none' }}>{next.action}</button>
+        <button onClick={next.onAction} className="i-press-97" style={{ height: 36, padding: '0 16px', borderRadius: 6, border: 'none', background: 'var(--on-ink)', color: 'var(--ink)', fontFamily: 'inherit', fontSize: 13, fontWeight: 600, cursor: 'pointer', flex: 'none' }}>{next.action}</button>
       </div>
       {/* why it matters */}
       <div style={{ gridColumn: '1 / -1', display: 'flex', alignItems: 'flex-start', gap: 10, padding: '2px 4px' }}>
@@ -154,21 +154,21 @@ export function PromptCanvas({ placeholder = 'صف ما تريد بناءه…',
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
       <div style={{ position: 'relative' }}>
-        <span aria-hidden style={{ position: 'absolute', inset: -2, borderRadius: 18, background: 'linear-gradient(100deg, var(--accent), color-mix(in srgb, var(--accent) 50%, var(--info)), var(--accent))', backgroundSize: '200% 100%', animation: 'shimmer 3s linear infinite', opacity: 0.5, filter: 'blur(6px)' }} />
-        <div style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: 10, borderRadius: 16, border: '1px solid var(--border-strong)', background: 'var(--surface)', padding: '10px 10px 10px 16px' }}>
+        <span aria-hidden style={{ position: 'absolute', inset: -2, borderRadius: 6, background: 'linear-gradient(100deg, var(--accent), color-mix(in srgb, var(--accent) 50%, var(--info)), var(--accent))', backgroundSize: '200% 100%', animation: 'shimmer 3s linear infinite', opacity: 0.5, filter: 'blur(6px)' }} />
+        <div style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: 10, borderRadius: 6, border: '1px solid var(--border-strong)', background: 'var(--surface)', padding: '10px 10px 10px 16px' }}>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" style={{ flex: 'none' }}><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3z" /></svg>
           <input value={text} onChange={(e) => setText(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') run(text); }} placeholder={placeholder} style={{ flex: 1, minWidth: 0, border: 'none', background: 'none', outline: 'none', fontFamily: 'inherit', fontSize: 14.5, color: 'var(--text)' }} />
-          <button onClick={() => run(text)} className="i-press-96" style={{ height: 38, padding: '0 16px', borderRadius: 999, border: 'none', background: 'var(--ink)', color: 'var(--on-ink)', fontFamily: 'inherit', fontSize: 13, fontWeight: 600, cursor: 'pointer', flex: 'none' }}>توليد</button>
+          <button onClick={() => run(text)} className="i-press-96" style={{ height: 38, padding: '0 16px', borderRadius: 6, border: 'none', background: 'var(--ink)', color: 'var(--on-ink)', fontFamily: 'inherit', fontSize: 13, fontWeight: 600, cursor: 'pointer', flex: 'none' }}>توليد</button>
         </div>
       </div>
       <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
         {suggestions.map((s) => (
-          <button key={s} onClick={() => { setText(s); run(s); }} className="i-lift" style={{ padding: '6px 13px', borderRadius: 999, border: '1px solid var(--border)', background: 'var(--surface-2)', color: 'var(--text-2)', fontFamily: 'inherit', fontSize: 12.5, fontWeight: 600, cursor: 'pointer', transition: 'transform 220ms' }}>{s}</button>
+          <button key={s} onClick={() => { setText(s); run(s); }} className="i-lift" style={{ padding: '6px 13px', borderRadius: 6, border: '1px solid var(--border)', background: 'var(--surface-2)', color: 'var(--text-2)', fontFamily: 'inherit', fontSize: 12.5, fontWeight: 600, cursor: 'pointer', transition: 'transform 220ms' }}>{s}</button>
         ))}
       </div>
       {generated && (
-        <div style={{ borderRadius: 16, border: '1px dashed var(--border-strong)', background: 'var(--bg-deep)', padding: 16, display: 'flex', alignItems: 'center', gap: 12, animation: 'fadeUp 340ms cubic-bezier(0.22,1,0.36,1)' }}>
-          <span style={{ width: 34, height: 34, borderRadius: 10, background: 'var(--accent-soft)', color: 'var(--accent)', display: 'grid', placeItems: 'center', flex: 'none' }}>
+        <div style={{ borderRadius: 6, border: '1px dashed var(--border-strong)', background: 'var(--bg-deep)', padding: 16, display: 'flex', alignItems: 'center', gap: 12, animation: 'fadeUp 340ms cubic-bezier(0.22,1,0.36,1)' }}>
+          <span style={{ width: 34, height: 34, borderRadius: 6, background: 'var(--accent-soft)', color: 'var(--accent)', display: 'grid', placeItems: 'center', flex: 'none' }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="4" width="7" height="7" rx="1.5" /><rect x="13" y="4" width="7" height="7" rx="1.5" /><rect x="4" y="13" width="7" height="7" rx="1.5" /><rect x="13" y="13" width="7" height="7" rx="1.5" /></svg>
           </span>
           <span style={{ fontSize: 13, color: 'var(--text-2)' }}>وُلّد تخطيط <b style={{ color: 'var(--text)' }}>«{generated}»</b> · جاهز للتحرير.</span>
@@ -182,8 +182,8 @@ export function PromptCanvas({ placeholder = 'صف ما تريد بناءه…',
       ultra-minimal, luminous, one metric + one line, no chrome. */
 export function GlanceableTile({ icon, metric, label, accent = 'var(--accent)' }: { icon: React.ReactNode; metric: React.ReactNode; label: React.ReactNode; accent?: string }) {
   return (
-    <div style={{ display: 'inline-flex', alignItems: 'center', gap: 12, padding: '12px 18px 12px 14px', borderRadius: 18, background: 'rgba(10,12,20,0.55)', backdropFilter: 'blur(18px) saturate(160%)', WebkitBackdropFilter: 'blur(18px) saturate(160%)', border: '1px solid rgba(255,255,255,0.14)', color: '#fff', boxShadow: `0 0 30px -6px ${accent}` }}>
-      <span style={{ width: 34, height: 34, borderRadius: 10, display: 'grid', placeItems: 'center', color: accent, background: 'rgba(255,255,255,0.08)', filter: `drop-shadow(0 0 6px ${accent})`, flex: 'none' }}>{icon}</span>
+    <div style={{ display: 'inline-flex', alignItems: 'center', gap: 12, padding: '12px 18px 12px 14px', borderRadius: 6, background: 'rgba(10,12,20,0.55)', backdropFilter: 'blur(18px) saturate(160%)', WebkitBackdropFilter: 'blur(18px) saturate(160%)', border: '1px solid rgba(255,255,255,0.14)', color: '#fff', boxShadow: 'none' }}>
+      <span style={{ width: 34, height: 34, borderRadius: 6, display: 'grid', placeItems: 'center', color: accent, background: 'rgba(255,255,255,0.08)', filter: `drop-shadow(0 0 6px ${accent})`, flex: 'none' }}>{icon}</span>
       <span>
         <span style={{ display: 'block', fontSize: 20, fontWeight: 700, lineHeight: 1.1, fontVariantNumeric: 'tabular-nums', letterSpacing: '-0.01em' }}>{metric}</span>
         <span style={{ display: 'block', fontSize: 11.5, color: 'rgba(255,255,255,0.6)' }}>{label}</span>

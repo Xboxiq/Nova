@@ -2,8 +2,8 @@ import { Section, SectionHeader } from '../SectionHeader';
 
 function Swatch({ token, desc, css }: { token: string; desc: string; css: React.CSSProperties }) {
   return (
-    <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 16, padding: 10, boxShadow: 'var(--shadow-1)' }}>
-      <div style={{ height: 56, borderRadius: 10, border: '1px solid var(--border)', ...css }} />
+    <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, padding: 10, }}>
+      <div style={{ height: 56, borderRadius: 6, border: '1px solid var(--border)', ...css }} />
       <div style={{ padding: '10px 6px 4px' }}>
         <div style={{ fontSize: 13, fontWeight: 600, fontFamily: 'var(--font-mono)' }}>{token}</div>
         <div style={{ fontSize: 12, color: 'var(--text-3)' }}>{desc}</div>
@@ -14,7 +14,7 @@ function Swatch({ token, desc, css }: { token: string; desc: string; css: React.
 
 function StatusChip({ token, label }: { token: string; label: string }) {
   return (
-    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '6px 14px', borderRadius: 999, background: `var(--${token}-soft)`, color: `var(--${token})`, fontSize: 13, fontWeight: 600 }}>
+    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '6px 14px', borderRadius: 6, background: `var(--${token}-soft)`, color: `var(--${token})`, fontSize: 13, fontWeight: 600 }}>
       <span style={{ width: 6, height: 6, borderRadius: '50%', background: `var(--${token})` }} />{label}
     </span>
   );

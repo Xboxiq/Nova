@@ -51,9 +51,9 @@
   --nova-state-selected: rgb(0 104 217 / 14%);
   --nova-glass-shadow: 0 1px 0 rgb(255 255 255 / 64%) inset, 0 -1px 0 rgb(49 102 118 / 10%) inset, 0 18px 46px rgb(27 69 82 / 12%), 0 3px 12px rgb(27 69 82 / 8%);
 
-  --nova-shadow-sm: 0 1px 2px rgb(16 36 46 / 4%), 0 8px 24px rgb(16 36 46 / 6%);
-  --nova-shadow-md: 0 12px 36px rgb(16 36 46 / 10%);
-  --nova-shadow-lg: 0 28px 90px rgb(16 36 46 / 18%);
+  --nova-shadow-sm: none;
+  --nova-shadow-md: none;
+  --nova-shadow-lg: none;
 }
 
 [data-theme="dark"] {
@@ -102,9 +102,9 @@
   --nova-state-selected: rgb(112 183 255 / 18%);
   --nova-glass-shadow: 0 1px 0 rgb(235 252 255 / 15%) inset, 0 -1px 0 rgb(0 8 12 / 34%) inset, 0 22px 64px rgb(0 7 12 / 38%), 0 4px 16px rgb(0 7 12 / 24%);
 
-  --nova-shadow-sm: 0 1px 2px rgb(1 9 13 / 18%), 0 10px 28px rgb(1 9 13 / 18%);
-  --nova-shadow-md: 0 18px 54px rgb(1 9 13 / 28%);
-  --nova-shadow-lg: 0 30px 96px rgb(1 9 13 / 44%);
+  --nova-shadow-sm: none;
+  --nova-shadow-md: none;
+  --nova-shadow-lg: none;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -150,9 +150,9 @@
     --nova-state-pressed: rgb(112 183 255 / 16%);
     --nova-state-selected: rgb(112 183 255 / 18%);
     --nova-glass-shadow: 0 1px 0 rgb(235 252 255 / 15%) inset, 0 -1px 0 rgb(0 8 12 / 34%) inset, 0 22px 64px rgb(0 7 12 / 38%), 0 4px 16px rgb(0 7 12 / 24%);
-    --nova-shadow-sm: 0 1px 2px rgb(1 9 13 / 18%), 0 10px 28px rgb(1 9 13 / 18%);
-    --nova-shadow-md: 0 18px 54px rgb(1 9 13 / 28%);
-    --nova-shadow-lg: 0 30px 96px rgb(1 9 13 / 44%);
+    --nova-shadow-sm: none;
+    --nova-shadow-md: none;
+    --nova-shadow-lg: none;
   }
 }
 
@@ -201,11 +201,11 @@
   --nova-copy-gap: clamp(1.25rem, 2vw, 2rem);
   --nova-card-inset: clamp(1.25rem, 2.2vw, 2rem);
 
-  --nova-radius-control: 10px;
-  --nova-radius-field: 16px;
-  --nova-radius-card: 24px;
-  --nova-radius-feature: 32px;
-  --nova-radius-pill: 999px;
+  --nova-radius-control: 4px;
+  --nova-radius-field: 5px;
+  --nova-radius-card: 6px;
+  --nova-radius-feature: 6px;
+  --nova-radius-pill: 6px;
 
   /* Controls and icon containers share optical—not merely numeric—sizes. */
   --nova-control-sm: 36px;

@@ -50,17 +50,13 @@
     linear-gradient(180deg, color-mix(in srgb, var(--nova-action) 78%, white) 0%, var(--nova-action) 48%, var(--nova-action-pressed) 100%);
   border-color: color-mix(in srgb, var(--nova-action-pressed) 74%, transparent);
   box-shadow:
-    inset 0 1px rgb(255 255 255 / 30%),
-    inset 0 -1px rgb(0 24 58 / 16%),
-    0 10px 24px color-mix(in srgb, var(--nova-action) 22%, transparent);
+    inset 0 1px rgb(255 255 255 / 30%), inset 0 -1px rgb(0 24 58 / 16%);
 }
 
 .nova-control.is-primary::after { background: transparent; }
 .nova-control.is-primary:hover {
   box-shadow:
-    inset 0 1px rgb(255 255 255 / 34%),
-    inset 0 -1px rgb(0 24 58 / 18%),
-    0 14px 30px color-mix(in srgb, var(--nova-action) 28%, transparent);
+    inset 0 1px rgb(255 255 255 / 34%), inset 0 -1px rgb(0 24 58 / 18%);
 }
 .nova-control.is-primary:hover::after { background: rgb(255 255 255 / 7%); }
 .nova-control.is-primary:active::after { background: rgb(0 21 49 / 12%); }
@@ -68,7 +64,6 @@
 .nova-control.is-secondary {
   background: var(--nova-surface);
   border-color: var(--nova-border);
-  box-shadow: var(--nova-shadow-sm);
 }
 
 .nova-control.is-quiet { color: var(--nova-ink-secondary); }
@@ -84,7 +79,7 @@
   background:
     linear-gradient(150deg, var(--nova-glass-strong), color-mix(in srgb, var(--nova-glass) 76%, transparent));
   border-color: var(--nova-glass-edge);
-  box-shadow: inset 0 1px var(--nova-glass-specular), 0 12px 30px color-mix(in srgb, var(--nova-ink) 12%, transparent);
+  box-shadow: inset 0 1px var(--nova-glass-specular);
   backdrop-filter: blur(22px) saturate(170%);
   -webkit-backdrop-filter: blur(22px) saturate(170%);
 }
@@ -119,7 +114,7 @@
   overflow: hidden;
   color: var(--nova-action-ink);
   border: 1px solid transparent;
-  border-radius: 12px;
+  border-radius: 6px;
   isolation: isolate;
   transition:
     color var(--nova-motion-control),
@@ -130,11 +125,11 @@
 }
 
 .nova-icon-tile > svg { position: relative; z-index: 2; width: var(--nova-icon-md); height: var(--nova-icon-md); }
-.nova-icon-tile.is-sm { width: var(--nova-icon-tile-sm); height: var(--nova-icon-tile-sm); border-radius: 9px; }
+.nova-icon-tile.is-sm { width: var(--nova-icon-tile-sm); height: var(--nova-icon-tile-sm); border-radius: 6px; }
 .nova-icon-tile.is-sm > svg { width: var(--nova-icon-sm); height: var(--nova-icon-sm); }
-.nova-icon-tile.is-lg { width: var(--nova-icon-tile-lg); height: var(--nova-icon-tile-lg); border-radius: 15px; }
+.nova-icon-tile.is-lg { width: var(--nova-icon-tile-lg); height: var(--nova-icon-tile-lg); border-radius: 6px; }
 .nova-icon-tile.is-lg > svg { width: var(--nova-icon-lg); height: var(--nova-icon-lg); }
-.nova-icon-tile.is-xl { width: var(--nova-icon-tile-xl); height: var(--nova-icon-tile-xl); border-radius: 20px; }
+.nova-icon-tile.is-xl { width: var(--nova-icon-tile-xl); height: var(--nova-icon-tile-xl); border-radius: 6px; }
 .nova-icon-tile.is-xl > svg { width: var(--nova-icon-xl); height: var(--nova-icon-xl); }
 
 .nova-icon-tile.is-tonal {
@@ -165,9 +160,7 @@
     linear-gradient(150deg, var(--nova-glass-strong), color-mix(in srgb, var(--nova-glass) 70%, var(--nova-glass-caustic)));
   border-color: var(--nova-glass-edge);
   box-shadow:
-    inset 0 1px var(--nova-glass-specular),
-    inset 0 -1px var(--nova-glass-edge-shade),
-    0 12px 28px color-mix(in srgb, var(--nova-ink) 14%, transparent);
+    inset 0 1px var(--nova-glass-specular), inset 0 -1px var(--nova-glass-edge-shade);
   backdrop-filter: blur(24px) saturate(175%);
   -webkit-backdrop-filter: blur(24px) saturate(175%);
 }

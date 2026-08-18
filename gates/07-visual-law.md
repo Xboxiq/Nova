@@ -26,10 +26,10 @@ than only the new one is what surfaced it.
   EXPECT: /^LIGHT_OVERHEAD_/m
   EVIDENCE: LIGHT_OVERHEAD_0.95
 
-- [x] G3: All three shadow roles are present and distinct — contact, cast, and occlusion at the joint
-  CHECK: node -e "const s=require('fs').readFileSync('src/madar/components/upload.tsx','utf8');const need=['data-folder-part=\"contact-shadow\"','data-folder-part=\"cast-shadow\"','data-folder-part=\"occlusion\"'];const miss=need.filter(n=>!s.includes(n));console.log(miss.length?'SHADOWS_MISSING '+miss.join(','):'THREE_SHADOWS')"
-  EXPECT: THREE_SHADOWS
-  EVIDENCE: THREE_SHADOWS
+- [x] G3: After the owner ruled anti-slop-ui #7 over §3, the two drop shadows are gone and the occlusion at the joint is not
+  CHECK: node -e "const s=require('fs').readFileSync('src/madar/components/upload.tsx','utf8');const gone=!/data-folder-part=\"(contact|cast)-shadow\"/.test(s);const joint=/data-folder-part=\"occlusion\"/.test(s);console.log(gone&&joint?'JOINT_ONLY':'RULING_NOT_APPLIED '+[gone,joint].join())"
+  EXPECT: JOINT_ONLY
+  EVIDENCE: JOINT_ONLY
 
 - [x] G4: The slips are placed by hand, not by loop — no two angles are equal and none is zero
   CHECK: node -e "const s=require('fs').readFileSync('src/madar/components/upload.tsx','utf8');const a=JSON.parse(/const SLIP_TILT = (\[[^\]]*\])/.exec(s)[1]);const ok=a.length>=3&&new Set(a).size===a.length&&a.every(v=>v!==0);console.log(ok?'ANGLES_UNEQUAL '+a.join(','):'ANGLES_MECHANICAL '+a.join(','))"

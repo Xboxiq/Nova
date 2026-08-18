@@ -40,7 +40,7 @@ export interface AccordionItem { title: React.ReactNode; body: React.ReactNode; 
 export function Accordion({ items, defaultOpen = 0 }: { items: AccordionItem[]; defaultOpen?: number }) {
   const [open, setOpen] = useState(defaultOpen);
   return (
-    <div style={{ borderRadius: 16, border: '1px solid var(--border)', overflow: 'hidden', background: 'var(--surface)' }}>
+    <div style={{ borderRadius: 6, border: '1px solid var(--border)', overflow: 'hidden', background: 'var(--surface)' }}>
       {items.map((it, i) => (
         <div key={i} style={{ borderTop: i ? '1px solid var(--border)' : 'none' }}>
           <button onClick={() => setOpen(open === i ? -1 : i)} className="i-surface2" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', padding: '14px 16px', border: 'none', background: 'none', cursor: 'pointer', fontFamily: 'inherit', fontSize: 14, fontWeight: 600, color: 'var(--text)', textAlign: 'start' }}>
@@ -82,7 +82,7 @@ export function Pagination({ total, value, defaultValue = 1, onChange }: { total
   let prev = 0;
   for (let i = 1; i <= total; i++) { if (pages.has(i)) { if (i - prev > 1) list.push('…'); list.push(i); prev = i; } }
   const arrow = (dir: 'prev' | 'next', d: string) => (
-    <button aria-label={dir} onClick={() => go(page + (dir === 'next' ? 1 : -1))} disabled={dir === 'prev' ? page === 1 : page === total} className="i-soft" style={{ width: 36, height: 36, borderRadius: 999, border: '1px solid var(--border-strong)', background: 'var(--surface)', color: 'var(--text)', cursor: 'pointer', display: 'grid', placeItems: 'center', opacity: (dir === 'prev' ? page === 1 : page === total) ? 0.4 : 1 }}>
+    <button aria-label={dir} onClick={() => go(page + (dir === 'next' ? 1 : -1))} disabled={dir === 'prev' ? page === 1 : page === total} className="i-soft" style={{ width: 36, height: 36, borderRadius: 6, border: '1px solid var(--border-strong)', background: 'var(--surface)', color: 'var(--text)', cursor: 'pointer', display: 'grid', placeItems: 'center', opacity: (dir === 'prev' ? page === 1 : page === total) ? 0.4 : 1 }}>
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="i-chevron-dir"><path d={d} /></svg>
     </button>
   );
@@ -91,7 +91,7 @@ export function Pagination({ total, value, defaultValue = 1, onChange }: { total
       {arrow('prev', 'M15 6l-6 6 6 6')}
       {list.map((p, i) => p === '…'
         ? <span key={`e${i}`} style={{ color: 'var(--text-3)', padding: '0 4px' }}>…</span>
-        : <button key={p} onClick={() => go(p)} className={p === page ? undefined : 'i-soft-text'} style={{ width: 36, height: 36, borderRadius: 999, border: 'none', background: p === page ? 'var(--ink)' : 'none', color: p === page ? 'var(--on-ink)' : 'var(--text-2)', fontFamily: 'inherit', fontSize: 13, fontWeight: 600, cursor: 'pointer', fontVariantNumeric: 'tabular-nums' }}>{p}</button>)}
+        : <button key={p} onClick={() => go(p)} className={p === page ? undefined : 'i-soft-text'} style={{ width: 36, height: 36, borderRadius: 6, border: 'none', background: p === page ? 'var(--ink)' : 'none', color: p === page ? 'var(--on-ink)' : 'var(--text-2)', fontFamily: 'inherit', fontSize: 13, fontWeight: 600, cursor: 'pointer', fontVariantNumeric: 'tabular-nums' }}>{p}</button>)}
       {arrow('next', 'M9 6l6 6-6 6')}
     </div>
   );
@@ -122,15 +122,15 @@ export function KanbanBoard({ columns: initial }: { columns: KanbanColumn[] }) {
           key={col.key}
           onDragOver={(e) => { e.preventDefault(); setOver(col.key); }}
           onDrop={() => drop(col.key)}
-          style={{ borderRadius: 16, background: over === col.key ? 'var(--accent-soft)' : 'var(--bg-deep)', border: `1px solid ${over === col.key ? 'var(--accent)' : 'var(--border)'}`, padding: 10, minHeight: 120, transition: 'background 180ms, border-color 180ms' }}
+          style={{ borderRadius: 6, background: over === col.key ? 'var(--accent-soft)' : 'var(--bg-deep)', border: `1px solid ${over === col.key ? 'var(--accent)' : 'var(--border)'}`, padding: 10, minHeight: 120, transition: 'background 180ms, border-color 180ms' }}
         >
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '2px 6px 10px' }}>
             <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-2)' }}>{col.title}</span>
-            <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-3)', background: 'var(--surface-2)', borderRadius: 999, padding: '1px 8px', fontVariantNumeric: 'tabular-nums' }}>{col.cards.length}</span>
+            <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-3)', background: 'var(--surface-2)', borderRadius: 6, padding: '1px 8px', fontVariantNumeric: 'tabular-nums' }}>{col.cards.length}</span>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {col.cards.map((card) => (
-              <div key={card.id} draggable onDragStart={() => setDrag({ card, from: col.key })} onDragEnd={() => { setDrag(null); setOver(null); }} style={{ borderRadius: 12, background: 'var(--surface)', border: '1px solid var(--border)', boxShadow: 'var(--shadow-1)', padding: '10px 12px', cursor: 'grab', opacity: drag?.card.id === card.id ? 0.4 : 1 }}>
+              <div key={card.id} draggable onDragStart={() => setDrag({ card, from: col.key })} onDragEnd={() => { setDrag(null); setOver(null); }} style={{ borderRadius: 6, background: 'var(--surface)', border: '1px solid var(--border)', padding: '10px 12px', cursor: 'grab', opacity: drag?.card.id === card.id ? 0.4 : 1 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                   <span style={{ width: 6, height: 6, borderRadius: '50%', background: `var(--${card.tone ?? 'accent'})`, flex: 'none' }} />
                   <span style={{ fontSize: 13, fontWeight: 600 }}>{card.title}</span>
@@ -158,14 +158,14 @@ export function CalendarMonth({ year = 2026, month = 6, events = [4, 11, 12, 18,
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
         <span style={{ fontSize: 15, fontWeight: 700 }}>{monthName} {year}</span>
         <span style={{ display: 'inline-flex', gap: 4 }}>
-          <button aria-label="prev" className="i-soft" style={{ width: 30, height: 30, borderRadius: 8, border: '1px solid var(--border)', background: 'var(--surface)', cursor: 'pointer', display: 'grid', placeItems: 'center', color: 'var(--text-2)' }}><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="i-chevron-dir"><path d="M15 6l-6 6 6 6" /></svg></button>
-          <button aria-label="next" className="i-soft" style={{ width: 30, height: 30, borderRadius: 8, border: '1px solid var(--border)', background: 'var(--surface)', cursor: 'pointer', display: 'grid', placeItems: 'center', color: 'var(--text-2)' }}><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="i-chevron-dir"><path d="M9 6l6 6-6 6" /></svg></button>
+          <button aria-label="prev" className="i-soft" style={{ width: 30, height: 30, borderRadius: 6, border: '1px solid var(--border)', background: 'var(--surface)', cursor: 'pointer', display: 'grid', placeItems: 'center', color: 'var(--text-2)' }}><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="i-chevron-dir"><path d="M15 6l-6 6 6 6" /></svg></button>
+          <button aria-label="next" className="i-soft" style={{ width: 30, height: 30, borderRadius: 6, border: '1px solid var(--border)', background: 'var(--surface)', cursor: 'pointer', display: 'grid', placeItems: 'center', color: 'var(--text-2)' }}><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="i-chevron-dir"><path d="M9 6l6 6-6 6" /></svg></button>
         </span>
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7,1fr)', gap: 4 }}>
         {DOW.map((d) => <div key={d} style={{ textAlign: 'center', fontSize: 10.5, fontWeight: 600, color: 'var(--text-3)', paddingBottom: 4 }}>{d}</div>)}
         {cells.map((c, i) => c === null ? <span key={`b${i}`} /> : (
-          <button key={c} onClick={() => { setSel(c); onSelect?.(c); }} style={{ position: 'relative', aspectRatio: '1', borderRadius: 10, border: 'none', cursor: 'pointer', fontFamily: 'inherit', fontSize: 12.5, fontWeight: sel === c ? 700 : 500, fontVariantNumeric: 'tabular-nums', background: sel === c ? 'var(--accent)' : 'transparent', color: sel === c ? 'var(--on-accent)' : 'var(--text)', transition: `background 200ms ${GLIDE}` }} className={sel === c ? undefined : 'i-surface2'}>
+          <button key={c} onClick={() => { setSel(c); onSelect?.(c); }} style={{ position: 'relative', aspectRatio: '1', borderRadius: 6, border: 'none', cursor: 'pointer', fontFamily: 'inherit', fontSize: 12.5, fontWeight: sel === c ? 700 : 500, fontVariantNumeric: 'tabular-nums', background: sel === c ? 'var(--accent)' : 'transparent', color: sel === c ? 'var(--on-accent)' : 'var(--text)', transition: `background 200ms ${GLIDE}` }} className={sel === c ? undefined : 'i-surface2'}>
             {c}
             {evt.has(c) && sel !== c && <span style={{ position: 'absolute', bottom: 5, insetInlineStart: '50%', transform: 'translateX(-50%)', width: 4, height: 4, borderRadius: '50%', background: 'var(--accent)' }} />}
           </button>
@@ -182,7 +182,7 @@ function TreeRow({ node, depth }: { node: TreeNode; depth: number }) {
   const hasKids = !!node.children?.length;
   return (
     <div>
-      <button onClick={() => hasKids && setOpen((v) => !v)} className="i-surface2" style={{ display: 'flex', alignItems: 'center', gap: 7, width: '100%', border: 'none', background: 'none', cursor: hasKids ? 'pointer' : 'default', fontFamily: 'inherit', fontSize: 13, color: 'var(--text)', padding: '7px 8px', borderRadius: 8, paddingInlineStart: depth * 18 + 8, textAlign: 'start' }}>
+      <button onClick={() => hasKids && setOpen((v) => !v)} className="i-surface2" style={{ display: 'flex', alignItems: 'center', gap: 7, width: '100%', border: 'none', background: 'none', cursor: hasKids ? 'pointer' : 'default', fontFamily: 'inherit', fontSize: 13, color: 'var(--text)', padding: '7px 8px', borderRadius: 6, paddingInlineStart: depth * 18 + 8, textAlign: 'start' }}>
         {hasKids
           ? <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ transform: open ? 'rotate(90deg)' : 'none', transition: 'transform 220ms', flex: 'none' }} className="i-chevron-dir"><path d="M9 6l6 6-6 6" /></svg>
           : <span style={{ width: 13, flex: 'none' }} />}
@@ -211,9 +211,9 @@ export function TagInput({ defaultTags = [], placeholder = 'أضف وسماً…
   const [text, setText] = useState('');
   const add = () => { const t = text.trim(); if (t && !tags.includes(t)) setTags([...tags, t]); setText(''); };
   return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center', minHeight: 44, borderRadius: 12, border: '1px solid var(--border-strong)', background: 'var(--surface-2)', padding: '7px 10px' }}>
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center', minHeight: 44, borderRadius: 6, border: '1px solid var(--border-strong)', background: 'var(--surface-2)', padding: '7px 10px' }}>
       {tags.map((t) => (
-        <span key={t} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, height: 28, padding: '0 6px 0 11px', borderRadius: 999, background: 'var(--accent-soft)', color: 'var(--accent)', fontSize: 12.5, fontWeight: 600 }}>
+        <span key={t} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, height: 28, padding: '0 6px 0 11px', borderRadius: 6, background: 'var(--accent-soft)', color: 'var(--accent)', fontSize: 12.5, fontWeight: 600 }}>
           {t}
           <button aria-label={`إزالة ${t}`} onClick={() => setTags(tags.filter((x) => x !== t))} style={{ width: 18, height: 18, borderRadius: '50%', border: 'none', background: 'color-mix(in srgb, var(--accent) 22%, transparent)', color: 'var(--accent)', cursor: 'pointer', display: 'grid', placeItems: 'center' }}>
             <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round"><path d="M6 6l12 12M18 6L6 18" /></svg>

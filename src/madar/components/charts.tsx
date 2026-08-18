@@ -80,7 +80,7 @@ export function MiniBarChart({ data, height = 96, target }: MiniBarChartProps) {
           <div key={b.label} onMouseEnter={() => setHov(i)} onMouseLeave={() => setHov(-1)} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, height: '100%', justifyContent: 'flex-end', cursor: 'default' }}>
             <span style={{ fontSize: 11, height: VAL, lineHeight: `${VAL}px`, flex: 'none', fontWeight: 700, fontVariantNumeric: 'tabular-nums', color: loud(b.value) ? tone : 'var(--accent)', opacity: hov === i ? 1 : 0, transition: 'opacity 180ms' }}>{b.value}</span>
             <div data-bar={b.label} style={{
-              width: '100%', maxWidth: 30, height: (b.value / max) * barMax, flex: 'none', borderRadius: '7px 7px 3px 3px',
+              width: '100%', maxWidth: 30, height: (b.value / max) * barMax, flex: 'none', borderRadius: '6px 6px 3px 3px',
               background: loud(b.value) || hov === i ? tone : 'var(--accent-soft)',
               transformOrigin: 'bottom', animation: `growBar 600ms ${glide} both`, animationDelay: `${i * 120}ms`,
               transition: 'background 200ms',

@@ -7,7 +7,7 @@ function Avatar({ initials, bg }: { initials: string; bg: string }) {
 
 function StatusBadge({ token, label }: { token: string; label: string }) {
   return (
-    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '3px 10px', borderRadius: 999, background: `var(--${token}-soft)`, color: `var(--${token})`, fontSize: 12, fontWeight: 600 }}>
+    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '3px 10px', borderRadius: 6, background: `var(--${token}-soft)`, color: `var(--${token})`, fontSize: 12, fontWeight: 600 }}>
       <span style={{ width: 5, height: 5, borderRadius: '50%', background: `var(--${token})` }} />{label}
     </span>
   );
@@ -37,8 +37,8 @@ export function Cards() {
       </SectionHeader>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: 20, alignItems: 'start' }}>
         {/* service card */}
-        <div className="i-card" style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 16, padding: 22, boxShadow: 'var(--shadow-1)', cursor: 'pointer', transition: 'transform 340ms cubic-bezier(0.22,1,0.36,1), box-shadow 340ms, border-color 340ms' }}>
-          <div style={{ width: 44, height: 44, borderRadius: 12, background: 'var(--accent-soft)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 14 }}>
+        <div className="i-card" style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, padding: 22, cursor: 'pointer', transition: 'transform 340ms cubic-bezier(0.22,1,0.36,1), box-shadow 340ms, border-color 340ms' }}>
+          <div style={{ width: 44, height: 44, borderRadius: 6, background: 'var(--accent-soft)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 14 }}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z" /><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5" /></svg>
           </div>
           <div style={{ fontSize: 17, fontWeight: 600, marginBottom: 4 }}>Subscription bundles</div>
@@ -53,7 +53,7 @@ export function Cards() {
 
         {/* stat cards */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-          <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 16, padding: 20, boxShadow: 'var(--shadow-1)' }}>
+          <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, padding: 20, }}>
             <div style={{ fontSize: 12, fontWeight: 600, letterSpacing: '0.08em', color: 'var(--text-3)' }}>MONTHLY REVENUE</div>
             <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 12, marginTop: 8 }}>
               <div>
@@ -64,7 +64,7 @@ export function Cards() {
               <svg width="90" height="36" viewBox="0 0 90 36" fill="none"><polyline points="2,28 16,22 30,25 44,14 58,18 72,8 88,12" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
             </div>
           </div>
-          <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 16, padding: 20, boxShadow: 'var(--shadow-1)' }}>
+          <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, padding: 20, }}>
             <div style={{ fontSize: 12, fontWeight: 600, letterSpacing: '0.08em', color: 'var(--text-3)' }}>ACTIVE STUDENTS</div>
             <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 12, marginTop: 8 }}>
               <div>
@@ -77,8 +77,8 @@ export function Cards() {
         </div>
 
         {/* pricing highlighted */}
-        <div style={{ background: 'var(--ink)', color: 'var(--on-ink)', borderRadius: 22, padding: 26, boxShadow: 'var(--shadow-3)', position: 'relative' }}>
-          <span style={{ position: 'absolute', top: -12, insetInlineEnd: 22, background: 'var(--accent)', color: 'var(--on-accent)', fontSize: 11.5, fontWeight: 700, letterSpacing: '0.04em', padding: '4px 12px', borderRadius: 999, boxShadow: 'var(--shadow-1)' }}>POPULAR</span>
+        <div style={{ background: 'var(--ink)', color: 'var(--on-ink)', borderRadius: 6, padding: 26, position: 'relative' }}>
+          <span style={{ position: 'absolute', top: -12, insetInlineEnd: 22, background: 'var(--accent)', color: 'var(--on-accent)', fontSize: 11.5, fontWeight: 700, letterSpacing: '0.04em', padding: '4px 12px', borderRadius: 6, }}>POPULAR</span>
           <div style={{ fontSize: 12, fontWeight: 600, letterSpacing: '0.1em', opacity: 0.6 }}>GROWTH</div>
           <div style={{ margin: '10px 0 4px' }}>
             <span style={{ fontSize: 40, fontWeight: 600, letterSpacing: '-0.02em', fontVariantNumeric: 'tabular-nums' }}>199</span>
@@ -92,11 +92,11 @@ export function Cards() {
               </span>
             ))}
           </div>
-          <button className="i-lift i-press-97" style={{ width: '100%', height: 44, marginTop: 20, borderRadius: 999, border: 'none', background: 'var(--on-ink)', color: 'var(--ink)', fontSize: 15, fontWeight: 600, cursor: 'pointer', transition: 'transform 220ms' }}>Choose Growth</button>
+          <button className="i-lift i-press-97" style={{ width: '100%', height: 44, marginTop: 20, borderRadius: 6, border: 'none', background: 'var(--on-ink)', color: 'var(--ink)', fontSize: 15, fontWeight: 600, cursor: 'pointer', transition: 'transform 220ms' }}>Choose Growth</button>
         </div>
 
         {/* list rows */}
-        <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 16, boxShadow: 'var(--shadow-1)', overflow: 'hidden' }}>
+        <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, overflow: 'hidden' }}>
           <ListRow initials="نم" bg="var(--accent-soft)" name="نورة المطيري" meta="Math · Grade 6 · 14 lessons" status="success" statusLabel="Active" />
           <div style={{ height: 1, background: 'var(--border)', margin: '0 18px' }} />
           <ListRow initials="OK" bg="var(--info-soft)" name="Omar Khalid" meta="Physics · Grade 9 · 6 lessons" status="warning" statusLabel="Pending" />
@@ -105,10 +105,10 @@ export function Cards() {
         </div>
 
         {/* glass card over placeholder imagery */}
-        <div style={{ borderRadius: 22, overflow: 'hidden', position: 'relative', minHeight: 240, border: '1px solid var(--border)', background: 'repeating-linear-gradient(45deg, var(--accent-soft) 0 10px, transparent 10px 20px), linear-gradient(150deg, var(--accent-soft), var(--bg-deep))' }}>
+        <div style={{ borderRadius: 6, overflow: 'hidden', position: 'relative', minHeight: 240, border: '1px solid var(--border)', background: 'repeating-linear-gradient(45deg, var(--accent-soft) 0 10px, transparent 10px 20px), linear-gradient(150deg, var(--accent-soft), var(--bg-deep))' }}>
           <div style={{ position: 'absolute', top: 14, insetInlineStart: 14, fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--text-3)', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, padding: '3px 8px' }}>[ product / cover image ]</div>
-          <div style={{ position: 'absolute', insetInline: 16, bottom: 16, borderRadius: 16, background: 'var(--glass)', backdropFilter: 'blur(var(--glass-blur)) saturate(var(--glass-sat))', WebkitBackdropFilter: 'blur(var(--glass-blur)) saturate(var(--glass-sat))', border: '1px solid var(--border)', boxShadow: 'var(--shadow-2), inset 0 1px 0 var(--glass-hl)', padding: 16, display: 'flex', alignItems: 'center', gap: 12 }}>
-            <div style={{ width: 40, height: 40, borderRadius: 12, background: 'var(--accent)', color: 'var(--on-accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 'none' }}>
+          <div style={{ position: 'absolute', insetInline: 16, bottom: 16, borderRadius: 6, background: 'var(--glass)', backdropFilter: 'blur(var(--glass-blur)) saturate(var(--glass-sat))', WebkitBackdropFilter: 'blur(var(--glass-blur)) saturate(var(--glass-sat))', border: '1px solid var(--border)', boxShadow: 'inset 0 1px 0 var(--glass-hl)', padding: 16, display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div style={{ width: 40, height: 40, borderRadius: 6, background: 'var(--accent)', color: 'var(--on-accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 'none' }}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M8 6l8 6-8 6V6z" /></svg>
             </div>
             <div style={{ flex: 1 }}>
@@ -119,12 +119,12 @@ export function Cards() {
         </div>
 
         {/* empty state */}
-        <div style={{ border: '1.5px dashed var(--border-strong)', borderRadius: 16, padding: '36px 24px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: 12 }}>
-          <div style={{ width: 44, height: 44, borderRadius: 12, background: 'var(--accent-soft)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ border: '1.5px dashed var(--border-strong)', borderRadius: 6, padding: '36px 24px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: 12 }}>
+          <div style={{ width: 44, height: 44, borderRadius: 6, background: 'var(--accent-soft)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="5" width="16" height="15" rx="2.5" /><path d="M4 10h16M9 3v4M15 3v4" /></svg>
           </div>
           <div style={{ fontSize: 14.5, color: 'var(--text-2)', maxWidth: '26ch' }}>No bookings yet. Your first one will appear here.</div>
-          <button className="i-soft" style={{ height: 36, padding: '0 18px', borderRadius: 999, border: '1px solid var(--border-strong)', background: 'var(--surface)', color: 'var(--text)', fontSize: 13.5, fontWeight: 600, cursor: 'pointer' }}>Create a booking</button>
+          <button className="i-soft" style={{ height: 36, padding: '0 18px', borderRadius: 6, border: '1px solid var(--border-strong)', background: 'var(--surface)', color: 'var(--text)', fontSize: 13.5, fontWeight: 600, cursor: 'pointer' }}>Create a booking</button>
         </div>
       </div>
     </Section>

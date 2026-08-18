@@ -79,7 +79,7 @@ export function Atelier() {
                 <BezelCard radius={20} inset={5}>
                   <div style={{ padding: '18px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <span style={{ fontSize: 13.5, color: 'var(--text-2)' }}>Inset highlight</span>
-                    <span style={{ width: 46, height: 22, borderRadius: 999, background: 'linear-gradient(180deg, color-mix(in srgb, white 60%, transparent), transparent), var(--surface-2)', boxShadow: 'inset 0 1px 0 color-mix(in srgb, white 70%, transparent)' }} />
+                    <span style={{ width: 46, height: 22, borderRadius: 6, background: 'linear-gradient(180deg, color-mix(in srgb, white 60%, transparent), transparent), var(--surface-2)', boxShadow: 'inset 0 1px 0 color-mix(in srgb, white 70%, transparent)' }} />
                   </div>
                 </BezelCard>
               </div>

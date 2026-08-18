@@ -31,7 +31,7 @@ export function SquircleIcon({ hue = 'blue', size = 48, variant = 'fill', childr
     <span style={{
       width: size, height: size, borderRadius: size * 0.3, display: 'grid', placeItems: 'center', flex: 'none',
       ...(variant === 'fill'
-        ? { background: `linear-gradient(180deg, ${h.a}, ${h.b})`, color: '#fff', boxShadow: `inset 0 1px 0 rgba(255,255,255,0.35), inset 0 -1px 0 rgba(0,0,0,0.18), 0 4px 10px ${h.shadow}` }
+        ? { background: `linear-gradient(180deg, ${h.a}, ${h.b})`, color: '#fff', boxShadow: `inset 0 1px 0 rgba(255,255,255,0.35), inset 0 -1px 0 rgba(0,0,0,0.18)` }
         : { background: h.tint, color: h.b, border: '1px solid var(--border)' }),
     }}>
       <span style={{ display: 'inline-flex', width: size * 0.5, height: size * 0.5, alignItems: 'center', justifyContent: 'center' }}>{children}</span>
@@ -50,12 +50,12 @@ const ORB_PALETTES: Record<Exclude<SoftHue, 'ink'>, [string, string, string, str
 };
 
 export function SpecularOrb({ hue = 'blue', size = 48, children }: { hue?: Exclude<SoftHue, 'ink'>; size?: number; children?: React.ReactNode }) {
-  const [light, mid, deep, halo] = ORB_PALETTES[hue];
+  const [light, mid, deep] = ORB_PALETTES[hue];
   return (
     <span style={{
       position: 'relative', width: size, height: size, borderRadius: '50%', flex: 'none',
       background: `radial-gradient(at 28% 26%, ${light} 0%, ${mid} 55%, ${deep} 100%)`,
-      boxShadow: `inset 9px 9px 20px rgba(255,255,255,0.55), inset -5px -5px 14px rgba(0,0,0,0.28), inset 0 0 0 1px rgba(255,255,255,0.18), 0 0 24px 2px ${halo}`,
+      boxShadow: `inset 9px 9px 20px rgba(255,255,255,0.55), inset -5px -5px 14px rgba(0,0,0,0.28), inset 0 0 0 1px rgba(255,255,255,0.18)`,
       display: 'grid', placeItems: 'center', color: '#fff', fontSize: size * 0.31, fontWeight: 700,
     }}>
       {children}
@@ -108,8 +108,8 @@ export function MemojiAvatar({ name, size = 46 }: { name: string; size?: number 
   const [ring, faceA, faceB] = MEMOJI_PALETTES[hash % MEMOJI_PALETTES.length];
   const face = size * 0.72;
   return (
-    <span title={name} style={{ width: size, height: size, borderRadius: 999, background: ring, display: 'grid', placeItems: 'center', flex: 'none' }}>
-      <span style={{ width: face, height: face, borderRadius: 999, background: `linear-gradient(135deg, ${faceA}, ${faceB})`, boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.4), inset 0 -1px 1px rgba(0,0,0,0.18)' }} />
+    <span title={name} style={{ width: size, height: size, borderRadius: 6, background: ring, display: 'grid', placeItems: 'center', flex: 'none' }}>
+      <span style={{ width: face, height: face, borderRadius: 6, background: `linear-gradient(135deg, ${faceA}, ${faceB})`, boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.4), inset 0 -1px 1px rgba(0,0,0,0.18)' }} />
     </span>
   );
 }

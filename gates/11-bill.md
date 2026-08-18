@@ -24,8 +24,8 @@ opposite directions.
   EXPECT: TOKENS_ONLY
   EVIDENCE: TOKENS_ONLY
 
-- [x] G4: It has a body — a sheet behind it at a placed angle, and both shadows fall straight down
-  CHECK: node -e 'const s=require("fs").readFileSync("src/madar/components/energy.tsx","utf8");const b=/export function BillDocument[\s\S]*?\n\}\n$/.exec(s+"\n")[0];const behind=/transform: .translateY\(6px\) rotate\(-0\.8deg\).,/.test(b);const placed=!/rotate\((0|[0-9]+)deg\)/.test(b);const down=/boxShadow: .0 1px 2px -1px var\(--shadow-color\), 0 14px 26px -14px var\(--shadow-color\).,/.test(b);console.log(behind&&placed&&down?"BILL_HAS_A_BODY":"BILL_IS_A_STICKER "+[behind,placed,down].join())'
+- [x] G4: Its body is now a hairline and a placed sheet behind it, with no shadow at all
+  CHECK: node -e 'const s=require("fs").readFileSync("src/madar/components/energy.tsx","utf8");const b=/export function BillDocument[\s\S]*?\n\}\n$/.exec(s+"\n")[0];const behind=/transform: .translateY\(6px\) rotate\(-0\.8deg\).,/.test(b);const placed=!/rotate\((0|[0-9]+)deg\)/.test(b);const hairline=(b.match(/border: .1px solid var\(--border\)./g)||[]).length>=2;const noBlur=!/boxShadow: .[^\x27]*[1-9][0-9]*px [^\x27]*[1-9][0-9]*px [1-9]/.test(b);console.log(behind&&placed&&hairline&&noBlur?"BILL_HAS_A_BODY":"BILL_LOST_ITS_BODY "+[behind,placed,hairline,noBlur].join())'
   EXPECT: BILL_HAS_A_BODY
   EVIDENCE: at node:internal/main/eval_string:74:3 | Node.js v22.22.2
 

@@ -110,7 +110,6 @@ export function MeterFace({ reading = 76542.8, tier = 2, model = 'NV-370 · 1PH 
         border: '1px solid var(--border-strong)',
         borderRadius: 'var(--r-lg)',
         // contact then cast: weight, then height. Both fall straight down.
-        boxShadow: '0 2px 3px -1px var(--shadow-color), 0 12px 22px -10px var(--shadow-color)',
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 'var(--sp-3)' }}>
@@ -187,8 +186,7 @@ export function ConsumptionBand({
         display: 'flex', flexDirection: 'column', gap: 'var(--sp-4)',
         padding: 'var(--sp-5)',
         background: 'var(--surface)', border: '1px solid var(--border)',
-        borderRadius: 'var(--r-lg)', boxShadow: 'var(--shadow-1)',
-      }}
+        borderRadius: 'var(--r-lg)',      }}
     >
       <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 'var(--sp-3)' }}>
         <b style={{ fontSize: 26, fontWeight: 700, color: 'var(--text)', fontVariantNumeric: 'tabular-nums' }}>
@@ -225,7 +223,6 @@ export function ConsumptionBand({
           style={{
             position: 'absolute', insetInlineStart: `calc(${pct(value)}% - 2px)`, top: 4,
             width: 4, height: 22, borderRadius: 2, background: tone,
-            boxShadow: '0 1px 2px var(--shadow-color)',
           }}
         />
       </div>
@@ -264,7 +261,7 @@ export function UsageStrip({ metrics }: { metrics?: UsageMetric[] }) {
       style={{
         display: 'flex', flexWrap: 'wrap', width: '100%',
         background: 'var(--surface)', border: '1px solid var(--border)',
-        borderRadius: 'var(--r-lg)', boxShadow: 'var(--shadow-1)', overflow: 'hidden',
+        borderRadius: 'var(--r-lg)', overflow: 'hidden',
       }}
     >
       {rows.map((m, i) => (
@@ -331,8 +328,7 @@ export function TariffLadder({ used = 412, steps = [200, 400, 600, 900] }: Tarif
       style={{
         width: '100%', maxWidth: 340, display: 'flex', flexDirection: 'column', gap: 'var(--sp-4)',
         padding: 'var(--sp-5)', background: 'var(--surface)',
-        border: '1px solid var(--border)', borderRadius: 'var(--r-lg)', boxShadow: 'var(--shadow-1)',
-      }}
+        border: '1px solid var(--border)', borderRadius: 'var(--r-lg)',      }}
     >
       <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 'var(--sp-3)' }}>
         <b style={{ fontSize: 14, fontWeight: 600, color: 'var(--text)' }}>{TIER[current].ar}</b>
@@ -448,8 +444,7 @@ export function AllocationBar({
       style={{
         width: '100%', maxWidth: 360, display: 'flex', flexDirection: 'column', gap: 'var(--sp-4)',
         padding: 'var(--sp-5)', background: 'var(--surface)',
-        border: '1px solid var(--border)', borderRadius: 'var(--r-lg)', boxShadow: 'var(--shadow-1)',
-      }}
+        border: '1px solid var(--border)', borderRadius: 'var(--r-lg)',      }}
     >
       <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 'var(--sp-3)' }}>
         <b style={{ fontSize: 14, fontWeight: 600, color: 'var(--text)' }}>مخصّص الدورة</b>
@@ -567,8 +562,7 @@ export function LoadComb({ rows, unit = 10, cap = 'ك.و.س' }: { rows?: LoadRow
       style={{
         width: '100%', maxWidth: 400, display: 'flex', flexDirection: 'column', gap: 'var(--sp-4)',
         padding: 'var(--sp-5)', background: 'var(--surface)',
-        border: '1px solid var(--border)', borderRadius: 'var(--r-lg)', boxShadow: 'var(--shadow-1)',
-      }}
+        border: '1px solid var(--border)', borderRadius: 'var(--r-lg)',      }}
     >
       <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 'var(--sp-3)' }}>
         <b style={{ fontSize: 14, fontWeight: 600, color: 'var(--text)' }}>أين ذهبت الكهرباء</b>
@@ -697,8 +691,7 @@ export function BillDocument({
         style={{
           position: 'absolute', inset: 0, transform: 'translateY(6px) rotate(-0.8deg)',
           background: 'var(--surface)', border: '1px solid var(--border)',
-          borderRadius: 'var(--r-md)', boxShadow: '0 6px 14px -10px var(--shadow-color)',
-        }}
+          borderRadius: 'var(--r-md)',        }}
       />
 
       <article
@@ -708,7 +701,6 @@ export function BillDocument({
           background: 'var(--surface)', border: '1px solid var(--border)',
           borderRadius: 'var(--r-md)',
           // contact then cast, both straight down
-          boxShadow: '0 1px 2px -1px var(--shadow-color), 0 14px 26px -14px var(--shadow-color)',
         }}
       >
         <div style={{ padding: 'var(--sp-5)', display: 'flex', flexDirection: 'column', gap: 'var(--sp-4)' }}>

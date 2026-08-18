@@ -25,8 +25,8 @@ export interface ToggleProps {
 export function BouncyToggle({ checked, defaultChecked = false, onChange, 'aria-label': ariaLabel = 'Toggle' }: ToggleProps) {
   const [on, setOn] = useControllable(checked, defaultChecked, onChange);
   return (
-    <button role="switch" aria-checked={on} aria-label={ariaLabel} onClick={() => setOn(!on)} style={{ position: 'relative', width: 58, height: 34, borderRadius: 999, border: 'none', padding: 0, cursor: 'pointer', flex: 'none', background: on ? 'var(--accent)' : 'var(--border-strong)', transition: 'background 260ms' }}>
-      <span style={{ position: 'absolute', top: 3, insetInlineStart: on ? 27 : 3, width: 28, height: 28, borderRadius: '50%', background: '#fff', boxShadow: '0 2px 5px rgba(0,0,0,0.28)', transition: `inset-inline-start 480ms ${bouncy}` }} />
+    <button role="switch" aria-checked={on} aria-label={ariaLabel} onClick={() => setOn(!on)} style={{ position: 'relative', width: 58, height: 34, borderRadius: 6, border: 'none', padding: 0, cursor: 'pointer', flex: 'none', background: on ? 'var(--accent)' : 'var(--border-strong)', transition: 'background 260ms' }}>
+      <span style={{ position: 'absolute', top: 3, insetInlineStart: on ? 27 : 3, width: 28, height: 28, borderRadius: '50%', background: '#fff', transition: `inset-inline-start 480ms ${bouncy}` }} />
     </button>
   );
 }
@@ -44,7 +44,7 @@ export function CinematicThemeSwitch({ checked, defaultChecked = false, onChange
     <button
       role="switch" aria-checked={night} aria-label={ariaLabel} onClick={() => setNight(!night)}
       style={{
-        position: 'relative', width: 92, height: 44, borderRadius: 999, border: '1px solid var(--border)', padding: 0, cursor: 'pointer', overflow: 'hidden', flex: 'none',
+        position: 'relative', width: 92, height: 44, borderRadius: 6, border: '1px solid var(--border)', padding: 0, cursor: 'pointer', overflow: 'hidden', flex: 'none',
         background: night ? 'linear-gradient(115deg, oklch(0.22 0.05 274), oklch(0.32 0.06 290))' : 'linear-gradient(115deg, #BFE3FF, #FFE9C4)',
         transition: 'background 560ms',
       }}
@@ -57,7 +57,7 @@ export function CinematicThemeSwitch({ checked, defaultChecked = false, onChange
       <span style={{
         position: 'absolute', top: 4, insetInlineStart: night ? 52 : 4, width: 34, height: 34, borderRadius: '50%',
         background: night ? '#E8ECFF' : '#FFD75E',
-        boxShadow: night ? '0 0 16px 3px rgba(190,200,255,0.7), inset -4px -3px 0 rgba(140,150,200,0.45)' : '0 0 18px 4px rgba(255,190,60,0.75)',
+        boxShadow: night ? 'inset -4px -3px 0 rgba(140,150,200,0.45)' : 'none',
         transition: `inset-inline-start 560ms ${spring}, background 560ms, box-shadow 560ms`,
       }} />
     </button>
@@ -97,7 +97,7 @@ export function ToggleChips({ options, value, defaultValue = [], onChange, multi
           <button
             key={label} onClick={() => toggle(i)} aria-pressed={on} className="i-press-96"
             style={{
-              display: 'inline-flex', alignItems: 'center', gap: 7, height: 36, padding: '0 15px', borderRadius: 999, cursor: 'pointer',
+              display: 'inline-flex', alignItems: 'center', gap: 7, height: 36, padding: '0 15px', borderRadius: 6, cursor: 'pointer',
               fontFamily: 'inherit', fontSize: 13, fontWeight: 600,
               border: on ? '1px solid var(--accent)' : '1px solid var(--border-strong)',
               background: on ? 'var(--accent)' : 'var(--surface)',
@@ -130,17 +130,17 @@ export function GlowMenu({ items, active, defaultActive = 0, onChange }: GlowMen
   const [internal, setInternal] = useState(defaultActive);
   const idx = active ?? internal;
   return (
-    <nav style={{ display: 'inline-flex', gap: 6, padding: 6, borderRadius: 999, background: 'var(--bg-deep)', border: '1px solid var(--border)' }}>
+    <nav style={{ display: 'inline-flex', gap: 6, padding: 6, borderRadius: 6, background: 'var(--bg-deep)', border: '1px solid var(--border)' }}>
       {items.map((label, i) => (
         <button
           key={label}
           onClick={() => { if (active === undefined) setInternal(i); onChange?.(i); }}
           className={i === idx ? undefined : 'i-soft-text'}
           style={{
-            border: 'none', cursor: 'pointer', fontFamily: 'inherit', fontSize: 13, fontWeight: 600, padding: '9px 16px', borderRadius: 999,
+            border: 'none', cursor: 'pointer', fontFamily: 'inherit', fontSize: 13, fontWeight: 600, padding: '9px 16px', borderRadius: 6,
             background: i === idx ? 'var(--accent)' : 'transparent',
             color: i === idx ? 'var(--on-accent)' : 'var(--text-2)',
-            boxShadow: i === idx ? '0 0 18px oklch(from var(--accent) l c h / 0.55)' : 'none',
+            boxShadow: 'none',
             transition: 'background 220ms, color 220ms, box-shadow 220ms',
           }}
         >{label}</button>

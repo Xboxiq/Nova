@@ -50,10 +50,10 @@
   /* material */
   --glass: var(--nova-glass);
   --shadow-color: var(--nova-shadow-tint);
-  --shadow-1: 0 1px 2px oklch(from var(--shadow-color) l c h / 0.06);
-  --shadow-2: 0 2px 6px oklch(from var(--shadow-color) l c h / 0.07), 0 8px 24px oklch(from var(--shadow-color) l c h / 0.07);
-  --shadow-3: 0 4px 12px oklch(from var(--shadow-color) l c h / 0.10), 0 20px 48px oklch(from var(--shadow-color) l c h / 0.14);
-  --shadow-4: 0 8px 24px oklch(from var(--shadow-color) l c h / 0.14), 0 32px 80px oklch(from var(--shadow-color) l c h / 0.22);
+  --shadow-1: none;
+  --shadow-2: none;
+  --shadow-3: none;
+  --shadow-4: none;
 
   /* spacing — 4px base, matched to the NOVA scale where the steps coincide */
   --sp-1: 4px; --sp-2: var(--nova-space-2); --sp-3: var(--nova-space-3); --sp-4: var(--nova-space-4);
@@ -61,11 +61,11 @@
   --sp-9: var(--nova-space-12); --sp-10: var(--nova-space-16); --sp-11: var(--nova-space-20); --sp-12: 120px;
 
   /* radius */
-  --r-xs: 8px;
-  --r-sm: 12px;
+  --r-xs: 3px;
+  --r-sm: 4px;
   --r-md: var(--nova-radius-field);
-  --r-lg: 22px;
-  --r-xl: 30px;
+  --r-lg: 6px;
+  --r-xl: 6px;
   --r-full: var(--nova-radius-pill);
 
   /* motion */

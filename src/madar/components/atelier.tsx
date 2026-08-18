@@ -15,7 +15,7 @@ const EASE = 'cubic-bezier(0.32,0.72,0,1)'; // heavy, physical
 /* ── AtelierEyebrow — the microscopic pill that precedes a display heading. */
 export function AtelierEyebrow({ children }: { children: ReactNode }) {
   return (
-    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7, padding: '5px 12px', borderRadius: 999, fontSize: 10.5, fontWeight: 600, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--text-2)', background: 'color-mix(in srgb, var(--text) 5%, transparent)', border: '1px solid color-mix(in srgb, var(--text) 9%, transparent)' }}>
+    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7, padding: '5px 12px', borderRadius: 6, fontSize: 10.5, fontWeight: 600, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--text-2)', background: 'color-mix(in srgb, var(--text) 5%, transparent)', border: '1px solid color-mix(in srgb, var(--text) 9%, transparent)' }}>
       <span style={{ width: 5, height: 5, borderRadius: '50%', background: 'var(--accent)' }} />
       {children}
     </span>
@@ -28,7 +28,7 @@ export function AtelierEyebrow({ children }: { children: ReactNode }) {
 export interface BezelCardProps { children?: ReactNode; radius?: number; inset?: number; style?: CSSProperties; innerStyle?: CSSProperties; className?: string; }
 export function BezelCard({ children, radius = 28, inset = 6, style, innerStyle, className }: BezelCardProps) {
   return (
-    <div className={className} style={{ borderRadius: radius, padding: inset, background: 'color-mix(in srgb, var(--text) 4%, transparent)', border: '1px solid color-mix(in srgb, var(--text) 8%, transparent)', boxShadow: 'var(--shadow-1)', ...style }}>
+    <div className={className} style={{ borderRadius: radius, padding: inset, background: 'color-mix(in srgb, var(--text) 4%, transparent)', border: '1px solid color-mix(in srgb, var(--text) 8%, transparent)', ...style }}>
       <div style={{ borderRadius: radius - inset, background: 'var(--surface)', boxShadow: 'inset 0 1px 0 color-mix(in srgb, white 55%, transparent), inset 0 0 0 1px color-mix(in srgb, var(--text) 5%, transparent)', overflow: 'hidden', height: '100%', ...innerStyle }}>
         {children}
       </div>
@@ -52,7 +52,7 @@ export function MagneticCTA({ label = 'ابدأ الآن', onClick, tone = 'ink'
       onPointerMove={(e) => { const r = ref.current!.getBoundingClientRect(); const dx = e.clientX - (r.left + r.width / 2); const dy = e.clientY - (r.top + r.height / 2); setT({ x: dx * 0.18, y: dy * 0.22 }); }}
       onPointerEnter={() => setHover(true)}
       onPointerLeave={() => { setHover(false); setT({ x: 0, y: 0 }); }}
-      style={{ display: 'inline-flex', alignItems: 'center', gap: 14, height: 54, paddingInline: '26px 8px', borderRadius: 999, border: 'none', background: bg, color: fg, fontFamily: 'inherit', fontSize: 15.5, fontWeight: 600, letterSpacing: '-0.01em', cursor: 'pointer', transform: `translate(${t.x}px, ${t.y}px) scale(${hover ? 1 : 1})`, transition: `transform 500ms ${EASE}`, willChange: 'transform' }}
+      style={{ display: 'inline-flex', alignItems: 'center', gap: 14, height: 54, paddingInline: '26px 8px', borderRadius: 6, border: 'none', background: bg, color: fg, fontFamily: 'inherit', fontSize: 15.5, fontWeight: 600, letterSpacing: '-0.01em', cursor: 'pointer', transform: `translate(${t.x}px, ${t.y}px) scale(${hover ? 1 : 1})`, transition: `transform 500ms ${EASE}`, willChange: 'transform' }}
       onPointerDown={(e) => { e.currentTarget.style.transform = `translate(${t.x}px, ${t.y}px) scale(0.97)`; }}
       onPointerUp={(e) => { e.currentTarget.style.transform = `translate(${t.x}px, ${t.y}px) scale(1)`; }}
     >

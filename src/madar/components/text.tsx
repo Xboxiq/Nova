@@ -54,10 +54,10 @@ export function SkillsShowcase({ skills, more }: { skills: string[]; more?: numb
   return (
     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
       {skills.map((s) => (
-        <span key={s} className="i-lift" style={{ padding: '7px 14px', borderRadius: 999, background: 'var(--accent-soft)', color: 'var(--accent)', fontSize: 13, fontWeight: 600, cursor: 'default', transition: 'transform 220ms' }}>{s}</span>
+        <span key={s} className="i-lift" style={{ padding: '7px 14px', borderRadius: 6, background: 'var(--accent-soft)', color: 'var(--accent)', fontSize: 13, fontWeight: 600, cursor: 'default', transition: 'transform 220ms' }}>{s}</span>
       ))}
       {more != null && more > 0 && (
-        <span style={{ padding: '7px 14px', borderRadius: 999, border: '1px dashed var(--border-strong)', color: 'var(--text-3)', fontSize: 13, fontWeight: 600 }}>+{more} more</span>
+        <span style={{ padding: '7px 14px', borderRadius: 6, border: '1px dashed var(--border-strong)', color: 'var(--text-3)', fontSize: 13, fontWeight: 600 }}>+{more} more</span>
       )}
     </div>
   );
@@ -69,7 +69,7 @@ export function SkillsShowcase({ skills, more }: { skills: string[]; more?: numb
 export function IridescentFoilCard({ children, style }: { children: React.ReactNode; style?: React.CSSProperties }) {
   return (
     <div className="i-foil" style={{
-      position: 'relative', borderRadius: 22, padding: 24, border: '1px solid var(--border)', overflow: 'hidden',
+      position: 'relative', borderRadius: 6, padding: 24, border: '1px solid var(--border)', overflow: 'hidden',
       background: 'linear-gradient(115deg, #F6E7F0 0%, #E7EDF9 18%, #E4F4EE 36%, #F8F1E2 54%, #EEE6F8 72%, #E5F0F7 90%, #F6E7F0 100%)',
       backgroundSize: '280% 280%', cursor: 'pointer', transition: 'background-position 900ms ease',
       ...style,

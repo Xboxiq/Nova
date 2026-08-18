@@ -98,12 +98,12 @@ export function HeroNav({ brand = 'Madar', links = ['الرئيسية', 'الم�
       <nav style={{ display: 'flex', gap: 22, marginInlineStart: 'auto', marginInlineEnd: 'auto', fontSize: 13.5, color: muted, flexWrap: 'wrap' }}>
         {links.map((l) => <a key={l} href="#" className="i-text" style={{ color: 'inherit', textDecoration: 'none', fontWeight: 500 }}>{l}</a>)}
       </nav>
-      <button className="i-press-97 i-lift" style={{ flex: 'none', height: 38, padding: '0 18px', borderRadius: 999, border: tone === 'dark' ? 'none' : '1px solid var(--border-strong)', background: tone === 'dark' ? '#fff' : 'var(--ink)', color: tone === 'dark' ? '#111' : 'var(--on-ink)', fontFamily: 'inherit', fontSize: 13, fontWeight: 600, cursor: 'pointer', boxShadow: pill ? 'var(--shadow-1)' : 'none', transition: `transform 200ms ${EASE}` }}>{cta}</button>
+      <button className="i-press-97 i-lift" style={{ flex: 'none', height: 38, padding: '0 18px', borderRadius: 6, border: tone === 'dark' ? 'none' : '1px solid var(--border-strong)', background: tone === 'dark' ? '#fff' : 'var(--ink)', color: tone === 'dark' ? '#111' : 'var(--on-ink)', fontFamily: 'inherit', fontSize: 13, fontWeight: 600, cursor: 'pointer', boxShadow: pill ? 'var(--shadow-1)' : 'none', transition: `transform 200ms ${EASE}` }}>{cta}</button>
     </div>
   );
 }
 
-const SHELL: CSSProperties = { position: 'relative', borderRadius: 26, border: '1px solid var(--border)', overflow: 'hidden', background: 'var(--surface)', boxShadow: 'var(--shadow-2)' };
+const SHELL: CSSProperties = { position: 'relative', borderRadius: 6, border: '1px solid var(--border)', overflow: 'hidden', background: 'var(--surface)', };
 
 /* ── 1 · SplitStatsHero — text block beside an image block, a stats row
       spanning the base. The classic two-column launch hero. */
@@ -131,7 +131,7 @@ export function SplitStatsHero({
           {eyebrow && <span style={{ fontSize: 11.5, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'oklch(from var(--accent) 0.75 0.18 h)' }}>{eyebrow}</span>}
           <h2 style={{ fontSize: 'clamp(30px,4.4vw,48px)', lineHeight: 1.05, fontWeight: 700, letterSpacing: '-0.03em', margin: '14px 0 16px' }}>{title}</h2>
           <p style={{ fontSize: 15, lineHeight: '24px', color: 'rgba(255,255,255,0.76)', maxWidth: '42ch', margin: '0 0 24px' }}>{sub}</p>
-          <button className="i-press-97 i-lift" style={{ height: 46, padding: '0 22px', borderRadius: 12, border: 'none', background: 'var(--accent)', color: 'var(--on-accent)', fontFamily: 'inherit', fontSize: 14.5, fontWeight: 600, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 8, transition: `transform 200ms ${EASE}` }}>
+          <button className="i-press-97 i-lift" style={{ height: 46, padding: '0 22px', borderRadius: 6, border: 'none', background: 'var(--accent)', color: 'var(--on-accent)', fontFamily: 'inherit', fontSize: 14.5, fontWeight: 600, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 8, transition: `transform 200ms ${EASE}` }}>
             {cta}<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="i-chevron-dir"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
           </button>
         </div>
@@ -176,12 +176,11 @@ export function ProductHero({
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           <p style={{ fontSize: 14.5, lineHeight: '23px', color: 'var(--text-2)', maxWidth: '40ch', margin: 0 }}>{sub}</p>
-          <button className="i-press-97 i-lift" style={{ alignSelf: 'start', height: 44, padding: '0 22px', borderRadius: 999, border: 'none', background: 'var(--accent)', color: 'var(--on-accent)', fontFamily: 'inherit', fontSize: 14, fontWeight: 600, cursor: 'pointer', transition: `transform 200ms ${EASE}` }}>{cta}</button>
+          <button className="i-press-97 i-lift" style={{ alignSelf: 'start', height: 44, padding: '0 22px', borderRadius: 6, border: 'none', background: 'var(--accent)', color: 'var(--on-accent)', fontFamily: 'inherit', fontSize: 14, fontWeight: 600, cursor: 'pointer', transition: `transform 200ms ${EASE}` }}>{cta}</button>
         </div>
       </div>
-      <div style={{ position: 'relative', borderRadius: 16, overflow: 'hidden', border: '1px solid var(--border)', boxShadow: 'var(--shadow-2)', background: 'var(--bg-deep)' }}>
+      <div style={{ position: 'relative', borderRadius: 6, overflow: 'hidden', border: '1px solid var(--border)', background: 'var(--bg-deep)' }}>
         {/* colored corner blobs peeking behind the frame, like the reference */}
-        <span aria-hidden style={{ position: 'absolute', insetInlineStart: -30, top: -30, width: 120, height: 120, background: 'oklch(from var(--accent) 0.7 0.2 h)', filter: 'blur(30px)', opacity: 0.5 }} />
         <span aria-hidden style={{ position: 'absolute', insetInlineEnd: -30, bottom: -30, width: 140, height: 140, background: 'oklch(from var(--accent) 0.65 0.2 calc(h + 120))', filter: 'blur(34px)', opacity: 0.5 }} />
         <div style={{ position: 'relative' }}>{children ?? <ProductFrame />}</div>
       </div>
@@ -196,29 +195,29 @@ function ProductFrame() {
   return (
     <div style={{ display: 'grid', gridTemplateColumns: '140px 1fr', gap: 0, background: 'var(--surface)', minHeight: 220 }}>
       <div style={{ borderInlineEnd: '1px solid var(--border)', padding: 14, display: 'flex', flexDirection: 'column', gap: 8 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 7, marginBottom: 6 }}><span style={{ width: 22, height: 22, borderRadius: 7, background: 'var(--accent)' }} /><span style={{ fontSize: 12, fontWeight: 700 }}>Nexus</span></div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 7, marginBottom: 6 }}><span style={{ width: 22, height: 22, borderRadius: 6, background: 'var(--accent)' }} /><span style={{ fontSize: 12, fontWeight: 700 }}>Nexus</span></div>
         {['اللوحة', 'المهام', 'الوكلاء', 'التحليلات', 'الفريق'].map((t, i) => (
-          <span key={t} style={{ fontSize: 11.5, fontWeight: i === 0 ? 700 : 500, color: i === 0 ? 'var(--text)' : 'var(--text-3)', background: i === 0 ? 'var(--surface-2)' : 'transparent', borderRadius: 7, padding: '5px 8px' }}>{t}</span>
+          <span key={t} style={{ fontSize: 11.5, fontWeight: i === 0 ? 700 : 500, color: i === 0 ? 'var(--text)' : 'var(--text-3)', background: i === 0 ? 'var(--surface-2)' : 'transparent', borderRadius: 6, padding: '5px 8px' }}>{t}</span>
         ))}
       </div>
       <div style={{ padding: 14 }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 8, marginBottom: 12 }}>
           {[['1,248', 'مهام نشطة'], ['34,892', 'مكتملة'], ['56', 'وكلاء'], ['98.4%', 'نجاح']].map(([v, l]) => (
-            <div key={l} style={{ border: '1px solid var(--border)', borderRadius: 10, padding: '8px 10px' }}>
+            <div key={l} style={{ border: '1px solid var(--border)', borderRadius: 6, padding: '8px 10px' }}>
               <div style={{ fontSize: 10, color: 'var(--text-3)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{l}</div>
               <div style={{ fontSize: 15, fontWeight: 700, fontVariantNumeric: 'tabular-nums' }}>{v}</div>
             </div>
           ))}
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: '1.6fr 1fr', gap: 8 }}>
-          <div style={{ border: '1px solid var(--border)', borderRadius: 10, padding: 12 }}>
+          <div style={{ border: '1px solid var(--border)', borderRadius: 6, padding: 12 }}>
             <div style={{ fontSize: 11, fontWeight: 700, marginBottom: 10 }}>عمليات سير العمل</div>
             <svg viewBox="0 0 200 70" style={{ width: '100%', height: 70 }} preserveAspectRatio="none">
               <path d="M0 55 C 30 50, 40 20, 70 28 S 120 60, 150 30 200 22 200 22" fill="none" stroke="var(--accent)" strokeWidth="2.5" strokeLinecap="round" />
               <path d="M0 55 C 30 50, 40 20, 70 28 S 120 60, 150 30 200 22 L200 70 L0 70 Z" fill="oklch(from var(--accent) 0.7 0.16 h / 0.14)" />
             </svg>
           </div>
-          <div style={{ border: '1px solid var(--border)', borderRadius: 10, padding: 12, display: 'flex', flexDirection: 'column', gap: 6 }}>
+          <div style={{ border: '1px solid var(--border)', borderRadius: 6, padding: 12, display: 'flex', flexDirection: 'column', gap: 6 }}>
             <div style={{ fontSize: 11, fontWeight: 700, marginBottom: 4 }}>التوزيع</div>
             {bars.map((b, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
@@ -263,7 +262,7 @@ export function ImmersiveHero({
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 14, alignItems: 'start' }}>
           <p style={{ fontSize: 13.5, lineHeight: '21px', color: 'rgba(255,255,255,0.78)', maxWidth: '38ch', margin: 0 }}>{sub}</p>
-          <button className="i-press-97 i-lift" style={{ height: 44, padding: '0 22px', borderRadius: 999, border: 'none', background: '#fff', color: '#111', fontFamily: 'inherit', fontSize: 14, fontWeight: 600, cursor: 'pointer', transition: `transform 200ms ${EASE}` }}>{cta}</button>
+          <button className="i-press-97 i-lift" style={{ height: 44, padding: '0 22px', borderRadius: 6, border: 'none', background: '#fff', color: '#111', fontFamily: 'inherit', fontSize: 14, fontWeight: 600, cursor: 'pointer', transition: `transform 200ms ${EASE}` }}>{cta}</button>
         </div>
       </div>
     </HeroVisual>
@@ -336,7 +335,7 @@ export function GalleryScatterHero({
         {tiles.map((t, i) => (
           <HeroVisual
             key={i} mood={t.mood} radius={10}
-            style={{ position: 'absolute', insetInlineStart: `${t.start}%`, top: `${t.top}%`, width: t.size, height: t.size * 1.18, boxShadow: 'var(--shadow-1)', transform: `rotate(${((i % 3) - 1) * 3}deg)` }}
+            style={{ position: 'absolute', insetInlineStart: `${t.start}%`, top: `${t.top}%`, width: t.size, height: t.size * 1.18, transform: `rotate(${((i % 3) - 1) * 3}deg)` }}
           />
         ))}
         <div style={{ position: 'absolute', insetInlineStart: '50%', top: '46%', transform: 'translate(-50%,-50%)', textAlign: 'center', zIndex: 4, background: 'radial-gradient(60% 120% at 50% 50%, var(--surface) 55%, transparent)', padding: '10px 24px' }}>

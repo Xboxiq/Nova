@@ -195,30 +195,6 @@ function Folder({
             transform: `rotateX(${camX}deg) rotateY(${camY}deg) scale(${spread ? 0.78 : 0.92})`,
           }}
         >
-          {/* Two of the three shadows the law asks for. Contact is tight and
-              dark where the object meets the surface and gives it weight; cast
-              is wider, softer and lower and gives it height. Both fall straight
-              down, because the light is straight above. VISUAL-LAW.md §3. */}
-          <div
-            data-folder-part="cast-shadow"
-            className="madar-folder-contact"
-            style={{
-              insetInlineStart: 4, top: H + 6, width: W - 8, height: 18,
-              filter: 'blur(14px)',
-              opacity: spread ? 0.05 : 0.13,
-              transform: `translateZ(-${D}px) scaleX(${1 + open * 0.16})`,
-            }}
-          />
-          <div
-            data-folder-part="contact-shadow"
-            className="madar-folder-contact"
-            style={{
-              insetInlineStart: 16, top: H + 1, width: W - 32, height: 8,
-              filter: 'blur(5px)',
-              opacity: spread ? 0.08 : 0.3,
-              transform: `translateZ(-${D}px) scaleX(${1 + open * 0.1})`,
-            }}
-          />
 
           {/* back panel and its tab — one plane, the object's spine */}
           <Face
@@ -302,7 +278,6 @@ function Folder({
                 borderRadius: 'var(--r-xs)',
                 // cast straight down: the light is overhead, so a leaf drops its
                 // shadow onto the leaf behind it, not off to one side
-                boxShadow: '0 3px 6px -2px var(--shadow-color)',
                 filter: `brightness(${1 - i * 0.04})`,
                 transform: `translateZ(${5 + i * 3 + spread * (22 + i * 18)}px) translateY(${-open * (48 + i * 15)}px) rotateZ(${SLIP_TILT[i]}deg)`,
               }}
@@ -418,8 +393,7 @@ function FlatFolder({ open, count, label }: { open: number; count: number; label
             style={{
               display: 'grid', placeItems: 'center',
               borderRadius: 'var(--r-xs)', background: 'var(--surface)',
-              border: '1px solid var(--border-strong)', boxShadow: 'var(--shadow-1)',
-              opacity: count ? 1 : 0,
+              border: '1px solid var(--border-strong)',              opacity: count ? 1 : 0,
               transition: `opacity var(--dur-2) var(--ease-out)`,
               fontSize: 12, fontWeight: 700, color: 'var(--accent-ink)',
               fontVariantNumeric: 'tabular-nums',

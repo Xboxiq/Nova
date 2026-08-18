@@ -1,6 +1,5 @@
 import { Section, SectionHeader } from '../SectionHeader';
 import {
-  DotMatrixReadout,
   ElasticSwitch,
   MarqueeFrame,
   PerimeterProgress,
@@ -12,8 +11,8 @@ function Cell({ title, note, children }: { title: string; note: string; children
   return (
     <div
       style={{
-        background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 22,
-        padding: 24, boxShadow: 'var(--shadow-1)', display: 'flex', flexDirection: 'column', gap: 18,
+        background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6,
+        padding: 24, display: 'flex', flexDirection: 'column', gap: 18,
       }}
     >
       <div>
@@ -45,13 +44,6 @@ export function Consequence() {
           note="«بدأ التنزيل» لا يقول شيئًا. هنا تخرج الورقة من الجهاز، فنتيجة الفعل هي الشيء الذي طلبته."
         >
           <ReceiptPrinter />
-        </Cell>
-
-        <Cell
-          title="Dot Matrix Readout: قراءة تشغيلية"
-          note="حين يقول المؤشر الدوّار أقل مما يجب: مصفوفة تمسح الصفوف، فترى أن النظام حيّ وفي أي مرحلة هو."
-        >
-          <DotMatrixReadout />
         </Cell>
 
         <Cell

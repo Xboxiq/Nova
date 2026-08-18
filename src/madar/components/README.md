@@ -133,9 +133,9 @@ Grouped by file. Every one is an importable component.
 
 **`feedback.tsx`** — `AiLoader` (dots/line/spinner/pulse), `FluxLoader`, `SyncProgressPanel`, `PulseRadar`, `MetricRing`, `RangeBar`, `StatusStrip`, `LogsTable`
 
-**`social.tsx`** — `ReactionBar`, `TypingDots`, `CommentThread`, `LiveCursorLabel`, `TestimonialSlider`, `TeamSection`, `AssigneeUser`, `AvatarBadge`, `AvatarStack`, `YearsTimeline`
+**`social.tsx`** — `ReactionBar`, `TypingDots`, `CommentThread`, `LiveCursorLabel`, `TeamSection`, `AssigneeUser`, `AvatarBadge`, `AvatarStack`, `YearsTimeline`
 
-**`content.tsx`** — `SquishyPricing`, `SplitCard`, `GradientMeshCard`, `NoiseDotCard`, `PinnedNote`, `WorkflowSteps`, `OnboardingChecklist`, `ChecklistRow`, `NumberedFeatures`, `BigStatRow`, `HeadlineChip`, `ConfigRow`, `FooterNewsletter`, `BentoGrid`/`BentoCell`, `MasonryColumns`/`MasonryItem`, `IconClusterNetwork`, `TimeField`, `ColorPicker`, `GradientPaletteGrid` (+ `CURATED_GRADIENTS`), `DuotoneImage`, `IconMarquee`, `FileCard`, `EditorialCard`
+**`content.tsx`** — `SplitCard`, `GradientMeshCard`, `PinnedNote`, `WorkflowSteps`, `OnboardingChecklist`, `ChecklistRow`, `NumberedFeatures`, `BigStatRow`, `HeadlineChip`, `ConfigRow`, `FooterNewsletter`, `MasonryColumns`/`MasonryItem`, `IconClusterNetwork`, `TimeField`, `ColorPicker`, `GradientPaletteGrid` (+ `CURATED_GRADIENTS`), `DuotoneImage`, `IconMarquee`, `FileCard`, `EditorialCard`
 
 Live demos: showcase sections **19 Library Vault** and **20 Pattern Atlas**.
 

@@ -43,12 +43,11 @@
   background: var(--nova-surface);
   border: 1px solid var(--nova-border);
   border-radius: var(--nova-radius-feature);
-  box-shadow: var(--nova-shadow-sm);
   isolation: isolate;
 }
 
 .studio-actions { grid-column: span 7; color: #eff8fa; background:
-  #102b35; border-color: rgb(184 231 239 / 16%); box-shadow: 0 16px 38px rgb(11 43 54 / 18%); }
+  #102b35; border-color: rgb(184 231 239 / 16%); }
 .studio-icons { grid-column: span 5; background:
   linear-gradient(160deg, color-mix(in srgb, var(--nova-surface-raised) 84%, var(--nova-expressive-mint)) 0%, var(--nova-surface) 76%); }
 .studio-navigation { grid-column: span 8; min-height: 520px; }
@@ -73,7 +72,7 @@
   height: 34px;
   color: var(--nova-action-ink);
   background: var(--nova-action-soft);
-  border-radius: 10px;
+  border-radius: 6px;
   font-size: var(--nova-text-label-sm);
   font-weight: var(--nova-weight-bold);
 }
@@ -120,7 +119,6 @@
   background: var(--nova-surface-raised);
   border: 1px solid var(--nova-border);
   border-radius: var(--nova-radius-field);
-  box-shadow: var(--nova-shadow-lg);
   transform-origin: top right;
   animation: studio-pop var(--nova-motion-disclosure) var(--nova-ease-enter);
 }
@@ -158,9 +156,9 @@
 .icon-workbench { position: relative; z-index: 2; }
 .icon-controls { display: flex; align-items: center; justify-content: space-between; gap: var(--nova-space-3); margin-block-end: var(--nova-space-5); }
 .icon-controls > div { display: flex; gap: var(--nova-space-1); }
-.icon-controls > div:last-child { padding: 3px; background: color-mix(in srgb, var(--nova-surface) 58%, transparent); border: 1px solid var(--nova-border); border-radius: 10px; }
-.icon-controls > div:last-child button { width: 32px; height: 30px; padding: 0; color: var(--nova-ink-tertiary); background: transparent; border: 0; border-radius: 7px; font-size: 9px; }
-.icon-controls > div:last-child button[aria-pressed="true"] { color: var(--nova-action-ink); background: var(--nova-surface); box-shadow: var(--nova-shadow-sm); }
+.icon-controls > div:last-child { padding: 3px; background: color-mix(in srgb, var(--nova-surface) 58%, transparent); border: 1px solid var(--nova-border); border-radius: 6px; }
+.icon-controls > div:last-child button { width: 32px; height: 30px; padding: 0; color: var(--nova-ink-tertiary); background: transparent; border: 0; border-radius: 6px; font-size: 9px; }
+.icon-controls > div:last-child button[aria-pressed="true"] { color: var(--nova-action-ink); background: var(--nova-surface); }
 
 .icon-material-scene {
   position: relative;
@@ -216,48 +214,48 @@
   padding: 6px;
   background: linear-gradient(150deg, var(--nova-glass-strong), color-mix(in srgb, var(--nova-glass) 72%, transparent));
   border: 1px solid var(--nova-glass-edge);
-  border-radius: 24px;
-  box-shadow: inset 0 1px var(--nova-glass-specular), 0 18px 46px color-mix(in srgb, var(--nova-ink) 14%, transparent);
+  border-radius: 6px;
+  box-shadow: inset 0 1px var(--nova-glass-specular);
   backdrop-filter: blur(26px) saturate(175%);
   -webkit-backdrop-filter: blur(26px) saturate(175%);
 }
-.adaptive-nav-lens { position: absolute; inset-block-start: 6px; inset-inline-start: 6px; width: calc(25% - 3px); height: calc(100% - 12px); background: color-mix(in srgb, var(--nova-surface) 78%, var(--nova-action-soft)); border: 1px solid color-mix(in srgb, var(--nova-glass-edge) 72%, var(--nova-action)); border-radius: 18px; box-shadow: inset 0 1px var(--nova-glass-specular), 0 8px 18px color-mix(in srgb, var(--nova-action) 10%, transparent); transition: transform var(--nova-motion-route) var(--nova-ease-physical); }
-.adaptive-nav button { position: relative; z-index: 1; display: grid; place-items: center; align-content: center; gap: 3px; min-width: 0; min-height: 52px; padding: 0 var(--nova-space-2); color: var(--nova-ink-secondary); background: transparent; border: 0; border-radius: 17px; font-size: var(--nova-text-label-sm); transition: color var(--nova-motion-control), transform var(--nova-motion-press); }
+.adaptive-nav-lens { position: absolute; inset-block-start: 6px; inset-inline-start: 6px; width: calc(25% - 3px); height: calc(100% - 12px); background: color-mix(in srgb, var(--nova-surface) 78%, var(--nova-action-soft)); border: 1px solid color-mix(in srgb, var(--nova-glass-edge) 72%, var(--nova-action)); border-radius: 6px; box-shadow: inset 0 1px var(--nova-glass-specular); transition: transform var(--nova-motion-route) var(--nova-ease-physical); }
+.adaptive-nav button { position: relative; z-index: 1; display: grid; place-items: center; align-content: center; gap: 3px; min-width: 0; min-height: 52px; padding: 0 var(--nova-space-2); color: var(--nova-ink-secondary); background: transparent; border: 0; border-radius: 6px; font-size: var(--nova-text-label-sm); transition: color var(--nova-motion-control), transform var(--nova-motion-press); }
 .adaptive-nav button svg { width: var(--nova-icon-md); height: var(--nova-icon-md); }
 .adaptive-nav button.active { color: var(--nova-action-ink); }
 .adaptive-nav button:active { transform: scale(.95); }
 .navigation-stage.is-dock .adaptive-nav button:not(.active) span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 .navigation-stage.is-tabs .adaptive-nav { border-radius: var(--nova-radius-field); }
-.navigation-stage.is-tabs .adaptive-nav-lens { border-radius: 11px; }
+.navigation-stage.is-tabs .adaptive-nav-lens { border-radius: 6px; }
 .navigation-stage.is-tabs .adaptive-nav button { grid-auto-flow: column; justify-content: center; }
 .navigation-stage.is-tabs .adaptive-nav button svg { display: none; }
 .navigation-stage.is-rail { grid-template-columns: minmax(0, 1fr) auto; align-items: stretch; gap: var(--nova-space-5); }
 .navigation-stage.is-rail .nav-content-preview { grid-column: 1; align-self: start; }
 .navigation-stage.is-rail .nav-content-preview > i { display: none; }
-.navigation-stage.is-rail .adaptive-nav { grid-column: 2; grid-row: 1; grid-template-columns: 1fr; grid-template-rows: repeat(4, 1fr); width: 74px; min-height: 264px; margin: 0; border-radius: 26px; }
+.navigation-stage.is-rail .adaptive-nav { grid-column: 2; grid-row: 1; grid-template-columns: 1fr; grid-template-rows: repeat(4, 1fr); width: 74px; min-height: 264px; margin: 0; border-radius: 6px; }
 .navigation-stage.is-rail .adaptive-nav-lens { width: calc(100% - 12px); height: calc(25% - 3px); }
 .navigation-stage.is-rail .adaptive-nav button span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 .nav-rule { display: flex; align-items: center; gap: var(--nova-space-2); margin: var(--nova-space-4) 0 0; color: var(--nova-ink-secondary); font-size: var(--nova-text-label-md); line-height: 1.6; }
 .nav-rule svg { flex: 0 0 auto; color: var(--nova-success); }
 
 .motion-workbench { position: relative; z-index: 2; }
-.motion-mode-switch { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; margin-block-end: var(--nova-space-4); padding: 3px; background: color-mix(in srgb, var(--nova-surface) 66%, transparent); border: 1px solid var(--nova-border); border-radius: 11px; }
-.motion-mode-switch button { min-height: 34px; padding: 0 var(--nova-space-2); color: var(--nova-ink-tertiary); background: transparent; border: 0; border-radius: 8px; font-size: 9px; }
-.motion-mode-switch button[aria-pressed="true"] { color: var(--nova-action-ink); background: var(--nova-surface); box-shadow: var(--nova-shadow-sm); }
+.motion-mode-switch { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; margin-block-end: var(--nova-space-4); padding: 3px; background: color-mix(in srgb, var(--nova-surface) 66%, transparent); border: 1px solid var(--nova-border); border-radius: 6px; }
+.motion-mode-switch button { min-height: 34px; padding: 0 var(--nova-space-2); color: var(--nova-ink-tertiary); background: transparent; border: 0; border-radius: 6px; font-size: 9px; }
+.motion-mode-switch button[aria-pressed="true"] { color: var(--nova-action-ink); background: var(--nova-surface); }
 .motion-canvas { position: relative; display: grid; place-items: center; width: 100%; min-height: 250px; padding: var(--nova-space-5); overflow: hidden; color: var(--nova-ink); background:
   linear-gradient(var(--nova-border) 1px, transparent 1px),
   linear-gradient(90deg, var(--nova-border) 1px, transparent 1px),
   color-mix(in srgb, var(--nova-surface) 74%, transparent); background-size: 28px 28px; border: 1px solid var(--nova-border); border-radius: var(--nova-radius-card); }
 .motion-canvas::after { position: absolute; inset: 50% auto auto 50%; width: 1px; height: 1px; background: var(--nova-action); box-shadow: 0 0 0 5px color-mix(in srgb, var(--nova-action) 12%, transparent); content: ""; }
-.motion-press-object { position: relative; z-index: 1; display: grid; place-items: center; width: 74px; height: 74px; color: var(--nova-on-action); background: var(--nova-action); border-radius: 23px; box-shadow: 0 18px 34px color-mix(in srgb, var(--nova-action) 26%, transparent); animation: studio-press 520ms var(--nova-ease-physical); }
+.motion-press-object { position: relative; z-index: 1; display: grid; place-items: center; width: 74px; height: 74px; color: var(--nova-on-action); background: var(--nova-action); border-radius: 6px; animation: studio-press 520ms var(--nova-ease-physical); }
 .motion-press-object svg { width: 28px; height: 28px; }
-.motion-reveal-object { position: relative; z-index: 1; display: grid; grid-template-columns: auto 1fr; gap: 3px var(--nova-space-3); width: min(100%, 280px); padding: var(--nova-space-4); text-align: start; background: var(--nova-surface-raised); border: 1px solid var(--nova-border); border-radius: var(--nova-radius-field); box-shadow: var(--nova-shadow-md); transform: scale(.74) translateY(24px); transform-origin: 50% 50%; opacity: .28; transition: transform var(--nova-motion-disclosure) var(--nova-ease-enter), opacity var(--nova-motion-control); }
-.motion-reveal-object i { grid-row: span 2; display: grid; place-items: center; width: 40px; height: 40px; color: var(--nova-action-ink); background: var(--nova-action-soft); border-radius: 12px; }
+.motion-reveal-object { position: relative; z-index: 1; display: grid; grid-template-columns: auto 1fr; gap: 3px var(--nova-space-3); width: min(100%, 280px); padding: var(--nova-space-4); text-align: start; background: var(--nova-surface-raised); border: 1px solid var(--nova-border); border-radius: var(--nova-radius-field); transform: scale(.74) translateY(24px); transform-origin: 50% 50%; opacity: .28; transition: transform var(--nova-motion-disclosure) var(--nova-ease-enter), opacity var(--nova-motion-control); }
+.motion-reveal-object i { grid-row: span 2; display: grid; place-items: center; width: 40px; height: 40px; color: var(--nova-action-ink); background: var(--nova-action-soft); border-radius: 6px; }
 .motion-reveal-object b { align-self: end; font-size: var(--nova-text-body-sm); }
 .motion-reveal-object small { color: var(--nova-ink-tertiary); font-size: var(--nova-text-label-sm); }
 .motion-canvas.is-open .motion-reveal-object { transform: scale(1) translateY(0); opacity: 1; }
-.motion-route-object { position: relative; z-index: 1; display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: var(--nova-space-3); width: min(100%, 270px); padding: var(--nova-space-4); text-align: start; background: var(--nova-surface); border: 1px solid var(--nova-border); border-radius: var(--nova-radius-field); box-shadow: var(--nova-shadow-md); animation: studio-route var(--nova-motion-route) var(--nova-ease-physical); }
-.motion-route-object i { display: grid; place-items: center; width: 36px; height: 36px; color: var(--nova-action-ink); background: var(--nova-action-soft); border-radius: 10px; font-style: normal; font-size: 10px; }
+.motion-route-object { position: relative; z-index: 1; display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: var(--nova-space-3); width: min(100%, 270px); padding: var(--nova-space-4); text-align: start; background: var(--nova-surface); border: 1px solid var(--nova-border); border-radius: var(--nova-radius-field); animation: studio-route var(--nova-motion-route) var(--nova-ease-physical); }
+.motion-route-object i { display: grid; place-items: center; width: 36px; height: 36px; color: var(--nova-action-ink); background: var(--nova-action-soft); border-radius: 6px; font-style: normal; font-size: 10px; }
 .motion-route-object b { font-size: var(--nova-text-body-sm); }
 .motion-route-object > svg { color: var(--nova-action-ink); }
 [dir="rtl"] .motion-route-object > svg { transform: scaleX(-1); }
@@ -280,7 +278,7 @@
 .studio-demo .navigation-stage.is-tabs .adaptive-nav button span { position: static; width: auto; height: auto; overflow: visible; clip-path: none; }
 
 @keyframes studio-pop { from { opacity: 0; transform: translateY(-8px) scale(.96); } }
-@keyframes studio-press { 0%, 100% { transform: scale(1); } 36% { transform: translateY(2px) scale(.91); box-shadow: 0 6px 14px color-mix(in srgb, var(--nova-action) 20%, transparent); } }
+@keyframes studio-press { 0%, 100% { transform: scale(1); } 36% { transform: translateY(2px) scale(.91); } }
 @keyframes studio-route { from { opacity: 0; transform: translateX(32px) scale(.96); } }
 [dir="rtl"] .motion-route-object { animation-name: studio-route-rtl; }
 @keyframes studio-route-rtl { from { opacity: 0; transform: translateX(-32px) scale(.96); } }

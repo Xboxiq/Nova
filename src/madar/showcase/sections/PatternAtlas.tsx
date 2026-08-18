@@ -4,9 +4,9 @@ import {
   Popover, FrostedTooltip, SelectField, DropdownMenu, AlertDialog, WelcomeModal,
   CommandBarTrigger, KbdButton, SpotlightButton, MessageDock,
   AiLoader, FluxLoader, SyncProgressPanel, PulseRadar, MetricRing, RangeBar, LogsTable,
-  ReactionBar, CommentThread, LiveCursorLabel, TestimonialSlider, TeamSection,
+  ReactionBar, CommentThread, LiveCursorLabel, TeamSection,
   AssigneeUser, AvatarBadge, AvatarStack, YearsTimeline,
-  SquishyPricing, SplitCard, GradientMeshCard, NoiseDotCard, PinnedNote,
+  SplitCard, GradientMeshCard, PinnedNote,
   WorkflowSteps, OnboardingChecklist, ChecklistRow, NumberedFeatures, BigStatRow,
   HeadlineChip, ConfigRow, FooterNewsletter, IconClusterNetwork, TimeField, ColorPicker,
   GradientPaletteGrid, DuotoneImage, IconMarquee, FileCard, EditorialCard,
@@ -14,7 +14,7 @@ import {
 } from '../../components';
 
 function Card({ children, pad = 24 }: { children: React.ReactNode; pad?: number }) {
-  return <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 22, padding: pad, boxShadow: 'var(--shadow-1)', display: 'flex', flexDirection: 'column', gap: 18 }}>{children}</div>;
+  return <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, padding: pad, display: 'flex', flexDirection: 'column', gap: 18 }}>{children}</div>;
 }
 function Rule() { return <div style={{ height: 1, background: 'var(--border)' }} />; }
 function Hint({ children, mb = 12 }: { children: React.ReactNode; mb?: number }) {
@@ -30,7 +30,7 @@ const CLUSTER_ICONS = [
 ];
 
 const MARQUEE_TILES = ['سل', 'جز', 'مد', 'وس', 'تع', 'رك'].map((t, i) => (
-  <span key={t} style={{ width: 44, height: 44, borderRadius: 13, background: `var(--${['accent', 'info', 'warning', 'success', 'danger', 'accent'][i]}-soft)`, color: `var(--${['accent', 'info', 'warning', 'success', 'danger', 'accent'][i]})`, display: 'grid', placeItems: 'center', fontWeight: 700, fontSize: 14, flex: 'none' }}>{t}</span>
+  <span key={t} style={{ width: 44, height: 44, borderRadius: 6, background: `var(--${['accent', 'info', 'warning', 'success', 'danger', 'accent'][i]}-soft)`, color: `var(--${['accent', 'info', 'warning', 'success', 'danger', 'accent'][i]})`, display: 'grid', placeItems: 'center', fontWeight: 700, fontSize: 14, flex: 'none' }}>{t}</span>
 ));
 
 export function PatternAtlas() {
@@ -54,7 +54,7 @@ export function PatternAtlas() {
               <div style={{ fontSize: 12.5, color: 'var(--text-2)', lineHeight: '19px' }}>يغلق بالنقر خارج اللوحة، والسهم يربطه بالزر.</div>
             </Popover>
             <FrostedTooltip tip="تلميح مجمّد بسهم مطابق">
-              <button className="i-soft" style={{ height: 38, padding: '0 16px', borderRadius: 999, border: '1px solid var(--border-strong)', background: 'var(--surface)', color: 'var(--text)', fontFamily: 'inherit', fontSize: 13.5, fontWeight: 600, cursor: 'pointer' }}>Hover me</button>
+              <button className="i-soft" style={{ height: 38, padding: '0 16px', borderRadius: 6, border: '1px solid var(--border-strong)', background: 'var(--surface)', color: 'var(--text)', fontFamily: 'inherit', fontSize: 13.5, fontWeight: 600, cursor: 'pointer' }}>Hover me</button>
             </FrostedTooltip>
             <DropdownMenu items={[
               { label: 'Rename', icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M14 4l6 6-10 10H4v-6L14 4z" /></svg> },
@@ -69,8 +69,8 @@ export function PatternAtlas() {
             <SpotlightButton>Spotlight follows</SpotlightButton>
           </div>
           <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-            <button onClick={() => setAlertOpen(true)} className="i-danger-soft" style={{ height: 38, padding: '0 16px', borderRadius: 999, border: '1px solid var(--danger)', background: 'transparent', color: 'var(--danger)', fontFamily: 'inherit', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>Alert dialog</button>
-            <button onClick={() => setWelcomeOpen(true)} className="i-soft" style={{ height: 38, padding: '0 16px', borderRadius: 999, border: '1px solid var(--border-strong)', background: 'var(--surface)', color: 'var(--text)', fontFamily: 'inherit', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>Welcome modal</button>
+            <button onClick={() => setAlertOpen(true)} className="i-danger-soft" style={{ height: 38, padding: '0 16px', borderRadius: 6, border: '1px solid var(--danger)', background: 'transparent', color: 'var(--danger)', fontFamily: 'inherit', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>Alert dialog</button>
+            <button onClick={() => setWelcomeOpen(true)} className="i-soft" style={{ height: 38, padding: '0 16px', borderRadius: 6, border: '1px solid var(--border-strong)', background: 'var(--surface)', color: 'var(--text)', fontFamily: 'inherit', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>Welcome modal</button>
           </div>
         </Card>
 
@@ -83,7 +83,7 @@ export function PatternAtlas() {
           <Rule />
           <div>
             <FluxLoader progress={progress} phases={['تجهيز', 'تغليف', 'تحميل', 'تسليم']} />
-            <button onClick={() => setProgress((p) => (p >= 0.99 ? 0.18 : Math.min(p + 0.18, 1)))} className="i-soft" style={{ marginTop: 12, height: 30, padding: '0 14px', borderRadius: 999, border: '1px solid var(--border-strong)', background: 'var(--surface)', color: 'var(--text)', fontFamily: 'inherit', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>Advance</button>
+            <button onClick={() => setProgress((p) => (p >= 0.99 ? 0.18 : Math.min(p + 0.18, 1)))} className="i-soft" style={{ marginTop: 12, height: 30, padding: '0 14px', borderRadius: 6, border: '1px solid var(--border-strong)', background: 'var(--surface)', color: 'var(--text)', fontFamily: 'inherit', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>Advance</button>
           </div>
           <Rule />
           <SyncProgressPanel fileName="tokens-mint-v2.fig" fileMeta="8.4 MB · Figma" progress={progress} />
@@ -124,24 +124,11 @@ export function PatternAtlas() {
 
         {/* commerce & content */}
         <Card>
-          <Hint mb={0}>Squishy pricing — press to feel it</Hint>
-          <SquishyPricing plans={[
-            { name: 'Starter', price: '49', period: 'SAR / شهر' },
-            { name: 'Growth', price: '199', period: 'SAR / شهر', note: 'الأكثر اختياراً' },
-            { name: 'Scale', price: '499', period: 'SAR / شهر' },
-          ]} />
-          <Rule />
           <SplitCard
             media={<DuotoneImage><div style={{ width: '100%', height: '100%', minHeight: 110, background: 'repeating-linear-gradient(45deg, #888 0 8px, #ccc 8px 16px)' }} /></DuotoneImage>}
             title="دورة التصوير الليلي"
             text="Duotone media column zooms on hover."
           />
-          <Rule />
-          <TestimonialSlider items={[
-            { quote: '«خفّض وقت بناء الواجهات عندنا من أسابيع لأيام — والعربي يعمل من أول مرة.»', name: 'ريم القحطاني', role: 'قائدة المنتج · سلة' },
-            { quote: '«أول نظام أشوفه يعامل الـ RTL كمواطن درجة أولى مش ترجمة.»', name: 'Adam Darwish', role: 'CTO · Bridge' },
-            { quote: '«الفيزياء في الحركة تحسها بيدك. المستخدمون لاحظوا الفرق فوراً.»', name: 'لينا عزيز', role: 'Design lead' },
-          ]} />
         </Card>
 
         {/* structure: workflow, onboarding, checklist, config */}
@@ -206,10 +193,6 @@ export function PatternAtlas() {
             <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.09em', opacity: 0.85 }}>GMV THIS MONTH</div>
             <div style={{ fontSize: 34, fontWeight: 700, fontVariantNumeric: 'tabular-nums', letterSpacing: '-0.02em', marginTop: 6 }}><OdometerNumber value={481260} /> <span style={{ fontSize: 14, fontWeight: 600, opacity: 0.8 }}>SAR</span></div>
           </GradientMeshCard>
-          <NoiseDotCard>
-            <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.09em', opacity: 0.6 }}>NOISE DOT</div>
-            <div style={{ fontSize: 16, fontWeight: 600, marginTop: 6 }}>حدّ متوهّج + نسيج نقطي</div>
-          </NoiseDotCard>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, alignItems: 'start' }}>
             <PinnedNote>
               <div style={{ fontSize: 13, fontWeight: 700 }}>ملاحظة مثبّتة</div>
@@ -263,10 +246,10 @@ export function PatternAtlas() {
       <div style={{ marginTop: 20, display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 20, alignItems: 'start' }}>
         <Card>
           <Hint mb={0}>Compact nav — resting vs. scrolled (shrinks 320ms)</Hint>
-          <div style={{ display: 'grid', placeItems: 'center', padding: 16, borderRadius: 16, background: 'var(--bg-deep)' }}>
+          <div style={{ display: 'grid', placeItems: 'center', padding: 16, borderRadius: 6, background: 'var(--bg-deep)' }}>
             <CompactNav scrolled={false} brand={<>Madar</>} links={['Home', 'Features', 'Docs']} cta="Get started" />
           </div>
-          <div style={{ display: 'grid', placeItems: 'center', padding: 16, borderRadius: 16, background: 'var(--bg-deep)' }}>
+          <div style={{ display: 'grid', placeItems: 'center', padding: 16, borderRadius: 6, background: 'var(--bg-deep)' }}>
             <CompactNav scrolled brand={<>Madar</>} links={['Home', 'Features', 'Docs']} cta="Get started" />
           </div>
           <div style={{ fontSize: 12, color: 'var(--text-3)' }}>In a real page these read window scroll via <code style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85em' }}>useScrolled()</code>.</div>
@@ -274,7 +257,7 @@ export function PatternAtlas() {
 
         <Card>
           <Hint mb={0}>Progressive navbar — transparent over hero, frosts on scroll</Hint>
-          <div style={{ borderRadius: 16, overflow: 'hidden', background: 'linear-gradient(150deg, color-mix(in srgb, var(--accent) 45%, #14141a), color-mix(in srgb, var(--accent) 12%, #0e0e12))', padding: 8 }}>
+          <div style={{ borderRadius: 6, overflow: 'hidden', background: 'linear-gradient(150deg, color-mix(in srgb, var(--accent) 45%, #14141a), color-mix(in srgb, var(--accent) 12%, #0e0e12))', padding: 8 }}>
             <ProgressiveNavbar scrolled={false} brand={<>Bridge</>} links={['المنتج', 'الأسعار', 'الدعم']} />
           </div>
           <ProgressiveNavbar scrolled brand={<>Bridge</>} links={['المنتج', 'الأسعار', 'الدعم']} />
@@ -293,7 +276,7 @@ export function PatternAtlas() {
 
       {/* marquee + footer full width */}
       <div style={{ marginTop: 20, display: 'flex', flexDirection: 'column', gap: 20 }}>
-        <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 22, padding: '18px 24px', boxShadow: 'var(--shadow-1)' }}>
+        <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, padding: '18px 24px', }}>
           <IconMarquee>{MARQUEE_TILES}</IconMarquee>
         </div>
         <FooterNewsletter

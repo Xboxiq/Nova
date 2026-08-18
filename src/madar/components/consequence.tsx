@@ -58,8 +58,7 @@ export function ShredConfirm({
         <div
           style={{
             width: 96, height: 84, borderRadius: 'var(--r-xs)', background: 'var(--surface)',
-            border: '1px solid var(--border)', boxShadow: 'var(--shadow-1)',
-            display: 'flex', flexDirection: 'column', gap: 6, padding: 'var(--sp-3)',
+            border: '1px solid var(--border)',            display: 'flex', flexDirection: 'column', gap: 6, padding: 'var(--sp-3)',
             transformOrigin: 'top center',
             animation: state === 'shredding' ? 'consequence-shred 1.4s var(--ease-out) forwards' : undefined,
             opacity: state === 'gone' ? 0 : 1,
@@ -143,7 +142,7 @@ export function ReceiptPrinter({
           style={{
             position: 'relative', zIndex: 2, height: 54, borderRadius: 'var(--r-sm)',
             background: 'var(--surface-2)', border: '1px solid var(--border-strong)',
-            boxShadow: 'var(--shadow-2)', display: 'grid', placeItems: 'center',
+ display: 'grid', placeItems: 'center',
           }}
         >
           <span style={{ width: '62%', height: 4, borderRadius: 2, background: 'var(--border-strong)' }} />
@@ -160,7 +159,7 @@ export function ReceiptPrinter({
           <div
             style={{
               padding: 'var(--sp-4)', background: 'var(--surface)', border: '1px solid var(--border)',
-              borderTop: 'none', boxShadow: 'var(--shadow-1)', display: 'grid', gap: 'var(--sp-2)',
+              borderTop: 'none', display: 'grid', gap: 'var(--sp-2)',
               fontSize: 12.5, color: 'var(--text-2)',
             }}
           >
@@ -205,61 +204,6 @@ export function ReceiptPrinter({
 /* ── Dot Matrix Readout — a status display built from lit cells.
    For an operational surface where a spinner says too little: the readout
    scans, so you can see the system is alive and which stage it is on. */
-export function DotMatrixReadout({
-  columns = 14,
-  rows = 5,
-  stage = 'يفحص السجلّات',
-}: {
-  columns?: number;
-  rows?: number;
-  stage?: string;
-}) {
-  const [head, setHead] = useState(0);
-
-  useEffect(() => {
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
-    if (reduced.matches) return;
-    const id = window.setInterval(() => setHead((h) => (h + 1) % columns), 110);
-    return () => window.clearInterval(id);
-  }, [columns]);
-
-  return (
-    <div style={{ display: 'grid', gap: 'var(--sp-3)', justifyItems: 'center' }}>
-      <div
-        role="img"
-        aria-label={stage}
-        style={{
-          display: 'grid', gridTemplateColumns: `repeat(${columns}, 6px)`, gap: 3,
-          padding: 'var(--sp-4)', borderRadius: 'var(--r-sm)', background: 'var(--bg-deep)',
-          border: '1px solid var(--border-strong)', boxShadow: 'var(--shadow-1)',
-        }}
-      >
-        {Array.from({ length: rows * columns }, (_, i) => {
-          const col = i % columns;
-          const row = Math.floor(i / columns);
-          const distance = (col - head + columns) % columns;
-          const crest = distance < 3;
-          const middle = row === Math.floor(rows / 2);
-          return (
-            <span
-              key={i}
-              style={{
-                width: 6, height: 6, borderRadius: '50%',
-                /* an unlit cell still has to read as a cell, or the grid stops
-                   looking like a display and becomes a few stray dots */
-                background: crest && (middle || distance === 0) ? 'var(--accent)' : 'var(--border-strong)',
-                opacity: crest ? 1 - distance * 0.22 : 0.75,
-                transition: 'opacity var(--dur-1) linear, background-color var(--dur-1) linear',
-              }}
-            />
-          );
-        })}
-      </div>
-      <p style={{ margin: 0, fontSize: 12.5, color: 'var(--text-3)' }}>{stage}</p>
-    </div>
-  );
-}
-
 /* ── Elastic Switch — the thumb stretches under the press, then snaps.
    The give tells you the control registered the touch before the state
    has changed, which a hard-swapping toggle never communicates. */
@@ -302,8 +246,7 @@ export function ElasticSwitch({
           style={{
             position: 'absolute', top: inset, insetInlineStart: inset,
             width: held ? track - inset * 2 - 2 : thumb, height: thumb,
-            borderRadius: 'var(--r-full)', background: 'var(--surface)', boxShadow: 'var(--shadow-1)',
-            transform: on && !held ? `translateX(calc(var(--dir-sign) * ${track - thumb - inset * 2 - 2}px))` : 'none',
+            borderRadius: 'var(--r-full)', background: 'var(--surface)',            transform: on && !held ? `translateX(calc(var(--dir-sign) * ${track - thumb - inset * 2 - 2}px))` : 'none',
             marginInlineStart: on && held ? 'auto' : undefined,
             insetInlineEnd: on && held ? inset : undefined,
             transition: 'width var(--dur-2) var(--ease-spring), transform var(--dur-2) var(--ease-spring)',
@@ -357,7 +300,7 @@ export function PerimeterProgress({
         position: 'relative', height: 52, padding: '0 26px', borderRadius: 'var(--r-full)',
         border: 'none', background: 'var(--surface)', color: 'var(--text)', fontFamily: 'inherit',
         fontSize: 14.5, fontWeight: 600, cursor: running ? 'progress' : 'pointer',
-        boxShadow: 'var(--shadow-1)', isolation: 'isolate',
+ isolation: 'isolate',
       }}
     >
       {/* the filling rim: a conic sweep masked to a 2px ring */}

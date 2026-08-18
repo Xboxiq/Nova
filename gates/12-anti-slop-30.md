@@ -99,3 +99,33 @@ G8 checks they stay recorded.
   CHECK: node -e 'const s=require("fs").readFileSync("src/madar/components/content.tsx","utf8");const c=/\/\* ── ChecklistRow[\s\S]*?\*\//.exec(s)[0];console.log(/anti-slop-ui #16 and #25/.test(c)&&/`ok` is a real boolean/.test(c)&&/ANTI-SLOP-30\.md/.test(c)?"RULING_BESIDE_CODE":"RULING_ONLY_IN_DOC")'
   EXPECT: RULING_BESIDE_CODE
   EVIDENCE: RULING_BESIDE_CODE
+
+- [x] G19: Rules 07 and 09 are executed, and measured rather than asserted
+  CHECK: node tools/qa/no-drop-shadow.mjs 2>&1 | grep -E 'BLURRED_DROP_SHADOWS|RADII_OVER_6PX'
+  EXPECT: /BLURRED_DROP_SHADOWS=0/m
+  EVIDENCE: BLURRED_DROP_SHADOWS=0 | RADII_OVER_6PX=0
+
+- [x] G20: The radius tokens are inside the band, so thirty sections follow from one block
+  CHECK: node -e 'const t=require("fs").readFileSync("design-system/nova-design-os/tokens/tokens.css","utf8");const vals=[...t.matchAll(/--nova-radius-\w+:\s*(\d+)px/g)].map((m)=>Number(m[1]));const shadows=[...t.matchAll(/--nova-shadow-(sm|md|lg):\s*([^;]+);/g)].map((m)=>m[2].trim());console.log(vals.length>=5&&vals.every((v)=>v<=6)&&shadows.every((v)=>v==="none")?"TOKENS_IN_BAND "+vals.join("/"):"TOKENS_OUT "+vals.join("/"))'
+  EXPECT: /^TOKENS_IN_BAND/m
+  EVIDENCE: TOKENS_IN_BAND 4/5/6/6/6
+
+- [x] G21: The five banned layouts are gone from the library, its barrel, its roster and the showcase
+  CHECK: node -e 'const {execSync}=require("child_process");const n=execSync("grep -rl \"SquishyPricing\\|TestimonialSlider\\|NoiseDotCard\\|BentoGrid\\|BentoCell\\|DotMatrixReadout\" src/ | wc -l",{encoding:"utf8"}).trim();console.log(n==="0"?"VOCABULARY_REMOVED":"TRACES_LEFT "+n)'
+  EXPECT: VOCABULARY_REMOVED
+  EVIDENCE: VOCABULARY_REMOVED
+
+- [x] G22: The solid surface is what a reader lands on
+  CHECK: node -e 'const s=require("fs").readFileSync("src/App.tsx","utf8");console.log(/isGlassLevel\(stored\) \? stored : "g0"/.test(s)?"SOLID_BY_DEFAULT":"GLASS_BY_DEFAULT")'
+  EXPECT: SOLID_BY_DEFAULT
+  EVIDENCE: SOLID_BY_DEFAULT
+
+- [x] G23: The law was amended to match the code, rather than left asserting three shadows that no longer exist
+  CHECK: node -e 'const s=require("fs").readFileSync("design-system/VISUAL-LAW.md","utf8");const amended=(s.match(/معدَّل بقرار المالك/g)||[]).length===2;const ruling=/حكم المالك بترجيح `anti-slop-ui` #7 و#9/.test(s)&&/بقي \*\*الانحجاب المحيطي/.test(s);const cost=/الأجسام في المكتبة تقرأ الآن \*\*أرقّ\*\*/.test(s);console.log(amended&&ruling&&cost?"LAW_MATCHES_CODE":"LAW_IS_STALE "+[amended,ruling,cost].join())'
+  EXPECT: LAW_MATCHES_CODE
+  EVIDENCE: LAW_MATCHES_CODE
+
+- [x] G24: Everything else still holds with the depth gone: axe, contrast, both instruments, the upload flow and addressing
+  CHECK: for f in madar-qa energy-qa upload-qa addressing glass-zero; do node tools/qa/$f.mjs 2>&1 | grep -E '^(CONTRAST_FAILURES|AXE_VIOLATIONS_MADAR|ENERGY_CHECKS|UPLOAD_FLOW|ADDRESSING|GLASS_ZERO)='; done
+  EXPECT: /AXE_VIOLATIONS_MADAR=0/m
+  EVIDENCE: ADDRESSING=ok | GLASS_ZERO=ok
