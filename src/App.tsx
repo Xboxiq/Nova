@@ -66,13 +66,20 @@ function getInitialLocale(): Locale {
   return stored === "en" ? "en" : "ar";
 }
 
+/* A section id in the URL fragment names the section to open. Anything else
+   in the fragment — the `#madar` nav anchor, for instance — is left alone. */
+function sectionFromHash(): string | null {
+  const id = decodeURIComponent(window.location.hash.slice(1));
+  return madarSections.some((section) => section.id === id) ? id : null;
+}
+
 function App() {
   const [theme, setTheme] = useState<ThemeName>(getInitialTheme);
   const [glass, setGlass] = useState<GlassLevel>(getInitialGlass);
   const [themeMenuOpen, setThemeMenuOpen] = useState(false);
   const [locale, setLocale] = useState<Locale>(getInitialLocale);
   const [category, setCategory] = useState<CategoryId | "all">("all");
-  const [madarSection, setMadarSection] = useState(madarSections[0].id);
+  const [madarSection, setMadarSection] = useState(() => sectionFromHash() ?? madarSections[0].id);
   const [query, setQuery] = useState("");
   const [view, setView] = useState<GalleryView>("grid");
   const [toast, setToast] = useState("");
@@ -93,6 +100,35 @@ function App() {
     document.documentElement.dataset.glass = glass;
     window.localStorage.setItem("nova-glass", glass);
   }, [glass]);
+
+  /* A pasted link, and the back button, both arrive as a hash change. */
+  useEffect(() => {
+    const open = () => {
+      const id = sectionFromHash();
+      if (id) setMadarSection(id);
+    };
+    window.addEventListener("hashchange", open);
+    return () => window.removeEventListener("hashchange", open);
+  }, []);
+
+  /* On a deep link the library is still a lazy chunk, so `#madar` does not
+     exist yet and the browser's own fragment scroll has nothing to land on.
+     Wait for the element rather than for a duration.
+     ponytail: capped at ~2s of frames instead of a MutationObserver — if the
+     chunk is that slow the user has already scrolled themselves. Upgrade to an
+     observer only if a slow connection is ever reported. */
+  useEffect(() => {
+    if (!sectionFromHash()) return;
+    let frame = 0;
+    let left = 120;
+    const land = () => {
+      const stage = document.getElementById("madar");
+      if (stage) stage.scrollIntoView({ block: "start" });
+      else if (left-- > 0) frame = window.requestAnimationFrame(land);
+    };
+    frame = window.requestAnimationFrame(land);
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
 
   useEffect(() => {
     if (!themeMenuOpen) return;
@@ -170,8 +206,18 @@ function App() {
 
   const toggleTheme = () => setTheme((value) => (DARK_THEMES.includes(value) ? "light" : "dark"));
 
-  const jumpToMadarSection = (id: string) => {
+  /* The fragment is the address. Without it a thirty-two section library has
+     no shareable link to any of its sections, which is how additions ended up
+     invisible: the page always opened on the first tab and nothing could point
+     anywhere else. replaceState rather than assignment, so picking through the
+     tabs does not fill the back button with thirty-two entries. */
+  const selectMadarSection = (id: string) => {
     setMadarSection(id);
+    window.history.replaceState(null, "", `#${id}`);
+  };
+
+  const jumpToMadarSection = (id: string) => {
+    selectMadarSection(id);
     setCommandOpen(false);
     window.requestAnimationFrame(() => {
       document.getElementById("madar")?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -417,7 +463,7 @@ function App() {
             theme={theme}
             glass={glass}
             activeSection={madarSection}
-            onSectionChange={setMadarSection}
+            onSectionChange={selectMadarSection}
           />
         </Suspense>
 

@@ -25,6 +25,7 @@ export default function MadarLibrary({
   const [family, setFamily] = useState<MadarFamilyId | "all">("all");
 
   const visible = family === "all" ? madarSections : madarSections.filter((section) => section.family === family);
+  const added = madarSections.filter((section) => section.added);
   const current = madarSections.find((section) => section.id === activeSection) ?? madarSections[0];
   const Section = current.component;
 
@@ -36,6 +37,21 @@ export default function MadarLibrary({
         </div>
         <p>{copy.madarLead}</p>
       </div>
+
+      {/* Thirty-two tabs, and the page opens on the first one. Without this
+          row an addition is only reachable by someone who already knows which
+          tab it lives in — which is exactly how the last two families stayed
+          invisible after they shipped. */}
+      {added.length > 0 && (
+        <nav className="madar-whats-new" aria-label={copy.madarNew}>
+          <span className="madar-whats-new-label">{copy.madarNew}</span>
+          {added.map((section) => (
+            <button key={section.id} type="button" onClick={() => onSectionChange(section.id)}>
+              {locale === "ar" ? section.titleAr : section.title}
+            </button>
+          ))}
+        </nav>
+      )}
 
       <div className="madar-controls">
         <div className="madar-families" role="toolbar" aria-label={copy.madarFamilies}>
@@ -84,7 +100,10 @@ export default function MadarLibrary({
                 onClick={() => onSectionChange(section.id)}
               >
                 <span>
-                  <strong>{locale === "ar" ? section.titleAr : section.title}</strong>
+                  <strong>
+                    {locale === "ar" ? section.titleAr : section.title}
+                    {section.added && <em className="madar-new">{copy.madarNewBadge}</em>}
+                  </strong>
                   <small>{locale === "ar" ? section.descriptionAr : section.description}</small>
                 </span>
                 <PiCaretRight aria-hidden="true" />
