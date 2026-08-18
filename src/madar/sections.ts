@@ -200,6 +200,17 @@ export const madarSections: MadarSection[] = [
     component: load("Outage", () => import("./showcase/sections/Outage")),
   },
   {
+    id: "madar-dispatch",
+    title: "Dispatch",
+    titleAr: "التوزيع",
+    family: "surfaces",
+    description: "Several orders, one address, one delivery: grouping, distance bands, customer rates, courier handoff.",
+    descriptionAr: "طلبات عدّة وعنوان واحد فتوصيل واحد: التجميع، وبُعد العنوان، ورتبة الزبون، وتحويل الطلب بين المندوبين.",
+    tags: ["dispatch", "delivery", "orders", "courier", "توزيع", "توصيل", "مندوب"],
+    component: load("Dispatch", () => import("./showcase/sections/Dispatch")),
+    added: true,
+  },
+  {
     id: "madar-schedule",
     title: "Schedule",
     titleAr: "الجدولة الزمنية",

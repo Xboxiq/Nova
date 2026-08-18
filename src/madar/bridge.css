@@ -411,3 +411,55 @@
   .madar-spec-row:nth-child(even) .madar-spec-stage,
   .madar-spec-row:nth-child(even) .madar-spec-copy { grid-column: 1; grid-row: auto; }
 }
+
+/* ── The lit edge, and the four-sided edge ──────────────────────────────────
+   Earned by re-reading the fifteen repositories I had refused wholesale for
+   their surfaces. `Curved-Glassmorphism-Login-Form-UI` is glass and its corners
+   are 220px, both banned here — but underneath it draws its border as a
+   *gradient*, with a padding-box/border-box mask XOR, so the hairline is bright
+   on one side of the object and faint on the other. That is not a shadow: zero
+   blur, one hairline, drawn. And it is exactly what a system with no drop
+   shadows is starved of — the owner's own recorded cost of deleting them was
+   that the objects read thinner.
+
+   Two changes to the reference on the way in:
+
+   · its gradient runs at 135deg, which means the light comes from the top-left
+     and therefore flips meaning between Arabic and English. Light comes from
+     above in both, so the gradient runs `to bottom` — direction-neutral, and
+     closer to §1's single light overhead than the reference was.
+   · its stops are raw white alphas. Here the lit end is `--border-strong` and
+     the dim end is `--border`, so it rides the seven packs and adds no colour.
+
+   `.madar-lit` is the perimeter version, for an object that should read as
+   having a top. `[data-edge='lit']` is the four-sided inset version from the
+   same file's `.edge`: four 1px insets with *unequal* alphas — brightest on top,
+   faintest underneath — which is one material lit from overhead expressed as an
+   edge rather than as a shadow. */
+.madar-lit {
+  position: relative;
+  border: 0;
+}
+
+.madar-lit::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  background: linear-gradient(to bottom, var(--border-strong), var(--border));
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+[data-edge='lit'] {
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--border-strong) 90%, transparent),
+    inset 0 -1px 0 color-mix(in srgb, var(--border) 35%, transparent),
+    inset 1px 0 0 color-mix(in srgb, var(--border) 60%, transparent),
+    inset -1px 0 0 color-mix(in srgb, var(--border) 60%, transparent);
+}
