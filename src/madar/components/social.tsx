@@ -7,7 +7,13 @@ import { MemojiAvatar } from './soft';
    avatar stack, years timeline).
 ──────────────────────────────────────────────────────────────────────── */
 
-/* ── ReactionBar — emoji chips with counts + a dashed add button. */
+/* ── ReactionBar — a reaction's glyph is the datum being counted.
+
+   anti-slop-ui #18 bans emoji as section headers, card icons and bullet points.
+   A reaction bar is the one place where the emoji *is* the data: the count belongs
+   to that glyph and no other, exactly as it does in the products people already
+   read. Replacing it with an icon would be inventing a second language for a
+   value the reader already knows. Recorded here and in ANTI-SLOP-30.md. */
 export function ReactionBar({ reactions: initial }: { reactions: { emoji: string; count: number; mine?: boolean }[] }) {
   const [rs, setRs] = useState(initial);
   return (

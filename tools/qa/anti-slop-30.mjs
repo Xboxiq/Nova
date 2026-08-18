@@ -54,6 +54,21 @@ function scan(files, re, rule) {
   return hits;
 }
 
+/** Every :hover rule whose body raises or enlarges the element. */
+function hoverLifts() {
+  const hits = [];
+  for (const path of ALL.filter((p) => p.endsWith(".css"))) {
+    for (const m of read(path).matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+      if (!/:hover/.test(m[1])) continue;
+      const body = m[2];
+      if (/transform:[^;]*translateY\(\s*-/.test(body) || /transform:[^;]*scale\(\s*(1\.[1-9]|[2-9])/.test(body)) {
+        hits.push(`${path}  ${m[1].trim().split("\n").pop().slice(0, 46)}`);
+      }
+    }
+  }
+  return hits;
+}
+
 /** Rule 02 is about the canvas, not about every white pixel. A 3px star dot and
     a 7% white hover film are not "a blinding pure white canvas", so the check
     reads the canvas token and the page's own background instead of grepping. */
@@ -74,7 +89,7 @@ function pureWhiteCanvas() {
 
 const RULES = [
   { n: "02", name: "no pure white canvas", fn: pureWhiteCanvas },
-  { n: "04", name: "no purple-on-black dark mode", files: [...CSS, ...SHELL_TSX],
+  { n: "04", name: "no purple-on-black dark mode", files: [...CSS, ...ALL],
     re: /#(8b5cf6|a855f7|7c3aed|6d28d9|c084fc)\b/i },
   { n: "10", name: "no Inter / Geist / Space Grotesk", files: CSS,
     re: /font-family[^;]*("|')(Inter|Geist|Space Grotesk)/i },
@@ -89,7 +104,7 @@ const RULES = [
     re: /animation:[^;]*\b(bounce|bob|float-?arrow)|scroll-?(down|hint|cue)[^;]*animation/i },
   { n: "23", name: "no em dash in a rendered heading", files: [...SHOWCASE, ...SHELL_TSX],
     re: /\b(title|eyebrow|label)="[^"]*—/ },
-  { n: "24", name: 'no "it is not X, it is Y" copy', files: [...SHELL_TSX, ...SHOWCASE],
+  { n: "24", name: 'no "it is not X, it is Y" copy', files: ALL,
     re: /ليس مجرّد|ليست مجرّد|ليس فقط|not just an?\b|isn'?t just/i },
   /* A check that reports state (a checkbox, a "done" row) is state, not a
      bullet — that distinction is ruled in ANTI-SLOP-30.md and carried by an
@@ -97,6 +112,10 @@ const RULES = [
      in front of prose, or dropped into copy as decoration. */
   { n: "25", name: "no checkmark as a bullet or in copy", files: ALL,
     re: /<PiCheck\s*\/>\s*\{?["'\u0600-\u06FF]|["'`][^"'`]*[✓✔✅]/ },
+  /* #21 across every stylesheet, library included. The line is elevation and
+     scale: an axial nudge along the reading direction is a direction cue, and a
+     press scale answers a pointer that is already down. */
+  { n: "21", name: "no lift or scale on hover", fn: hoverLifts },
   { n: "29", name: "no neon accents", files: [...CSS, ...ALL],
     re: /#(0{2}ff0{2}|0{2}ffff|ff0{2}ff|39ff14|0ff|f0f)\b/i },
 ];

@@ -46,7 +46,7 @@ G8 checks they stay recorded.
   EVIDENCE: LEGAL_IS_REAL
 
 - [x] G8: The conflicts with the project's own law are recorded with a ruling, not quietly resolved either way
-  CHECK: node -e "const s=require('fs').readFileSync('design-system/ANTI-SLOP-30.md','utf8');const rows=(s.match(/^\| [0-9]{2} \|/gm)||[]).length;const conflicts=/تعارض مسجَّل/.test(s)&&/§3/.test(s)&&/data-glass/.test(s)&&/القانون يسبق/.test(s);const asks=/المطلوب منك/.test(s)&&/قرارٌ ينتظرك/.test(s);console.log(rows===30&&conflicts&&asks?'MATRIX_AND_CONFLICTS':'INCOMPLETE '+[rows,conflicts,asks].join())"
+  CHECK: node -e "const s=require('fs').readFileSync('design-system/ANTI-SLOP-30.md','utf8');const matrix=s.split('## الجدول')[1].split('---')[0];const rows=(matrix.match(/^\| [0-9]{2} \|/gm)||[]).length;const conflicts=/تعارض مسجَّل/.test(s)&&/§3/.test(s)&&/data-glass/.test(s)&&/القانون يسبق/.test(s);const asks=/المطلوب منك/.test(s)&&/قرارٌ ينتظرك/.test(s);console.log(rows===30&&conflicts&&asks?'MATRIX_AND_CONFLICTS':'INCOMPLETE '+[rows,conflicts,asks].join())"
   EXPECT: MATRIX_AND_CONFLICTS
   EVIDENCE: MATRIX_AND_CONFLICTS
 
@@ -129,3 +129,33 @@ G8 checks they stay recorded.
   CHECK: for f in madar-qa energy-qa upload-qa addressing glass-zero; do node tools/qa/$f.mjs 2>&1 | grep -E '^(CONTRAST_FAILURES|AXE_VIOLATIONS_MADAR|ENERGY_CHECKS|UPLOAD_FLOW|ADDRESSING|GLASS_ZERO)='; done
   EXPECT: /AXE_VIOLATIONS_MADAR=0/m
   EVIDENCE: ADDRESSING=ok | GLASS_ZERO=ok
+
+- [x] G25: The standard is measured over the library too, not the shell alone
+  CHECK: node -e 'const s=require("fs").readFileSync("tools/qa/anti-slop-30.mjs","utf8");const four=/\{ n: "04"[^}]*files: \[\.\.\.CSS, \.\.\.ALL\]/.test(s);const twentyfour=/\{ n: "24"[^}]*files: ALL,/.test(s);const hover=/\{ n: "21", name: "no lift or scale on hover", fn: hoverLifts \}/.test(s);console.log(four&&twentyfour&&hover?"LIBRARY_IN_SCOPE":"SHELL_ONLY "+[four,twentyfour,hover].join())'
+  EXPECT: LIBRARY_IN_SCOPE
+  EVIDENCE: LIBRARY_IN_SCOPE
+
+- [x] G26: No lift and no scale on hover in any stylesheet, the madar layer included
+  CHECK: node tools/qa/anti-slop-30.mjs 2>&1 | grep -E '^  (PASS|FAIL) 21 '
+  EXPECT: /^  PASS 21/m
+  EVIDENCE: PASS 21  no lift or scale on hover
+
+- [x] G27: The library's hover utilities report through colour, and the press scales are deliberately left
+  CHECK: node -e 'const s=require("fs").readFileSync("src/madar/interactions.css","utf8");const lift=/\.i-lift:hover,\n\.i-lift-shadow:hover,\n\.i-lift2-shadow:hover \{ border-color: var\(--border-strong\); \}/.test(s);const dock=/\.i-dock-icon:hover \{ background: var\(--surface-2\); \}/.test(s);const card=/\.i-card:hover \{ border-color: var\(--border-strong\); \}/.test(s);const press=(s.match(/\.i-press-\d+:active \{ transform: scale\(/g)||[]).length>=5;const why=/direct manipulation rather than an invitation/.test(s);console.log(lift&&dock&&card&&press&&why?"UTILITIES_RECOLOURED":"UTILITIES_STILL_LIFT "+[lift,dock,card,press,why].join())'
+  EXPECT: UTILITIES_RECOLOURED
+  EVIDENCE: UTILITIES_RECOLOURED
+
+- [x] G28: What the scanner flags in the library but is not a violation is written down with its reason, so it is not churned next pass
+  CHECK: node -e 'const s=require("fs").readFileSync("design-system/ANTI-SLOP-30.md","utf8");const sec=/## تمريرة المكتبة/.test(s);const rulings=/\*\*مفردات الفيزياء\*\*/.test(s)&&/أطقم Lucide\/Feather الجاهزة/.test(s)&&/مؤشّرًا \*\*نازلًا سلفًا\*\*/.test(s);const emoji=/\*\*هو البيان المعدود\*\*/.test(s);console.log(sec&&rulings&&emoji?"LIBRARY_PASS_RECORDED":"UNRECORDED "+[sec,rulings,emoji].join())'
+  EXPECT: LIBRARY_PASS_RECORDED
+  EVIDENCE: LIBRARY_PASS_RECORDED
+
+- [x] G29: The emoji that stays keeps its ruling beside the component
+  CHECK: node -e 'const s=require("fs").readFileSync("src/madar/components/social.tsx","utf8");const c=/\/\* ── ReactionBar[\s\S]*?\*\//.exec(s)[0];console.log(/anti-slop-ui #18/.test(c)&&/the emoji \*is\* the data/.test(c)&&/ANTI-SLOP-30\.md/.test(c)?"RULING_BESIDE_CODE":"RULING_ONLY_IN_DOC")'
+  EXPECT: RULING_BESIDE_CODE
+  EVIDENCE: RULING_BESIDE_CODE
+
+- [x] G30: The matrix is numbered by the skill's own closing checklist, and every one of the thirty has a row
+  CHECK: node -e 'const f=require("fs");const doc=f.readFileSync("design-system/ANTI-SLOP-30.md","utf8");const matrix=doc.split("## الجدول")[1].split("`ANTI_SLOP_30")[0];const nums=[...matrix.matchAll(/^\| (\d{2}) \|/gm)].map((m)=>m[1]);const complete=nums.length===30&&nums.every((n,i)=>Number(n)===i+1);const skill=f.readFileSync(".claude/skills/anti-slop-ui/SKILL.md","utf8");const anchors=[["02","Lucide"],["07","emoji"],["09","em dash"],["15","X, it"],["19","radii are crisp"],["28","translateY lift"]];const placed=anchors.every(([n,txt])=>new RegExp(`\\| ${n} \\|[^\\n]*`).test(matrix))&&anchors.every(([,txt])=>skill.toLowerCase().includes(txt.toLowerCase()));const noted=/ترقيم \*\*قائمة التحقّق في آخر المهارة\*\*/.test(doc);console.log(complete&&placed&&noted?"MATRIX_CANONICAL":"MATRIX_DRIFTED "+[nums.length,complete,placed,noted].join())'
+  EXPECT: MATRIX_CANONICAL
+  EVIDENCE: MATRIX_CANONICAL

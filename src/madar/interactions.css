@@ -2,9 +2,13 @@
    Applied as classNames alongside inline token-based styles, standing in for
    the prototype's style-hover/style-active pseudo-attributes. */
 
-.i-lift:hover { transform: translateY(-1px); }
-.i-lift-shadow:hover { transform: translateY(-1px); }
-.i-lift2-shadow:hover { transform: translateY(-2px); }
+/* anti-slop-ui #21: hover reports through colour, never by lifting. The class
+   names are kept because forty call sites compose them; what changed is what they
+   do. The press scales below are deliberately left: they answer a pointer that is
+   already down, which is direct manipulation rather than an invitation. */
+.i-lift:hover,
+.i-lift-shadow:hover,
+.i-lift2-shadow:hover { border-color: var(--border-strong); }
 .i-press-97:active { transform: scale(0.97); }
 .i-press-96:active { transform: scale(0.96); }
 .i-press-94:active { transform: scale(0.94); }
@@ -18,11 +22,14 @@
 .i-danger-soft:hover { background: var(--danger-soft); }
 .i-text:hover { color: var(--text); }
 
-.i-card:hover { transform: translateY(-3px); border-color: var(--border-strong); }
+.i-card:hover { border-color: var(--border-strong); }
+/* An axial nudge along the reading direction is a direction cue, not elevation:
+   #21 names lift and scale on cards, and this is neither. The line drawn — and
+   gated — is no negative translateY and no scale on hover. */
 .i-chevron:hover { transform: translateX(4px); }
 [dir='rtl'] .i-chevron:hover { transform: translateX(-4px); }
-.i-dock-icon:hover { transform: scale(1.28) translateY(-7px); }
-.i-cta:hover { transform: translateY(-3px); }
+.i-dock-icon:hover { background: var(--surface-2); }
+.i-cta:hover { background: color-mix(in srgb, var(--accent) 88%, var(--ink)); }
 .i-brightness:hover { filter: brightness(1.06); }
 
 .madar-surface button { transition: transform var(--dur-2) var(--ease-out); }
@@ -49,8 +56,8 @@
 
 /* Button-in-Button haptic physics (high-end-visual-design skill §5.B) */
 .hero-cta:active { transform: scale(0.98); }
-.hero-cta:hover .hero-cta-icon { transform: translate(3px, -1px) scale(1.08); }
-[dir='rtl'] .hero-cta:hover .hero-cta-icon { transform: translate(-3px, -1px) scale(1.08); }
+.hero-cta:hover .hero-cta-icon { transform: translateX(3px); }
+[dir='rtl'] .hero-cta:hover .hero-cta-icon { transform: translateX(-3px); }
 .hero-navlink:hover { background: rgba(255,255,255,0.12) !important; color: #fff !important; }
 
 .madar-surface ::selection { background: var(--accent-soft); color: var(--text); }
