@@ -1,4 +1,5 @@
 import { Section, SectionHeader } from '../SectionHeader';
+import { SpecShelf } from '../SpecRow';
 import {
   ProgressiveBlur, LiquidGlassCard, GlassSegmented,
   AnticipatoryDashboard, PromptCanvas, GlanceableTile,
@@ -22,7 +23,7 @@ export function Trends2026() {
         Built from the X trends research: progressive blur, reactive liquid glass, anticipatory AI dashboards, prompt-first canvases, and glanceable AR tiles. Every source tweet is mapped in <code style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85em' }}>TRENDS.md</code>.
       </SectionHeader>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(320px,1fr))', gap: 20, alignItems: 'start' }}>
+      <SpecShelf>
         {/* liquid glass + glass segmented over aurora */}
         <GlassStage minHeight={320}>
           <div style={{ color: 'rgba(255,255,255,0.75)', fontSize: 11, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: 14 }}>Liquid glass · reactive</div>
@@ -68,7 +69,7 @@ export function Trends2026() {
           <div style={{ fontSize: 13.5, fontWeight: 600, color: 'var(--text-2)', marginBottom: 14 }}>Prompt-first canvas — الواجهة تتولّد</div>
           <PromptCanvas />
         </div>
-      </div>
+      </SpecShelf>
 
       {/* glanceable AR tiles over a dark stage */}
       <div style={{ marginTop: 20 }}>

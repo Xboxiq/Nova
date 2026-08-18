@@ -1,4 +1,5 @@
 import { Section, SectionHeader } from '../SectionHeader';
+import { SpecShelf } from '../SpecRow';
 
 export function Motion() {
   return (
@@ -6,7 +7,7 @@ export function Motion() {
       <SectionHeader eyebrow="27 · MOTION" title="Motion: physics, not fireworks">
         Four durations, three curves. Only transform, opacity, filter and shadow ever animate. Exits run at 60% of entrances.
       </SectionHeader>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(240px,1fr))', gap: 20 }}>
+      <SpecShelf>
         <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, padding: 24, display: 'flex', flexDirection: 'column', gap: 10, fontFamily: 'var(--font-mono)', fontSize: 13 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: 'var(--text-2)' }}>--dur-1</span><span style={{ fontWeight: 600 }}>140ms · micro</span></div>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: 'var(--text-2)' }}>--dur-2</span><span style={{ fontWeight: 600 }}>220ms · controls</span></div>
@@ -34,7 +35,7 @@ export function Motion() {
           <div style={{ fontSize: 14.5, fontWeight: 600 }}>Ambient float</div>
           <div style={{ fontSize: 12.5, color: 'var(--text-3)', textAlign: 'center' }}>≤6px · ≥5s · one per hero<br />the only allowed loop</div>
         </div>
-      </div>
+      </SpecShelf>
 
       <div style={{ marginTop: 56, borderRadius: 6, background: 'var(--ink)', color: 'var(--on-ink)', padding: '56px 40px', textAlign: 'center', }}>
         <div style={{ fontSize: 'clamp(26px,3.4vw,38px)', fontWeight: 600, letterSpacing: '-0.02em', lineHeight: 1.15 }}>Everything above lives in design.md</div>

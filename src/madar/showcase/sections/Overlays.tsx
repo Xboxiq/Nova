@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Section, SectionHeader } from '../SectionHeader';
+import { SpecShelf } from '../SpecRow';
 
 function MenuRow({ children, danger, shortcut }: { children: React.ReactNode; danger?: boolean; shortcut?: string }) {
   return (
@@ -33,7 +34,7 @@ export function Overlays() {
         <button onClick={showToast} className="i-lift i-press-97" style={{ height: 44, padding: '0 22px', borderRadius: 6, border: '1px solid var(--border-strong)', background: 'var(--surface)', color: 'var(--text)', fontSize: 15, fontWeight: 600, cursor: 'pointer', transition: 'transform 220ms' }}>Show toast</button>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 20, alignItems: 'start' }}>
+      <SpecShelf>
         {/* command palette (static) */}
         <div style={{ borderRadius: 6, border: '1px solid var(--border)', background: 'var(--surface)', overflow: 'hidden' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, height: 52, padding: '0 18px', borderBottom: '1px solid var(--border)', color: 'var(--text-3)' }}>
@@ -74,7 +75,7 @@ export function Overlays() {
             <div style={{ fontSize: 13.5, color: 'var(--text-2)', lineHeight: '20px' }}>Mobile quick tasks slide from the bottom edge — grabber on top, drag or tap the scrim to dismiss.</div>
           </div>
         </div>
-      </div>
+      </SpecShelf>
 
       {modalOpen && (
         <div onClick={() => setModalOpen(false)} style={{ position: 'fixed', inset: 0, zIndex: 100, background: 'oklch(0.2 0.03 260 / 0.4)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, animation: 'overlayIn 340ms cubic-bezier(0.22,1,0.36,1)' }}>

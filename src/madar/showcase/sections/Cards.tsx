@@ -1,4 +1,5 @@
 import { Section, SectionHeader } from '../SectionHeader';
+import { SpecShelf } from '../SpecRow';
 import { useTheme } from '../../theme/ThemeContext';
 
 function Avatar({ initials, bg }: { initials: string; bg: string }) {
@@ -35,7 +36,7 @@ export function Cards() {
       <SectionHeader eyebrow="05 · SURFACES" title="The card family">
         Resting cards are almost flat; they lift when they mean something. Hover any clickable card: −3px, shadow 1→2, chevron nudges.
       </SectionHeader>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: 20, alignItems: 'start' }}>
+      <SpecShelf>
         {/* service card */}
         <div className="i-card" style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, padding: 22, cursor: 'pointer', transition: 'transform 340ms cubic-bezier(0.22,1,0.36,1), box-shadow 340ms, border-color 340ms' }}>
           <div style={{ width: 44, height: 44, borderRadius: 6, background: 'var(--accent-soft)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 14 }}>
@@ -126,7 +127,7 @@ export function Cards() {
           <div style={{ fontSize: 14.5, color: 'var(--text-2)', maxWidth: '26ch' }}>No bookings yet. Your first one will appear here.</div>
           <button className="i-soft" style={{ height: 36, padding: '0 18px', borderRadius: 6, border: '1px solid var(--border-strong)', background: 'var(--surface)', color: 'var(--text)', fontSize: 13.5, fontWeight: 600, cursor: 'pointer' }}>Create a booking</button>
         </div>
-      </div>
+      </SpecShelf>
     </Section>
   );
 }

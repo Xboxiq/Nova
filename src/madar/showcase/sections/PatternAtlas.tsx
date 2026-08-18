@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Section, SectionHeader } from '../SectionHeader';
+import { SpecShelf } from '../SpecRow';
 import {
   Popover, FrostedTooltip, SelectField, DropdownMenu, AlertDialog, WelcomeModal,
   CommandBarTrigger, KbdButton, SpotlightButton, MessageDock,
@@ -44,7 +45,7 @@ export function PatternAtlas() {
         The rest of the 95-pattern Jahez catalog plus the remaining lab pieces, every one an importable component. This completes the source libraries: overlays, feedback, social, commerce, layout.
       </SectionHeader>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 20, alignItems: 'start' }}>
+      <SpecShelf>
         {/* overlays & triggers */}
         <Card>
           <Hint mb={0}>Overlays: popover · tooltip · select · dropdown · dialogs</Hint>
@@ -240,10 +241,10 @@ export function PatternAtlas() {
           <Hint mb={0}>Curated gradients — tap to copy CSS</Hint>
           <GradientPaletteGrid />
         </Card>
-      </div>
+      </SpecShelf>
 
       {/* scroll-reactive chrome (shown in both states side by side) + bucket */}
-      <div style={{ marginTop: 20, display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 20, alignItems: 'start' }}>
+      <SpecShelf>
         <Card>
           <Hint mb={0}>Compact nav — resting vs. scrolled (shrinks 320ms)</Hint>
           <div style={{ display: 'grid', placeItems: 'center', padding: 16, borderRadius: 6, background: 'var(--bg-deep)' }}>
@@ -272,7 +273,7 @@ export function PatternAtlas() {
           </div>
           <div style={{ fontSize: 12, color: 'var(--text-3)', textAlign: 'center' }}>Recolors with the theme accent.</div>
         </Card>
-      </div>
+      </SpecShelf>
 
       {/* marquee + footer full width */}
       <div style={{ marginTop: 20, display: 'flex', flexDirection: 'column', gap: 20 }}>

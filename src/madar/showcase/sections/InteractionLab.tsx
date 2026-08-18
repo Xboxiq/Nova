@@ -1,4 +1,5 @@
 import { Section, SectionHeader } from '../SectionHeader';
+import { SpecShelf } from '../SpecRow';
 import {
   PublishButton, CopyCodeButton, ShatterButton,
   BouncyToggle, CinematicThemeSwitch, GlowMenu,
@@ -11,7 +12,7 @@ export function InteractionLab() {
       <SectionHeader eyebrow="13 · INTERACTION LAB" title="Stateful micro-interactions">
         Buttons and toggles that narrate their own state — every demo here is the reusable component from <code style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85em' }}>src/components</code>, live. Publish, copy, shatter, flip the toggles.
       </SectionHeader>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 20, alignItems: 'start' }}>
+      <SpecShelf>
         {/* stateful buttons */}
         <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, padding: 24, display: 'flex', flexDirection: 'column', gap: 18 }}>
           <div style={{ fontSize: 13.5, fontWeight: 500, color: 'var(--text-2)' }}>Publish — a button that reports back</div>
@@ -65,7 +66,7 @@ export function InteractionLab() {
             { name: 'Reviewer', initial: 'Q', gradient: 'linear-gradient(135deg,#FF8A4A,#F36A1F)', state: 'done' },
           ]} />
         </div>
-      </div>
+      </SpecShelf>
     </Section>
   );
 }

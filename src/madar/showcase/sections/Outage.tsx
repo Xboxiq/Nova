@@ -1,5 +1,5 @@
 import { Section, SectionHeader } from '../SectionHeader';
-import { SpecRow } from '../SpecRow';
+import { SpecList, SpecRow } from '../SpecRow';
 import { OutageCompare } from '../../components/outage';
 
 export function Outage() {
@@ -9,13 +9,13 @@ export function Outage() {
         انقطعت الكهرباء. والسؤال ليس «متى» — ذاك خطّ زمني بنيناه سلفًا — بل «العيب عندي أم عند الشبكة؟». وهذا جوابٌ لا يوجد في أيٍّ من المسارَين، بل في تقاطعهما. فالرسم يجب أن يُظهر التقاطع، لا أن يترك القارئ يقارن مخطّطَين من ذاكرته.
       </SectionHeader>
 
-      <SpecRow n={1} name="Grid fault: انقطع عندك وعند الحيّ" specimen={<OutageCompare />}>
+      <SpecList>
+
+      <SpecRow name="Grid fault: انقطع عندك وعند الحيّ" specimen={<OutageCompare />}>
         مسارَان على محور واحد، والرابطة بينهما مرسومة حيث يتقاطعان — والرابطة هي الحكم لا زينةً بجانبه. والحكم مُشتَقّ من التقاطعات لا مكتوبًا يدًا: كل انقطاع عندك له نظير عند الحيّ، فالعيب خارج البيت.
       </SpecRow>
 
       <SpecRow
-        n={2}
-        flip
         name="Premises fault: انقطع عندك والحيّ يعمل"
         specimen={(
           <OutageCompare
@@ -26,6 +26,7 @@ export function Outage() {
       >
         انقطاع واحد بلا نظير يقلب الحكم كلّه — وهذا هو سبب رسم التقاطع: الفرق بين «بلّغ الشركة» و«افحص قاطعك» عرضُ ثلاث بكسلات لا يراها من ينظر إلى مسار واحد. والتاريخ محايد اللون، والملوّن هو ما لم ينتهِ بعد.
       </SpecRow>
+      </SpecList>
     </Section>
   );
 }

@@ -1,4 +1,5 @@
 import { Section, SectionHeader } from '../SectionHeader';
+import { SpecShelf } from '../SpecRow';
 
 function SquircleTile({ gradient, children }: { gradient: string; children: React.ReactNode }) {
   return (
@@ -29,7 +30,7 @@ export function SoftVocabulary() {
       <SectionHeader eyebrow="11 · SOFT VOCABULARY" title="The consumer dialect: Liquid Soft">
         A warmer sub-language for consumer surfaces: squircle tonal icons, specular orbs, flat brand + halo. One dialect per screen — never mixed with admin flat tiles.
       </SectionHeader>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: 20, alignItems: 'start' }}>
+      <SpecShelf>
         {/* squircle tonal system */}
         <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, padding: 24, }}>
           <div style={{ fontSize: 13.5, fontWeight: 500, color: 'var(--text-2)', marginBottom: 16 }}>Squircle tonal triple — fill · shadow · tint</div>
@@ -119,7 +120,7 @@ export function SoftVocabulary() {
             <div style={{ fontSize: 11.5, color: 'rgba(255,255,255,0.75)', marginTop: 10 }}>Chromatic edge rings · only over color or photo</div>
           </div>
         </div>
-      </div>
+      </SpecShelf>
     </Section>
   );
 }

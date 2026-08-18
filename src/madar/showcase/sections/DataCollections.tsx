@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { Section, SectionHeader } from '../SectionHeader';
+import { SpecList, SpecRow } from '../SpecRow';
 import {
   CATEGORICAL, DonutChart, Gauge, Heatmap, StarRating, ProgressCircle,
   Tabs, Accordion, Breadcrumb, Pagination, KanbanBoard, CalendarMonth, TreeView, TagInput,
@@ -7,15 +8,9 @@ import {
 import type { KanbanColumn, TreeNode } from '../../components';
 
 /* A titled panel so every demo reads as one library artifact. */
-function Panel({ title, note, children, span = 1 }: { title: string; note?: string; children: ReactNode; span?: number }) {
+function Panel({ title, note, children }: { title: string; note?: string; children: ReactNode; span?: number }) {
   return (
-    <div style={{ gridColumn: `span ${span}`, background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, padding: 22, display: 'flex', flexDirection: 'column', gap: 16, minWidth: 0 }}>
-      <div>
-        <div style={{ fontSize: 14.5, fontWeight: 700, letterSpacing: '-0.01em' }}>{title}</div>
-        {note && <div style={{ fontSize: 12, color: 'var(--text-3)', marginTop: 3 }}>{note}</div>}
-      </div>
-      {children}
-    </div>
+    <SpecRow name={title} specimen={children} fill>{note}</SpecRow>
   );
 }
 
@@ -54,7 +49,7 @@ export function DataCollections() {
       </SectionHeader>
 
       {/* ── Data visualization ── */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 20, alignItems: 'start' }}>
+      <SpecList>
         <Panel title="Donut: حصص الطلبات" note="فئوي · ترتيب ثابت آمن لعمى الألوان + مفتاح دائم">
           <DonutChart
             centerLabel="طلب"
@@ -100,10 +95,10 @@ export function DataCollections() {
             ))}
           </div>
         </Panel>
-      </div>
+      </SpecList>
 
       {/* ── Collections & navigation ── */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 20, alignItems: 'start', marginTop: 20 }}>
+      <SpecList>
         <Panel title="Tabs" note="خط سفلي ينزلق · RTL آمن">
           <Tabs tabs={['نظرة عامة', 'التحليلات', 'الإعدادات']} />
         </Panel>
@@ -138,7 +133,7 @@ export function DataCollections() {
         <Panel title="Kanban: اسحب البطاقات بين الأعمدة" note="سحب وإفلات HTML أصلي" span={2}>
           <KanbanBoard columns={KANBAN} />
         </Panel>
-      </div>
+      </SpecList>
     </Section>
   );
 }

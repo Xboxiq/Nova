@@ -1,21 +1,25 @@
 import { useState } from 'react';
 import { Section, SectionHeader } from '../SectionHeader';
+import { SpecList, SpecRow } from '../SpecRow';
 
 const spring = 'cubic-bezier(0.34,1.45,0.64,1)';
 
 function RitualCard({ onEnter, onLeave, title, desc, children }: { onEnter: () => void; onLeave: () => void; title: string; desc: string; children: React.ReactNode }) {
   return (
-    <div
-      onMouseEnter={onEnter} onMouseLeave={onLeave}
-      className="i-card"
-      style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, padding: '28px 20px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14, cursor: 'pointer', transition: 'transform 340ms cubic-bezier(0.22,1,0.36,1), box-shadow 340ms' }}
+    <SpecRow
+      name={title}
+      specimen={(
+        <div
+          onMouseEnter={onEnter} onMouseLeave={onLeave}
+          className="i-card"
+          style={{ position: 'relative', width: 64, height: 64, display: 'grid', placeItems: 'center', cursor: 'pointer' }}
+        >
+          {children}
+        </div>
+      )}
     >
-      <div style={{ position: 'relative', width: 64, height: 64, display: 'grid', placeItems: 'center' }}>{children}</div>
-      <div style={{ textAlign: 'center' }}>
-        <div style={{ fontSize: 14.5, fontWeight: 600 }}>{title}</div>
-        <div style={{ fontSize: 12.5, color: 'var(--text-3)', marginTop: 2 }}>{desc}</div>
-      </div>
-    </div>
+      {desc}
+    </SpecRow>
   );
 }
 
@@ -36,7 +40,7 @@ export function IconLab() {
       <SectionHeader eyebrow="09 · ICON LAB" title="Icon presentation rituals">
         Four ways to stage an icon beyond the flat tile. Each is a hover ritual — one per surface, chosen once per project. Hover each card.
       </SectionHeader>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(230px,1fr))', gap: 20 }}>
+      <SpecList>
         {/* ORBIT */}
         <RitualCard onEnter={() => setHov('orbit')} onLeave={() => setHov(null)} title="Orbit" desc="Electron speeds up on hover">
           <div style={{ position: 'absolute', inset: 0, animation: `spin ${hov === 'orbit' ? 1 : 4.2}s linear infinite` }}>
@@ -79,7 +83,7 @@ export function IconLab() {
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9.5a6 6 0 0 1 12 0c0 4.5 1.8 5.5 1.8 5.5H4.2S6 14 6 9.5z" /><path d="M10 18.5a2 2 0 0 0 4 0" /></svg>
           </div>
         </RitualCard>
-      </div>
+      </SpecList>
     </Section>
   );
 }

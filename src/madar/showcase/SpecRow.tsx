@@ -22,63 +22,108 @@ import { useState, type ReactNode } from 'react';
 ──────────────────────────────────────────────────────────────────────── */
 
 export interface SpecRowProps {
-  /** The ordinal in the section. A real sequence, so it is numbered. */
-  n: number;
   name: string;
-  /** What the piece claims, in one paragraph. */
-  children: ReactNode;
+  /** What the piece claims, in one paragraph. Optional: some specimens are named
+      and nothing more, and an invented sentence is worse than no sentence. */
+  children?: ReactNode;
   specimen: ReactNode;
-  /** Flips which side the specimen takes. The section alternates it. */
-  flip?: boolean;
+  /** The specimen is a full-width thing (a table, a board) rather than an object
+      to be centred, so the stage stretches instead of shrink-wrapping it. */
+  fill?: boolean;
+  /** The specimen already paints its own surface — an upload folder, a bezel plate.
+      A toned stage under it is the card-inside-a-card #13 bans, so the stage keeps
+      the column and drops the tone. */
+  bare?: boolean;
 }
 
-export function SpecRow({ n, name, children, specimen, flip = false }: SpecRowProps) {
+/* The ordinal and the alternation are CSS, not props: a counter numbers the rows
+   in document order and `:nth-child(even)` flips the sides. That matters more than
+   tidiness — it means a section's existing local wrapper can be reimplemented as
+   one line of SpecRow without touching thirty call sites, which is how the rest of
+   the library gets migrated without rewriting its JSX. */
+export function SpecRow({ name, children, specimen, fill, bare }: SpecRowProps) {
   return (
-    <div
-      data-spec-row={flip ? 'flipped' : 'normal'}
-      style={{
-        display: 'grid',
-        // deliberately unequal: 1.45 to 1, because a half each says the
-        // statement and the specimen weigh the same, and they do not
-        gridTemplateColumns: flip ? 'minmax(0,1fr) minmax(0,1.45fr)' : 'minmax(0,1.45fr) minmax(0,1fr)',
-        gap: 'var(--sp-6, 32px)',
-        alignItems: 'start',
-        paddingBlock: 34,
-        borderBlockStart: '1px solid var(--border)',
-      }}
-    >
-      <div
-        data-spec-stage=""
-        style={{
-          gridColumn: flip ? 2 : 1,
-          gridRow: 1,
-          display: 'grid',
-          placeItems: 'center',
-          padding: 26,
-          // tone contrast, not a card: no border, no radius competing with the
-          // specimen's own, and the ground reads as the surface it stands on
-          background: 'var(--surface-2)',
-          borderRadius: 'var(--r-xs)',
-        }}
-      >
-        {specimen}
-      </div>
-
-      <div style={{ gridColumn: flip ? 1 : 2, gridRow: 1, display: 'grid', gap: 10, paddingBlockStart: 4 }}>
+    <div className="madar-spec-row" data-spec-row="">
+      <div className="madar-spec-stage" data-spec-stage={bare ? 'bare' : fill ? 'fill' : ''}>{specimen}</div>
+      <div className="madar-spec-copy">
         <div style={{ display: 'flex', alignItems: 'baseline', gap: 10 }}>
-          <span
-            aria-hidden="true"
-            style={{
-              fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--text-3)',
-              fontVariantNumeric: 'tabular-nums',
-            }}
-          >
-            <bdi dir="ltr">{String(n).padStart(2, '0')}</bdi>
-          </span>
+          <span className="madar-spec-ordinal" aria-hidden="true" />
           <h3 style={{ margin: 0, fontSize: 15, fontWeight: 600, color: 'var(--text)', letterSpacing: '-0.01em' }}>{name}</h3>
         </div>
-        <p style={{ margin: 0, fontSize: 13, lineHeight: 1.75, color: 'var(--text-2)' }}>{children}</p>
+        {children ? <p style={{ margin: 0, fontSize: 13, lineHeight: 1.75, color: 'var(--text-2)' }}>{children}</p> : null}
       </div>
+    </div>
+  );
+}
+
+/** Wraps a run of rows so the counter resets per section. */
+export function SpecList({ children }: { children: ReactNode }) {
+  return <div className="madar-spec-list">{children}</div>;
+}
+
+export interface SpecShelfProps {
+  children: ReactNode;
+  /** The repeating rhythm of column spans out of twelve. */
+  rhythm?: number[];
+  label?: string;
+  /** The items are already finished objects — a specular card, a bezel plate — so
+      they get the rhythm without a plinth. A toned box under a card is the
+      card-inside-a-card the standard bans. */
+  bare?: boolean;
+}
+
+/* ── SpecShelf — specimens without statements, still not a grid.
+
+   `SpecRow` is master-detail, and it needs a statement per specimen. Some sections
+   are banks: four kinetics demos, six pattern cards, and no sentence attached to
+   any one of them. Converting those to master-detail would mean inventing fifty
+   paragraphs of copy, and invented copy is its own slop — so it was not done.
+
+   `anti-slop-ui` #13 offers more than one replacement for the equal grid, and the
+   one that fits a bank is the asymmetrical layout. Items take spans out of twelve
+   on a repeating uneven rhythm — 7/5, then 5/7, then 12 — so no two rows are the
+   same width and nothing needs a caption it does not have. The rhythm is stated
+   rather than random, which is the difference between a composition and a
+   scatter: `-3.5°, 2.1°, -1.2°` reads as a hand, and §4 asks for exactly that.
+──────────────────────────────────────────────────────────────────────── */
+export function SpecShelf({ children, rhythm = [7, 5, 5, 7, 12], label, bare }: SpecShelfProps) {
+  const items = Array.isArray(children) ? children : [children];
+  const flat = items.flat().filter(Boolean);
+
+  return (
+    <div
+      data-spec-shelf=""
+      aria-label={label}
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(12, minmax(0, 1fr))',
+        gap: 'var(--sp-5, 24px)',
+        paddingBlockStart: bare ? 0 : 28,
+        borderBlockStart: bare ? undefined : '1px solid var(--border)',
+      }}
+    >
+      {flat.map((child, i) => (
+        <div
+          key={i}
+          data-shelf-item={rhythm[i % rhythm.length]}
+          style={{
+            gridColumn: `span ${rhythm[i % rhythm.length]}`,
+            display: 'grid',
+            placeItems: bare ? 'stretch' : 'center',
+            ...(bare
+              ? null
+              : {
+                  padding: 22,
+                  // tone contrast rather than a card: #7's own replacement for the
+                  // shadow, and it stops a card sitting inside a card
+                  background: 'var(--surface-2)',
+                  borderRadius: 'var(--r-xs)',
+                }),
+          }}
+        >
+          {child}
+        </div>
+      ))}
     </div>
   );
 }

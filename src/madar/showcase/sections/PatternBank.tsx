@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Section, SectionHeader } from '../SectionHeader';
+import { SpecShelf } from '../SpecRow';
 import { GradientHeadline, GradientShimmerText } from '../../components';
 
 const spring = 'cubic-bezier(0.34,1.45,0.64,1)';
@@ -96,7 +97,7 @@ export function PatternBank() {
       </SectionHeader>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
         {/* status strip + gradient headline / flux loader + day picker */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 20, alignItems: 'start' }}>
+        <SpecShelf>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '9px 16px', borderRadius: 6, background: 'oklch(0.2 0.03 274)', color: 'oklch(0.95 0.005 270)', fontSize: 13, fontWeight: 500 }}>
               <span style={{ width: 8, height: 8, borderRadius: '50%', background: 'oklch(0.75 0.15 158)', animation: 'pulseDot 1.8s ease-in-out infinite', flex: 'none' }} />
@@ -127,10 +128,10 @@ export function PatternBank() {
             <div style={{ fontSize: 13.5, fontWeight: 500, color: 'var(--text-2)', marginBottom: 12 }}>Day picker — recurring schedules</div>
             <DayPicker />
           </div>
-        </div>
+        </SpecShelf>
 
         {/* expandable tabs + dock / side rail + marquee + pass */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 20, alignItems: 'start' }}>
+        <SpecShelf>
           <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, padding: 24, }}>
             <div style={{ fontSize: 13.5, fontWeight: 500, color: 'var(--text-2)', marginBottom: 14 }}>Expandable tabs — active one absorbs space</div>
             <ExpandableTabs />
@@ -185,7 +186,7 @@ export function PatternBank() {
               </div>
             </div>
           </div>
-        </div>
+        </SpecShelf>
       </div>
     </Section>
   );

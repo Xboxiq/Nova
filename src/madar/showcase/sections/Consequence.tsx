@@ -1,4 +1,5 @@
 import { Section, SectionHeader } from '../SectionHeader';
+import { SpecList, SpecRow } from '../SpecRow';
 import {
   ElasticSwitch,
   MarqueeFrame,
@@ -9,18 +10,7 @@ import {
 
 function Cell({ title, note, children }: { title: string; note: string; children: React.ReactNode }) {
   return (
-    <div
-      style={{
-        background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6,
-        padding: 24, display: 'flex', flexDirection: 'column', gap: 18,
-      }}
-    >
-      <div>
-        <div style={{ fontSize: 13.5, fontWeight: 600, color: 'var(--text)' }}>{title}</div>
-        <p style={{ margin: '6px 0 0', fontSize: 12.5, lineHeight: 1.6, color: 'var(--text-2)' }}>{note}</p>
-      </div>
-      <div style={{ display: 'grid', placeItems: 'center', minHeight: 150 }}>{children}</div>
-    </div>
+    <SpecRow name={title} specimen={children}>{note}</SpecRow>
   );
 }
 
@@ -31,7 +21,7 @@ export function Consequence() {
         نتيجة الفعل تخصّ الضابط الذي سبّبه، لا إشعارًا في زاوية أخرى من الشاشة. حذف يُتلف أمامك، تصدير يُخرج الورقة، مفتاح يعطي تحت الإصبع، وحدّ يمتلئ أثناء العمل. المستخدم لا يحتاج أن ينظر بعيدًا ليعرف ما حدث.
       </SectionHeader>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: 20, alignItems: 'start' }}>
+      <SpecList>
         <Cell
           title="Shred Confirm: الحذف الذي تراه"
           note="نافذة التأكيد تسأل «هل أنت متأكد». هذا يُريك الإتلاف ويترك ثانية للتراجع، فالقرار يُتخذ على الأثر لا على الوصف."
@@ -69,7 +59,7 @@ export function Consequence() {
         >
           <MarqueeFrame />
         </Cell>
-      </div>
+      </SpecList>
     </Section>
   );
 }

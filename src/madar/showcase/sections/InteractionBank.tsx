@@ -1,4 +1,5 @@
 import { Section, SectionHeader } from '../SectionHeader';
+import { SpecShelf } from '../SpecRow';
 import { useTheme } from '../../theme/ThemeContext';
 import { ToolbarDock, ToggleChips, Fieldset, Field, MiniBarChart } from '../../components';
 
@@ -17,7 +18,7 @@ export function InteractionBank() {
       <SectionHeader eyebrow="17 · INTERACTION BANK" title="The 21st.dev imports: completed">
         The last four patterns from the import list (design.md §18), as reusable components: the editor toolbar dock, HeroUI toggle chips and fieldset, and the bar variant of the mini chart. The other 27 live in sections 04–16 — all importable from <code style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85em' }}>src/components</code>.
       </SectionHeader>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 20, alignItems: 'start' }}>
+      <SpecShelf>
         <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, padding: 24, }}>
           <div style={{ fontSize: 13.5, fontWeight: 500, color: 'var(--text-2)', marginBottom: 14 }}>Toolbar dock — pill glides and stretches between tools</div>
           <div style={{ display: 'grid', placeItems: 'center', padding: '26px 12px', borderRadius: 6, background: 'repeating-linear-gradient(45deg, var(--accent-soft) 0 10px, transparent 10px 20px), var(--bg-deep)', border: '1px solid var(--border)' }}>
@@ -54,7 +55,7 @@ export function InteractionBank() {
             { label: 'Tue', value: 72 }, { label: 'Wed', value: 64 }, { label: 'Thu', value: 92 }, { label: 'Fri', value: 51 },
           ]} />
         </div>
-      </div>
+      </SpecShelf>
     </Section>
   );
 }

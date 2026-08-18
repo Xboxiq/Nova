@@ -24,17 +24,25 @@ not. Hence §21, and hence this file.
 - [x] G3: The composition is measured, and the sections I wrote are off the grid
   CHECK: node tools/qa/composition.mjs
   EXPECT: COMPOSITION=ok
-  EVIDENCE: ALTERNATES=true | COMPOSITION=ok
+  EVIDENCE: LEGACY_GRIDS=0 (ceiling 0) | COMPOSITION=ok
 
 - [x] G4: The row is what the standard asks for — unequal columns, a hairline, a toned stage, alternating sides
-  CHECK: node tools/qa/composition.mjs 2>&1 | grep -E 'ROW_CLAIMS|ALTERNATES'
+  Rewritten: the ordinal and the alternation moved out of props and into CSS so a
+  section's local wrapper could become one line of SpecRow, and the old check was
+  looking for a `flip` prop that no longer exists. A gate pinned to an
+  implementation detail dies with the detail; the claims are read from the
+  stylesheet now.
+  CHECK: node tools/qa/composition.mjs 2>&1 | grep -E 'ROW_CLAIMS'
   EXPECT: /ROW_CLAIMS=ok/m
-  EVIDENCE: ROW_CLAIMS=ok | ALTERNATES=true
+  EVIDENCE: ROW_CLAIMS=ok
 
-- [x] G5: The legacy count is printed rather than hidden, and cannot grow past what it is
+- [x] G5: The legacy count is printed rather than hidden, and the ceiling is now zero
+  The ceiling was 21 when this file was written, then 16, and the migration took
+  it to 0. It was lowered each time rather than left slack, which is the only way
+  a ceiling means anything.
   CHECK: node tools/qa/composition.mjs 2>&1 | grep LEGACY_GRIDS
-  EXPECT: /LEGACY_GRIDS=(1?[0-9]|2[01])$/m
-  EVIDENCE: LEGACY_GRIDS=21
+  EXPECT: /LEGACY_GRIDS=0 \(ceiling 0\)/m
+  EVIDENCE: LEGACY_GRIDS=0 (ceiling 0)
 
 - [x] G6: §20 — depth is three ramps together, and one alone is not depth
   CHECK: node -e 'const f=require("fs");const s=f.readFileSync("src/madar/showcase/SpecRow.tsx","utf8");const three=/translateY\(\$\{i \* 18\}px\) scale\(\$\{1 - i \* 0\.05\}\)/.test(s)&&/opacity: 1 - i \* 0\.1/.test(s);const law=f.readFileSync("design-system/VISUAL-LAW.md","utf8");const art=/### 20\. العمق بثلاثة انحدارات/.test(law)&&/أخفض فقط تُقرأ سوء ترتيب/.test(law);console.log(three&&art?"THREE_RAMPS":"RAMPS_INCOMPLETE "+[three,art].join())'

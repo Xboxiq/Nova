@@ -333,3 +333,81 @@
     transition-duration: 1ms !important;
   }
 }
+
+/* The showcase's composition — anti-slop-ui #13's REQUIRED half, and §21.
+
+   The ordinal is a counter and the alternation is `:nth-child(even)`, which keeps
+   both out of the call sites: a section's own card wrapper can be reimplemented as
+   a single SpecRow, so twenty-one legacy sections migrate by editing one function
+   each instead of thirty JSX call sites. Rewriting that JSX by regex broke two
+   files first; this is the version that does not need to. */
+.madar-spec-list {
+  counter-reset: madar-spec;
+}
+
+.madar-spec-row {
+  display: grid;
+  /* unequal on purpose: a half each says the statement and the specimen weigh
+     the same, and they do not */
+  grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+  gap: var(--sp-6);
+  align-items: start;
+  padding-block: 34px;
+  border-block-start: 1px solid var(--border);
+  counter-increment: madar-spec;
+}
+
+.madar-spec-row:nth-child(even) {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.45fr);
+}
+
+.madar-spec-stage {
+  grid-column: 1;
+  grid-row: 1;
+  display: grid;
+  place-items: center;
+  padding: 26px;
+  /* tone contrast rather than a card: #7's own replacement for the shadow */
+  background: var(--surface-2);
+  border-radius: var(--r-xs);
+}
+
+/* a table or a board is not an object on a plinth: it wants the whole stage */
+.madar-spec-stage[data-spec-stage='fill'] {
+  place-items: stretch;
+  padding: 18px;
+}
+
+/* a specimen that paints its own surface needs no plinth under it */
+.madar-spec-stage[data-spec-stage='bare'] {
+  background: none;
+  padding: 0;
+}
+
+.madar-spec-copy {
+  display: grid;
+  grid-column: 2;
+  grid-row: 1;
+  gap: 10px;
+  padding-block-start: 4px;
+}
+
+.madar-spec-row:nth-child(even) .madar-spec-stage { grid-column: 2; }
+.madar-spec-row:nth-child(even) .madar-spec-copy { grid-column: 1; }
+
+.madar-spec-ordinal::before {
+  content: counter(madar-spec, decimal-leading-zero);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-3);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 860px) {
+  .madar-spec-row,
+  .madar-spec-row:nth-child(even) { grid-template-columns: minmax(0, 1fr); }
+  .madar-spec-row .madar-spec-stage,
+  .madar-spec-row .madar-spec-copy,
+  .madar-spec-row:nth-child(even) .madar-spec-stage,
+  .madar-spec-row:nth-child(even) .madar-spec-copy { grid-column: 1; grid-row: auto; }
+}

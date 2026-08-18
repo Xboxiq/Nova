@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Section, SectionHeader } from '../SectionHeader';
+import { SpecShelf } from '../SpecRow';
 import {
   MagneticButton, HoldToConfirm, SlideToUnlock, ElasticCounter, PinInput,
   KeycapButton, SlidingGradientButton, ScrambleText, UnderlineLink,
@@ -19,7 +20,7 @@ export function PhysicsLab() {
       <SectionHeader eyebrow="16 · PHYSICS LAB" title="Motion that has weight">
         Spring-physics interactions from the Kinetics vocabulary — tuned curves, not guessed durations. Every demo is the reusable component from <code style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85em' }}>src/components</code>: drag, hold, type, press.
       </SectionHeader>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 20, alignItems: 'start' }}>
+      <SpecShelf>
         {/* magnetic + keycap + gradient slide */}
         <Card>
           <div>
@@ -85,7 +86,7 @@ export function PhysicsLab() {
             <div><span style={{ color: 'var(--accent)' }}>drop-in</span> cubic-bezier(0.18, 1.25, 0.40, 1)</div>
           </div>
         </Card>
-      </div>
+      </SpecShelf>
     </Section>
   );
 }

@@ -1,4 +1,5 @@
 import { Section, SectionHeader } from '../SectionHeader';
+import { SpecShelf } from '../SpecRow';
 import { DiaText, Ignite, SkillsShowcase, ListBox, ActivityDropdown, EventCard } from '../../components';
 
 export function TextLists() {
@@ -7,7 +8,7 @@ export function TextLists() {
       <SectionHeader eyebrow="15 · TEXT & LISTS" title="Expressive text, listboxes & events">
         Dia text ignites on hover, skill chips wrap, listboxes describe themselves, and the event card composes live status — all from <code style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85em' }}>src/components</code>.
       </SectionHeader>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 20, alignItems: 'start' }}>
+      <SpecShelf>
         {/* dia text + skills */}
         <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, padding: 26, }}>
           <div style={{ fontSize: 13.5, fontWeight: 500, color: 'var(--text-2)', marginBottom: 14 }}>Dia text — key words ignite (hover them)</div>
@@ -46,7 +47,7 @@ export function TextLists() {
           ]}
           capacity={0.75}
         />
-      </div>
+      </SpecShelf>
     </Section>
   );
 }

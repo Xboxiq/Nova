@@ -1,19 +1,14 @@
 import { Section, SectionHeader } from '../SectionHeader';
+import { SpecList, SpecRow } from '../SpecRow';
 import {
   DataTable, Drawer, ToastDemo, FileDropzone, EmptyState, Banner, RangeSlider,
 } from '../../components';
 import type { Column } from '../../components';
 
 /* A titled panel so each essential surface reads as one library artifact. */
-function Panel({ title, note, children, span = 1 }: { title: string; note?: string; children: React.ReactNode; span?: number }) {
+function Panel({ title, note, children }: { title: string; note?: string; children: React.ReactNode; span?: number }) {
   return (
-    <div style={{ gridColumn: `span ${span}`, background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, padding: 22, display: 'flex', flexDirection: 'column', gap: 16, minWidth: 0 }}>
-      <div>
-        <div style={{ fontSize: 14.5, fontWeight: 700, letterSpacing: '-0.01em' }}>{title}</div>
-        {note && <div style={{ fontSize: 12, color: 'var(--text-3)', marginTop: 3 }}>{note}</div>}
-      </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'flex-start' }}>{children}</div>
-    </div>
+    <SpecRow name={title} specimen={children} fill>{note}</SpecRow>
   );
 }
 
@@ -38,7 +33,7 @@ export function Essentials() {
         The pieces that make the library production-complete: a sortable, selectable data table; a slide-in drawer; a toast stack; a drag-and-drop dropzone; empty states; status banners; and a dual-handle range. All tokenized, theme-aware, and mirrored under RTL with logical properties only.
       </SectionHeader>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 20, alignItems: 'start' }}>
+      <SpecList>
         <Panel title="DataTable" note="ترتيب بالنقر على الترويسة · تحديد صفوف · RTL" span={2}>
           <DataTable columns={COLS} rows={ROWS} selectable initialSort="tasks" />
         </Panel>
@@ -72,7 +67,7 @@ export function Essentials() {
         <Panel title="EmptyState" note="أيقونة · عنوان · وصف · إجراء" span={2}>
           <div style={{ width: '100%' }}><EmptyState /></div>
         </Panel>
-      </div>
+      </SpecList>
     </Section>
   );
 }

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Section, SectionHeader } from '../SectionHeader';
+import { SpecShelf } from '../SpecRow';
 import { DynamicIsland } from '../../components';
 
 const spring = 'cubic-bezier(0.34,1.45,0.64,1)';
@@ -108,12 +109,12 @@ export function SignatureCards() {
       <SectionHeader eyebrow="10 · SIGNATURE CARDS" title="Cards with a ritual">
         Hero-grade cards — each owns one physical gesture. Use at most one ritual family per page. Hover, and tap the island.
       </SectionHeader>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: 24, alignItems: 'start' }}>
+      <SpecShelf>
         <Dossier />
         <FannedStack />
         <SpatialGlass />
         <IslandDemo />
-      </div>
+      </SpecShelf>
     </Section>
   );
 }

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Section, SectionHeader } from '../SectionHeader';
+import { SpecShelf } from '../SpecRow';
 import { useTheme } from '../../theme/ThemeContext';
 
 function CheckIcon() {
@@ -34,7 +35,7 @@ export function Inputs() {
       <SectionHeader eyebrow="04 · CONTROLS" title="Inputs & forms">
         44px fields on surface-2, accent focus rings, errors in words never color alone. The segmented control slides with a spring — try it.
       </SectionHeader>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 20, alignItems: 'start' }}>
+      <SpecShelf>
         {/* text fields */}
         <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, padding: 24, display: 'flex', flexDirection: 'column', gap: 18 }}>
           <label style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
@@ -102,7 +103,7 @@ export function Inputs() {
             ))}
           </div>
         </div>
-      </div>
+      </SpecShelf>
     </Section>
   );
 }

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Section, SectionHeader } from '../SectionHeader';
+import { SpecShelf } from '../SpecRow';
 import { useTheme } from '../../theme/ThemeContext';
 import {
   SquircleIcon, SpecularOrb, BurstSeal, MemojiAvatar,
@@ -73,7 +74,7 @@ export function LibraryVault() {
         </div>
       </AuroraMeshHero>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 20, alignItems: 'start', marginTop: 20 }}>
+      <SpecShelf>
         {/* soft primitives */}
         <Card>
           <Hint mb={4}>Soft primitives — squircle triple, orbs, seal, memoji</Hint>
@@ -184,10 +185,10 @@ export function LibraryVault() {
             { title: 'فحص RTL والثيمات', state: 'pending' },
           ]} />
         </Card>
-      </div>
+      </SpecShelf>
 
       {/* row 3 — spotlight + magnifying dock */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 20, alignItems: 'stretch', marginTop: 20 }}>
+      <SpecShelf>
         <CursorSpotlight>
           <div style={{ fontSize: 12, fontWeight: 600, letterSpacing: '0.1em', color: 'var(--accent)' }}>CURSOR SPOTLIGHT</div>
           <div style={{ fontSize: 19, fontWeight: 600, margin: '8px 0 4px' }}>The light follows your pointer</div>
@@ -198,7 +199,7 @@ export function LibraryVault() {
           <MagnifyingDock icons={DOCK_ICONS} labels={['Home', 'Browse', 'Search', 'Alerts', 'Profile', 'Menu']} />
           <div style={{ fontSize: 12, color: 'var(--text-3)' }}>hovered 1.32 · neighbors 1.14 · next 1.05</div>
         </div>
-      </div>
+      </SpecShelf>
     </Section>
   );
 }

@@ -1,5 +1,5 @@
 import { Section, SectionHeader } from '../SectionHeader';
-import { SpecRow, SpecStack } from '../SpecRow';
+import { SpecList, SpecRow, SpecStack } from '../SpecRow';
 import { MiniBarChart } from '../../components/charts';
 import {
   AllocationBar,
@@ -21,23 +21,23 @@ export function Energy() {
         رقمٌ وحده ليس معلومة. «412 ك.و.س» لا يقول شيئًا حتى تعرف أن هذا البيت يستقرّ عادةً بين 260 و380، وأن الكيلوواط التالي يدخل شريحة أغلى. هذه العائلة تعرض القراءة كجهاز يُقرأ، والاستهلاك مقابل معتاده هو لا مقابل صفر.
       </SectionHeader>
 
+      <SpecList>
+
       <UsageStrip />
 
-      <SpecRow n={1} name="Meter Face: العدّاد جهازٌ يُقرأ" specimen={<MeterFace reading={reading} tier={3} />}>
+      <SpecRow name="Meter Face: العدّاد جهازٌ يُقرأ" specimen={<MeterFace reading={reading} tier={3} />}>
         النافذة غائرة تحت الوجه لا مرسومة عليه، وحافّتها الداخلية هي ما يجعلها نافذة. والأسطوانات تدور حين يتغيّر الرقم — الحركة آلة تعمل لا نصّ يُستبدل، ورقم الكسر على أسطوانة بلون مختلف كما في العدّادات الحقيقية.
       </SpecRow>
 
-      <SpecRow n={2} flip name="Consumption Band: مقابل معتادك أنت" specimen={<ConsumptionBand />}>
+      <SpecRow name="Consumption Band: مقابل معتادك أنت" specimen={<ConsumptionBand />}>
         المدى المعتاد مخطّط لأنه بيانات، لا فراغ. وحين تخرج القراءة منه تُضيء حافة البطاقة السفلية بلون الحكم — ولا تُضيء ما دامت داخله، فالتوهّج هنا حالة لا زينة.
       </SpecRow>
 
-      <SpecRow n={3} name="Tariff Ladder: أين يبدأ الأغلى" specimen={<TariffLadder />}>
+      <SpecRow name="Tariff Ladder: أين يبدأ الأغلى" specimen={<TariffLadder />}>
         لكل شريحة لونها الثابت: نفسه في ختم العدّاد، ونفسه هنا، ونفسه في أي موضع تُسمّى فيه شريحة. يتعلّمه القارئ مرّة فيقرأ به بلا مفتاح في كل بطاقة.
       </SpecRow>
 
       <SpecRow
-        n={4}
-        flip
         name="Monthly vs Target: الخطّ المرجعي"
         specimen={(
           <div style={{ width: '100%', maxWidth: 340 }}>
@@ -60,7 +60,6 @@ export function Energy() {
       </SpecRow>
 
       <SpecRow
-        n={5}
         name="Allocation: المقيس والمتوقَّع والمتبقّي"
         specimen={(
           <SpecStack
@@ -75,8 +74,6 @@ export function Energy() {
       </SpecRow>
 
       <SpecRow
-        n={6}
-        flip
         name="Bill: المستند الذي يستلمه العميل"
         specimen={(
           <SpecStack
@@ -90,9 +87,10 @@ export function Energy() {
         الفاتورة مستند: ورقة لها حافة، وورقة تحتها تحمل السُمك بزاوية موضوعة لا محسوبة. والتخريم عند المَفصِل لأنه يقول «هذا الجزء ينفصل» — فلا يظهر في فاتورة مسدَّدة، إذ لا شيء فيها ينفصل.
       </SpecRow>
 
-      <SpecRow n={7} name="Load Comb: المقدار المعدود يُرسم معدودًا" specimen={<LoadComb />}>
+      <SpecRow name="Load Comb: المقدار المعدود يُرسم معدودًا" specimen={<LoadComb />}>
         عمودٌ بطول ١٩٠ بكسل يقول «أكثر من ذاك». تسع عشرة شرطة كلٌّ منها عشرة كيلوواط تقول «مئة وتسعون» ويمكن عدّها. والشرطة الأخيرة قصيرة حين لا تكتمل وحدتها، فالكسر جزء من القراءة لا تقريبٌ يخفيه الرسم.
       </SpecRow>
+      </SpecList>
     </Section>
   );
 }
