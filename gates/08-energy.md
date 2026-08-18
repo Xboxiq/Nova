@@ -13,7 +13,7 @@ law was followed rather than cited.
 - [x] G2: Production build succeeds and the section is its own lazy chunk
   CHECK: npm run build 2>&1 | grep -E 'assets/Energy-|built in'
   EXPECT: /assets\/Energy-[^ ]+\.js/m
-  EVIDENCE: dist/assets/Energy-DXnxrA3G.js                                          2.77 kB │ gzip:   1.40 kB │ map:     4.60 kB | ✓ built in 2.21s
+  EVIDENCE: dist/assets/Energy-Be8I0Wmj.js                                          4.77 kB │ gzip:   2.13 kB │ map:     8.08 kB | ✓ built in 2.81s
 
 - [x] G3: The family declares no raw colour, so it rides the seven packs
   CHECK: node -e "const s=require('fs').readFileSync('src/madar/components/energy.tsx','utf8');const raw=[...s.matchAll(/#[0-9a-fA-F]{3,8}\b|\b(?:rgba?|hsla?|oklch)\(/g)].map(m=>m[0]);console.log(raw.length?'RAW_COLOR '+[...new Set(raw)].join(','):'TOKENS_ONLY')"

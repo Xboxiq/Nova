@@ -211,7 +211,7 @@
   /* deslop-ignore-next-line 06 */
   background-image: repeating-linear-gradient(
     135deg,
-    var(--border) 0 1px,
+    var(--madar-hatch-color, var(--border)) 0 1px,
     transparent 1px 5px
   );
 }

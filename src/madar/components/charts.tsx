@@ -43,30 +43,69 @@ export function Sparkline({ points, width = 130, height = 44, strokeWidth = 2.5,
    MiniBarChart — the bar sibling of mini-chart. Bars grow from the
    baseline once on mount, staggered 120ms (§19.1 segment loader); hover
    reveals the value; the peak bar carries the accent.
+
+   With `target`, the chart stops being a ranking and becomes a comparison:
+   VISUAL-LAW.md §14 asks that a reading be measured against a reference that
+   is *drawn on the same scale*, so the line is a real construction line —
+   dashed and neutral, because the benchmark is structure — and the bars that
+   reach it are the ones that take the tone.
 ──────────────────────────────────────────────────────────────────────── */
 export interface MiniBarChartProps {
   data: { label: string; value: number }[];
   height?: number;
+  /** A declared reference the bars are read against. `tone` colours the bars
+      that reach it — not the line, which stays neutral. */
+  target?: { value: number; label?: string; tone?: string };
 }
 
-export function MiniBarChart({ data, height = 96 }: MiniBarChartProps) {
+export function MiniBarChart({ data, height = 96, target }: MiniBarChartProps) {
   const [hov, setHov] = useState(-1);
-  const max = Math.max(...data.map((b) => b.value));
-  const barMax = height - 24;
+  const max = Math.max(...data.map((b) => b.value), target?.value ?? 0);
+  /* Every row of the column has a fixed height and does not shrink, so the
+     plot area is exact and the reference line can be placed by arithmetic
+     rather than by eye — the gate measures it against a bar to prove it.
+     Left to flex defaults the rows overflow and shrink, and the bars quietly
+     leave the scale the line is drawn on. */
+  const VAL = 13; const LAB = 14; const GAP = 6;
+  const barMax = height - VAL - LAB - GAP * 2;
+  const LABEL = LAB + GAP;
+  const tone = target?.tone ?? 'var(--accent)';
+  const loud = (v: number) => (target ? v >= target.value : v === max);
+  const lineY = target ? LABEL + (target.value / max) * barMax : 0;
+
   return (
-    <div style={{ display: 'flex', alignItems: 'flex-end', gap: 8, height }}>
-      {data.map((b, i) => (
-        <div key={b.label} onMouseEnter={() => setHov(i)} onMouseLeave={() => setHov(-1)} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, height: '100%', justifyContent: 'flex-end', cursor: 'default' }}>
-          <span style={{ fontSize: 11, fontWeight: 700, fontVariantNumeric: 'tabular-nums', color: 'var(--accent)', opacity: hov === i ? 1 : 0, transition: 'opacity 180ms' }}>{b.value}</span>
-          <div style={{
-            width: '100%', maxWidth: 30, height: (b.value / max) * barMax, borderRadius: '7px 7px 3px 3px',
-            background: b.value === max || hov === i ? 'var(--accent)' : 'var(--accent-soft)',
-            transformOrigin: 'bottom', animation: `growBar 600ms ${glide} both`, animationDelay: `${i * 120}ms`,
-            transition: 'background 200ms',
-          }} />
-          <span style={{ fontSize: 10.5, fontWeight: 600, color: b.value === max ? 'var(--text)' : 'var(--text-3)' }}>{b.label}</span>
-        </div>
-      ))}
+    <div style={{ position: 'relative', height }}>
+      <div style={{ display: 'flex', alignItems: 'flex-end', gap: 8, height: '100%' }}>
+        {data.map((b, i) => (
+          <div key={b.label} onMouseEnter={() => setHov(i)} onMouseLeave={() => setHov(-1)} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, height: '100%', justifyContent: 'flex-end', cursor: 'default' }}>
+            <span style={{ fontSize: 11, height: VAL, lineHeight: `${VAL}px`, flex: 'none', fontWeight: 700, fontVariantNumeric: 'tabular-nums', color: loud(b.value) ? tone : 'var(--accent)', opacity: hov === i ? 1 : 0, transition: 'opacity 180ms' }}>{b.value}</span>
+            <div data-bar={b.label} style={{
+              width: '100%', maxWidth: 30, height: (b.value / max) * barMax, flex: 'none', borderRadius: '7px 7px 3px 3px',
+              background: loud(b.value) || hov === i ? tone : 'var(--accent-soft)',
+              transformOrigin: 'bottom', animation: `growBar 600ms ${glide} both`, animationDelay: `${i * 120}ms`,
+              transition: 'background 200ms',
+            }} />
+            <span style={{ fontSize: 10.5, fontWeight: 600, height: LAB, lineHeight: `${LAB}px`, flex: 'none', color: loud(b.value) ? 'var(--text)' : 'var(--text-3)' }}>{b.label}</span>
+          </div>
+        ))}
+      </div>
+
+      {target && (
+        <>
+          <span
+            data-target-line="" aria-hidden="true"
+            style={{ position: 'absolute', insetInline: 0, bottom: lineY, borderTop: '1px dashed var(--border-strong)', pointerEvents: 'none' }}
+          />
+          <span style={{
+            position: 'absolute', insetInlineEnd: 0, bottom: lineY + 4, padding: '1px 8px',
+            background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--r-full)',
+            fontSize: 10.5, fontWeight: 600, color: 'var(--text-2)', fontVariantNumeric: 'tabular-nums',
+            pointerEvents: 'none', whiteSpace: 'nowrap',
+          }}>
+            {target.label ?? target.value}
+          </span>
+        </>
+      )}
     </div>
   );
 }

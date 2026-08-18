@@ -132,7 +132,10 @@ export {
 export { UploadFolder, simulatedUpload } from './upload';
 export type { UploadFolderProps, UploadItem, UploadPhase, Uploader, FolderVariant } from './upload';
 
-export { MeterFace, ConsumptionBand, UsageStrip, TariffLadder, useLiveReading } from './energy';
+export {
+  MeterFace, ConsumptionBand, UsageStrip, TariffLadder, AllocationBar, LoadComb, useLiveReading,
+} from './energy';
 export type {
   TariffTier, MeterFaceProps, ConsumptionBandProps, UsageMetric, TariffLadderProps,
+  AllocationBarProps, LoadRow,
 } from './energy';

@@ -8,6 +8,14 @@ families this repository already scans for. Reading the feed is part of the law,
 so these gates cover both the written rule and its reference implementation in
 `UploadFolder`.
 
+Two of these checks were rewritten after the fifth batch, and the reason is
+worth keeping: the runner only executes gates that are still unmet, so a gate
+recorded as met can quietly stop matching the code. G5 had been recorded before
+`filed` was hoisted out of the call site into a derived const, and G13 before the
+hatch colour was put behind a variable so a segment can carry its own. Both
+claims still hold; both checks had gone stale. Re-running the whole file rather
+than only the new one is what surfaced it.
+
 - [x] G1: The law is written down, including the part where references were rejected
   CHECK: node -e "const d=require('fs').readFileSync('design-system/VISUAL-LAW.md','utf8');const need=['الجسم قبل الشكل','ظلّ التلامُس','الظلّ المصبوب','الانحجاب المحيطي','الزاوية قرار','مرفوض'];const miss=need.filter(n=>!d.includes(n));console.log(miss.length?'LAW_INCOMPLETE '+miss.join(','):'LAW_WRITTEN')"
   EXPECT: LAW_WRITTEN
@@ -16,7 +24,7 @@ so these gates cover both the written rule and its reference implementation in
 - [x] G2: No lateral light — the two side walls carry the same value, so mirroring for RTL cannot invert the lighting
   CHECK: node -e "const s=require('fs').readFileSync('src/madar/components/upload.tsx','utf8');const sides=[...s.matchAll(/brightness=\{LIGHT\.(\w+)\}/g)].map(m=>m[1]).filter(n=>n==='sideWall');const lit=/const LIGHT = \{[\s\S]*?\};/.exec(s)[0];const one=/sideWall:\s*([0-9.]+)/.exec(lit)[1];console.log(sides.length===2&&one?'LIGHT_OVERHEAD_'+one:'LATERAL_LIGHT')"
   EXPECT: /^LIGHT_OVERHEAD_/m
-  EVIDENCE: LIGHT_OVERHEAD_0.92
+  EVIDENCE: LIGHT_OVERHEAD_0.95
 
 - [x] G3: All three shadow roles are present and distinct — contact, cast, and occlusion at the joint
   CHECK: node -e "const s=require('fs').readFileSync('src/madar/components/upload.tsx','utf8');const need=['data-folder-part=\"contact-shadow\"','data-folder-part=\"cast-shadow\"','data-folder-part=\"occlusion\"'];const miss=need.filter(n=>!s.includes(n));console.log(miss.length?'SHADOWS_MISSING '+miss.join(','):'THREE_SHADOWS')"
@@ -29,7 +37,7 @@ so these gates cover both the written rule and its reference implementation in
   EVIDENCE: ANGLES_UNEQUAL -3.5,2.1,-1.2
 
 - [x] G5: The clip reports a state rather than trimming the object — it renders only once the work is filed
-  CHECK: node -e "const s=require('fs').readFileSync('src/madar/components/upload.tsx','utf8');const gated=/\{filed && sheets > 0 && spread === 0 && \(/.test(s);const wired=/filed=\{!active && !failed && items\.length > 0\}/.test(s);console.log(gated&&wired?'CLIP_IS_STATE':'CLIP_IS_ORNAMENT')"
+  CHECK: node -e "const s=require('fs').readFileSync('src/madar/components/upload.tsx','utf8');const gated=/\{filed && sheets > 0 && spread === 0 && \(/.test(s);const derived=/const filed = !active && !failed && items\.length > 0;/.test(s);const passed=/filed=\{filed\}/.test(s);console.log(gated&&derived&&passed?'CLIP_IS_STATE':'CLIP_IS_ORNAMENT '+[gated,derived,passed].join())"
   EXPECT: CLIP_IS_STATE
   EVIDENCE: CLIP_IS_STATE
 
@@ -69,7 +77,7 @@ so these gates cover both the written rule and its reference implementation in
   EVIDENCE: BATCH2_RECORDED
 
 - [x] G13: The unfilled part of a measure is drawn as data, and the hatch is a structure rather than a wash
-  CHECK: node -e 'const f=require("fs");const css=f.readFileSync("src/madar/bridge.css","utf8");const c=f.readFileSync("src/madar/components/upload.tsx","utf8");const hatch=/\.madar-track \{[\s\S]*?repeating-linear-gradient\([\s\S]*?var\(--border\) 0 1px/.test(css);const hard=!/\.madar-track \{[\s\S]*?\n\}/.exec(css)[0].includes("%,");const used=(c.match(/className="madar-track"/g)||[]).length>=2;console.log(hatch&&hard&&used?"REMAINDER_IS_DATA":"REMAINDER_BLANK "+[hatch,hard,used].join())'
+  CHECK: node -e 'const f=require("fs");const css=f.readFileSync("src/madar/bridge.css","utf8");const c=f.readFileSync("src/madar/components/upload.tsx","utf8");const rule=/\.madar-track,\n\.madar-hatch \{[\s\S]*?\n\}/.exec(css)[0];const hatch=/repeating-linear-gradient\(/.test(rule)&&/var\(--madar-hatch-color, var\(--border\)\) 0 1px/.test(rule);const hard=!rule.includes("%");const used=(c.match(/className="madar-track"/g)||[]).length>=2;console.log(hatch&&hard&&used?"REMAINDER_IS_DATA":"REMAINDER_BLANK "+[hatch,hard,used].join())'
   EXPECT: REMAINDER_IS_DATA
   EVIDENCE: REMAINDER_IS_DATA
 

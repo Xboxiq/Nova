@@ -1,11 +1,14 @@
 import { Section, SectionHeader } from '../SectionHeader';
 import {
+  AllocationBar,
   ConsumptionBand,
+  LoadComb,
   MeterFace,
   TariffLadder,
   UsageStrip,
   useLiveReading,
 } from '../../components/energy';
+import { MiniBarChart } from '../../components/charts';
 
 function Cell({ title, note, children }: { title: string; note: string; children: React.ReactNode }) {
   return (
@@ -56,6 +59,45 @@ export function Energy() {
             note="لكل شريحة لونها الثابت: نفسه في ختم العدّاد، ونفسه هنا، ونفسه في أي موضع تُسمّى فيه شريحة. يتعلّمه القارئ مرّة فيقرأ به بلا مفتاح في كل بطاقة."
           >
             <TariffLadder />
+          </Cell>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 20, alignItems: 'start' }}>
+          <Cell
+            title="Monthly vs Target — الخطّ المرجعي"
+            note="سقف الميزانية مرسوم على مقياس الأعمدة نفسه لا مكتوبًا تحتها، ومتقطّعًا لأنه خطّ إنشاء لا بيانات. والأشهر التي بلغته هي وحدها التي تحمل لون الحكم — الباقي هادئ."
+          >
+            <div style={{ width: '100%', maxWidth: 360 }}>
+              <MiniBarChart
+                height={120}
+                target={{ value: 400, label: '400 ك.و.س', tone: 'var(--danger)' }}
+                data={[
+                  { label: 'يناير', value: 318 },
+                  { label: 'فبراير', value: 296 },
+                  { label: 'مارس', value: 344 },
+                  { label: 'أبريل', value: 402 },
+                  { label: 'مايو', value: 468 },
+                  { label: 'يونيو', value: 412 },
+                ]}
+              />
+            </div>
+          </Cell>
+
+          <Cell
+            title="Allocation — المقيس والمتوقَّع والمتبقّي"
+            note="المستهلك مصمت لأنه مقيس، والمتوقّع مخطّط بلونه نفسه لأنه لم يُقَس بعد، والمتبقّي مخطّط بالمحايد. والحالتان معروضتان معًا لأن السلوك عند التجاوز هو ما يُختبر: الشريط يمتدّ ويظهر خطّ المخصّص، ولا يُعاد قياسه لإخفاء التجاوز."
+          >
+            <div style={{ display: 'grid', gap: 22, width: '100%' }}>
+              <AllocationBar />
+              <AllocationBar budget={450} projected={78} />
+            </div>
+          </Cell>
+
+          <Cell
+            title="Load Comb — المقدار المعدود يُرسم معدودًا"
+            note="عمودٌ بطول ١٩٠ بكسل يقول «أكثر من ذاك». تسع عشرة شرطة كلٌّ منها عشرة كيلوواط تقول «مئة وتسعون» ويمكن عدّها. والشرطة الأخيرة قصيرة حين لا تكتمل وحدتها، فالكسر جزء من القراءة لا تقريبٌ يخفيه الرسم."
+          >
+            <LoadComb />
           </Cell>
         </div>
       </div>

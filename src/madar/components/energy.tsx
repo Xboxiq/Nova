@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Sparkline } from './charts';
+import { CATEGORICAL } from './dataviz';
 
 /* ────────────────────────────────────────────────────────────────────────
    Energy — reading a meter, and reading yourself against your own normal.
@@ -389,4 +390,236 @@ export function useLiveReading(start = 76542.8, kwhPerTick = 0.1, ms = 1600) {
     return () => window.clearInterval(timer.current);
   }, [kwhPerTick, ms]);
   return reading;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Added after the fifth batch of visual feed — analysis and verdicts in
+   design-system/VISUAL-ANALYSIS-05.md, law in VISUAL-LAW.md §14–§15.
+══════════════════════════════════════════════════════════════════════════ */
+
+export interface AllocationBarProps {
+  /** kWh allocated for the cycle. */
+  budget?: number;
+  /** kWh already metered. */
+  used?: number;
+  /** kWh the current daily rate will still add before the cycle closes. */
+  projected?: number;
+  unit?: string;
+}
+
+/* ── AllocationBar — one bar, three parts, each part named.
+
+   §15: hatching means "not a realised measurement". So the metered part is
+   solid and the projection is hatched in the same hue — same quantity, one
+   of them measured and one of them not — and what is left of the allocation
+   is hatched in the neutral, because a remainder is data too (§11).
+
+   The allocation edge is drawn as a reference line (§14) rather than assumed
+   to be the end of the bar: when the projection runs past it the bar has to
+   keep going, and a budget bar that silently rescales to hide an overshoot is
+   the one thing this component exists to prevent. */
+export function AllocationBar({
+  budget = 500, used = 412, projected = 61, unit = 'ك.و.س',
+}: AllocationBarProps) {
+  const scale = Math.max(budget, used + projected);
+  const free = Math.max(0, budget - used - projected);
+  const over = used + projected > budget;
+  const pct = (n: number) => `${(n / scale) * 100}%`;
+
+  const parts = [
+    { key: 'used', label: 'المستهلك', value: used, solid: true, color: 'var(--accent)' },
+    {
+      key: 'projected', label: 'المتوقّع حتى نهاية الدورة', value: projected,
+      solid: false, color: over ? 'var(--danger)' : 'var(--accent)',
+    },
+    { key: 'free', label: 'المتبقّي من المخصّص', value: free, solid: false, color: 'var(--border)' },
+  ].filter((p) => p.value > 0);
+
+  /* backgroundColor, never the `background` shorthand: the shorthand resets
+     background-image, and inline styles outrank the class, so it would erase
+     the very hatch the segment is being given. */
+  const swatch = (p: (typeof parts)[number]) => ({
+    backgroundColor: p.solid ? p.color : 'var(--surface-2)',
+    ...(p.solid ? null : { ['--madar-hatch-color' as string]: p.color }),
+  });
+
+  return (
+    <div
+      style={{
+        width: '100%', maxWidth: 360, display: 'flex', flexDirection: 'column', gap: 'var(--sp-4)',
+        padding: 'var(--sp-5)', background: 'var(--surface)',
+        border: '1px solid var(--border)', borderRadius: 'var(--r-lg)', boxShadow: 'var(--shadow-1)',
+      }}
+    >
+      <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 'var(--sp-3)' }}>
+        <b style={{ fontSize: 14, fontWeight: 600, color: 'var(--text)' }}>مخصّص الدورة</b>
+        <span style={{ fontSize: 12, fontWeight: 600, color: over ? 'var(--danger)' : 'var(--text-3)' }}>
+          {over
+            ? <>متوقّع تجاوزه بـ<bdi dir="ltr"> {ar(used + projected - budget)} </bdi>{unit}</>
+            : <><bdi dir="ltr">{ar(budget)}</bdi> {unit}</>}
+        </span>
+      </div>
+
+      <div style={{ position: 'relative', paddingBlockStart: 16 }}>
+        <div
+          data-allocation=""
+          style={{
+            position: 'relative', display: 'flex', height: 14, gap: 2,
+            background: 'var(--surface-2)', border: '1px solid var(--border)',
+            borderRadius: 'var(--r-full)', overflow: 'hidden',
+          }}
+        >
+          {parts.map((p) => (
+            <span
+              key={p.key}
+              data-part={p.key}
+              className={p.solid ? undefined : 'madar-hatch'}
+              title={`${p.label} — ${ar(p.value)} ${unit}`}
+              style={{ width: pct(p.value), ...swatch(p) }}
+            />
+          ))}
+        </div>
+
+        {/* the allocation itself, drawn on the same scale as the bar */}
+        {over && (
+          <>
+            <span
+              data-budget-edge="" aria-hidden="true"
+              style={{
+                position: 'absolute', insetInlineStart: pct(budget), top: 12, bottom: -4,
+                borderInlineStart: '1px dashed var(--border-strong)',
+              }}
+            />
+            {/* the chip hangs on the allocated side of its own line, so it
+                stays inside the card at any overshoot and mirrors with dir */}
+            <span
+              data-budget-chip=""
+              style={{
+                position: 'absolute', insetInlineEnd: `calc(100% - ${pct(budget)})`, top: 0,
+                padding: '0 7px', background: 'var(--surface)', border: '1px solid var(--border)',
+                borderRadius: 'var(--r-full)', fontSize: 10.5, fontWeight: 600, color: 'var(--text-2)',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              المخصّص
+            </span>
+          </>
+        )}
+      </div>
+
+      {/* the legend repeats each part's own treatment, so the reading never
+          rests on colour alone and the two hatches stay tellable apart */}
+      <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'grid', gap: 7 }}>
+        {parts.map((p) => (
+          <li key={p.key} style={{ display: 'flex', alignItems: 'center', gap: 9, fontSize: 12 }}>
+            <span
+              data-swatch={p.key}
+              className={p.solid ? undefined : 'madar-hatch'}
+              aria-hidden="true"
+              style={{
+                width: 16, height: 11, borderRadius: 3, flex: 'none',
+                border: '1px solid var(--border)', ...swatch(p),
+              }}
+            />
+            <span style={{ flex: 1, color: 'var(--text-2)' }}>{p.label}</span>
+            <b style={{ fontWeight: 700, color: 'var(--text)', fontVariantNumeric: 'tabular-nums' }}>
+              <bdi dir="ltr">{ar(p.value)}</bdi>
+            </b>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export interface LoadRow {
+  label: string;
+  kwh: number;
+  /** The leftover bucket. It is the absence of a category, not one of them, so
+      it takes the neutral: a hue here would spend one of the taxonomy's
+      colours on "everything else", and the red end of the categorical scale
+      would collide with the verdict red used elsewhere on the same screen. */
+  other?: boolean;
+}
+
+/* ── LoadComb — a quantity made of countable units, drawn countable.
+
+   §15. A 96px bar says "more than that one". Nineteen ticks at ten kilowatt-
+   hours each say "one hundred and ninety", and the eye can check it. The last
+   tick of a row is short when the unit is not whole, because the remainder is
+   part of the reading rather than a rounding the drawing hides.
+
+   The category colours are `CATEGORICAL` from dataviz.tsx — the palette that
+   was already validated for contrast and colour-blindness. A second palette
+   invented here would be a second language for the same job. */
+export function LoadComb({ rows, unit = 10, cap = 'ك.و.س' }: { rows?: LoadRow[]; unit?: number; cap?: string }) {
+  const loads: LoadRow[] = rows ?? [
+    { label: 'التكييف', kwh: 186 },
+    { label: 'سخّان الماء', kwh: 84 },
+    { label: 'الأجهزة', kwh: 62 },
+    { label: 'الإضاءة', kwh: 46 },
+    { label: 'أخرى', kwh: 34, other: true },
+  ];
+  const total = loads.reduce((s, r) => s + r.kwh, 0);
+
+  return (
+    <div
+      style={{
+        width: '100%', maxWidth: 400, display: 'flex', flexDirection: 'column', gap: 'var(--sp-4)',
+        padding: 'var(--sp-5)', background: 'var(--surface)',
+        border: '1px solid var(--border)', borderRadius: 'var(--r-lg)', boxShadow: 'var(--shadow-1)',
+      }}
+    >
+      <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 'var(--sp-3)' }}>
+        <b style={{ fontSize: 14, fontWeight: 600, color: 'var(--text)' }}>أين ذهبت الكهرباء</b>
+        <span style={{ fontSize: 12, color: 'var(--text-3)' }}>
+          <bdi dir="ltr">{ar(total)}</bdi> {cap}
+        </span>
+      </div>
+
+      <div style={{ display: 'grid', gap: 'var(--sp-3)' }}>
+        {loads.map((r, i) => {
+          const units = r.kwh / unit;
+          const whole = Math.floor(units);
+          const rest = units - whole;
+          const color = r.other ? 'var(--border-strong)' : CATEGORICAL[i % CATEGORICAL.length];
+          return (
+            <div key={r.label} style={{ display: 'grid', gap: 5 }}>
+              <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 'var(--sp-3)', fontSize: 12 }}>
+                <span style={{ color: 'var(--text-2)' }}>{r.label}</span>
+                <b style={{ fontWeight: 700, color: 'var(--text)', fontVariantNumeric: 'tabular-nums' }}>
+                  <bdi dir="ltr">{ar(r.kwh)}</bdi>
+                </b>
+              </div>
+              <div
+                data-comb={r.label}
+                role="img"
+                aria-label={`${r.label} ${ar(r.kwh)} ${cap}`}
+                style={{ display: 'flex', alignItems: 'flex-end', gap: 3, height: 20 }}
+              >
+                {Array.from({ length: whole + (rest > 0 ? 1 : 0) }, (_, t) => {
+                  const partial = t === whole;
+                  return (
+                    <span
+                      key={t}
+                      style={{
+                        width: 3, borderRadius: 1.5, flex: 'none',
+                        // a partial unit is drawn partial: the reading is not rounded to fit
+                        height: partial ? Math.max(6, Math.round(20 * rest)) : 20,
+                        background: color, opacity: partial ? 0.55 : 1,
+                      }}
+                    />
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <p style={{ margin: 0, fontSize: 11, color: 'var(--text-3)' }}>
+        كل شرطة <bdi dir="ltr">{ar(unit)}</bdi> {cap} — والشرطة القصيرة جزء من وحدة
+      </p>
+    </div>
+  );
 }
