@@ -160,7 +160,7 @@
   --nova-font-ui: -apple-system, BlinkMacSystemFont, "SF Pro Text", "IBM Plex Sans Arabic", "IBM Plex Sans", "Segoe UI", Tahoma, Arial, sans-serif;
   --nova-font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "IBM Plex Sans Arabic", "IBM Plex Sans", "Segoe UI", sans-serif;
   --nova-font-editorial-ar: "IBM Plex Sans Arabic", -apple-system, BlinkMacSystemFont, sans-serif;
-  --nova-font-mono: "Geist Mono Variable", ui-monospace, SFMono-Regular, Consolas, monospace;
+  --nova-font-mono: "JetBrains Mono", "IBM Plex Mono", ui-monospace, SFMono-Regular, Consolas, monospace;
 
   --nova-weight-regular: 400;
   --nova-weight-medium: 550;

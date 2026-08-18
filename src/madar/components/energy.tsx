@@ -826,9 +826,8 @@ export function BillDocument({
                 color: 'var(--text)', border: '1px solid var(--success)',
               }}
             >
-              <svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-                <path d="M2.5 6.4l2.4 2.3L9.6 3.6" stroke="var(--success)" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
+              {/* anti-slop-ui #25: no checkmark to say "yes". The word says it,
+                  and the outline colour is the state. */}
               مُسدَّدة
             </span>
           </div>

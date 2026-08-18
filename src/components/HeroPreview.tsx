@@ -1,7 +1,7 @@
 import {
   PiCheckCircleFill,
   PiDotsThree,
-  PiSparkle,
+  PiGauge,
 } from "react-icons/pi";
 import type { Locale } from "../i18n";
 import { uiCopy } from "../i18n";
@@ -20,14 +20,13 @@ export default function HeroPreview({ locale }: HeroPreviewProps) {
       <span className="stage-aurora" aria-hidden="true" />
       <div className="stage-window">
         <header className="stage-toolbar">
-          <div className="window-controls" aria-hidden="true"><i /><i /><i /></div>
-          <span><PiSparkle /> NOVA OS</span>
+          <span className="stage-name">NOVA OS</span>
           <span className="stage-more" aria-hidden="true"><PiDotsThree /></span>
         </header>
 
         <div className="stage-layout">
           <aside className="stage-rail" aria-hidden="true">
-            <span className="active"><PiSparkle /></span>
+            <span className="active"><PiGauge /></span>
             <span /><span /><span />
           </aside>
 
@@ -72,7 +71,6 @@ export default function HeroPreview({ locale }: HeroPreviewProps) {
       </div>
 
       <div className="stage-float nova-glass">
-        <span><PiSparkle /></span>
         <div><strong><bdi dir="ltr" lang="en">React 19</bdi></strong><small><bdi dir="ltr" lang="en">TypeScript + Vite</bdi></small></div>
       </div>
     </div>

@@ -14,7 +14,7 @@ export function InteractionBank() {
   const { rtl } = useTheme();
   return (
     <Section label="Interaction bank">
-      <SectionHeader eyebrow="17 · INTERACTION BANK" title="The 21st.dev imports — completed">
+      <SectionHeader eyebrow="17 · INTERACTION BANK" title="The 21st.dev imports: completed">
         The last four patterns from the import list (design.md §18), as reusable components: the editor toolbar dock, HeroUI toggle chips and fieldset, and the bar variant of the mini chart. The other 27 live in sections 04–16 — all importable from <code style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85em' }}>src/components</code>.
       </SectionHeader>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 20, alignItems: 'start' }}>

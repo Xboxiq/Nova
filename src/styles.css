@@ -586,7 +586,8 @@ button:disabled {
 }
 
 .hero-stage:hover .stage-window {
-  transform: rotateY(0) rotateX(0) translateY(-3px);
+  /* the un-rotation is the interaction; the lift on top of it was decoration */
+  transform: rotateY(0) rotateX(0);
 }
 
 .stage-toolbar {
@@ -624,21 +625,16 @@ button:disabled {
   border-radius: 9px;
 }
 
-.window-controls {
-  display: flex;
-  gap: 6px;
+/* anti-slop-ui #15: the three coral/amber/mint dots were a faux window chrome on
+   a product mockup in the hero — decoration standing in for a real interface,
+   which VISUAL-LAW §10 refuses on the same grounds. The toolbar now names the
+   product it is showing instead. */
+.stage-name {
+  color: var(--nova-ink-secondary);
+  font-size: var(--nova-text-label-md);
+  font-weight: var(--nova-weight-semibold);
+  letter-spacing: 0.04em;
 }
-
-.window-controls i {
-  width: 8px;
-  height: 8px;
-  background: var(--nova-border-strong);
-  border-radius: 50%;
-}
-
-.window-controls i:first-child { background: var(--nova-expressive-coral); }
-.window-controls i:nth-child(2) { background: var(--nova-expressive-amber); }
-.window-controls i:nth-child(3) { background: var(--nova-expressive-mint); }
 
 .stage-layout {
   display: grid;
@@ -1500,10 +1496,10 @@ button:disabled {
 }
 
 @media (hover: hover) and (pointer: fine) {
+  /* anti-slop-ui #21: no lift and no hover elevation. The border colour is the
+     whole report, and it lands in one step instead of floating the card. */
   .component-card:hover {
     border-color: color-mix(in srgb, var(--nova-action) 28%, var(--nova-border));
-    box-shadow: var(--nova-shadow-md);
-    transform: translateY(-3px);
   }
 }
 
@@ -2107,3 +2103,92 @@ footer#sources > a {
     border-color: var(--nova-border-strong);
   }
 }
+
+/* The footer's legal controls. Buttons look like the links beside them because
+   they do the same job; what differs is that they open a document rather than
+   leave the site. */
+.footer-legal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--nova-space-4);
+  align-items: center;
+}
+
+.footer-legal button,
+.footer-legal a {
+  padding: 0;
+  color: var(--nova-ink-secondary);
+  font-size: var(--nova-text-label-md);
+  font-family: inherit;
+  /* deslop-ignore-next-line 09 */
+  text-decoration: underline;
+  text-decoration-color: var(--nova-border-strong);
+  text-underline-offset: 3px;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  transition: color var(--nova-motion-fast), text-decoration-color var(--nova-motion-fast);
+}
+
+.footer-legal button:hover,
+.footer-legal a:hover {
+  color: var(--nova-ink);
+  text-decoration-color: var(--nova-ink);
+}
+
+/* anti-slop-ui #8 and #9: a solid surface and a tight radius. A legal document
+   is a document; it is not the place for a frosted panel. */
+.legal-dialog {
+  width: min(40rem, calc(100vw - 2rem));
+  max-height: min(80vh, 44rem);
+  padding: 0;
+  color: var(--nova-ink);
+  background: var(--nova-surface);
+  border: 1px solid var(--nova-border-strong);
+  border-radius: 6px;
+}
+
+.legal-dialog::backdrop {
+  background: rgb(9 12 16 / 55%);
+}
+
+.legal-surface {
+  display: grid;
+  max-height: inherit;
+  grid-template-rows: auto minmax(0, 1fr);
+}
+
+.legal-surface > header {
+  display: flex;
+  gap: var(--nova-space-4);
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: var(--nova-space-5) var(--nova-space-6);
+  border-block-end: 1px solid var(--nova-border);
+}
+
+.legal-surface h2 {
+  margin: 0;
+  font-size: var(--nova-text-title-md);
+  font-weight: var(--nova-weight-semibold);
+}
+
+.legal-surface > header p {
+  margin: 4px 0 0;
+  color: var(--nova-ink-tertiary);
+  font-size: var(--nova-text-label-md);
+}
+
+.legal-body {
+  padding: var(--nova-space-5) var(--nova-space-6) var(--nova-space-6);
+  overflow-y: auto;
+}
+
+.legal-body p {
+  margin: 0 0 var(--nova-space-4);
+  color: var(--nova-ink-secondary);
+  font-size: var(--nova-text-body-sm);
+  line-height: 1.75;
+}
+
+.legal-body p:last-child { margin-block-end: 0; }

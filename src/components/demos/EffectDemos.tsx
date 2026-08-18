@@ -5,7 +5,8 @@ import {
   PiHouse,
   PiMagnifyingGlass,
   PiMagicWand,
-  PiSparkle,
+  PiPlus,
+  PiStackSimple,
   PiUserCircle,
 } from "react-icons/pi";
 import type { DemoProps } from "./shared";
@@ -26,7 +27,7 @@ function GlowingShadow() {
   return (
     <div className="demo demo-glowing-shadow">
       <button type="button" className={`glowing-card ${active ? "active" : ""}`} onClick={() => setActive((value) => !value)}>
-        <span className="glow-edge" /><div><span><PiSparkle /></span><small>ميزة الأسبوع</small></div><h4>حوّل الفكرة إلى نظام.</h4><p>ظل واحد يحدّد الأولوية دون تشويش بقية الواجهة.</p><footer><strong>{active ? "التوهّج فعّال" : "اضغط للتفعيل"}</strong><PiArrowUpRight /></footer>
+        <span className="glow-edge" /><div><span><PiStackSimple /></span><small>ميزة الأسبوع</small></div><h4>حوّل الفكرة إلى نظام.</h4><p>ظل واحد يحدّد الأولوية دون تشويش بقية الواجهة.</p><footer><strong>{active ? "التوهّج فعّال" : "اضغط للتفعيل"}</strong><PiArrowUpRight /></footer>
       </button>
     </div>
   );
@@ -48,7 +49,7 @@ function GlassButton({ onNotify }: Pick<DemoProps, "onNotify">) {
   const [pressed, setPressed] = useState(false);
   return (
     <div className="demo demo-glass-button">
-      <div className="glass-scene"><i /><i /><i /><button type="button" className={pressed ? "pressed" : ""} onClick={() => { setPressed(true); onNotify("تم تنفيذ الإجراء الزجاجي"); window.setTimeout(() => setPressed(false), 500); }}><PiSparkle /><span>إنشاء مساحة</span><PiArrowUpRight /></button></div>
+      <div className="glass-scene"><i /><i /><i /><button type="button" className={pressed ? "pressed" : ""} onClick={() => { setPressed(true); onNotify("تم تنفيذ الإجراء الزجاجي"); window.setTimeout(() => setPressed(false), 500); }}><PiPlus /><span>إنشاء مساحة</span><PiArrowUpRight /></button></div>
     </div>
   );
 }
@@ -68,7 +69,7 @@ function ShinyText() {
   const [paused, setPaused] = useState(false);
   return (
     <div className="demo demo-shiny-text">
-      <button type="button" className={`shiny-badge ${paused ? "paused" : ""}`} aria-pressed={paused} onClick={() => setPaused((value) => !value)}><PiSparkle /><span>مدعوم بتفاصيل NOVA</span></button>
+      <button type="button" className={`shiny-badge ${paused ? "paused" : ""}`} aria-pressed={paused} onClick={() => setPaused((value) => !value)}><PiStackSimple /><span>مدعوم بتفاصيل NOVA</span></button>
       <h4>واجهة تبدو هادئة<br />وتشعر بأنها حيّة.</h4>
       <p>{paused ? "تم إيقاف اللمعة." : "اضغط على الوسم لإيقاف اللمعة."}</p>
     </div>

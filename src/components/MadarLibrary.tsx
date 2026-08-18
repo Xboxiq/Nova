@@ -1,5 +1,6 @@
 import { Suspense, useState } from "react";
 import { PiCaretRight, PiStack } from "react-icons/pi";
+import MadarStageSkeleton from "./MadarStageSkeleton";
 import { ThemeProvider } from "../madar/theme/ThemeContext";
 import type { GlassLevel, ThemeName } from "../madar/theme/themes";
 import { madarFamilies, madarSections, type MadarFamilyId } from "../madar/sections";
@@ -121,7 +122,7 @@ export default function MadarLibrary({
         tabIndex={-1}
       >
         <ThemeProvider theme={theme} glass={glass} rtl={locale === "ar"}>
-          <Suspense fallback={<p className="madar-loading">{copy.madarLoading}</p>}>
+          <Suspense fallback={<MadarStageSkeleton locale={locale} />}>
             <Section />
           </Suspense>
         </ThemeProvider>

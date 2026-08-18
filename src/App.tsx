@@ -9,12 +9,14 @@ import {
   PiMagnifyingGlass,
   PiMoonStars,
   PiPalette,
-  PiSparkle,
   PiSun,
   PiTranslate,
   PiX,
 } from "react-icons/pi";
+import BrandMark from "./components/BrandMark";
 import CommandPalette from "./components/CommandPalette";
+import LegalDialog, { type LegalDoc } from "./components/LegalDialog";
+import MadarStageSkeleton from "./components/MadarStageSkeleton";
 import AdvancedPatternLab from "./components/AdvancedPatternLab";
 import HeroPreview from "./components/HeroPreview";
 import MobileDock from "./components/MobileDock";
@@ -84,6 +86,7 @@ function App() {
   const [view, setView] = useState<GalleryView>("grid");
   const [toast, setToast] = useState("");
   const [commandOpen, setCommandOpen] = useState(false);
+  const [legalDoc, setLegalDoc] = useState<LegalDoc | null>(null);
   const searchRef = useRef<HTMLInputElement>(null);
   const themeMenuRef = useRef<HTMLDivElement>(null);
   const copy = uiCopy[locale];
@@ -247,7 +250,7 @@ function App() {
 
       <header className="topbar nova-glass" aria-label={copy.navLabel}>
         <a className="brand" href="#top" aria-label="NOVA UI">
-          <span className="brand-mark" aria-hidden="true"><PiSparkle /></span>
+          <span className="brand-mark" aria-hidden="true"><BrandMark /></span>
           <span>NOVA</span>
           <span className="brand-suffix">UI</span>
         </a>
@@ -457,7 +460,7 @@ function App() {
           </div>
         </section>
 
-        <Suspense fallback={<p className="madar-loading">{copy.madarLoading}</p>}>
+        <Suspense fallback={<MadarStageSkeleton locale={locale} />}>
           <MadarLibrary
             locale={locale}
             theme={theme}
@@ -484,10 +487,19 @@ function App() {
       </main>
 
       <footer id="sources">
-        <div className="brand footer-brand"><span className="brand-mark"><PiSparkle /></span><span>NOVA</span><span className="brand-suffix">UI</span></div>
+        <div className="brand footer-brand"><span className="brand-mark" aria-hidden="true"><BrandMark /></span><span>NOVA</span><span className="brand-suffix">UI</span></div>
         <p>{copy.footer}</p>
-        <a href="https://21st.dev" target="_blank" rel="noreferrer">21st.dev</a>
+        {/* anti-slop-ui #29 and #30: real documents behind real controls. Buttons
+            rather than `#` links, because there is no page to navigate to and a
+            dead fragment is the thing the standard names. */}
+        <nav className="footer-legal" aria-label={`${copy.terms} / ${copy.privacy}`}>
+          <button type="button" onClick={() => setLegalDoc("terms")}>{copy.terms}</button>
+          <button type="button" onClick={() => setLegalDoc("privacy")}>{copy.privacy}</button>
+          <a href="https://21st.dev" target="_blank" rel="noreferrer">21st.dev</a>
+        </nav>
       </footer>
+
+      <LegalDialog doc={legalDoc} locale={locale} closeLabel={copy.close} onClose={() => setLegalDoc(null)} />
 
       <MobileDock locale={locale} onSearch={() => setCommandOpen(true)} />
       <CommandPalette

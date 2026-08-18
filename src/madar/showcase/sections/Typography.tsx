@@ -12,7 +12,7 @@ function Row({ token, children, style }: { token: string; children: React.ReactN
 export function Typography() {
   return (
     <Section label="Typography">
-      <SectionHeader eyebrow="02 · FOUNDATIONS" title="Type — bilingual by birth">
+      <SectionHeader eyebrow="02 · FOUNDATIONS" title="Type: bilingual by birth">
         Instrument Sans for Latin, IBM Plex Sans Arabic for Arabic — one stack, the browser resolves the script. Arabic gets +10% line-height and zero negative tracking.
       </SectionHeader>
       <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 20, alignItems: 'start' }}>

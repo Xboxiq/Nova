@@ -22,7 +22,7 @@ function Cell({ name, en, children }: { name: string; en: string; children: Reac
 export function Kinetics99() {
   return (
     <Section label="Kinetics 99">
-      <SectionHeader eyebrow="25 · KINETICS 99" title="The completion set — full ckissi/kinetics parity">
+      <SectionHeader eyebrow="25 · KINETICS 99" title="The completion set: full ckissi/kinetics parity">
         The two dozen patterns that finish the 99-effect Kinetics catalog: ambient loaders, physics toys, text theatrics, and reveals. Every one is tokenized, recolors with the theme, mirrors under RTL, and honours reduced-motion. Ambient loops are the only repeating motion, by design.
       </SectionHeader>
 

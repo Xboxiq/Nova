@@ -18,7 +18,7 @@ function GlassStage({ children, minHeight = 260 }: { children: React.ReactNode; 
 export function Trends2026() {
   return (
     <Section label="Trends 2026">
-      <SectionHeader eyebrow="22 · TRENDS 2026" title="The modern vocabulary — glass, generative, glanceable">
+      <SectionHeader eyebrow="22 · TRENDS 2026" title="The modern vocabulary: glass, generative, glanceable">
         Built from the X trends research: progressive blur, reactive liquid glass, anticipatory AI dashboards, prompt-first canvases, and glanceable AR tiles. Every source tweet is mapped in <code style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85em' }}>TRENDS.md</code>.
       </SectionHeader>
 

@@ -26,7 +26,7 @@ function Memoji({ ring, grad }: { ring: string; grad: string }) {
 export function SoftVocabulary() {
   return (
     <Section label="Soft vocabulary">
-      <SectionHeader eyebrow="11 · SOFT VOCABULARY" title="The consumer dialect — Liquid Soft">
+      <SectionHeader eyebrow="11 · SOFT VOCABULARY" title="The consumer dialect: Liquid Soft">
         A warmer sub-language for consumer surfaces: squircle tonal icons, specular orbs, flat brand + halo. One dialect per screen — never mixed with admin flat tiles.
       </SectionHeader>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: 20, alignItems: 'start' }}>

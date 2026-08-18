@@ -32,7 +32,7 @@ function UndoDemo() {
 export function KineticsBank() {
   return (
     <Section label="Kinetics bank">
-      <SectionHeader eyebrow="18 · KINETICS BANK" title="The full Kinetics catalog — imported">
+      <SectionHeader eyebrow="18 · KINETICS BANK" title="The full Kinetics catalog: imported">
         The remaining physics vocabulary from kinetics.colorion.co (design.md §19.1), each an importable component: colored-edge push, squish, rubber-band slider, drag-to-dismiss, scrubber, reorder, speed dial, icon morph, odometer, typewriter, EKG dot, segment loader, undo snackbar, stagger.
       </SectionHeader>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 20, alignItems: 'start' }}>

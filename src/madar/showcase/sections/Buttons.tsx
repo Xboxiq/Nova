@@ -3,7 +3,7 @@ import { Section, SectionHeader } from '../SectionHeader';
 export function Buttons() {
   return (
     <Section label="Buttons">
-      <SectionHeader eyebrow="03 · CONTROLS" title="Buttons — ink actions, colored meaning">
+      <SectionHeader eyebrow="03 · CONTROLS" title="Buttons: ink actions, colored meaning">
         One ink primary per view. Hover lifts −1px, press scales 0.97, focus rings with the accent. Gradient is allowed exactly once — the hero CTA.
       </SectionHeader>
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 22, padding: 28, boxShadow: 'var(--shadow-1)', display: 'flex', flexDirection: 'column', gap: 24 }}>

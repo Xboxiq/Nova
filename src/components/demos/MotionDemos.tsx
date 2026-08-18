@@ -6,7 +6,6 @@ import {
   PiImage,
   PiLightning,
   PiPenNib,
-  PiSparkle,
   PiSpinnerGap,
 } from "react-icons/pi";
 import type { DemoProps } from "./shared";
@@ -135,7 +134,7 @@ function Foil() {
         }}
         style={{ background: `radial-gradient(circle at ${point.x}% ${point.y}%, rgba(255,255,255,.86), transparent 22%), conic-gradient(from ${point.x * 2}deg at ${point.x}% ${point.y}%, #91efd4, #9ce2ff, #ffb49f, #f7dd89, #91efd4)` }}
       >
-        <span className="foil-grain" /><div><PiSparkle /><small>NOVA / 004</small></div><h4>IRIDESCENT<br />SYSTEM</h4><footer><span>MEMBER CARD</span><strong>∞</strong></footer>
+        <span className="foil-grain" /><div><small>NOVA / 004</small></div><h4>IRIDESCENT<br />SYSTEM</h4><footer><span>MEMBER CARD</span><strong>∞</strong></footer>
       </button>
     </div>
   );

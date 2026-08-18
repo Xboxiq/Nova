@@ -183,7 +183,8 @@
   content: "";
 }
 
-button.nova-icon-tile:hover { transform: translateY(-1px); }
+/* anti-slop-ui #21: state shifts, not lift. The border already reports hover. */
+button.nova-icon-tile:hover { border-color: var(--nova-border-strong); }
 button.nova-icon-tile:active { transform: translateY(1px) scale(.96); }
 
 @keyframes nova-spin { to { transform: rotate(360deg); } }

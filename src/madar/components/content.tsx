@@ -313,6 +313,8 @@ export function ColorPicker({ onChange }: { onChange?: (color: string) => void }
           <input
             type="range" min={0} max={360} value={hue} aria-label="Hue"
             onChange={(e) => setHue(Number(e.target.value))}
+            /* a hue slider's track is the colour circle itself: its six primaries, not neon accents */
+            /* anti-slop-ignore-next-line 29 */
             style={{ width: '100%', height: 12, borderRadius: 999, appearance: 'none', WebkitAppearance: 'none', background: 'linear-gradient(90deg, #f00, #ff0, #0f0, #0ff, #00f, #f0f, #f00)', outline: 'none', cursor: 'pointer' }}
           />
         </div>
@@ -355,7 +357,7 @@ export function GradientPaletteGrid() {
           style={{ border: 'none', padding: 0, cursor: 'pointer', borderRadius: 13, overflow: 'hidden', background: 'var(--surface)', boxShadow: 'var(--shadow-1)', transition: 'transform 220ms', textAlign: 'center' }}
         >
           <span style={{ display: 'block', height: 44, background: g.css }} />
-          <span style={{ display: 'block', fontSize: 10, fontWeight: 700, padding: '5px 4px', color: copied === i ? 'var(--accent)' : 'var(--text-2)', fontFamily: 'var(--font-mono)' }}>{copied === i ? 'COPIED ✓' : g.name}</span>
+          <span style={{ display: 'block', fontSize: 10, fontWeight: 700, padding: '5px 4px', color: copied === i ? 'var(--accent)' : 'var(--text-2)', fontFamily: 'var(--font-mono)' }}>{copied === i ? 'COPIED' : g.name}</span>
         </button>
       ))}
     </div>

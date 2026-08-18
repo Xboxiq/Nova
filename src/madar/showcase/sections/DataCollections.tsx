@@ -55,7 +55,7 @@ export function DataCollections() {
 
       {/* ── Data visualization ── */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 20, alignItems: 'start' }}>
-        <Panel title="Donut — حصص الطلبات" note="فئوي · ترتيب ثابت آمن لعمى الألوان + مفتاح دائم">
+        <Panel title="Donut: حصص الطلبات" note="فئوي · ترتيب ثابت آمن لعمى الألوان + مفتاح دائم">
           <DonutChart
             centerLabel="طلب"
             data={[
@@ -85,11 +85,11 @@ export function DataCollections() {
           </div>
         </Panel>
 
-        <Panel title="Heatmap — نشاط 20 أسبوعاً" note="تسلسلي · لون واحد فاتح→غامق حسب المقدار" span={2}>
+        <Panel title="Heatmap: نشاط 20 أسبوعاً" note="تسلسلي · لون واحد فاتح→غامق حسب المقدار" span={2}>
           <Heatmap weeks={20} seed={7} />
         </Panel>
 
-        <Panel title="Palette — CATEGORICAL" note="مُتحقَّق منه بـ validate_palette.js (light + Night)">
+        <Panel title="Palette: CATEGORICAL" note="مُتحقَّق منه بـ validate_palette.js (light + Night)">
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {CATEGORICAL.map((c, i) => (
               <div key={c} style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 12.5 }}>
@@ -135,7 +135,7 @@ export function DataCollections() {
           <TreeView nodes={TREE} />
         </Panel>
 
-        <Panel title="Kanban — اسحب البطاقات بين الأعمدة" note="سحب وإفلات HTML أصلي" span={2}>
+        <Panel title="Kanban: اسحب البطاقات بين الأعمدة" note="سحب وإفلات HTML أصلي" span={2}>
           <KanbanBoard columns={KANBAN} />
         </Panel>
       </div>

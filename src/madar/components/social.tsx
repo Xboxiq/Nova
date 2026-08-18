@@ -145,7 +145,7 @@ export function TeamSection({ members }: { members: TeamMember[] }) {
               onClick={() => setFollowing((s) => { const n = new Set(s); if (n.has(i)) n.delete(i); else n.add(i); return n; })}
               className="i-press-96"
               style={{ height: 32, padding: '0 14px', borderRadius: 999, fontFamily: 'inherit', fontSize: 12.5, fontWeight: 600, cursor: 'pointer', border: on ? '1px solid var(--border)' : 'none', background: on ? 'var(--surface)' : 'var(--ink)', color: on ? 'var(--text-2)' : 'var(--on-ink)', transition: 'background 220ms, color 220ms' }}
-            >{on ? 'متابَع ✓' : 'متابعة'}</button>
+            >{on ? 'متابَع' : 'متابعة'}</button>
           </div>
         );
       })}

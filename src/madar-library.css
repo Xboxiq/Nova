@@ -106,7 +106,6 @@
 
 .madar-whats-new button:hover {
   border-color: var(--nova-action);
-  transform: translateY(-1px);
 }
 
 .madar-whats-new button:active {
@@ -168,7 +167,6 @@
 
 .madar-picker-list button:hover {
   border-color: var(--nova-border-strong);
-  transform: translateY(-1px);
 }
 
 .madar-picker-list button:active {
@@ -259,4 +257,49 @@
   .madar-picker-list {
     grid-template-columns: minmax(0, 1fr);
   }
+}
+
+/* The stage's own proportions, so the lazy chunk lands without a jump. It shares
+   the shimmer with .gallery-skeleton rather than inventing a second one. */
+.madar-skeleton {
+  display: grid;
+  gap: var(--nova-space-3);
+  margin-block-start: var(--nova-space-6);
+}
+
+.madar-skeleton span,
+.madar-skeleton-grid span {
+  background: var(--nova-surface-quiet);
+  border: 1px solid var(--nova-border);
+  border-radius: var(--nova-radius-field);
+  animation: skeleton-slide 1.4s linear infinite;
+  background-image: linear-gradient(
+    110deg,
+    var(--nova-surface) 25%,
+    var(--nova-surface-quiet) 45%,
+    var(--nova-surface) 65%
+  );
+  background-size: 240% 100%;
+}
+
+.madar-skeleton-label { width: 7rem; height: 0.75rem; }
+.madar-skeleton-title { width: min(26rem, 70%); height: 2rem; }
+.madar-skeleton-line { width: min(44rem, 100%); height: 0.9rem; }
+.madar-skeleton-line.is-short { width: min(30rem, 70%); }
+
+.madar-skeleton-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  gap: var(--nova-space-5);
+  margin-block-start: var(--nova-space-4);
+  background: none;
+  border: 0;
+  animation: none;
+}
+
+.madar-skeleton-grid span { min-height: 15rem; border-radius: var(--nova-radius-card); }
+
+@media (prefers-reduced-motion: reduce) {
+  .madar-skeleton span,
+  .madar-skeleton-grid span { animation: none; }
 }

@@ -106,7 +106,7 @@ export interface SlideToUnlockProps {
   width?: number;
 }
 
-export function SlideToUnlock({ label = 'اسحب للتأكيد ←', confirmLabel = 'تم التأكيد ✓', onConfirm, width = 264 }: SlideToUnlockProps) {
+export function SlideToUnlock({ label = 'اسحب للتأكيد ←', confirmLabel = 'تم التأكيد', onConfirm, width = 264 }: SlideToUnlockProps) {
   const MAX = width - 60;
   const [x, setX] = useState(0);
   const [ok, setOk] = useState(false);

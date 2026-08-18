@@ -3,7 +3,7 @@ import {
   PiCheck,
   PiCircleNotch,
   PiCursorClick,
-  PiSparkle,
+  PiSwatches,
 } from "react-icons/pi";
 import type { CSSProperties } from "react";
 import type { Locale } from "../i18n";
@@ -68,7 +68,7 @@ export default function SystemShowcase({ locale }: SystemShowcaseProps) {
             <p>{copy.materialLabel}</p>
           </header>
           <div className="material-orbit" aria-hidden="true">
-            <span><PiSparkle /></span>
+            <span><PiSwatches /></span>
             <i /><i /><i />
           </div>
           <h3>{copy.materialTitle}</h3>

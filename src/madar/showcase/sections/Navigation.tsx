@@ -41,7 +41,7 @@ export function Navigation() {
 
   return (
     <Section label="Navigation">
-      <SectionHeader eyebrow="06 · WAYFINDING" title="Navigation — sidebar, tabs, dock">
+      <SectionHeader eyebrow="06 · WAYFINDING" title="Navigation: sidebar, tabs, dock">
         Admin shells get a sidebar with an inline-start accent bar; consumer shells get the floating dock. Hover the dock — icons magnify with a spring.
       </SectionHeader>
       <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: 20, alignItems: 'start' }}>

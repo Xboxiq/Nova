@@ -17,12 +17,13 @@ import {
   PiPenNib,
   PiPenNibThin,
   PiPlay,
-  PiSparkle,
-  PiSparkleThin,
   PiSquaresFour,
   PiStack,
   PiStackThin,
   PiUser,
+  PiShapes,
+  PiCompass,
+  PiCompassThin,
 } from "react-icons/pi";
 import type { Locale } from "../i18n";
 
@@ -95,7 +96,7 @@ export default function PatternStudio({ locale, onNotify }: PatternStudioProps) 
         </article>
 
         <article className="studio-panel studio-icons">
-          <StudioPanelHeader icon={<PiSparkle />} title={copy.icons} body={copy.iconsBody} meta="Phosphor · 4 optical sizes" />
+          <StudioPanelHeader icon={<PiShapes />} title={copy.icons} body={copy.iconsBody} meta="Phosphor · 4 optical sizes" />
           <IconWorkbench locale={locale} />
         </article>
 
@@ -231,7 +232,7 @@ export function IconWorkbench({ locale, compact = false }: WorkbenchProps) {
   const [selected, setSelected] = useState(0);
   const ar = locale === "ar";
   const icons = [
-    { label: ar ? "إلهام" : "Ideas", regular: PiSparkle, thin: PiSparkleThin },
+    { label: ar ? "إلهام" : "Ideas", regular: PiCompass, thin: PiCompassThin },
     { label: ar ? "رسم" : "Draw", regular: PiPenNib, thin: PiPenNibThin },
     { label: ar ? "طبقات" : "Layers", regular: PiStack, thin: PiStackThin },
     { label: ar ? "طاقة" : "Energy", regular: PiLightning, thin: PiLightningThin },
