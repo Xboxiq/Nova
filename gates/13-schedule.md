@@ -88,3 +88,23 @@ actually poses.
   CHECK: node -e 'const s=require("fs").readFileSync("design-system/LIBRARY-ROADMAP.md","utf8");const means=/حدّ شعري/.test(s)&&/ظلّ داخلي عند مَفصِل/.test(s)&&/تراكب/.test(s);const criteria=(s.match(/^\d\. \*\*/gm)||[]).length>=6;const rounds=(s.match(/^\*\*[٠-٩0-9]\./gm)||[]).length>=4;const done=/\| \*\*Schedule\*\* \|/.test(s);console.log(means&&criteria&&rounds&&done?"PROGRAMME_WRITTEN":"IMPROVISED "+[means,criteria,rounds,done].join())'
   EXPECT: PROGRAMME_WRITTEN
   EVIDENCE: PROGRAMME_WRITTEN
+
+- [x] G17: §17 — length is duration, vertical offset is state, and the fault is defined as a shape rather than a threshold
+  CHECK: node -e 'const s=require("fs").readFileSync("src/madar/components/schedule.tsx","utf8");const offset=/high: \{ color: .var\(--accent\)., ar: .[^\x27]*., top: 6/.test(s)&&/low: \{[^}]*top: 30/.test(s);const shape=/const SHORT = 0\.34;/.test(s)&&/const CLUSTER = 3;/.test(s)&&/run = c\.to - c\.from < SHORT \? run \+ 1 : 0;/.test(s);const named=/data-duty-fault/.test(s)&&/تشغيل متقطّع قصير/.test(s);const why=/the fault is a \*shape\*, not a threshold/.test(s);console.log(offset&&shape&&named&&why?"SHAPE_IS_THE_DIAGNOSIS":"THRESHOLD_ONLY "+[offset,shape,named,why].join())'
+  EXPECT: SHAPE_IS_THE_DIAGNOSIS
+  EVIDENCE: SHAPE_IS_THE_DIAGNOSIS
+
+- [x] G18: A clipped start is cut square on the side the reader meets first — a logical corner, not a physical one
+  CHECK: node -e 'const s=require("fs").readFileSync("src/madar/components/schedule.tsx","utf8");const logical=/borderStartStartRadius: 0, borderEndStartRadius: 0/.test(s);const noPhysical=!/borderRadius: r\.clipped \? .0 2px 2px 0./.test(s);const why=/a physical corner list\n                \/\/ would cut the wrong end/.test(s);console.log(logical&&noPhysical&&why?"CORNER_IS_LOGICAL":"CORNER_IS_PHYSICAL "+[logical,noPhysical,why].join())'
+  EXPECT: CORNER_IS_LOGICAL
+  EVIDENCE: CORNER_IS_LOGICAL
+
+- [x] G19: §18 — the reading is a cap and the body beneath it is hatched, never faded
+  CHECK: node -e 'const s=require("fs").readFileSync("src/madar/components/charts.tsx","utf8");const opt=/reading\?: .mass. \| .edge.;/.test(s);const cap=/borderTop: `2px solid \$\{loud\(b\.value\) \|\| hov === i \? tone : .var\(--accent\).\}`/.test(s);const hatched=/className=\{reading === .edge. \? .madar-hatch. : undefined\}/.test(s);const noFill=/\? .transparent./.test(s);const noShorthand=!/[^-\w]background: /.test(/data-bar=\{b\.label\}[\s\S]*?\/>/.exec(s)[0]);console.log(opt&&cap&&hatched&&noFill&&noShorthand?"READING_IS_THE_EDGE":"READING_IS_THE_MASS "+[opt,cap,hatched,noFill,noShorthand].join())'
+  EXPECT: READING_IS_THE_EDGE
+  EVIDENCE: READING_IS_THE_EDGE
+
+- [x] G20: The sixth batch is recorded with what it earned and what it did not — including the technique that turned out to be built already
+  CHECK: node -e 'const f=require("fs");const law=f.readFileSync("design-system/VISUAL-LAW.md","utf8");const an=f.readFileSync("design-system/VISUAL-ANALYSIS-06.md","utf8");const arts=/### 17\. الطول مدّة/.test(law)&&/### 18\. القراءة قد تكون حرفًا/.test(law);const triage=/الدفعة السادسة: تقنية واحدة لم تسبق/.test(law)&&/للمرّة الرابعة/.test(law);const already=/منفَّذ سلفًا/.test(an)&&/ToolbarDock/.test(an)&&/دوكًا خامسًا/.test(an);const owned=/للمرّة الثالثة/.test(an);console.log(arts&&triage&&already&&owned?"BATCH6_RECORDED":"BATCH6_UNRECORDED "+[arts,triage,already,owned].join())'
+  EXPECT: BATCH6_RECORDED
+  EVIDENCE: BATCH6_RECORDED

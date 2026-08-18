@@ -140,5 +140,5 @@ export type {
   AllocationBarProps, LoadRow, BillDocumentProps,
 } from './energy';
 
-export { DayStrip, WindowPicker, TariffClock, DEFAULT_PLAN } from './schedule';
-export type { Period, DayStripProps, WindowPickerProps, TariffClockProps } from './schedule';
+export { DayStrip, WindowPicker, TariffClock, DutyCycle, DEFAULT_PLAN } from './schedule';
+export type { Period, Level, Run, DayStripProps, WindowPickerProps, TariffClockProps, DutyCycleProps } from './schedule';

@@ -136,6 +136,59 @@ if (Number(await focused()) !== 0) failures.push("Home did not reach the first h
 await page.keyboard.press("End");
 if (Number(await focused()) !== 23) failures.push("End did not reach the last hour");
 
+// ── §17: length is duration, offset is state, and the fault is a shape ──────
+const duty = await page.evaluate(() => {
+  const box = document.querySelector("#madar-schedule-panel [data-duty]");
+  const runs = [...box.querySelectorAll("[data-run]")].map((el) => ({
+    kind: el.dataset.run,
+    x: el.getBoundingClientRect().left,
+    w: el.getBoundingClientRect().width,
+    top: Number(getComputedStyle(el).top.replace("px", "")),
+    // the start side is logical, so read the corner the reader meets first
+    startRadius: getComputedStyle(el)[
+      getComputedStyle(el.parentElement).direction === "rtl" ? "borderTopRightRadius" : "borderTopLeftRadius"
+    ],
+  }));
+  return { runs, fault: Boolean(document.querySelector("#madar-schedule-panel [data-duty-fault]")) };
+});
+const high = duty.runs.filter((r) => r.kind === "high");
+const low = duty.runs.filter((r) => r.kind === "low");
+const short = duty.runs.filter((r) => r.kind === "short");
+if (!high.length || !low.length) failures.push("the duty cycle draws only one level");
+// the offset is the encoding: every high run sits above every low one
+if (Math.max(...high.map((r) => r.top)) >= Math.min(...low.map((r) => r.top))) {
+  failures.push("a high run does not sit above the low ones, so the offset encodes nothing");
+}
+// width is duration: the widest run must be wider than the shortest by a real margin
+const widest = Math.max(...duty.runs.map((r) => r.w));
+if (widest <= Math.min(...short.map((r) => r.w)) * 2) failures.push("run widths do not track duration");
+if (short.length < 3) failures.push(`the short-cycle cluster holds ${short.length} runs, expected 3 or more`);
+if (!duty.fault) failures.push("three short runs in a row were not named as a fault");
+// a clipped start is cut square rather than faded
+const clipped = await page.evaluate(() => {
+  const box = document.querySelector("#madar-schedule-panel [data-duty]");
+  const rtl = getComputedStyle(box).direction === "rtl";
+  const runs = [...box.querySelectorAll("[data-run]")];
+  const first = runs.reduce((a, b) => {
+    const ra = a.getBoundingClientRect(); const rb = b.getBoundingClientRect();
+    return (rtl ? ra.right > rb.right : ra.left < rb.left) ? a : b;
+  });
+  const cs = getComputedStyle(first);
+  return rtl ? cs.borderTopRightRadius : cs.borderTopLeftRadius;
+});
+if (clipped !== "0px") failures.push(`the clipped run's leading corner is ${clipped}, expected it cut square`);
+
+// ── §18: the reading is the cap, and the body beneath it is hatched ─────────
+const edge = await page.evaluate(() => {
+  const bar = document.querySelector('#madar-schedule-panel [data-reading="edge"]');
+  const cs = getComputedStyle(bar);
+  return { top: cs.borderTopWidth, image: cs.backgroundImage, colour: cs.backgroundColor };
+});
+if (edge.top !== "2px") failures.push(`the reading edge is ${edge.top}, expected a 2px cap`);
+if (edge.image === "none") failures.push("the bar body is not hatched, so the mass still claims to be the value");
+if (!/rgba\(0, 0, 0, 0\)|transparent/.test(edge.colour)) failures.push(`the body is filled (${edge.colour}) as well as hatched`);
+if (/gradient/.test(edge.image) && !/repeating/.test(edge.image)) failures.push("the body fades instead of hatching");
+
 await browser.close();
 server.kill();
 

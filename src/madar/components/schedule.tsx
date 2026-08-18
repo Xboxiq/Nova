@@ -407,3 +407,177 @@ export function TariffClock({ plan = DEFAULT_PLAN, now = 14.4, size = 200 }: Tar
     </div>
   );
 }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Added after the sixth batch of visual feed — analysis and verdicts in
+   design-system/VISUAL-ANALYSIS-06.md, law in VISUAL-LAW.md §17–§18.
+══════════════════════════════════════════════════════════════════════════ */
+
+export type Level = 'high' | 'low';
+
+export interface Run {
+  /** Hour the run started, as a fraction of the day. */
+  from: number;
+  /** Hour it stopped. */
+  to: number;
+  level: Level;
+  /** True when the run began before this window opened. */
+  clipped?: boolean;
+}
+
+const LEVEL: Record<Level, { color: string; ar: string; top: number; height: number }> = {
+  // the vertical offset *is* the encoding: high sits high, low sits low (§17)
+  high: { color: 'var(--accent)', ar: 'حمل كامل', top: 6, height: 20 },
+  low: { color: 'var(--info)', ar: 'حمل منخفض', top: 30, height: 14 },
+};
+
+/** A run this short is not a duty cycle, it is a symptom. */
+const SHORT = 0.34;
+/** Three or more of them in a row is the fault worth naming. */
+const CLUSTER = 3;
+
+export interface DutyCycleProps {
+  runs?: Run[];
+  /** Hours spanned by the window, so widths are read against a known scale. */
+  span?: [number, number];
+  label?: string;
+}
+
+/* ── DutyCycle — how a machine actually ran.
+
+   §17: the length of a mark is a duration and its vertical offset is a state.
+   Bars answer "how much in each hour"; this answers "how it ran" — one long
+   block is a machine that settled, and a picket fence of short ones is a machine
+   that could not.
+
+   So the fault is a *shape*, not a threshold: three or more runs shorter than
+   twenty minutes back to back are drawn as the cluster of hairlines they are, and
+   named. That is the same claim §8 makes — a detail earns its place by carrying a
+   state — except here the state is legible before the label is read.
+
+   A run that began before the window opened is cut square on its leading edge
+   instead of rounded. An edge that says "this continues past me" is information;
+   fading it out would be atmosphere. */
+export function DutyCycle({
+  runs,
+  span = [20, 6],
+  label = 'المكيّف — الليلة الماضية',
+}: DutyCycleProps) {
+  const cycles: Run[] = runs ?? [
+    { from: 20, to: 21.4, level: 'high', clipped: true },
+    { from: 21.6, to: 22.1, level: 'low' },
+    { from: 22.3, to: 23.9, level: 'high' },
+    { from: 24.1, to: 24.35, level: 'high' },
+    { from: 24.45, to: 24.7, level: 'high' },
+    { from: 24.8, to: 25.05, level: 'high' },
+    { from: 25.2, to: 26.6, level: 'low' },
+    { from: 26.9, to: 28.4, level: 'high' },
+    { from: 28.7, to: 30, level: 'low' },
+  ];
+
+  /* Widths are fractions of the window, not of the day: a six-hour window drawn
+     on a twenty-four-hour scale would make every run unreadable. */
+  const [open, close] = [span[0], span[1] <= span[0] ? span[1] + 24 : span[1]];
+  const width = close - open;
+  const pct = (h: number) => ((h - open) / width) * 100;
+
+  const shortRuns = cycles.filter((r) => r.to - r.from < SHORT);
+  const faulted = useMemo(() => {
+    let run = 0;
+    for (const c of cycles) {
+      run = c.to - c.from < SHORT ? run + 1 : 0;
+      if (run >= CLUSTER) return true;
+    }
+    return false;
+  }, [cycles]);
+
+  const total = cycles.reduce((s, r) => s + (r.to - r.from), 0);
+
+  return (
+    <div
+      style={{
+        width: '100%', maxWidth: 420, display: 'flex', flexDirection: 'column', gap: 'var(--sp-4)',
+        padding: 'var(--sp-5)', background: 'var(--surface)',
+        border: '1px solid var(--border)', borderRadius: 'var(--r-md)',
+      }}
+    >
+      <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 'var(--sp-3)' }}>
+        <b style={{ fontSize: 14, fontWeight: 600, color: 'var(--text)' }}>{label}</b>
+        <span style={{ fontSize: 12, color: 'var(--text-3)', fontVariantNumeric: 'tabular-nums' }}>
+          اشتغل <bdi dir="ltr">{total.toFixed(1)}</bdi> من <bdi dir="ltr">{width}</bdi> ساعة
+        </span>
+      </div>
+
+      <div
+        data-duty=""
+        role="img"
+        aria-label={`${label}: ${cycles.length} دورة تشغيل، مجموعها ${total.toFixed(1)} ساعة${faulted ? '، وفيها تشغيل متقطّع قصير' : ''}`}
+        style={{
+          position: 'relative', height: 50,
+          background: 'var(--surface-2)', border: '1px solid var(--border)',
+          borderRadius: 'var(--r-xs)', overflow: 'hidden',
+        }}
+      >
+        {cycles.map((r, i) => {
+          const short = r.to - r.from < SHORT;
+          const l = LEVEL[r.level];
+          return (
+            <span
+              key={i}
+              data-run={short ? 'short' : r.level}
+              title={`${hh(r.from)} – ${hh(r.to)} · ${l.ar}`}
+              style={{
+                position: 'absolute',
+                insetInlineStart: `${pct(r.from)}%`,
+                width: `max(2px, ${pct(r.to) - pct(r.from)}%)`,
+                top: short ? 4 : l.top,
+                height: short ? 42 : l.height,
+                background: short ? 'var(--danger)' : l.color,
+                // A clipped start is cut square, and "start" is a logical side: in
+                // Arabic the run begins at the right, so a physical corner list
+                // would cut the wrong end. Same class of mistake as §2's lighting.
+                borderRadius: 2,
+                ...(r.clipped ? { borderStartStartRadius: 0, borderEndStartRadius: 0 } : null),
+                opacity: short ? 0.9 : 1,
+              }}
+            />
+          );
+        })}
+      </div>
+
+      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10.5, color: 'var(--text-3)', fontVariantNumeric: 'tabular-nums' }}>
+        {[0, 0.25, 0.5, 0.75, 1].map((f) => (
+          <span key={f}><bdi dir="ltr">{hh(open + f * width)}</bdi></span>
+        ))}
+      </div>
+
+      <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexWrap: 'wrap', gap: 'var(--sp-4)', fontSize: 11.5 }}>
+        {(Object.keys(LEVEL) as Level[]).map((k) => (
+          <li key={k} style={{ display: 'flex', alignItems: 'center', gap: 7, color: 'var(--text-2)' }}>
+            <span
+              data-legend-level={k}
+              aria-hidden="true"
+              style={{ width: 16, height: k === 'high' ? 9 : 6, borderRadius: 2, background: LEVEL[k].color, flex: 'none' }}
+            />
+            {LEVEL[k].ar}
+          </li>
+        ))}
+      </ul>
+
+      {/* the fault is a shape first; the sentence only names what is already visible */}
+      {faulted && (
+        <p
+          data-duty-fault=""
+          style={{
+            margin: 0, paddingBlockStart: 'var(--sp-3)', borderBlockStart: '1px solid var(--border)',
+            fontSize: 12, lineHeight: 1.6, color: 'var(--text-2)',
+          }}
+        >
+          <b style={{ color: 'var(--danger)', fontWeight: 600 }}>تشغيل متقطّع قصير</b>{' '}
+          — <bdi dir="ltr">{shortRuns.length}</bdi> دورات أقصر من عشرين دقيقة متتالية. المكيّف يبدأ ويتوقّف
+          قبل أن يبرّد، وهذا يستهلك أكثر من التشغيل المتّصل ويُتلف الضاغط.
+        </p>
+      )}
+    </div>
+  );
+}

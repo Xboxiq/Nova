@@ -1,5 +1,6 @@
 import { Section, SectionHeader } from '../SectionHeader';
-import { DayStrip, TariffClock, WindowPicker } from '../../components/schedule';
+import { DayStrip, DutyCycle, TariffClock, WindowPicker } from '../../components/schedule';
+import { MiniBarChart } from '../../components/charts';
 
 function Cell({ title, note, children }: { title: string; note: string; children: React.ReactNode }) {
   return (
@@ -39,6 +40,34 @@ export function Schedule() {
             note="اليوم دورة، والشريط يقطعه عند منتصف الليل. على المينا تقع الذروة مقابل ساعات الهدوء فيُقرأ شكل الخطّة بنظرة. مرسومة بالحدود لا بالتعبئة، فسُمك الحلقة هو الجسم، واليد التي تعبرها هي التراكب."
           >
             <TariffClock />
+          </Cell>
+
+          <Cell
+            title="Duty Cycle: كيف اشتغلت الآلة"
+            note="الأعمدة تجيب «كم في كل ساعة»، وهذا يجيب «كيف اشتغل»: طول العلامة مدّة، وإزاحتها الرأسية حالة. كتلة واحدة طويلة آلةٌ استقرّت، وسياجٌ من القصيرات آلةٌ لم تستطع — فالعيب شكلٌ يُرى قبل أن تُقرأ جملته. والدورة التي بدأت قبل النافذة مقطوعة الحرف لا مُتلاشية: حافّةٌ تقول «أكمل خلفي» معلومة، والتلاشي جوّ."
+          >
+            <DutyCycle />
+          </Cell>
+
+          <Cell
+            title="Edge Reading: القراءة حرفٌ لا كتلة"
+            note="في المرجع يُضاء رأس العمود ويتلاشى جسمه. أخذنا الادّعاء ورفضنا التدرّج: الحرف مصمت لأنه القراءة، والجسم مخطَّط لأنه المساحة التي تقف فيها القراءة لا القراءة نفسها — وهو المعنى الذي أعطاه §15-ب للتخطيط أصلًا."
+          >
+            <div style={{ width: '100%', maxWidth: 340 }}>
+              <MiniBarChart
+                height={120}
+                reading="edge"
+                target={{ value: 400, label: '400 ك.و.س', tone: 'var(--danger)' }}
+                data={[
+                  { label: 'يناير', value: 318 },
+                  { label: 'فبراير', value: 296 },
+                  { label: 'مارس', value: 344 },
+                  { label: 'أبريل', value: 402 },
+                  { label: 'مايو', value: 468 },
+                  { label: 'يونيو', value: 412 },
+                ]}
+              />
+            </div>
           </Cell>
 
           <Cell

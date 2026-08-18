@@ -56,9 +56,14 @@ export interface MiniBarChartProps {
   /** A declared reference the bars are read against. `tone` colours the bars
       that reach it — not the line, which stays neutral. */
   target?: { value: number; label?: string; tone?: string };
+  /** Where the reading lives (VISUAL-LAW.md §18). `mass` fills the bar, which
+      makes the whole block the claim. `edge` puts the value on a hairline at the
+      bar's top and hatches the body beneath it, so the body reads as the space
+      the value stands in rather than as the value. */
+  reading?: 'mass' | 'edge';
 }
 
-export function MiniBarChart({ data, height = 96, target }: MiniBarChartProps) {
+export function MiniBarChart({ data, height = 96, target, reading = 'mass' }: MiniBarChartProps) {
   const [hov, setHov] = useState(-1);
   const max = Math.max(...data.map((b) => b.value), target?.value ?? 0);
   /* Every row of the column has a fixed height and does not shrink, so the
@@ -79,12 +84,27 @@ export function MiniBarChart({ data, height = 96, target }: MiniBarChartProps) {
         {data.map((b, i) => (
           <div key={b.label} onMouseEnter={() => setHov(i)} onMouseLeave={() => setHov(-1)} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, height: '100%', justifyContent: 'flex-end', cursor: 'default' }}>
             <span style={{ fontSize: 11, height: VAL, lineHeight: `${VAL}px`, flex: 'none', fontWeight: 700, fontVariantNumeric: 'tabular-nums', color: loud(b.value) ? tone : 'var(--accent)', opacity: hov === i ? 1 : 0, transition: 'opacity 180ms' }}>{b.value}</span>
-            <div data-bar={b.label} style={{
-              width: '100%', maxWidth: 30, height: (b.value / max) * barMax, flex: 'none', borderRadius: '6px 6px 3px 3px',
-              background: loud(b.value) || hov === i ? tone : 'var(--accent-soft)',
-              transformOrigin: 'bottom', animation: `growBar 600ms ${glide} both`, animationDelay: `${i * 120}ms`,
-              transition: 'background 200ms',
-            }} />
+            <div
+              data-bar={b.label}
+              data-reading={reading}
+              className={reading === 'edge' ? 'madar-hatch' : undefined}
+              style={{
+                width: '100%', maxWidth: 30, height: (b.value / max) * barMax, flex: 'none', borderRadius: '6px 6px 3px 3px',
+                // backgroundColor, never the shorthand: it would erase the hatch
+                backgroundColor: reading === 'edge'
+                  ? 'transparent'
+                  : (loud(b.value) || hov === i ? tone : 'var(--accent-soft)'),
+                ...(reading === 'edge'
+                  ? {
+                    ['--madar-hatch-color' as string]: loud(b.value) || hov === i ? tone : 'var(--border)',
+                    // the cap is the reading; the hatch below is the room it stands in
+                    borderTop: `2px solid ${loud(b.value) || hov === i ? tone : 'var(--accent)'}`,
+                  }
+                  : null),
+                transformOrigin: 'bottom', animation: `growBar 600ms ${glide} both`, animationDelay: `${i * 120}ms`,
+                transition: 'background-color 200ms, border-color 200ms',
+              }}
+            />
             <span style={{ fontSize: 10.5, fontWeight: 600, height: LAB, lineHeight: `${LAB}px`, flex: 'none', color: loud(b.value) ? 'var(--text)' : 'var(--text-3)' }}>{b.label}</span>
           </div>
         ))}
