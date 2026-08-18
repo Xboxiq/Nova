@@ -196,15 +196,22 @@
    wash, which is what separates it from the atmospheric gradients we refuse. */
 .madar-track {
   background-color: var(--surface-2);
-  /* A repeating hard-stop hatch, not an atmospheric wash. Group 06 refuses
-     gradients used as mood; this has hard stops, one token colour, and it
-     marks the remaining part of a measure, so it carries information. The
-     scanner cannot tell the two apart by pattern, so the distinction is
-     recorded here rather than left to it. */
+}
+
+/* The pattern itself, so it can mark a whole track or one segment of one — the
+   band's "your usual range" is the same statement about a part.
+
+   A repeating hard-stop hatch, not an atmospheric wash. Group 06 refuses
+   gradients used as mood; this has hard stops, one token colour, and it marks
+   a part of a measure, so it carries information. The scanner cannot tell the
+   two apart by pattern, so the distinction is recorded here rather than left
+   to it. */
+.madar-track,
+.madar-hatch {
   /* deslop-ignore-next-line 06 */
   background-image: repeating-linear-gradient(
     135deg,
-    var(--border) 0 1px,
+    var(--madar-hatch-color, var(--border)) 0 1px,
     transparent 1px 5px
   );
 }
