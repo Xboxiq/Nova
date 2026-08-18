@@ -23,7 +23,7 @@ G8 checks they stay recorded.
 - [x] G3: Production build succeeds
   CHECK: npm run build 2>&1 | grep -E 'built in'
   EXPECT: /built in/m
-  EVIDENCE: ✓ built in 1.77s
+  EVIDENCE: ✓ built in 1.67s
 
 - [x] G4: The standard is enforced by a runnable check, and it passes
   CHECK: node tools/qa/anti-slop-30.mjs 2>&1 | tail -1
@@ -71,6 +71,31 @@ G8 checks they stay recorded.
   EVIDENCE: THEME_MENU=ok | RUNTIME_ERRORS=0
 
 - [x] G13: The footer and both documents are captured, so what shipped is on record
-  CHECK: node -e "const f=require('fs');const need=['gates/screenshots/qa-legal-light-rtl.png','gates/screenshots/qa-footer-night-rtl.png'];const miss=need.filter(n=>!f.existsSync(n));console.log(miss.length?'MISSING '+miss.join(','):'SHOTS_PRESENT')"
+  CHECK: node -e "const f=require('fs');const need=['gates/screenshots/qa-legal-light-rtl.png','gates/screenshots/qa-footer-night-rtl.png','gates/screenshots/qa-glass-g0-light-rtl.png'];const miss=need.filter(n=>!f.existsSync(n));console.log(miss.length?'MISSING '+miss.join(','):'SHOTS_PRESENT')"
   EXPECT: SHOTS_PRESENT
   EVIDENCE: SHOTS_PRESENT
+
+- [x] G14: The mono family named in the tokens is the one the bundle actually ships
+  CHECK: node -e 'const f=require("fs");const pkg=JSON.parse(f.readFileSync("package.json","utf8")).dependencies;const tok=f.readFileSync("design-system/nova-design-os/tokens/tokens.css","utf8");const main=f.readFileSync("src/main.tsx","utf8");const named=/--nova-font-mono: "IBM Plex Mono"/.test(tok);const shipped=Boolean(pkg["@fontsource/ibm-plex-mono"])&&/ibm-plex-mono\/latin-400\.css/.test(main);const gone=!pkg["@fontsource-variable/geist-mono"]&&!/geist/i.test(tok+main);console.log(named&&shipped&&gone?"MONO_NAMED_AND_SHIPPED":"MONO_NOMINAL "+[named,shipped,gone].join())'
+  EXPECT: MONO_NAMED_AND_SHIPPED
+  EVIDENCE: MONO_NAMED_AND_SHIPPED
+
+- [x] G15: Only the latin subsets ride along, so the fix did not cost 160kB of unrenderable glyphs
+  CHECK: node -e 'const {execSync}=require("child_process");const out=execSync("ls dist/assets | grep -c ibm-plex-mono || true",{encoding:"utf8"}).trim();const bad=execSync("ls dist/assets | grep -cE \"ibm-plex-mono-(cyrillic|vietnamese|greek)\" || true",{encoding:"utf8"}).trim();console.log(Number(out)>0&&bad==="0"?"LATIN_ONLY":"SUBSETS_BLOATED "+[out,bad].join())'
+  EXPECT: LATIN_ONLY
+  EVIDENCE: LATIN_ONLY
+
+- [x] G16: Rule 08 is reachable rather than parked — a solid glass level exists and rebinds the tokens, not just the blur
+  CHECK: node -e 'const f=require("fs");const t=f.readFileSync("src/madar/theme/themes.ts","utf8");const css=f.readFileSync("src/madar/bridge.css","utf8");const typed=/GlassLevel = "g0"/.test(t)&&/level: "g0"/.test(t)&&/value === "g0"/.test(t);const block=/\[data-glass="g0"\] \{[\s\S]*?\}/.exec(css);const rebinds=block&&/--nova-glass: var\(--nova-surface\)/.test(block[0])&&/--nova-glass-specular: transparent/.test(block[0])&&/--glass-blur: 0px/.test(block[0]);console.log(typed&&rebinds?"SOLID_LEVEL_EXISTS":"GLASS_HAS_NO_ZERO "+[typed,Boolean(rebinds)].join())'
+  EXPECT: SOLID_LEVEL_EXISTS
+  EVIDENCE: SOLID_LEVEL_EXISTS
+
+- [x] G17: In a browser, g0 actually turns the glass opaque
+  CHECK: node tools/qa/glass-zero.mjs
+  EXPECT: GLASS_ZERO=ok
+  EVIDENCE: GLASS_ZERO=ok | OFFERED_IN_UI=true
+
+- [x] G18: The state-reporting check keeps its ruling beside the code, not only in the document
+  CHECK: node -e 'const s=require("fs").readFileSync("src/madar/components/content.tsx","utf8");const c=/\/\* ── ChecklistRow[\s\S]*?\*\//.exec(s)[0];console.log(/anti-slop-ui #16 and #25/.test(c)&&/`ok` is a real boolean/.test(c)&&/ANTI-SLOP-30\.md/.test(c)?"RULING_BESIDE_CODE":"RULING_ONLY_IN_DOC")'
+  EXPECT: RULING_BESIDE_CODE
+  EVIDENCE: RULING_BESIDE_CODE

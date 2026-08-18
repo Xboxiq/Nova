@@ -16,8 +16,8 @@
     "slop": "node .claude/skills/kill-ai-slop/scripts/scan.mjs src"
   },
   "dependencies": {
-    "@fontsource-variable/geist-mono": "^5.2.8",
     "@fontsource-variable/ibm-plex-sans": "^5.2.8",
+    "@fontsource/ibm-plex-mono": "^5.3.0",
     "@fontsource/ibm-plex-sans-arabic": "^5.2.9",
     "react": "19.2.7",
     "react-dom": "19.2.7",

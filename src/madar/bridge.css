@@ -83,7 +83,25 @@
   --glass-hl: var(--nova-glass-specular);
 }
 
-/* glass system — design.md §5 */
+/* glass system — design.md §5, plus its zero.
+
+   g0 is not "less blur": it rebinds the glass tokens themselves to solid
+   surfaces, so every surface that reads them — the shell's top bar and toast as
+   much as the library's cards — becomes opaque at once. A `backdrop-filter` over
+   an opaque background has nothing to filter, so the hardcoded blurs in the
+   shell stop mattering rather than needing to be hunted down one by one. */
+[data-glass="g0"] {
+  --glass-blur: 0px;
+  --glass-sat: 100%;
+  --glass-hl: transparent;
+  --nova-glass: var(--nova-surface);
+  --nova-glass-strong: var(--nova-surface);
+  --nova-glass-edge: var(--nova-border);
+  --nova-glass-edge-shade: var(--nova-border);
+  --nova-glass-specular: transparent;
+  --nova-glass-caustic: transparent;
+}
+
 [data-glass="g1"] { --glass-blur: 10px; --glass-sat: 140%; --glass-hl: transparent; }
 [data-glass="g2"] { --glass-blur: 20px; --glass-sat: 160%; --glass-hl: var(--nova-glass-edge); }
 [data-glass="g3"] { --glass-blur: 36px; --glass-sat: 180%; --glass-hl: var(--nova-glass-specular); }

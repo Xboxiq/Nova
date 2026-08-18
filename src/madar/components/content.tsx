@@ -158,7 +158,13 @@ export function OnboardingChecklist({ title, steps, current, footer }: { title: 
   );
 }
 
-/* ── ChecklistRow — green ✓ seal or red warning triangle beside text. */
+/* ── ChecklistRow — a check seal or a warning triangle beside text.
+
+   anti-slop-ui #16 and #25 ban a checkmark used as a bullet in a feature list.
+   This is not that: `ok` is a real boolean and the false branch draws a warning
+   triangle, so the glyph reports which of two states the row is in. A bullet
+   would be the same mark on every row, saying nothing. The ruling is recorded in
+   design-system/ANTI-SLOP-30.md and kept here beside the code it governs. */
 export function ChecklistRow({ ok, children }: { ok: boolean; children: React.ReactNode }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 0', fontSize: 13.5 }}>
