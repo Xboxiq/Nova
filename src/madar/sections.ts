@@ -17,6 +17,10 @@ export interface MadarSection {
   descriptionAr: string;
   tags: string[];
   component: LazyExoticComponent<ComponentType>;
+  /** Marks a recently added section. Thirty-two tabs open on the first one,
+      so without this an addition is invisible to anyone who does not already
+      know which tab to click. */
+  added?: true;
 }
 
 export const madarFamilies: MadarFamily[] = [
@@ -140,6 +144,7 @@ export const madarSections: MadarSection[] = [
     description: "A destination that opens for what lands in it, with per-file state, cancel, and retry.",
     descriptionAr: "وجهة تفتح غطاءها لما يهبط فيها، وحالة لكل ملف مع إلغاء وإعادة محاولة.",
     tags: ["upload", "file", "progress", "رفع", "ملفات"],
+    added: true,
     component: load("Upload", () => import("./showcase/sections/Upload")),
   },
 
@@ -191,6 +196,7 @@ export const madarSections: MadarSection[] = [
     description: "A meter read as an instrument, consumption against its own normal, and the tariff ladder.",
     descriptionAr: "عدّاد يُقرأ كجهاز، واستهلاك مقابل معتاده، وسُلّم الشرائح.",
     tags: ["energy", "meter", "kwh", "tariff", "طاقة", "عدّاد", "استهلاك"],
+    added: true,
     component: load("Energy", () => import("./showcase/sections/Energy")),
   },
   {

@@ -72,6 +72,64 @@
   border-radius: var(--nova-radius-card);
 }
 
+/* Recently added. A row, not a banner: label then the sections themselves, so
+   the addition is one click from where the eye already is. The mark on the tab
+   answers the second question — which of the thirty-two is it. */
+.madar-whats-new {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--nova-space-2);
+  align-items: center;
+  margin-block-start: var(--nova-space-5);
+}
+
+.madar-whats-new-label {
+  color: var(--nova-ink-secondary);
+  font-size: var(--nova-text-label-md);
+  font-weight: var(--nova-weight-semibold);
+}
+
+.madar-whats-new button {
+  min-height: var(--nova-hit-min);
+  padding: var(--nova-space-2) var(--nova-space-4);
+  color: var(--nova-ink);
+  font-size: var(--nova-text-body-sm);
+  font-weight: var(--nova-weight-semibold);
+  background: var(--nova-action-soft);
+  border: 1px solid color-mix(in srgb, var(--nova-action) 35%, var(--nova-border));
+  border-radius: var(--nova-radius-pill);
+  cursor: pointer;
+  transition:
+    border-color var(--nova-motion-fast),
+    transform var(--nova-motion-instant);
+}
+
+.madar-whats-new button:hover {
+  border-color: var(--nova-action);
+  transform: translateY(-1px);
+}
+
+.madar-whats-new button:active {
+  transform: translateY(0);
+}
+
+/* The accent is the outline, not the fill. Accent-on-accent-soft is the pastel
+   pill this repository scans for, and axe caught it failing contrast in three
+   packs at once; ink inside a hairline reads in all seven, and puts the colour
+   at the edge where VISUAL-LAW.md §5 says the detail belongs. */
+.madar-new {
+  margin-inline-start: var(--nova-space-2);
+  padding: 0 var(--nova-space-2);
+  color: var(--nova-ink);
+  font-size: var(--nova-text-label-sm);
+  font-style: normal;
+  font-weight: var(--nova-weight-semibold);
+  vertical-align: middle;
+  background: transparent;
+  border: 1px solid var(--nova-action);
+  border-radius: var(--nova-radius-pill);
+}
+
 .madar-picker-heading {
   display: flex;
   gap: var(--nova-space-2);
