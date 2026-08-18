@@ -189,6 +189,17 @@ export const madarSections: MadarSection[] = [
     component: load("DataDisplay", () => import("./showcase/sections/DataDisplay")),
   },
   {
+    id: "madar-outage",
+    title: "Outage",
+    titleAr: "الانقطاع والعودة",
+    family: "surfaces",
+    description: "Two series on one axis, where the coincidence is the finding.",
+    descriptionAr: "مسارَان على محور واحد، والتقاطع بينهما هو المعلومة.",
+    tags: ["outage", "reliability", "compare", "انقطاع", "موثوقية", "مقارنة"],
+    added: true,
+    component: load("Outage", () => import("./showcase/sections/Outage")),
+  },
+  {
     id: "madar-schedule",
     title: "Schedule",
     titleAr: "الجدولة الزمنية",

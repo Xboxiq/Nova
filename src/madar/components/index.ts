@@ -142,3 +142,6 @@ export type {
 
 export { DayStrip, WindowPicker, TariffClock, DutyCycle, DEFAULT_PLAN } from './schedule';
 export type { Period, Level, Run, DayStripProps, WindowPickerProps, TariffClockProps, DutyCycleProps } from './schedule';
+
+export { OutageCompare } from './outage';
+export type { Span, Verdict, OutageCompareProps } from './outage';
