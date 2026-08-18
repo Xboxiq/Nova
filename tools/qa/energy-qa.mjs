@@ -172,6 +172,29 @@ const edgeAt = await page.evaluate(() => {
 // 450 allocated on a 490 scale (412 metered + 78 projected).
 if (Math.abs(edgeAt - 92) > 2) failures.push(`the allocation edge sits at ${edgeAt}%, expected 92%`);
 
+// ── the perforation is an affordance, so it tracks the state ────────────────
+await page.waitForSelector("#madar-energy-panel [data-bill]", { timeout: 15000 });
+const bills = await page.evaluate(() =>
+  [...document.querySelectorAll("#madar-energy-panel [data-bill]")].map((b) => ({
+    state: b.dataset.bill,
+    notches: b.querySelector("[data-perforation]")?.children.length ?? 0,
+    stub: Boolean(b.querySelector("[data-stub]")),
+    settled: Boolean(b.querySelector("[data-settled]")),
+    total: (b.querySelector("[data-stub] b, [data-settled] b")?.textContent ?? "").trim(),
+  })),
+);
+if (bills.length !== 2) failures.push(`expected the bill in both states, found ${bills.length}`);
+const due = bills.find((b) => b.state === "due");
+const settled = bills.find((b) => b.state === "settled");
+if (!due?.notches) failures.push("a payable bill has no perforation to tear along");
+if (!due?.stub) failures.push("a payable bill has no stub");
+if (settled?.notches) failures.push(`a settled bill still shows ${settled.notches} notches with nothing to detach`);
+if (settled?.stub || !settled?.settled) failures.push("a settled bill is not drawn settled");
+// two states, not one card duplicated: the readings differ so the totals differ.
+if (due && settled && due.total === settled.total) {
+  failures.push(`both bills show ${due.total} — the states are documented with the same numbers`);
+}
+
 await browser.close();
 server.kill();
 

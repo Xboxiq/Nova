@@ -1,6 +1,7 @@
 import { Section, SectionHeader } from '../SectionHeader';
 import {
   AllocationBar,
+  BillDocument,
   ConsumptionBand,
   LoadComb,
   MeterFace,
@@ -90,6 +91,16 @@ export function Energy() {
             <div style={{ display: 'grid', gap: 22, width: '100%' }}>
               <AllocationBar />
               <AllocationBar budget={450} projected={78} />
+            </div>
+          </Cell>
+
+          <Cell
+            title="Bill — المستند الذي يستلمه العميل"
+            note="الفاتورة مستند: ورقة لها حافة، وورقة تحتها تحمل السُمك بزاوية موضوعة لا محسوبة. والتخريم عند المَفصِل لأنه يقول «هذا الجزء ينفصل» — فلا يظهر في فاتورة مسدَّدة، إذ لا شيء فيها ينفصل. والحالتان معروضتان لأن الفرق بينهما بنيةٌ لا لون."
+          >
+            <div style={{ display: 'grid', gap: 26, width: '100%', placeItems: 'center' }}>
+              <BillDocument />
+              <BillDocument paid previous={75835.6} current={76130.4} cycle="1 يونيو – 30 يونيو" />
             </div>
           </Cell>
 
