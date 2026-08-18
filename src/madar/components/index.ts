@@ -139,3 +139,6 @@ export type {
   TariffTier, MeterFaceProps, ConsumptionBandProps, UsageMetric, TariffLadderProps,
   AllocationBarProps, LoadRow, BillDocumentProps,
 } from './energy';
+
+export { DayStrip, WindowPicker, TariffClock, DEFAULT_PLAN } from './schedule';
+export type { Period, DayStripProps, WindowPickerProps, TariffClockProps } from './schedule';

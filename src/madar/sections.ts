@@ -189,6 +189,17 @@ export const madarSections: MadarSection[] = [
     component: load("DataDisplay", () => import("./showcase/sections/DataDisplay")),
   },
   {
+    id: "madar-schedule",
+    title: "Schedule",
+    titleAr: "الجدولة الزمنية",
+    family: "surfaces",
+    description: "The day as a counted axis: tariff windows, a clock, and a priced window picker.",
+    descriptionAr: "اليوم محورًا معدودًا: نوافذ التسعير، ومينا الساعة، ومنتقي نافذة مُسعَّر.",
+    tags: ["time", "tariff", "schedule", "وقت", "تسعير", "جدولة"],
+    added: true,
+    component: load("Schedule", () => import("./showcase/sections/Schedule")),
+  },
+  {
     id: "madar-energy",
     title: "Energy",
     titleAr: "الطاقة",
