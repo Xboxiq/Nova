@@ -1,4 +1,5 @@
 import { Section, SectionHeader } from '../SectionHeader';
+import { SpecShelf } from '../SpecRow';
 import {
   PublishButton, CopyCodeButton, ShatterButton,
   BouncyToggle, CinematicThemeSwitch, GlowMenu,
@@ -11,9 +12,9 @@ export function InteractionLab() {
       <SectionHeader eyebrow="13 · INTERACTION LAB" title="Stateful micro-interactions">
         Buttons and toggles that narrate their own state — every demo here is the reusable component from <code style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85em' }}>src/components</code>, live. Publish, copy, shatter, flip the toggles.
       </SectionHeader>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 20, alignItems: 'start' }}>
+      <SpecShelf>
         {/* stateful buttons */}
-        <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 22, padding: 24, boxShadow: 'var(--shadow-1)', display: 'flex', flexDirection: 'column', gap: 18 }}>
+        <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, padding: 24, display: 'flex', flexDirection: 'column', gap: 18 }}>
           <div style={{ fontSize: 13.5, fontWeight: 500, color: 'var(--text-2)' }}>Publish — a button that reports back</div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
             <PublishButton />
@@ -28,7 +29,7 @@ export function InteractionLab() {
         </div>
 
         {/* toggles */}
-        <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 22, padding: 24, boxShadow: 'var(--shadow-1)', display: 'flex', flexDirection: 'column', gap: 18 }}>
+        <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, padding: 24, display: 'flex', flexDirection: 'column', gap: 18 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
             <div><div style={{ fontSize: 14.5, fontWeight: 600 }}>Bouncy toggle</div><div style={{ fontSize: 12.5, color: 'var(--text-3)' }}>Overshoot spring · 480ms</div></div>
             <BouncyToggle defaultChecked aria-label="Bouncy toggle" />
@@ -55,7 +56,7 @@ export function InteractionLab() {
             <div style={{ fontSize: 20, fontWeight: 600, color: '#3A3444', marginTop: 8 }}>Founders card · 0001</div>
             <div style={{ fontSize: 13, color: '#8A7F96', marginTop: 4 }}>Holographic sheen shifts on hover. Collectibles, memberships, gift cards.</div>
           </IridescentFoilCard>
-          <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 22, padding: 24, boxShadow: 'var(--shadow-1)', display: 'flex', alignItems: 'center', gap: 18 }}>
+          <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, padding: 24, display: 'flex', alignItems: 'center', gap: 18 }}>
             <LogoTraceLoader />
             <div><div style={{ fontSize: 14.5, fontWeight: 600 }}>Logo trace loader</div><div style={{ fontSize: 12.5, color: 'var(--text-3)', lineHeight: '18px' }}>The brand mark draws itself while the app boots — branded waiting, not a spinner.</div></div>
           </div>
@@ -65,7 +66,7 @@ export function InteractionLab() {
             { name: 'Reviewer', initial: 'Q', gradient: 'linear-gradient(135deg,#FF8A4A,#F36A1F)', state: 'done' },
           ]} />
         </div>
-      </div>
+      </SpecShelf>
     </Section>
   );
 }

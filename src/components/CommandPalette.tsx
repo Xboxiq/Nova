@@ -2,7 +2,6 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import {
   PiArrowElbowDownLeft,
   PiMagnifyingGlass,
-  PiSparkle,
   PiStack,
   PiX,
 } from "react-icons/pi";
@@ -85,7 +84,7 @@ export default function CommandPalette({
     >
       <div className="command-surface nova-glass">
         <header className="command-header">
-          <span aria-hidden="true"><PiSparkle /></span>
+          <span aria-hidden="true"><PiMagnifyingGlass /></span>
           <div>
             <h2 id="command-title">{copy.commandTitle}</h2>
             <p>{copy.commandHint}</p>
@@ -118,7 +117,7 @@ export default function CommandPalette({
               aria-selected="false"
               onClick={() => onSelect(item.id)}
             >
-              <span className="command-result-icon" aria-hidden="true"><PiSparkle /></span>
+              <span className="command-result-icon" aria-hidden="true"><PiStack /></span>
               <span>
                 <strong>{locale === "ar" ? item.titleAr : item.title}</strong>
                 <small>{locale === "ar" ? item.title : item.titleAr}</small>

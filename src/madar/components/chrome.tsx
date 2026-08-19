@@ -39,7 +39,7 @@ export function CompactNav({ brand, links, cta, scrolled: controlled }: CompactN
   return (
     <nav style={{
       display: 'inline-flex', alignItems: 'center', gap: on ? 10 : 18,
-      padding: on ? '7px 8px 7px 16px' : '11px 11px 11px 20px', borderRadius: 999,
+      padding: on ? '7px 8px 7px 16px' : '11px 11px 11px 20px', borderRadius: 6,
       background: 'var(--glass)', backdropFilter: 'blur(var(--glass-blur)) saturate(var(--glass-sat))', WebkitBackdropFilter: 'blur(var(--glass-blur)) saturate(var(--glass-sat))',
       border: '1px solid var(--border)', boxShadow: on ? 'var(--shadow-2), inset 0 1px 0 var(--glass-hl)' : 'var(--shadow-1), inset 0 1px 0 var(--glass-hl)',
       transition: 'gap 320ms cubic-bezier(0.22,1,0.36,1), padding 320ms cubic-bezier(0.22,1,0.36,1), box-shadow 320ms',
@@ -47,11 +47,11 @@ export function CompactNav({ brand, links, cta, scrolled: controlled }: CompactN
       <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontWeight: 700, fontSize: on ? 14 : 15.5, marginInlineEnd: 'auto', transition: 'font-size 320ms' }}>{brand}</span>
       <span style={{ display: 'inline-flex', gap: 2 }}>
         {links.map((l, i) => (
-          <a key={l} href="#" className={i === 0 ? undefined : 'i-soft-text'} style={{ textDecoration: 'none', color: i === 0 ? 'var(--text)' : 'var(--text-2)', fontSize: on ? 12.5 : 13.5, fontWeight: i === 0 ? 600 : 500, padding: on ? '6px 11px' : '7px 14px', borderRadius: 999, background: i === 0 ? 'var(--accent-soft)' : undefined, transition: 'font-size 320ms, padding 320ms' }}>{l}</a>
+          <a key={l} href="#" className={i === 0 ? undefined : 'i-soft-text'} style={{ textDecoration: 'none', color: i === 0 ? 'var(--text)' : 'var(--text-2)', fontSize: on ? 12.5 : 13.5, fontWeight: i === 0 ? 600 : 500, padding: on ? '6px 11px' : '7px 14px', borderRadius: 6, background: i === 0 ? 'var(--accent-soft)' : undefined, transition: 'font-size 320ms, padding 320ms' }}>{l}</a>
         ))}
       </span>
       {cta && (
-        <button className="i-lift i-press-96" style={{ height: on ? 32 : 36, padding: on ? '0 13px' : '0 16px', borderRadius: 999, border: 'none', background: 'var(--ink)', color: 'var(--on-ink)', fontFamily: 'inherit', fontSize: on ? 12.5 : 13.5, fontWeight: 600, cursor: 'pointer', transition: 'height 320ms, padding 320ms, font-size 320ms' }}>{cta}</button>
+        <button className="i-lift i-press-96" style={{ height: on ? 32 : 36, padding: on ? '0 13px' : '0 16px', borderRadius: 6, border: 'none', background: 'var(--ink)', color: 'var(--on-ink)', fontFamily: 'inherit', fontSize: on ? 12.5 : 13.5, fontWeight: 600, cursor: 'pointer', transition: 'height 320ms, padding 320ms, font-size 320ms' }}>{cta}</button>
       )}
     </nav>
   );
@@ -73,7 +73,7 @@ export function ProgressiveNavbar({ brand, links, scrolled: controlled, restingC
   const fg = on ? 'var(--text)' : restingColor;
   return (
     <div style={{
-      display: 'flex', alignItems: 'center', gap: 18, padding: '12px 20px', borderRadius: 16,
+      display: 'flex', alignItems: 'center', gap: 18, padding: '12px 20px', borderRadius: 6,
       background: on ? 'var(--glass)' : 'transparent',
       backdropFilter: on ? 'blur(var(--glass-blur)) saturate(var(--glass-sat))' : 'none', WebkitBackdropFilter: on ? 'blur(var(--glass-blur)) saturate(var(--glass-sat))' : 'none',
       borderBottom: on ? '1px solid var(--border)' : '1px solid transparent',
@@ -82,7 +82,7 @@ export function ProgressiveNavbar({ brand, links, scrolled: controlled, restingC
     }}>
       <span style={{ fontWeight: 700, fontSize: 15, marginInlineEnd: 'auto', display: 'inline-flex', alignItems: 'center', gap: 8 }}>{brand}</span>
       <nav style={{ display: 'flex', gap: 4 }}>
-        {links.map((l) => <a key={l} href="#" style={{ textDecoration: 'none', color: 'inherit', opacity: 0.85, fontSize: 13.5, fontWeight: 500, padding: '7px 12px', borderRadius: 999 }}>{l}</a>)}
+        {links.map((l) => <a key={l} href="#" style={{ textDecoration: 'none', color: 'inherit', opacity: 0.85, fontSize: 13.5, fontWeight: 500, padding: '7px 12px', borderRadius: 6 }}>{l}</a>)}
       </nav>
     </div>
   );
@@ -94,7 +94,7 @@ export function BucketGlyph({ size = 72, count }: { size?: number; count?: numbe
   const w = size, h = size * 0.86;
   return (
     <span style={{ position: 'relative', width: w, height: h, display: 'inline-block' }}>
-      <span aria-hidden style={{ position: 'absolute', top: h * 0.14, insetInline: '18%', height: h * 0.75, background: 'linear-gradient(180deg, oklch(from var(--accent) calc(l + 0.06) c h), var(--accent) 60%, oklch(from var(--accent) calc(l - 0.1) c h))', borderRadius: `0 0 ${w * 0.32}px ${w * 0.32}px / 0 0 ${h * 0.5}px ${h * 0.5}px`, boxShadow: 'inset 0 2px 0 rgba(255,255,255,0.3), var(--shadow-2)' }} />
+      <span aria-hidden style={{ position: 'absolute', top: h * 0.14, insetInline: '18%', height: h * 0.75, background: 'linear-gradient(180deg, oklch(from var(--accent) calc(l + 0.06) c h), var(--accent) 60%, oklch(from var(--accent) calc(l - 0.1) c h))', borderRadius: `0 0 ${w * 0.32}px ${w * 0.32}px / 0 0 ${h * 0.5}px ${h * 0.5}px`, boxShadow: 'inset 0 2px 0 rgba(255,255,255,0.3)', }} />
       <span aria-hidden style={{ position: 'absolute', top: h * 0.07, insetInline: '13%', height: h * 0.2, background: 'oklch(from var(--accent) calc(l + 0.1) c h)', borderRadius: '50%', boxShadow: 'inset 0 -3px 6px rgba(0,0,0,0.2)' }} />
       <span aria-hidden style={{ position: 'absolute', top: '-4%', insetInline: '26%', height: h * 0.4, border: '3px solid var(--accent)', borderBottom: 'none', borderRadius: `${w * 0.3}px ${w * 0.3}px 0 0`, opacity: 0.85 }} />
       {count != null && <span style={{ position: 'absolute', insetInline: 0, top: '46%', textAlign: 'center', color: 'var(--on-accent)', fontSize: size * 0.26, fontWeight: 800, fontVariantNumeric: 'tabular-nums' }}>{count}</span>}

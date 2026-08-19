@@ -1,4 +1,5 @@
 import { Section } from '../SectionHeader';
+import { SpecShelf } from '../SpecRow';
 import {
   AtelierEyebrow, BezelCard, MagneticCTA, RevealOnView, SpecularCard, EditorialFigure, DisplaySerif,
 } from '../../components';
@@ -14,7 +15,7 @@ export function Atelier() {
         <span aria-hidden style={{ position: 'absolute', inset: '-40px', pointerEvents: 'none', opacity: 0.5, mixBlendMode: 'overlay', backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.32'/%3E%3C/svg%3E\")" }} />
 
         {/* Editorial split header */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 32, alignItems: 'end', marginBottom: 64 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.55fr) minmax(0, 1fr)', gap: 32, alignItems: 'end', marginBottom: 64 }}>
           <RevealOnView>
             <AtelierEyebrow>Atelier · الطبقة الفاخرة</AtelierEyebrow>
             <h2 style={{ margin: '18px 0 0' }}>
@@ -31,7 +32,7 @@ export function Atelier() {
         </div>
 
         {/* Z-Axis cascade of machined cards */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(260px,1fr))', gap: 24, alignItems: 'stretch' }}>
+        <SpecShelf bare rhythm={[5, 4, 3]}>
           <RevealOnView delay={0} style={{ transform: 'rotate(-1.4deg)' }}>
             <SpecularCard style={{ height: '100%' }}>
               <div style={{ padding: 26, minHeight: 200, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
@@ -55,12 +56,12 @@ export function Atelier() {
               </div>
             </SpecularCard>
           </RevealOnView>
-        </div>
+        </SpecShelf>
 
         {/* Double-Bezel feature plate + island CTA */}
         <RevealOnView delay={80} style={{ marginTop: 32 }}>
           <BezelCard radius={34} inset={7}>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: 28, alignItems: 'center', padding: 'clamp(28px, 5vw, 56px)' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.7fr) minmax(0, 1fr)', gap: 28, alignItems: 'center', padding: 'clamp(28px, 5vw, 56px)' }}>
               <div>
                 <DisplaySerif size="clamp(30px, 4vw, 52px)" style={{ display: 'block' }}>The machined</DisplaySerif>
                 <DisplaySerif size="clamp(30px, 4vw, 52px)" style={{ display: 'block', fontStyle: 'italic' }}>surface.</DisplaySerif>
@@ -79,7 +80,7 @@ export function Atelier() {
                 <BezelCard radius={20} inset={5}>
                   <div style={{ padding: '18px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <span style={{ fontSize: 13.5, color: 'var(--text-2)' }}>Inset highlight</span>
-                    <span style={{ width: 46, height: 22, borderRadius: 999, background: 'linear-gradient(180deg, color-mix(in srgb, white 60%, transparent), transparent), var(--surface-2)', boxShadow: 'inset 0 1px 0 color-mix(in srgb, white 70%, transparent)' }} />
+                    <span style={{ width: 46, height: 22, borderRadius: 6, background: 'linear-gradient(180deg, color-mix(in srgb, white 60%, transparent), transparent), var(--surface-2)', boxShadow: 'inset 0 1px 0 color-mix(in srgb, white 70%, transparent)' }} />
                   </div>
                 </BezelCard>
               </div>

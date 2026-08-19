@@ -40,8 +40,8 @@ export function ToolbarDock({ tools, active, defaultActive = 0, onChange, rtl = 
   }, [idx, rtl, tools.length]);
 
   return (
-    <div ref={wrap} style={{ position: 'relative', display: 'inline-flex', gap: 4, padding: 6, borderRadius: 18, background: 'var(--glass)', backdropFilter: 'blur(var(--glass-blur)) saturate(var(--glass-sat))', WebkitBackdropFilter: 'blur(var(--glass-blur)) saturate(var(--glass-sat))', border: '1px solid var(--border)', boxShadow: 'var(--shadow-2), inset 0 1px 0 var(--glass-hl)' }}>
-      <span style={{ position: 'absolute', top: 6, bottom: 6, insetInlineStart: pill.x, width: pill.w, borderRadius: 12, background: 'var(--accent)', boxShadow: 'var(--shadow-1)', transition: `inset-inline-start 400ms ${glide}, width 400ms ${glide}` }} />
+    <div ref={wrap} style={{ position: 'relative', display: 'inline-flex', gap: 4, padding: 6, borderRadius: 6, background: 'var(--glass)', backdropFilter: 'blur(var(--glass-blur)) saturate(var(--glass-sat))', WebkitBackdropFilter: 'blur(var(--glass-blur)) saturate(var(--glass-sat))', border: '1px solid var(--border)', boxShadow: 'inset 0 1px 0 var(--glass-hl)', }}>
+      <span style={{ position: 'absolute', top: 6, bottom: 6, insetInlineStart: pill.x, width: pill.w, borderRadius: 6, background: 'var(--accent)', transition: `inset-inline-start 400ms ${glide}, width 400ms ${glide}` }} />
       {tools.map((t, i) => (
         <button
           key={t.label}
@@ -49,7 +49,7 @@ export function ToolbarDock({ tools, active, defaultActive = 0, onChange, rtl = 
           onClick={() => { if (active === undefined) setInternal(i); onChange?.(i); }}
           aria-label={t.label}
           aria-pressed={idx === i}
-          style={{ position: 'relative', zIndex: 1, display: 'inline-flex', alignItems: 'center', gap: 7, height: 40, padding: idx === i ? '0 14px' : '0 11px', borderRadius: 12, border: 'none', background: 'none', cursor: 'pointer', fontFamily: 'inherit', fontSize: 12.5, fontWeight: 600, color: idx === i ? 'var(--on-accent)' : 'var(--text-2)', transition: 'color 300ms' }}
+          style={{ position: 'relative', zIndex: 1, display: 'inline-flex', alignItems: 'center', gap: 7, height: 40, padding: idx === i ? '0 14px' : '0 11px', borderRadius: 6, border: 'none', background: 'none', cursor: 'pointer', fontFamily: 'inherit', fontSize: 12.5, fontWeight: 600, color: idx === i ? 'var(--on-accent)' : 'var(--text-2)', transition: 'color 300ms' }}
         >
           <span style={{ display: 'inline-flex' }}>{t.icon}</span>
           {idx === i && <span>{t.label}</span>}

@@ -1,4 +1,5 @@
 import { Section, SectionHeader } from '../SectionHeader';
+import { SpecList, SpecRow } from '../SpecRow';
 import { UploadFolder, simulatedUpload, type Uploader } from '../../components/upload';
 
 /* One file is made to fail, so the failed state and its retry are shown
@@ -26,18 +27,7 @@ const failsTheSecondFile: Uploader = (file, onProgress, signal) => {
 
 function Cell({ title, note, children }: { title: string; note: string; children: React.ReactNode }) {
   return (
-    <div
-      style={{
-        background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 22,
-        padding: 24, boxShadow: 'var(--shadow-1)', display: 'flex', flexDirection: 'column', gap: 18,
-      }}
-    >
-      <div>
-        <div style={{ fontSize: 13.5, fontWeight: 600, color: 'var(--text)' }}>{title}</div>
-        <p style={{ margin: '6px 0 0', fontSize: 12.5, lineHeight: 1.6, color: 'var(--text-2)' }}>{note}</p>
-      </div>
-      <div style={{ display: 'grid', placeItems: 'center' }}>{children}</div>
-    </div>
+    <SpecRow name={title} specimen={children} bare>{note}</SpecRow>
   );
 }
 
@@ -48,23 +38,23 @@ export function Upload() {
         شريط تقدّم يعدّ إلى المئة يصف الزمن ولا يصف العمل. هنا للرفع مكان يذهب إليه: مجلّد يفتح غطاءه حين تهبط الملفات ويستقرّ مواربًا بعدها، وكل ملف يحمل حالته الخاصة — في الانتظار، جارٍ، تمّ، أخفق — مع مخرج منها: إلغاء أثناء النقل، وإعادة محاولة بعد الفشل.
       </SectionHeader>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(320px,1fr))', gap: 20, alignItems: 'start' }}>
+      <SpecList>
         <Cell
-          title="Solid — الجسم المبنيّ"
+          title="Solid: الجسم المبنيّ"
           note="ليس رسمًا لمجلّد بل مجلّد: ظهر وثلاثة جدران تمنحه سمكًا، وأوراق تتراكم بعدد الملفات، وغطاء على مفصلة حقيقية. كل وجه يأخذ لونه من توكن واحد وسطوعه من زاويته إلى ضوء واحد فوقه — مادة واحدة تُضاء، لا لوحة ألوان ثانية تُدار."
         >
           <UploadFolder variant="solid" />
         </Cell>
 
         <Cell
-          title="Exploded — الجسم يشرح بناءه"
+          title="Exploded: الجسم يشرح بناءه"
           note="نفس الأوجه تتباعد في العمق كما يفعل التفكيك الهندسي: الظهر، فالأوراق، فالغطاء. نظام التصميم يُظهر تركيبه وهو يعمل، لا في رسم توضيحي منفصل عنه."
         >
           <UploadFolder variant="exploded" title="أرشيف التسليم" meta="ثلاث طبقات: ظهر، أوراق، غطاء" tabLabel="ARCHIVE" />
         </Cell>
 
         <Cell
-          title="Flat — الأصل المرسوم، وقصّة الإخفاق"
+          title="Flat: الأصل المرسوم، وقصّة الإخفاق"
           note="الصيغة الأولى محفوظة لا لأنها أضعف، بل لأن الحكم على المجسّم لا يصحّ بلا ما يُقاس عليه — وهي الاختيار الصحيح داخل قائمة كثيفة. وهنا يُرفض ملف عمدًا: يتلوّن مساره بلون الخطر ويظهر زرّ إعادة المحاولة مكان الإلغاء."
         >
           <UploadFolder
@@ -75,7 +65,7 @@ export function Upload() {
             upload={failsTheSecondFile}
           />
         </Cell>
-      </div>
+      </SpecList>
     </Section>
   );
 }

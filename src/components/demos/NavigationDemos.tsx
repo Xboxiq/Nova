@@ -13,10 +13,11 @@ import {
   PiPaperclip,
   PiPause,
   PiPlay,
-  PiSparkle,
   PiUploadSimple,
   PiUser,
   PiWaveform,
+  PiChatCircleDots,
+  PiPalette,
 } from "react-icons/pi";
 import type { DemoProps } from "./shared";
 
@@ -91,7 +92,7 @@ function Activity() {
 
 function GlowMenu() {
   const [active, setActive] = useState(0);
-  const items = [[PiHouse, "الرئيسية"], [PiSparkle, "الإبداع"], [PiFolder, "المشاريع"], [PiUser, "الحساب"]] as const;
+  const items = [[PiHouse, "الرئيسية"], [PiPalette, "الإبداع"], [PiFolder, "المشاريع"], [PiUser, "الحساب"]] as const;
   return (
     <div className="demo demo-glow-menu">
       <nav className="glow-nav" aria-label="قائمة داكنة">
@@ -112,7 +113,7 @@ function AgentDock({ onNotify }: Pick<DemoProps, "onNotify">) {
   };
   return (
     <div className="demo demo-agent">
-      <div className="agent-response"><span><PiSparkle /></span><div><small>NOVA Agent</small><p>كيف أستطيع مساعدتك في بناء الواجهة؟</p></div></div>
+      <div className="agent-response"><span><PiChatCircleDots /></span><div><small>NOVA Agent</small><p>كيف أستطيع مساعدتك في بناء الواجهة؟</p></div></div>
       <div className={`agent-composer ${listening ? "listening" : ""}`}>
         <button type="button" aria-label="إرفاق ملف"><PiPaperclip /></button>
         <input value={value} onChange={(event) => setValue(event.target.value)} placeholder={listening ? "أستمع إليك..." : "اكتب طلبك"} onKeyDown={(event) => { if (event.key === "Enter") send(); }} />

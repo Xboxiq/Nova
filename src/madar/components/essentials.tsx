@@ -28,7 +28,7 @@ export function DataTable<R extends Record<string, Cell>>({ columns, rows, selec
   const th: React.CSSProperties = { textAlign: 'start', fontSize: 11.5, fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase', color: 'var(--text-3)', padding: '10px 14px', whiteSpace: 'nowrap' };
   const td: React.CSSProperties = { fontSize: 13.5, padding: '11px 14px', color: 'var(--text)', borderTop: '1px solid var(--border)' };
   return (
-    <div style={{ overflowX: 'auto', borderRadius: 16, border: '1px solid var(--border)', background: 'var(--surface)' }}>
+    <div style={{ overflowX: 'auto', borderRadius: 6, border: '1px solid var(--border)', background: 'var(--surface)' }}>
       <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 420 }}>
         <thead>
           <tr>
@@ -80,13 +80,13 @@ export function Drawer({ triggerLabel = 'افتح اللوحة', title = 'الل
     : { insetBlock: 0, [side === 'end' ? 'insetInlineEnd' : 'insetInlineStart']: 0, width: 'min(380px, 86%)' } as React.CSSProperties;
   return (
     <>
-      <button onClick={() => setOpen(true)} className="i-press-97 i-lift" style={{ height: 42, padding: '0 20px', borderRadius: 12, border: '1px solid var(--border-strong)', background: 'var(--surface)', color: 'var(--text)', fontFamily: 'inherit', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>{triggerLabel}</button>
+      <button onClick={() => setOpen(true)} className="i-press-97 i-lift" style={{ height: 42, padding: '0 20px', borderRadius: 6, border: '1px solid var(--border-strong)', background: 'var(--surface)', color: 'var(--text)', fontFamily: 'inherit', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>{triggerLabel}</button>
       <div aria-hidden={!open} style={{ position: 'fixed', inset: 0, zIndex: 60, pointerEvents: open ? 'auto' : 'none' }}>
         <div onClick={() => setOpen(false)} style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.42)', opacity: open ? 1 : 0, transition: `opacity 320ms ${GLIDE}`, backdropFilter: open ? 'blur(2px)' : 'none' }} />
-        <div role="dialog" aria-modal="true" style={{ position: 'absolute', ...panelPos, background: 'var(--surface)', boxShadow: 'var(--shadow-3)', borderInlineStart: side === 'end' ? '1px solid var(--border)' : undefined, borderInlineEnd: side === 'start' ? '1px solid var(--border)' : undefined, transform: open ? 'none' : hidden, transition: `transform 420ms ${SPRING}`, display: 'flex', flexDirection: 'column' }}>
+        <div role="dialog" aria-modal="true" style={{ position: 'absolute', ...panelPos, background: 'var(--surface)', borderInlineStart: side === 'end' ? '1px solid var(--border)' : undefined, borderInlineEnd: side === 'start' ? '1px solid var(--border)' : undefined, transform: open ? 'none' : hidden, transition: `transform 420ms ${SPRING}`, display: 'flex', flexDirection: 'column' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 18px', borderBottom: '1px solid var(--border)' }}>
             <b style={{ fontSize: 15.5 }}>{title}</b>
-            <button aria-label="إغلاق" onClick={() => setOpen(false)} className="i-soft" style={{ width: 32, height: 32, borderRadius: 8, border: 'none', background: 'var(--surface-2)', color: 'var(--text-2)', cursor: 'pointer', display: 'grid', placeItems: 'center' }}>
+            <button aria-label="إغلاق" onClick={() => setOpen(false)} className="i-soft" style={{ width: 32, height: 32, borderRadius: 6, border: 'none', background: 'var(--surface-2)', color: 'var(--text-2)', cursor: 'pointer', display: 'grid', placeItems: 'center' }}>
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M6 6l12 12M18 6L6 18" /></svg>
             </button>
           </div>
@@ -120,11 +120,11 @@ export function ToastDemo() {
   };
   return (
     <>
-      <button onClick={push} className="i-press-97 i-lift" style={{ height: 42, padding: '0 20px', borderRadius: 12, border: 'none', background: 'var(--ink)', color: 'var(--on-ink)', fontFamily: 'inherit', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>أطلق تنبيهاً</button>
+      <button onClick={push} className="i-press-97 i-lift" style={{ height: 42, padding: '0 20px', borderRadius: 6, border: 'none', background: 'var(--ink)', color: 'var(--on-ink)', fontFamily: 'inherit', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>أطلق تنبيهاً</button>
       <div style={{ position: 'fixed', insetInlineEnd: 20, bottom: 20, zIndex: 70, display: 'flex', flexDirection: 'column', gap: 10, pointerEvents: 'none' }}>
         {items.map((t) => (
-          <div key={t.id} style={{ pointerEvents: 'auto', display: 'flex', alignItems: 'center', gap: 10, minWidth: 240, padding: '12px 14px', borderRadius: 12, background: 'var(--surface)', border: '1px solid var(--border)', boxShadow: 'var(--shadow-3)', animation: `toastIn 420ms ${SPRING} both` }}>
-            <span style={{ width: 26, height: 26, borderRadius: 8, background: `color-mix(in srgb, ${TONE_COLOR[t.tone]} 16%, transparent)`, color: TONE_COLOR[t.tone], display: 'grid', placeItems: 'center', flex: 'none' }}>
+          <div key={t.id} style={{ pointerEvents: 'auto', display: 'flex', alignItems: 'center', gap: 10, minWidth: 240, padding: '12px 14px', borderRadius: 6, background: 'var(--surface)', border: '1px solid var(--border)', animation: `toastIn 420ms ${SPRING} both` }}>
+            <span style={{ width: 26, height: 26, borderRadius: 6, background: `color-mix(in srgb, ${TONE_COLOR[t.tone]} 16%, transparent)`, color: TONE_COLOR[t.tone], display: 'grid', placeItems: 'center', flex: 'none' }}>
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">{TONE_ICON[t.tone]}</svg>
             </span>
             <span style={{ fontSize: 13.5, fontWeight: 500, flex: 1 }}>{t.text}</span>
@@ -156,13 +156,13 @@ export function FileDropzone({ onFiles }: { onFiles?: (f: DroppedFile[]) => void
         onDragOver={(e) => { e.preventDefault(); setOver(true); }} onDragLeave={() => setOver(false)}
         onDrop={(e) => { e.preventDefault(); setOver(false); add(e.dataTransfer.files); }}
         onClick={() => input.current?.click()}
-        style={{ display: 'grid', placeItems: 'center', gap: 8, padding: '26px 18px', borderRadius: 14, cursor: 'pointer', border: `1.5px dashed ${over ? 'var(--accent)' : 'var(--border-strong)'}`, background: over ? 'var(--accent-soft)' : 'var(--surface-2)', transition: `background 180ms, border-color 180ms`, textAlign: 'center' }}>
+        style={{ display: 'grid', placeItems: 'center', gap: 8, padding: '26px 18px', borderRadius: 6, cursor: 'pointer', border: `1.5px dashed ${over ? 'var(--accent)' : 'var(--border-strong)'}`, background: over ? 'var(--accent-soft)' : 'var(--surface-2)', transition: `background 180ms, border-color 180ms`, textAlign: 'center' }}>
         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke={over ? 'var(--accent)' : 'var(--text-3)'} strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" style={{ transition: `transform 300ms ${SPRING}`, transform: over ? 'translateY(-3px)' : 'none' }}><path d="M12 16V4M7 9l5-5 5 5" /><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" /></svg>
         <span style={{ fontSize: 13.5, fontWeight: 600, color: 'var(--text-2)' }}>اسحب الملفات هنا أو انقر للاختيار</span>
         <input ref={input} type="file" multiple hidden onChange={(e) => add(e.target.files)} />
       </div>
       {files.map((f, i) => (
-        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '9px 12px', borderRadius: 10, background: 'var(--surface)', border: '1px solid var(--border)', animation: `fadeUp 320ms ${GLIDE} both` }}>
+        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '9px 12px', borderRadius: 6, background: 'var(--surface)', border: '1px solid var(--border)', animation: `fadeUp 320ms ${GLIDE} both` }}>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" style={{ flex: 'none' }}><path d="M6 3h9l4 4v14H6z" /><path d="M14 3v5h5" /></svg>
           <span style={{ fontSize: 13, fontWeight: 500, flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{f.name}</span>
           <span style={{ fontSize: 11.5, color: 'var(--text-3)', fontVariantNumeric: 'tabular-nums' }}>{fmt(f.size)}</span>
@@ -179,15 +179,15 @@ export function FileDropzone({ onFiles }: { onFiles?: (f: DroppedFile[]) => void
 export interface EmptyStateProps { title?: string; description?: string; cta?: string; icon?: ReactNode; onAction?: () => void; }
 export function EmptyState({ title = 'لا شيء هنا بعد', description = 'ابدأ بإضافة أول عنصر وستظهر القائمة هنا.', cta = 'إضافة عنصر', icon, onAction }: EmptyStateProps) {
   return (
-    <div style={{ display: 'grid', placeItems: 'center', gap: 12, textAlign: 'center', padding: '36px 20px', borderRadius: 18, border: '1px dashed var(--border-strong)', background: 'var(--surface-2)' }}>
-      <span style={{ width: 56, height: 56, borderRadius: 16, background: 'var(--surface)', border: '1px solid var(--border)', boxShadow: 'var(--shadow-1)', display: 'grid', placeItems: 'center', color: 'var(--accent)' }}>
+    <div style={{ display: 'grid', placeItems: 'center', gap: 12, textAlign: 'center', padding: '36px 20px', borderRadius: 6, border: '1px dashed var(--border-strong)', background: 'var(--surface-2)' }}>
+      <span style={{ width: 56, height: 56, borderRadius: 6, background: 'var(--surface)', border: '1px solid var(--border)', display: 'grid', placeItems: 'center', color: 'var(--accent)' }}>
         {icon ?? <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M3 7l9-4 9 4-9 4-9-4z" /><path d="M3 7v10l9 4 9-4V7" /><path d="M12 11v10" /></svg>}
       </span>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
         <b style={{ fontSize: 16, letterSpacing: '-0.01em' }}>{title}</b>
         <span style={{ fontSize: 13.5, color: 'var(--text-3)', maxWidth: '34ch', lineHeight: '20px' }}>{description}</span>
       </div>
-      {cta && <button onClick={onAction} className="i-press-97 i-lift" style={{ height: 40, padding: '0 20px', borderRadius: 10, border: 'none', background: 'var(--accent)', color: 'var(--on-accent)', fontFamily: 'inherit', fontSize: 13.5, fontWeight: 600, cursor: 'pointer' }}>{cta}</button>}
+      {cta && <button onClick={onAction} className="i-press-97 i-lift" style={{ height: 40, padding: '0 20px', borderRadius: 6, border: 'none', background: 'var(--accent)', color: 'var(--on-accent)', fontFamily: 'inherit', fontSize: 13.5, fontWeight: 600, cursor: 'pointer' }}>{cta}</button>}
     </div>
   );
 }
@@ -198,7 +198,7 @@ export function Banner({ tone = 'info', title, children, dismissible = true }: {
   if (!show) return null;
   const c = TONE_COLOR[tone];
   return (
-    <div role="status" style={{ display: 'flex', alignItems: 'flex-start', gap: 11, padding: '13px 15px', borderRadius: 12, background: `color-mix(in srgb, ${c} 10%, var(--surface))`, border: `1px solid color-mix(in srgb, ${c} 32%, transparent)` }}>
+    <div role="status" style={{ display: 'flex', alignItems: 'flex-start', gap: 11, padding: '13px 15px', borderRadius: 6, background: `color-mix(in srgb, ${c} 10%, var(--surface))`, border: `1px solid color-mix(in srgb, ${c} 32%, transparent)` }}>
       <span style={{ color: c, flex: 'none', marginTop: 1 }}>
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">{TONE_ICON[tone]}</svg>
       </span>
@@ -236,12 +236,12 @@ export function RangeSlider({ min = 0, max = 100, defaultLow = 25, defaultHigh =
     window.addEventListener('pointermove', move); window.addEventListener('pointerup', up);
   };
   const Handle = ({ v, on }: { v: number; on: (e: React.PointerEvent) => void }) => (
-    <span onPointerDown={on} style={{ position: 'absolute', insetInlineStart: `${pct(v)}%`, top: '50%', transform: 'translate(-50%,-50%)', width: 20, height: 20, borderRadius: '50%', background: 'var(--surface)', border: '2px solid var(--accent)', boxShadow: 'var(--shadow-2)', cursor: 'grab', touchAction: 'none' }} />
+    <span onPointerDown={on} style={{ position: 'absolute', insetInlineStart: `${pct(v)}%`, top: '50%', transform: 'translate(-50%,-50%)', width: 20, height: 20, borderRadius: '50%', background: 'var(--surface)', border: '2px solid var(--accent)', cursor: 'grab', touchAction: 'none' }} />
   );
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 12, width: '100%', maxWidth: 300 }}>
-      <div ref={track} style={{ position: 'relative', height: 6, borderRadius: 999, background: 'var(--surface-2)' }}>
-        <span style={{ position: 'absolute', insetInlineStart: `${pct(lo)}%`, width: `${pct(hi) - pct(lo)}%`, top: 0, bottom: 0, background: 'var(--accent)', borderRadius: 999 }} />
+      <div ref={track} style={{ position: 'relative', height: 6, borderRadius: 6, background: 'var(--surface-2)' }}>
+        <span style={{ position: 'absolute', insetInlineStart: `${pct(lo)}%`, width: `${pct(hi) - pct(lo)}%`, top: 0, bottom: 0, background: 'var(--accent)', borderRadius: 6 }} />
         <Handle v={lo} on={drag('lo')} />
         <Handle v={hi} on={drag('hi')} />
       </div>

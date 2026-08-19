@@ -12,7 +12,7 @@ import { SPRING, GLIDE } from './physics';
 export function AuroraMeshHero({ children, minHeight = 260 }: { children: React.ReactNode; minHeight?: number }) {
   return (
     <div style={{
-      position: 'relative', borderRadius: 26, overflow: 'hidden', minHeight,
+      position: 'relative', borderRadius: 6, overflow: 'hidden', minHeight,
       border: '1px solid var(--border)',
       background: [
         'radial-gradient(60% 80% at 20% 10%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 60%)',
@@ -22,8 +22,6 @@ export function AuroraMeshHero({ children, minHeight = 260 }: { children: React.
       backgroundSize: '160% 160%, 150% 150%, 170% 170%, auto',
       animation: 'meshDrift 16s ease-in-out infinite',
     }}>
-      <span aria-hidden style={{ position: 'absolute', top: '-15%', insetInlineEnd: '8%', width: 130, height: 130, borderRadius: '50%', background: 'color-mix(in srgb, var(--accent) 30%, transparent)', filter: 'blur(46px)', animation: 'floaty 9s ease-in-out infinite' }} />
-      <span aria-hidden style={{ position: 'absolute', bottom: '-18%', insetInlineStart: '12%', width: 110, height: 110, borderRadius: '50%', background: 'color-mix(in srgb, var(--info) 26%, transparent)', filter: 'blur(42px)', animation: 'floaty 11s ease-in-out 1.5s infinite' }} />
       <div style={{ position: 'relative', padding: 28 }}>{children}</div>
     </div>
   );
@@ -40,7 +38,7 @@ export function CursorSpotlight({ children, minHeight = 200 }: { children: React
         setPos({ x: ((e.clientX - r.left) / r.width) * 100, y: ((e.clientY - r.top) / r.height) * 100 });
       }}
       style={{
-        position: 'relative', borderRadius: 22, overflow: 'hidden', minHeight, border: '1px solid var(--border)',
+        position: 'relative', borderRadius: 6, overflow: 'hidden', minHeight, border: '1px solid var(--border)',
         background: `radial-gradient(220px circle at ${pos.x}% ${pos.y}%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 70%), radial-gradient(var(--border) 1px, transparent 1px) 0 0 / 22px 22px, var(--bg-deep)`,
       }}
     >
@@ -54,13 +52,13 @@ export function CursorSpotlight({ children, minHeight = 200 }: { children: React
       generative or processing actions. */
 export function GenerateButton({ children = 'Generate', onClick }: { children?: React.ReactNode; onClick?: () => void }) {
   return (
-    <span style={{ position: 'relative', display: 'inline-grid', placeItems: 'center', borderRadius: 999, padding: 2, overflow: 'hidden', isolation: 'isolate' }}>
+    <span style={{ position: 'relative', display: 'inline-grid', placeItems: 'center', borderRadius: 6, padding: 2, overflow: 'hidden', isolation: 'isolate' }}>
       <span aria-hidden style={{
         position: 'absolute', inset: -22, zIndex: -1,
         background: 'conic-gradient(from 0deg, var(--accent), transparent 30%, color-mix(in srgb, var(--accent) 60%, var(--info)) 50%, transparent 75%, var(--accent) 100%)',
         animation: 'spin 3s linear infinite',
       }} />
-      <button onClick={onClick} className="i-press-97" style={{ position: 'relative', height: 44, padding: '0 24px', borderRadius: 999, border: 'none', background: 'var(--ink)', color: 'var(--on-ink)', fontFamily: 'inherit', fontSize: 14, fontWeight: 600, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+      <button onClick={onClick} className="i-press-97" style={{ position: 'relative', height: 44, padding: '0 24px', borderRadius: 6, border: 'none', background: 'var(--ink)', color: 'var(--on-ink)', fontFamily: 'inherit', fontSize: 14, fontWeight: 600, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 8 }}>
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3z" /><path d="M19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9L19 15z" /></svg>
         {children}
       </button>
@@ -75,7 +73,7 @@ export function GlowInput({ placeholder = 'Ask anything…' }: { placeholder?: s
   return (
     <span style={{ position: 'relative', display: 'block' }}>
       <span aria-hidden style={{
-        position: 'absolute', inset: -3, borderRadius: 15, filter: 'blur(10px)', opacity: focus ? 0.8 : 0.35, transition: 'opacity 300ms',
+        position: 'absolute', inset: -3, borderRadius: 6, filter: 'blur(10px)', opacity: focus ? 0.8 : 0.35, transition: 'opacity 300ms',
         background: 'linear-gradient(100deg, var(--accent), color-mix(in srgb, var(--accent) 50%, var(--info)), var(--accent))',
         backgroundSize: '200% 100%', animation: 'shimmer 3s linear infinite',
       }} />
@@ -83,7 +81,7 @@ export function GlowInput({ placeholder = 'Ask anything…' }: { placeholder?: s
         placeholder={placeholder}
         onFocus={() => setFocus(true)}
         onBlur={() => setFocus(false)}
-        style={{ position: 'relative', width: '100%', boxSizing: 'border-box', height: 46, borderRadius: 13, border: '1px solid var(--border-strong)', background: 'var(--surface)', color: 'var(--text)', padding: '0 16px', fontFamily: 'inherit', fontSize: 15, outline: 'none' }}
+        style={{ position: 'relative', width: '100%', boxSizing: 'border-box', height: 46, borderRadius: 6, border: '1px solid var(--border-strong)', background: 'var(--surface)', color: 'var(--text)', padding: '0 16px', fontFamily: 'inherit', fontSize: 15, outline: 'none' }}
       />
     </span>
   );
@@ -143,7 +141,7 @@ export function SwipeableListRow({ children, actionLabel = 'Archive', onAction, 
   const start = useRef(0);
 
   return (
-    <div style={{ position: 'relative', borderRadius: 14, overflow: 'hidden', border: '1px solid var(--border)' }}>
+    <div style={{ position: 'relative', borderRadius: 6, overflow: 'hidden', border: '1px solid var(--border)' }}>
       <button
         onClick={() => { onAction?.(); setX(0); }}
         style={{ position: 'absolute', insetBlock: 0, insetInlineEnd: 0, width: OPEN, border: 'none', background: 'var(--warning)', color: '#fff', fontFamily: 'inherit', fontSize: 12.5, fontWeight: 700, cursor: 'pointer' }}
@@ -182,16 +180,15 @@ export function MagnifyingDock({ icons, labels }: { icons: React.ReactNode[]; la
     return d === 0 ? -10 : d === 1 ? -5 : d === 2 ? -2 : 0;
   };
   return (
-    <div onMouseLeave={() => setHov(-1)} style={{ display: 'inline-flex', alignItems: 'flex-end', gap: 8, padding: 10, borderRadius: 24, background: 'var(--glass)', backdropFilter: 'blur(var(--glass-blur)) saturate(var(--glass-sat))', WebkitBackdropFilter: 'blur(var(--glass-blur)) saturate(var(--glass-sat))', border: '1px solid var(--border)', boxShadow: 'var(--shadow-3), inset 0 1px 0 var(--glass-hl)' }}>
+    <div onMouseLeave={() => setHov(-1)} style={{ display: 'inline-flex', alignItems: 'flex-end', gap: 8, padding: 10, borderRadius: 6, background: 'var(--glass)', backdropFilter: 'blur(var(--glass-blur)) saturate(var(--glass-sat))', WebkitBackdropFilter: 'blur(var(--glass-blur)) saturate(var(--glass-sat))', border: '1px solid var(--border)', boxShadow: 'inset 0 1px 0 var(--glass-hl)', }}>
       {icons.map((icon, i) => (
         <button
           key={i}
           aria-label={labels[i]}
           onMouseEnter={() => setHov(i)}
           style={{
-            width: 44, height: 44, borderRadius: 13, border: 'none', background: 'var(--surface)', color: 'var(--text-2)',
-            cursor: 'pointer', display: 'grid', placeItems: 'center', boxShadow: 'var(--shadow-1)',
-            transform: `scale(${scaleFor(i)}) translateY(${liftFor(i)}px)`, transformOrigin: 'bottom center',
+            width: 44, height: 44, borderRadius: 6, border: 'none', background: 'var(--surface)', color: 'var(--text-2)',
+            cursor: 'pointer', display: 'grid', placeItems: 'center',            transform: `scale(${scaleFor(i)}) translateY(${liftFor(i)}px)`, transformOrigin: 'bottom center',
             transition: `transform 240ms ${SPRING}`,
           }}
         >{icon}</button>

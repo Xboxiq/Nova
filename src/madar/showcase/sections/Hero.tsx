@@ -19,12 +19,12 @@ function GlassPanel({ children, style, tilt = 0, delay = 0 }: { children: React.
   return (
     <div style={{ ...reveal(delay), transform: `rotate(${tilt}deg)` }}>
       <div style={{
-        padding: 6, borderRadius: 26,
+        padding: 6, borderRadius: 6,
         background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)',
-        boxShadow: '0 30px 60px -20px rgba(0,0,0,0.55)', ...style,
+ ...style,
       }}>
         <div style={{
-          position: 'relative', borderRadius: 20, overflow: 'hidden',
+          position: 'relative', borderRadius: 6, overflow: 'hidden',
           background: 'rgba(255,255,255,0.10)',
           backdropFilter: 'blur(24px) saturate(180%)', WebkitBackdropFilter: 'blur(24px) saturate(180%)',
           boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.35), inset 0 -1px 0 rgba(0,0,0,0.2)',
@@ -42,7 +42,7 @@ export function Hero() {
   return (
     <Section label="Hero pattern" maxWidth={1240} padding="0 16px">
       <div style={{
-        position: 'relative', marginTop: 12, borderRadius: 32, overflow: 'hidden', minHeight: 660, isolation: 'isolate',
+        position: 'relative', marginTop: 12, borderRadius: 6, overflow: 'hidden', minHeight: 660, isolation: 'isolate',
         background: 'radial-gradient(120% 90% at 50% -10%, oklch(0.32 0.09 274), oklch(0.16 0.05 274) 60%, oklch(0.11 0.04 274))',
         border: '1px solid rgba(255,255,255,0.08)',
       }}>
@@ -57,27 +57,27 @@ export function Hero() {
         <div style={{ position: 'relative', zIndex: 2, padding: '18px 22px 40px' }}>
           {/* Fluid Island glass navbar — Double-Bezel */}
           <div style={{ ...reveal(0), display: 'flex', justifyContent: 'center' }}>
-            <div style={{ padding: 5, borderRadius: 999, background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.12)', boxShadow: '0 12px 30px -12px rgba(0,0,0,0.5)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '7px 8px 7px 16px', borderRadius: 999, background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(20px) saturate(180%)', WebkitBackdropFilter: 'blur(20px) saturate(180%)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.3)' }}>
+            <div style={{ padding: 5, borderRadius: 6, background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.12)', }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '7px 8px 7px 16px', borderRadius: 6, background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(20px) saturate(180%)', WebkitBackdropFilter: 'blur(20px) saturate(180%)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.3)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 9, marginInlineEnd: 14 }}>
-                  <div style={{ width: 22, height: 22, borderRadius: '50%', background: 'conic-gradient(from 210deg, var(--accent), oklch(from var(--accent) l c calc(h + 60)), var(--accent))', boxShadow: '0 0 14px oklch(from var(--accent) l c h / 0.8)' }} />
+                  <div style={{ width: 22, height: 22, borderRadius: '50%', background: 'conic-gradient(from 210deg, var(--accent), oklch(from var(--accent) l c calc(h + 60)), var(--accent))', }} />
                   <span style={{ fontWeight: 700, fontSize: 15, color: '#fff' }}>Madar</span>
                 </div>
                 <nav style={{ display: 'flex', gap: 2 }}>
                   {['Home', 'Features', 'Pricing', 'Docs'].map((l, i) => (
-                    <a key={l} href="#" className="hero-navlink" style={{ textDecoration: 'none', color: i === 0 ? '#fff' : 'rgba(255,255,255,0.62)', fontSize: 13, fontWeight: i === 0 ? 600 : 500, padding: '7px 13px', borderRadius: 999, background: i === 0 ? 'rgba(255,255,255,0.14)' : 'transparent', transition: `background 300ms ${EASE}, color 300ms` }}>{l}</a>
+                    <a key={l} href="#" className="hero-navlink" style={{ textDecoration: 'none', color: i === 0 ? '#fff' : 'rgba(255,255,255,0.62)', fontSize: 13, fontWeight: i === 0 ? 600 : 500, padding: '7px 13px', borderRadius: 6, background: i === 0 ? 'rgba(255,255,255,0.14)' : 'transparent', transition: `background 300ms ${EASE}, color 300ms` }}>{l}</a>
                   ))}
                 </nav>
                 {/* secondary intent, distinct from the hero's primary CTA (§14 no-duplicate-intent) */}
-                <button style={{ marginInlineStart: 12, height: 38, padding: '0 18px', borderRadius: 999, border: '1px solid rgba(255,255,255,0.22)', background: 'rgba(255,255,255,0.06)', color: '#fff', fontFamily: 'inherit', fontSize: 13.5, fontWeight: 600, cursor: 'pointer', transition: `background 300ms ${EASE}` }} onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.14)')} onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.06)')}>Sign in</button>
+                <button style={{ marginInlineStart: 12, height: 38, padding: '0 18px', borderRadius: 6, border: '1px solid rgba(255,255,255,0.22)', background: 'rgba(255,255,255,0.06)', color: '#fff', fontFamily: 'inherit', fontSize: 13.5, fontWeight: 600, cursor: 'pointer', transition: `background 300ms ${EASE}` }} onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.14)')} onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.06)')}>Sign in</button>
               </div>
             </div>
           </div>
 
           {/* headline stack */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', padding: '68px 20px 8px', maxWidth: 900, margin: '0 auto' }}>
-            <span style={{ ...reveal(120), display: 'inline-flex', alignItems: 'center', gap: 9, padding: '6px 16px', borderRadius: 999, background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.14)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', fontSize: 11, letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 600, color: 'rgba(255,255,255,0.8)' }}>
-              <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--accent)', boxShadow: '0 0 8px var(--accent)' }} />
+            <span style={{ ...reveal(120), display: 'inline-flex', alignItems: 'center', gap: 9, padding: '6px 16px', borderRadius: 6, background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.14)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', fontSize: 11, letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 600, color: 'rgba(255,255,255,0.8)' }}>
+              <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--accent)', }} />
               One system · five moods · two directions
             </span>
             <h1 style={{ ...reveal(220), fontSize: 'clamp(42px, 6vw, 74px)', lineHeight: 1.04, fontWeight: 600, letterSpacing: '-0.035em', margin: '26px 0 0', color: '#fff', textWrap: 'balance' as const }}>
@@ -87,13 +87,13 @@ export function Hero() {
               A bilingual, multi-theme design language. Apple physics, Notion calm, Vercel precision, engineered into 130+ live components.
             </p>
             <div style={{ ...reveal(420), display: 'flex', gap: 12, marginTop: 32, flexWrap: 'wrap', justifyContent: 'center' }}>
-              <button className="hero-cta" style={{ display: 'inline-flex', alignItems: 'center', gap: 10, height: 52, padding: '0 8px 0 26px', borderRadius: 999, border: 'none', background: '#fff', color: '#0b0b12', fontFamily: 'inherit', fontSize: 16, fontWeight: 600, cursor: 'pointer', boxShadow: '0 18px 40px -14px rgba(0,0,0,0.6)', transition: `transform 500ms ${EASE}` }}>
+              <button className="hero-cta" style={{ display: 'inline-flex', alignItems: 'center', gap: 10, height: 52, padding: '0 8px 0 26px', borderRadius: 6, border: 'none', background: '#fff', color: '#0b0b12', fontFamily: 'inherit', fontSize: 16, fontWeight: 600, cursor: 'pointer', transition: `transform 500ms ${EASE}` }}>
                 Start building
                 <span className="hero-cta-icon" style={{ width: 36, height: 36, borderRadius: '50%', background: 'var(--accent)', color: 'var(--on-accent)', display: 'grid', placeItems: 'center', transition: `transform 500ms ${EASE}` }}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17L17 7M9 7h8v8" /></svg>
                 </span>
               </button>
-              <button style={{ height: 52, padding: '0 24px', borderRadius: 999, border: '1px solid rgba(255,255,255,0.22)', background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)', color: '#fff', fontFamily: 'inherit', fontSize: 16, fontWeight: 600, cursor: 'pointer', transition: `background 300ms ${EASE}` }} onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.15)')} onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.08)')}>Read design.md</button>
+              <button style={{ height: 52, padding: '0 24px', borderRadius: 6, border: '1px solid rgba(255,255,255,0.22)', background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)', color: '#fff', fontFamily: 'inherit', fontSize: 16, fontWeight: 600, cursor: 'pointer', transition: `background 300ms ${EASE}` }} onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.15)')} onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.08)')}>Read design.md</button>
             </div>
           </div>
 
@@ -105,7 +105,7 @@ export function Hero() {
               <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 10, marginTop: 8 }}>
                 <div>
                   <span style={{ fontSize: 30, fontWeight: 700, fontVariantNumeric: 'tabular-nums', letterSpacing: '-0.02em' }}>84,120</span>
-                  <div style={{ marginTop: 6 }}><span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '2px 9px', borderRadius: 999, background: 'rgba(120,230,180,0.18)', color: 'oklch(0.85 0.16 158)', fontSize: 12, fontWeight: 700 }}>↑ 12.4%</span></div>
+                  <div style={{ marginTop: 6 }}><span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '2px 9px', borderRadius: 6, background: 'rgba(120,230,180,0.18)', color: 'oklch(0.85 0.16 158)', fontSize: 12, fontWeight: 700 }}>↑ 12.4%</span></div>
                 </div>
                 <svg width="92" height="38" viewBox="0 0 92 38" fill="none"><polyline points="2,30 16,24 30,27 44,14 58,18 72,7 90,11" stroke="var(--accent)" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" /><circle cx="90" cy="11" r="3" fill="var(--accent)" /></svg>
               </div>
@@ -129,11 +129,11 @@ export function Hero() {
             {/* live activity */}
             <GlassPanel tilt={3} delay={720} style={{ width: 268 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 9, marginBottom: 12 }}>
-                <span style={{ width: 8, height: 8, borderRadius: '50%', background: 'oklch(0.8 0.16 158)', boxShadow: '0 0 10px oklch(0.8 0.16 158)', animation: 'pulseDot 1.8s ease-in-out infinite' }} />
+                <span style={{ width: 8, height: 8, borderRadius: '50%', background: 'oklch(0.8 0.16 158)', animation: 'pulseDot 1.8s ease-in-out infinite' }} />
                 <span style={{ fontSize: 13, fontWeight: 600 }}>طلبك في الطريق</span>
                 <span style={{ marginInlineStart: 'auto', fontSize: 12, opacity: 0.6, fontVariantNumeric: 'tabular-nums' }}>12 min</span>
               </div>
-              <div style={{ height: 5, borderRadius: 999, background: 'rgba(255,255,255,0.14)', overflow: 'hidden' }}><div style={{ width: '62%', height: '100%', borderRadius: 999, background: 'linear-gradient(90deg, var(--accent), oklch(from var(--accent) l c calc(h + 50)))' }} /></div>
+              <div style={{ height: 5, borderRadius: 6, background: 'rgba(255,255,255,0.14)', overflow: 'hidden' }}><div style={{ width: '62%', height: '100%', borderRadius: 6, background: 'linear-gradient(90deg, var(--accent), oklch(from var(--accent) l c calc(h + 50)))' }} /></div>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, opacity: 0.6, marginTop: 8 }}><span>المطعم</span><span>السائق</span><span>منزلك</span></div>
             </GlassPanel>
           </div>

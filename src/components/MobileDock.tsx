@@ -1,8 +1,8 @@
 import {
   PiHouse,
   PiMagnifyingGlass,
-  PiSparkle,
   PiSquaresFour,
+  PiSwatches,
 } from "react-icons/pi";
 import type { Locale } from "../i18n";
 import { uiCopy } from "../i18n";
@@ -22,7 +22,7 @@ export default function MobileDock({ locale, onSearch }: MobileDockProps) {
         <span>{copy.home}</span>
       </a>
       <a href="#system">
-        <PiSparkle aria-hidden="true" />
+        <PiSwatches aria-hidden="true" />
         <span>{copy.system}</span>
       </a>
       <a className="dock-primary" href="#components">

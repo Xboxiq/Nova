@@ -67,15 +67,14 @@ export {
 export type { LogRow } from './feedback';
 
 export {
-  ReactionBar, TypingDots, CommentThread, LiveCursorLabel, TestimonialSlider,
-  TeamSection, AssigneeUser, AvatarBadge, AvatarStack, YearsTimeline,
+  ReactionBar, TypingDots, CommentThread, LiveCursorLabel, TeamSection, AssigneeUser, AvatarBadge, AvatarStack, YearsTimeline,
 } from './social';
 export type { ThreadComment, Testimonial, TeamMember, TimelineStation } from './social';
 
 export {
-  SquishyPricing, SplitCard, GradientMeshCard, NoiseDotCard, PinnedNote,
+  SplitCard, GradientMeshCard, PinnedNote,
   WorkflowSteps, OnboardingChecklist, ChecklistRow, NumberedFeatures, BigStatRow,
-  HeadlineChip, ConfigRow, FooterNewsletter, BentoGrid, BentoCell, MasonryColumns, MasonryItem,
+  HeadlineChip, ConfigRow, FooterNewsletter, MasonryColumns, MasonryItem,
   IconClusterNetwork, TimeField, ColorPicker, CURATED_GRADIENTS, GradientPaletteGrid,
   DuotoneImage, IconMarquee, FileCard, EditorialCard,
 } from './content';
@@ -126,16 +125,23 @@ export type {
 } from './heroLayouts';
 
 export {
-  ShredConfirm, ReceiptPrinter, DotMatrixReadout, ElasticSwitch, PerimeterProgress, MarqueeFrame,
+  ShredConfirm, ReceiptPrinter, ElasticSwitch, PerimeterProgress, MarqueeFrame,
 } from './consequence';
 
 export { UploadFolder, simulatedUpload } from './upload';
 export type { UploadFolderProps, UploadItem, UploadPhase, Uploader, FolderVariant } from './upload';
 
 export {
-  MeterFace, ConsumptionBand, UsageStrip, TariffLadder, AllocationBar, LoadComb, useLiveReading,
+  MeterFace, ConsumptionBand, UsageStrip, TariffLadder, AllocationBar, LoadComb, BillDocument,
+  useLiveReading,
 } from './energy';
 export type {
   TariffTier, MeterFaceProps, ConsumptionBandProps, UsageMetric, TariffLadderProps,
-  AllocationBarProps, LoadRow,
+  AllocationBarProps, LoadRow, BillDocumentProps,
 } from './energy';
+
+export { DayStrip, WindowPicker, TariffClock, DutyCycle, DEFAULT_PLAN } from './schedule';
+export type { Period, Level, Run, DayStripProps, WindowPickerProps, TariffClockProps, DutyCycleProps } from './schedule';
+
+export { OutageCompare } from './outage';
+export type { Span, Verdict, OutageCompareProps } from './outage';

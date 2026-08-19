@@ -1,4 +1,5 @@
 import { Section, SectionHeader } from '../SectionHeader';
+import { SpecShelf } from '../SpecRow';
 import { DiaText, Ignite, SkillsShowcase, ListBox, ActivityDropdown, EventCard } from '../../components';
 
 export function TextLists() {
@@ -7,9 +8,9 @@ export function TextLists() {
       <SectionHeader eyebrow="15 · TEXT & LISTS" title="Expressive text, listboxes & events">
         Dia text ignites on hover, skill chips wrap, listboxes describe themselves, and the event card composes live status — all from <code style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85em' }}>src/components</code>.
       </SectionHeader>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 20, alignItems: 'start' }}>
+      <SpecShelf>
         {/* dia text + skills */}
-        <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 22, padding: 26, boxShadow: 'var(--shadow-1)' }}>
+        <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, padding: 26, }}>
           <div style={{ fontSize: 13.5, fontWeight: 500, color: 'var(--text-2)', marginBottom: 14 }}>Dia text — key words ignite (hover them)</div>
           <DiaText>
             We build <Ignite>calm platforms</Ignite> where every surface speaks <Ignite shift={-1}>two languages</Ignite> from birth.
@@ -20,7 +21,7 @@ export function TextLists() {
         </div>
 
         {/* listbox + activity dropdown */}
-        <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 22, padding: 24, boxShadow: 'var(--shadow-1)' }}>
+        <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, padding: 24, }}>
           <div style={{ fontSize: 13.5, fontWeight: 500, color: 'var(--text-2)', marginBottom: 12 }}>Listbox — icon tile + title + description (click)</div>
           <ListBox options={[
             { title: 'Public', description: 'Anyone with the link can view', icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9" /><path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9S14.5 18.4 12 21c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3z" /></svg> },
@@ -37,7 +38,7 @@ export function TextLists() {
 
         {/* event manager */}
         <EventCard
-          title="درس الفيزياء — مجموعة ب"
+          title="درس الفيزياء: مجموعة ب"
           status={{ label: 'Open', tone: 'success' }}
           details={[
             { icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="5" width="16" height="15" rx="2.5" /><path d="M4 10h16M9 3v4M15 3v4" /></svg>, text: 'Sun & Tue & Thu · 4:30–6:00 PM' },
@@ -46,7 +47,7 @@ export function TextLists() {
           ]}
           capacity={0.75}
         />
-      </div>
+      </SpecShelf>
     </Section>
   );
 }

@@ -38,7 +38,7 @@ export function MagneticButton({ children, strength = 0.3, onClick }: MagneticBu
         onClick={onClick}
         className="i-press-94"
         style={{
-          height: 46, padding: '0 26px', borderRadius: 999, border: 'none', background: 'var(--ink)', color: 'var(--on-ink)',
+          height: 46, padding: '0 26px', borderRadius: 6, border: 'none', background: 'var(--ink)', color: 'var(--on-ink)',
           fontFamily: 'inherit', fontSize: 14.5, fontWeight: 600, cursor: 'pointer',
           transform: `translate(${d.x}px,${d.y}px)`,
           transition: (d.x || d.y) ? 'transform 150ms ease-out' : `transform 500ms ${SPRING}`,
@@ -106,7 +106,7 @@ export interface SlideToUnlockProps {
   width?: number;
 }
 
-export function SlideToUnlock({ label = 'اسحب للتأكيد ←', confirmLabel = 'تم التأكيد ✓', onConfirm, width = 264 }: SlideToUnlockProps) {
+export function SlideToUnlock({ label = 'اسحب للتأكيد ←', confirmLabel = 'تم التأكيد', onConfirm, width = 264 }: SlideToUnlockProps) {
   const MAX = width - 60;
   const [x, setX] = useState(0);
   const [ok, setOk] = useState(false);
@@ -115,8 +115,8 @@ export function SlideToUnlock({ label = 'اسحب للتأكيد ←', confirmLa
   const t = useTimeout();
 
   return (
-    <div style={{ position: 'relative', width, height: 56, borderRadius: 999, background: 'var(--surface-2)', border: '1px solid var(--border)', overflow: 'hidden' }}>
-      <span style={{ position: 'absolute', top: 0, bottom: 0, insetInlineStart: 0, width: x + 56, borderRadius: 999, background: ok ? 'var(--success-soft)' : 'var(--accent-soft)', transition: drag ? 'none' : `width 450ms ${SPRING}` }} />
+    <div style={{ position: 'relative', width, height: 56, borderRadius: 6, background: 'var(--surface-2)', border: '1px solid var(--border)', overflow: 'hidden' }}>
+      <span style={{ position: 'absolute', top: 0, bottom: 0, insetInlineStart: 0, width: x + 56, borderRadius: 6, background: ok ? 'var(--success-soft)' : 'var(--accent-soft)', transition: drag ? 'none' : `width 450ms ${SPRING}` }} />
       <span style={{ opacity: Math.max(1 - x / 120, 0), transition: drag ? 'none' : 'opacity 300ms', position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', fontSize: 13.5, fontWeight: 600, color: 'var(--text-3)', pointerEvents: 'none' }}>{label}</span>
       {ok && <span style={{ position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', fontSize: 13.5, fontWeight: 700, color: 'var(--success)', pointerEvents: 'none' }}>{confirmLabel}</span>}
       <button
@@ -129,10 +129,9 @@ export function SlideToUnlock({ label = 'اسحب للتأكيد ←', confirmLa
           if (done) { onConfirm?.(); clearTimeout(t.current); t.current = setTimeout(() => { setX(0); setOk(false); }, 2000); }
         }}
         style={{
-          position: 'absolute', top: 4, insetInlineStart: 4 + x, width: 48, height: 48, borderRadius: 999, border: 'none',
+          position: 'absolute', top: 4, insetInlineStart: 4 + x, width: 48, height: 48, borderRadius: 6, border: 'none',
           background: ok ? 'var(--success)' : 'var(--ink)', color: ok ? '#fff' : 'var(--on-ink)',
-          display: 'grid', placeItems: 'center', cursor: 'grab', touchAction: 'none', boxShadow: 'var(--shadow-2)',
-          transition: drag ? 'background 300ms' : `inset-inline-start 450ms ${SPRING}, background 300ms`,
+          display: 'grid', placeItems: 'center', cursor: 'grab', touchAction: 'none',          transition: drag ? 'background 300ms' : `inset-inline-start 450ms ${SPRING}, background 300ms`,
         }}
       >
         {ok
@@ -161,7 +160,7 @@ export function ElasticCounter({ defaultValue = 12, onChange }: { defaultValue?:
         color: bump ? 'var(--accent)' : 'var(--text)', transform: bump ? 'scale(1.25) translateY(-5px)' : 'none',
         transition: `transform 400ms ${SPRING}, color 250ms`,
       }}>{v}</span>
-      <span style={{ width: 34, height: 34, borderRadius: 999, background: 'var(--accent-soft)', color: 'var(--accent)', display: 'grid', placeItems: 'center', fontSize: 17, fontWeight: 700 }}>+</span>
+      <span style={{ width: 34, height: 34, borderRadius: 6, background: 'var(--accent-soft)', color: 'var(--accent)', display: 'grid', placeItems: 'center', fontSize: 17, fontWeight: 700 }}>+</span>
     </button>
   );
 }
@@ -200,7 +199,7 @@ export function PinInput({ length = 4, onComplete }: PinInputProps) {
           onKeyDown={(e) => { if (e.key === 'Backspace' && !pin[i] && i > 0) refs.current[i - 1]?.focus(); }}
           style={{
             width: 46, height: 54, textAlign: 'center', fontSize: 20, fontWeight: 700, fontFamily: 'var(--font-mono)', color: 'var(--text)',
-            borderRadius: 13, background: 'var(--surface-2)', border: v ? '1.5px solid var(--accent)' : '1.5px solid var(--border-strong)',
+            borderRadius: 6, background: 'var(--surface-2)', border: v ? '1.5px solid var(--accent)' : '1.5px solid var(--border-strong)',
             transform: pop === i ? 'scale(1.14)' : 'scale(1)', transition: `transform 350ms ${SPRING}, border-color 200ms`, outline: 'none',
           }}
         />
@@ -212,8 +211,10 @@ export function PinInput({ length = 4, onComplete }: PinInputProps) {
 /* ── KeycapButton — press(90ms): a solid bottom box-shadow is the key's
       side wall; :active bottoms out (translateY 5px, shadow→1px). */
 export function KeycapButton({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) {
-  const up = '0 6px 0 0 var(--border-strong), 0 10px 16px -4px oklch(from var(--shadow-color) l c h / 0.3)';
-  const down = '0 1px 0 0 var(--border-strong), 0 2px 6px -2px oklch(from var(--shadow-color) l c h / 0.3)';
+  /* the plane under a keycap is a drawn edge at zero blur, which anti-slop-ui #7
+     leaves standing; the blurred half of each pair was the floaty part. */
+  const up = '0 6px 0 0 var(--border-strong)';
+  const down = '0 1px 0 0 var(--border-strong)';
   const [pressed, setPressed] = useState(false);
   return (
     <button
@@ -222,7 +223,7 @@ export function KeycapButton({ children, onClick }: { children: React.ReactNode;
       onPointerUp={() => setPressed(false)}
       onPointerLeave={() => setPressed(false)}
       style={{
-        minWidth: 58, height: 56, padding: '0 16px', borderRadius: 12, border: 'none', background: 'var(--surface-2)', color: 'var(--text)',
+        minWidth: 58, height: 56, padding: '0 16px', borderRadius: 6, border: 'none', background: 'var(--surface-2)', color: 'var(--text)',
         fontFamily: 'var(--font-mono)', fontSize: 18, fontWeight: 700, cursor: 'pointer',
         transform: pressed ? 'translateY(5px)' : 'none', boxShadow: pressed ? down : up,
         transition: 'transform 90ms ease-out, box-shadow 90ms ease-out',
@@ -243,7 +244,7 @@ export function PushButton({ children, onClick }: { children: React.ReactNode; o
       onPointerUp={() => setPressed(false)}
       onPointerLeave={() => setPressed(false)}
       style={{
-        height: 48, padding: '0 24px', borderRadius: 14, border: 'none', background: 'var(--accent)', color: 'var(--on-accent)',
+        height: 48, padding: '0 24px', borderRadius: 6, border: 'none', background: 'var(--accent)', color: 'var(--on-accent)',
         fontFamily: 'inherit', fontSize: 14.5, fontWeight: 700, cursor: 'pointer',
         transform: pressed ? 'translateY(5px)' : 'none',
         boxShadow: pressed ? `0 1px 0 0 ${edge}` : `0 6px 0 0 ${edge}`,
@@ -264,7 +265,7 @@ export function SquishButton({ children, onClick }: { children: React.ReactNode;
       onPointerUp={() => setPressed(false)}
       onPointerLeave={() => setPressed(false)}
       style={{
-        height: 46, padding: '0 26px', borderRadius: 999, border: 'none', background: 'var(--ink)', color: 'var(--on-ink)',
+        height: 46, padding: '0 26px', borderRadius: 6, border: 'none', background: 'var(--ink)', color: 'var(--on-ink)',
         fontFamily: 'inherit', fontSize: 14.5, fontWeight: 600, cursor: 'pointer',
         transform: pressed ? 'scale(0.88)' : 'scale(1)',
         transition: pressed ? 'transform 80ms ease-out' : `transform 500ms ${SPRING}`,
@@ -293,7 +294,7 @@ export function RubberBandSlider({ defaultValue = 60, onChange, width = 240 }: R
   return (
     <div style={{ width, padding: '10px 0', touchAction: 'none' }}>
       <div
-        style={{ position: 'relative', height: 6, borderRadius: 999, background: 'var(--surface-2)', cursor: 'pointer' }}
+        style={{ position: 'relative', height: 6, borderRadius: 6, background: 'var(--surface-2)', cursor: 'pointer' }}
         onPointerDown={(e) => {
           e.currentTarget.setPointerCapture(e.pointerId);
           geo.current = { startX: e.clientX, startV: clamp(v) };
@@ -306,11 +307,10 @@ export function RubberBandSlider({ defaultValue = 60, onChange, width = 240 }: R
         }}
         onPointerUp={() => { setDrag(false); const c = clamp(v); setV(c); onChange?.(Math.round(c)); }}
       >
-        <div style={{ position: 'absolute', top: 0, bottom: 0, insetInlineStart: 0, width: `${clamp(v)}%`, borderRadius: 999, background: 'var(--accent)', transition: drag ? 'none' : `width 450ms ${SPRING}` }} />
+        <div style={{ position: 'absolute', top: 0, bottom: 0, insetInlineStart: 0, width: `${clamp(v)}%`, borderRadius: 6, background: 'var(--accent)', transition: drag ? 'none' : `width 450ms ${SPRING}` }} />
         <span style={{
           position: 'absolute', top: '50%', insetInlineStart: `calc(${(v / 100) * 100}% )`, transform: 'translate(-50%, -50%)',
-          width: 22, height: 22, borderRadius: '50%', background: 'var(--surface)', border: '2px solid var(--accent)', boxShadow: 'var(--shadow-2)',
-          transition: drag ? 'none' : `inset-inline-start 450ms ${SPRING}`, cursor: 'grab',
+          width: 22, height: 22, borderRadius: '50%', background: 'var(--surface)', border: '2px solid var(--accent)',          transition: drag ? 'none' : `inset-inline-start 450ms ${SPRING}`, cursor: 'grab',
         }} />
       </div>
       <div style={{ marginTop: 10, fontSize: 12.5, color: 'var(--text-3)', fontVariantNumeric: 'tabular-nums' }}>{Math.round(clamp(v))}%</div>
@@ -346,7 +346,7 @@ export function DragToDismissCard({ children, onDismiss, respawnMs = 1200 }: Dra
         } else setX(0);
       }}
       style={{
-        background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 16, padding: '14px 18px',
+        background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, padding: '14px 18px',
         boxShadow: drag ? 'var(--shadow-3)' : 'var(--shadow-1)', cursor: 'grab', touchAction: 'none', userSelect: 'none',
         transform: `translateX(${x}px) rotate(${x * 0.05}deg)`,
         opacity: gone ? 0 : Math.max(1 - Math.abs(x) / 340, 0.25),
@@ -380,7 +380,7 @@ export function NumberScrubber({ defaultValue = 24, min = 0, max = 200, suffix =
       }}
       onPointerUp={() => setScrub(false)}
       style={{
-        display: 'inline-flex', alignItems: 'baseline', gap: 3, padding: '8px 14px', borderRadius: 12,
+        display: 'inline-flex', alignItems: 'baseline', gap: 3, padding: '8px 14px', borderRadius: 6,
         background: scrub ? 'var(--accent-soft)' : 'var(--surface-2)', border: '1px solid var(--border-strong)',
         cursor: 'ew-resize', touchAction: 'none', userSelect: 'none',
         transform: scrub ? 'scale(1.06)' : 'scale(1)', transition: `transform 250ms ${SPRING}, background 200ms`,
@@ -410,9 +410,8 @@ export function SpeedDialFab({ actions }: { actions: SpeedDialAction[] }) {
           aria-label={a.label}
           onClick={() => { a.onClick?.(); setOpen(false); }}
           style={{
-            position: 'absolute', bottom: 0, insetInlineStart: 4, width: 46, height: 46, borderRadius: 999, border: '1px solid var(--border)',
-            background: 'var(--surface)', color: 'var(--accent)', cursor: 'pointer', display: 'grid', placeItems: 'center', boxShadow: 'var(--shadow-2)',
-            transform: open ? `translateY(-${(i + 1) * 56}px) scale(1)` : 'translateY(0) scale(0.4)',
+            position: 'absolute', bottom: 0, insetInlineStart: 4, width: 46, height: 46, borderRadius: 6, border: '1px solid var(--border)',
+            background: 'var(--surface)', color: 'var(--accent)', cursor: 'pointer', display: 'grid', placeItems: 'center',            transform: open ? `translateY(-${(i + 1) * 56}px) scale(1)` : 'translateY(0) scale(0.4)',
             opacity: open ? 1 : 0, pointerEvents: open ? 'auto' : 'none',
             transition: `transform 420ms ${SPRING} ${open ? [20, 70, 120][i] ?? i * 50 : 0}ms, opacity 250ms ${open ? [20, 70, 120][i] ?? i * 50 : 0}ms`,
           }}
@@ -424,9 +423,8 @@ export function SpeedDialFab({ actions }: { actions: SpeedDialAction[] }) {
         onClick={() => setOpen((v) => !v)}
         className="i-press-94"
         style={{
-          position: 'relative', zIndex: 1, width: 56, height: 56, borderRadius: 999, border: 'none', background: 'var(--ink)', color: 'var(--on-ink)',
-          cursor: 'pointer', display: 'grid', placeItems: 'center', boxShadow: 'var(--shadow-3)',
-        }}
+          position: 'relative', zIndex: 1, width: 56, height: 56, borderRadius: 6, border: 'none', background: 'var(--ink)', color: 'var(--on-ink)',
+          cursor: 'pointer', display: 'grid', placeItems: 'center',        }}
       >
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" style={{ transform: open ? 'rotate(45deg)' : 'none', transition: `transform 350ms ${SPRING}` }}><path d="M12 5v14M5 12h14" /></svg>
       </button>
@@ -469,7 +467,7 @@ export function ReorderableList({ items: initial }: { items: string[] }) {
             }}
             onPointerUp={() => setDrag(null)}
             style={{
-              display: 'flex', alignItems: 'center', gap: 10, height: 44, padding: '0 14px', borderRadius: 12,
+              display: 'flex', alignItems: 'center', gap: 10, height: 44, padding: '0 14px', borderRadius: 6,
               background: 'var(--surface)', border: '1px solid var(--border)',
               boxShadow: isDragged ? 'var(--shadow-3)' : 'var(--shadow-1)',
               transform: isDragged ? `translateY(${drag.y}px) scale(1.02)` : 'none',

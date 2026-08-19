@@ -7,7 +7,7 @@ const shimmerBg: React.CSSProperties = {
 
 function StatusBadge({ token, label }: { token: string; label: string }) {
   return (
-    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '3px 10px', borderRadius: 999, background: `var(--${token}-soft)`, color: `var(--${token})`, fontSize: 12, fontWeight: 600 }}>
+    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '3px 10px', borderRadius: 6, background: `var(--${token}-soft)`, color: `var(--${token})`, fontSize: 12, fontWeight: 600 }}>
       <span style={{ width: 5, height: 5, borderRadius: '50%', background: `var(--${token})` }} />{label}
     </span>
   );
@@ -33,7 +33,7 @@ export function DataDisplay() {
         52px rows, hairline dividers, tabular numerals end-aligned. Status is always a word with a dot — never color alone.
       </SectionHeader>
       <div style={{ display: 'grid', gridTemplateColumns: '1.6fr 1fr', gap: 20, alignItems: 'start' }}>
-        <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 16, boxShadow: 'var(--shadow-1)', overflow: 'hidden' }}>
+        <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, overflow: 'hidden' }}>
           <div style={{ display: 'grid', gridTemplateColumns: '2fr 1.4fr 1fr 0.8fr', gap: 12, padding: '10px 18px', background: 'var(--bg-deep)', fontSize: 11, fontWeight: 600, letterSpacing: '0.08em', color: 'var(--text-3)' }}>
             <span>CUSTOMER</span><span>PLAN</span><span>STATUS</span><span style={{ textAlign: 'end' }}>AMOUNT</span>
           </div>
@@ -44,13 +44,13 @@ export function DataDisplay() {
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-          <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 22, padding: 24, boxShadow: 'var(--shadow-1)', display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, padding: 24, display: 'flex', flexDirection: 'column', gap: 16 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <span style={{ fontSize: 13.5, fontWeight: 500, color: 'var(--text-2)' }}>Storage used</span>
               <span style={{ fontSize: 13.5, fontWeight: 600, color: 'var(--accent)', fontVariantNumeric: 'tabular-nums' }}>68%</span>
             </div>
-            <div style={{ height: 8, borderRadius: 999, background: 'var(--surface-2)' }}>
-              <div style={{ width: '68%', height: 8, borderRadius: 999, background: 'var(--accent)', transition: 'width 560ms cubic-bezier(0.22,1,0.36,1)' }} />
+            <div style={{ height: 8, borderRadius: 6, background: 'var(--surface-2)' }}>
+              <div style={{ width: '68%', height: 8, borderRadius: 6, background: 'var(--accent)', transition: 'width 560ms cubic-bezier(0.22,1,0.36,1)' }} />
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 14, paddingTop: 6 }}>
               <span style={{ display: 'flex' }}>
@@ -63,7 +63,7 @@ export function DataDisplay() {
             </div>
           </div>
 
-          <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 22, padding: 24, boxShadow: 'var(--shadow-1)', display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, padding: 24, display: 'flex', flexDirection: 'column', gap: 12 }}>
             <div style={{ fontSize: 13.5, fontWeight: 500, color: 'var(--text-2)' }}>Skeleton — shape-true, never spinners</div>
             <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
               <span style={{ width: 40, height: 40, borderRadius: '50%', flex: 'none', ...shimmerBg }} />
@@ -72,7 +72,7 @@ export function DataDisplay() {
                 <span style={{ height: 12, borderRadius: 6, width: '85%', ...shimmerBg }} />
               </span>
             </div>
-            <div style={{ height: 64, borderRadius: 12, ...shimmerBg }} />
+            <div style={{ height: 64, borderRadius: 6, ...shimmerBg }} />
           </div>
         </div>
       </div>

@@ -110,7 +110,6 @@ export function MeterFace({ reading = 76542.8, tier = 2, model = 'NV-370 · 1PH 
         border: '1px solid var(--border-strong)',
         borderRadius: 'var(--r-lg)',
         // contact then cast: weight, then height. Both fall straight down.
-        boxShadow: '0 2px 3px -1px var(--shadow-color), 0 12px 22px -10px var(--shadow-color)',
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 'var(--sp-3)' }}>
@@ -187,8 +186,7 @@ export function ConsumptionBand({
         display: 'flex', flexDirection: 'column', gap: 'var(--sp-4)',
         padding: 'var(--sp-5)',
         background: 'var(--surface)', border: '1px solid var(--border)',
-        borderRadius: 'var(--r-lg)', boxShadow: 'var(--shadow-1)',
-      }}
+        borderRadius: 'var(--r-lg)',      }}
     >
       <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 'var(--sp-3)' }}>
         <b style={{ fontSize: 26, fontWeight: 700, color: 'var(--text)', fontVariantNumeric: 'tabular-nums' }}>
@@ -225,7 +223,6 @@ export function ConsumptionBand({
           style={{
             position: 'absolute', insetInlineStart: `calc(${pct(value)}% - 2px)`, top: 4,
             width: 4, height: 22, borderRadius: 2, background: tone,
-            boxShadow: '0 1px 2px var(--shadow-color)',
           }}
         />
       </div>
@@ -264,7 +261,7 @@ export function UsageStrip({ metrics }: { metrics?: UsageMetric[] }) {
       style={{
         display: 'flex', flexWrap: 'wrap', width: '100%',
         background: 'var(--surface)', border: '1px solid var(--border)',
-        borderRadius: 'var(--r-lg)', boxShadow: 'var(--shadow-1)', overflow: 'hidden',
+        borderRadius: 'var(--r-lg)', overflow: 'hidden',
       }}
     >
       {rows.map((m, i) => (
@@ -331,8 +328,7 @@ export function TariffLadder({ used = 412, steps = [200, 400, 600, 900] }: Tarif
       style={{
         width: '100%', maxWidth: 340, display: 'flex', flexDirection: 'column', gap: 'var(--sp-4)',
         padding: 'var(--sp-5)', background: 'var(--surface)',
-        border: '1px solid var(--border)', borderRadius: 'var(--r-lg)', boxShadow: 'var(--shadow-1)',
-      }}
+        border: '1px solid var(--border)', borderRadius: 'var(--r-lg)',      }}
     >
       <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 'var(--sp-3)' }}>
         <b style={{ fontSize: 14, fontWeight: 600, color: 'var(--text)' }}>{TIER[current].ar}</b>
@@ -448,8 +444,7 @@ export function AllocationBar({
       style={{
         width: '100%', maxWidth: 360, display: 'flex', flexDirection: 'column', gap: 'var(--sp-4)',
         padding: 'var(--sp-5)', background: 'var(--surface)',
-        border: '1px solid var(--border)', borderRadius: 'var(--r-lg)', boxShadow: 'var(--shadow-1)',
-      }}
+        border: '1px solid var(--border)', borderRadius: 'var(--r-lg)',      }}
     >
       <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 'var(--sp-3)' }}>
         <b style={{ fontSize: 14, fontWeight: 600, color: 'var(--text)' }}>مخصّص الدورة</b>
@@ -567,8 +562,7 @@ export function LoadComb({ rows, unit = 10, cap = 'ك.و.س' }: { rows?: LoadRow
       style={{
         width: '100%', maxWidth: 400, display: 'flex', flexDirection: 'column', gap: 'var(--sp-4)',
         padding: 'var(--sp-5)', background: 'var(--surface)',
-        border: '1px solid var(--border)', borderRadius: 'var(--r-lg)', boxShadow: 'var(--shadow-1)',
-      }}
+        border: '1px solid var(--border)', borderRadius: 'var(--r-lg)',      }}
     >
       <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 'var(--sp-3)' }}>
         <b style={{ fontSize: 14, fontWeight: 600, color: 'var(--text)' }}>أين ذهبت الكهرباء</b>
@@ -620,6 +614,217 @@ export function LoadComb({ rows, unit = 10, cap = 'ك.و.س' }: { rows?: LoadRow
       <p style={{ margin: 0, fontSize: 11, color: 'var(--text-3)' }}>
         كل شرطة <bdi dir="ltr">{ar(unit)}</bdi> {cap} — والشرطة القصيرة جزء من وحدة
       </p>
+    </div>
+  );
+}
+
+export interface BillDocumentProps {
+  /** Register reading that opened the cycle. */
+  previous?: number;
+  /** Register reading that closed it. */
+  current?: number;
+  /** Upper bound of each tier, ascending. */
+  steps?: number[];
+  /** Price per kWh inside each tier, same order as `steps`. */
+  rates?: number[];
+  cycle?: string;
+  due?: string;
+  paid?: boolean;
+  account?: string;
+  currency?: string;
+}
+
+/* ── BillDocument — the cycle as the object the customer actually receives.
+
+   A bill is a document, so it is drawn as one: paper with an edge, a second
+   sheet behind it carrying the thickness (§1), light straight overhead so it
+   survives mirroring (§2), and contact plus cast shadow falling down (§3).
+
+   The perforation is the detail, and it lives at the joint (§5). Its meaning is
+   an affordance — *this part detaches* — so it renders only when there is a stub
+   to tear off, which is what keeps it a statement rather than an ornament (§8).
+   A settled bill has nothing to detach: the sheet is whole and carries a mark.
+   The notches are structure, not a measure — unlike the comb above, their count
+   is not a reading and does not pretend to be.
+
+   Colour is the tier encoding and the amount's state, nothing else. The paper is
+   neutral material (§9). */
+export function BillDocument({
+  previous = 76130.4,
+  current = 76542.8,
+  steps = [200, 400, 600, 900],
+  rates = [0.18, 0.24, 0.3, 0.38],
+  cycle = '1 يوليو – 31 يوليو',
+  due = '15 أغسطس',
+  paid = false,
+  account = 'NV-4419-2207',
+  currency = 'ر.س',
+}: BillDocumentProps) {
+  const used = Math.max(0, Math.round((current - previous) * 10) / 10);
+
+  /* The tiers apply to the cycle's running total, so the split is this cycle's
+     consumption measured against the step edges — not a flat rate dressed up. */
+  const lines = steps
+    .map((edge, i) => {
+      const from = i === 0 ? 0 : steps[i - 1];
+      const kwh = Math.max(0, Math.min(used, edge) - from);
+      return { tier: (i + 1) as TariffTier, from, edge, kwh, rate: rates[i], cost: kwh * rates[i] };
+    })
+    .filter((l) => l.kwh > 0);
+  const total = lines.reduce((s, l) => s + l.cost, 0);
+
+  const Row = ({ label, value, strong }: { label: string; value: string; strong?: boolean }) => (
+    <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 'var(--sp-3)', fontSize: strong ? 13 : 12.5 }}>
+      <span style={{ color: strong ? 'var(--text)' : 'var(--text-2)', fontWeight: strong ? 600 : 400 }}>{label}</span>
+      <b style={{ fontWeight: strong ? 700 : 600, color: 'var(--text)', fontVariantNumeric: 'tabular-nums' }}>
+        <bdi dir="ltr">{value}</bdi>
+      </b>
+    </div>
+  );
+
+  return (
+    <div style={{ position: 'relative', width: '100%', maxWidth: 340 }}>
+      {/* the sheet underneath: this is the thickness, and its angle is placed
+          rather than computed — an even offset reads as a duplicate layer */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute', inset: 0, transform: 'translateY(6px) rotate(-0.8deg)',
+          background: 'var(--surface)', border: '1px solid var(--border)',
+          borderRadius: 'var(--r-md)',        }}
+      />
+
+      <article
+        data-bill={paid ? 'settled' : 'due'}
+        style={{
+          position: 'relative',
+          background: 'var(--surface)', border: '1px solid var(--border)',
+          borderRadius: 'var(--r-md)',
+          // contact then cast, both straight down
+        }}
+      >
+        <div style={{ padding: 'var(--sp-5)', display: 'flex', flexDirection: 'column', gap: 'var(--sp-4)' }}>
+          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 'var(--sp-3)' }}>
+            <div>
+              <div style={{ fontSize: 13.5, fontWeight: 600, color: 'var(--text)' }}>فاتورة الكهرباء</div>
+              {/* Arabic prose that opens with a numeral. In an LTR container the
+                  leading digit drags to the end, so the run needs its own
+                  direction — bdi with auto detection, which finds the first
+                  strong character rather than trusting the container. */}
+              <div style={{ fontSize: 11.5, color: 'var(--text-3)', marginBlockStart: 3 }}>
+                <bdi>{cycle}</bdi>
+              </div>
+            </div>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--text-3)' }}>
+              <bdi dir="ltr">{account}</bdi>
+            </span>
+          </div>
+
+          {/* the consumption is a subtraction, and a bill shows its working */}
+          <div style={{ display: 'grid', gap: 6, paddingBlock: 'var(--sp-3)', borderBlock: '1px solid var(--border)' }}>
+            <Row label="القراءة السابقة" value={ar(previous, 1)} />
+            <Row label="القراءة الحالية" value={ar(current, 1)} />
+            <Row label="الاستهلاك — ك.و.س" value={ar(used, 1)} strong />
+          </div>
+
+          <div style={{ display: 'grid', gap: 7 }}>
+            {lines.map((l) => (
+              <div key={l.tier} style={{ display: 'flex', alignItems: 'center', gap: 9, fontSize: 12 }}>
+                <i
+                  title={TIER[l.tier].ar}
+                  style={{ width: 7, height: 7, borderRadius: '50%', background: TIER[l.tier].color, flex: 'none' }}
+                />
+                <span style={{ color: 'var(--text-2)' }}>{TIER[l.tier].ar}</span>
+                <span style={{ flex: 1, fontSize: 11, color: 'var(--text-3)', textAlign: 'center' }}>
+                  <bdi dir="ltr">{ar(l.kwh, 1)} × {l.rate.toFixed(2)}</bdi>
+                </span>
+                <b style={{ fontWeight: 600, color: 'var(--text)', fontVariantNumeric: 'tabular-nums' }}>
+                  <bdi dir="ltr">{ar(l.cost, 2)}</bdi>
+                </b>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* The joint. It is here because something detaches here — a settled bill
+            has no stub, so it has no perforation either. */}
+        {!paid && (
+          <>
+            <div
+              data-perforation=""
+              aria-hidden="true"
+              style={{
+                position: 'relative', display: 'flex', justifyContent: 'space-between',
+                paddingInline: 10, borderBlockStart: '1px solid var(--border)',
+              }}
+            >
+              {Array.from({ length: 26 }, (_, i) => (
+                <span
+                  key={i}
+                  style={{
+                    width: 5, height: 5, marginBlockStart: -3, borderRadius: '50%',
+                    background: 'var(--surface-2)',
+                    boxShadow: 'inset 0 1px 1.5px var(--shadow-color)',
+                  }}
+                />
+              ))}
+            </div>
+
+            <div
+              data-stub=""
+              style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 'var(--sp-3)',
+                padding: 'var(--sp-4) var(--sp-5) var(--sp-5)',
+              }}
+            >
+              <div>
+                <div style={{ fontSize: 11.5, color: 'var(--text-3)' }}>المستحقّ</div>
+                <b style={{ fontSize: 24, fontWeight: 700, color: 'var(--text)', fontVariantNumeric: 'tabular-nums', letterSpacing: '-0.01em' }}>
+                  <bdi dir="ltr">{ar(total, 2)}</bdi>
+                  <span style={{ fontSize: 12.5, fontWeight: 500, color: 'var(--text-3)', marginInlineStart: 5 }}>{currency}</span>
+                </b>
+              </div>
+              <span
+                style={{
+                  padding: '4px 10px', borderRadius: 'var(--r-full)', fontSize: 11.5, fontWeight: 600,
+                  color: 'var(--text)', border: `1px solid var(--warning)`,
+                }}
+              >
+                يُسدَّد قبل {due}
+              </span>
+            </div>
+          </>
+        )}
+
+        {paid && (
+          <div
+            data-settled=""
+            style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 'var(--sp-3)',
+              padding: 'var(--sp-4) var(--sp-5) var(--sp-5)', borderBlockStart: '1px solid var(--border)',
+            }}
+          >
+            <div>
+              <div style={{ fontSize: 11.5, color: 'var(--text-3)' }}>سُدِّدت</div>
+              <b style={{ fontSize: 20, fontWeight: 700, color: 'var(--text-2)', fontVariantNumeric: 'tabular-nums' }}>
+                <bdi dir="ltr">{ar(total, 2)}</bdi>
+                <span style={{ fontSize: 12, fontWeight: 500, color: 'var(--text-3)', marginInlineStart: 5 }}>{currency}</span>
+              </b>
+            </div>
+            <span
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: 6, padding: '4px 10px',
+                borderRadius: 'var(--r-full)', fontSize: 11.5, fontWeight: 600,
+                color: 'var(--text)', border: '1px solid var(--success)',
+              }}
+            >
+              {/* anti-slop-ui #25: no checkmark to say "yes". The word says it,
+                  and the outline colour is the state. */}
+              مُسدَّدة
+            </span>
+          </div>
+        )}
+      </article>
     </div>
   );
 }

@@ -61,7 +61,7 @@ function StatusPill({ status }: { status: string }) {
   const map: Record<string, [string, string]> = { active: ['success', 'نشط'], pending: ['warning', 'معلّق'], suspended: ['danger', 'موقوف'] };
   const [tone, label] = map[status];
   return (
-    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '3px 10px', borderRadius: 999, background: `var(--${tone}-soft)`, color: `var(--${tone})`, fontSize: 12, fontWeight: 600 }}>
+    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '3px 10px', borderRadius: 6, background: `var(--${tone}-soft)`, color: `var(--${tone})`, fontSize: 12, fontWeight: 600 }}>
       <span style={{ width: 5, height: 5, borderRadius: '50%', background: `var(--${tone})` }} />{label}
     </span>
   );
@@ -89,21 +89,21 @@ export function AdminAccess() {
         Not another component grid. This is the complete <b>access &amp; permissions</b> screen the brief asked for (صفحات ادمن اكسسز متكاملة) — sidebar shell, role cards, a live permission matrix, an editable members table, and an audit rail. Everything is interactive and mirrors under RTL.
       </SectionHeader>
 
-      <div style={{ borderRadius: 24, border: '1px solid var(--border)', background: 'var(--surface)', boxShadow: 'var(--shadow-2)', overflow: 'hidden', display: 'grid', gridTemplateColumns: '210px 1fr', minHeight: 620 }}>
+      <div style={{ borderRadius: 6, border: '1px solid var(--border)', background: 'var(--surface)', overflow: 'hidden', display: 'grid', gridTemplateColumns: '210px 1fr', minHeight: 620 }}>
         {/* ── sidebar ── */}
         <aside style={{ background: 'var(--bg-deep)', borderInlineEnd: '1px solid var(--border)', padding: '18px 12px', display: 'flex', flexDirection: 'column', gap: 3 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 9, padding: '0 10px 16px' }}>
-            <div style={{ width: 26, height: 26, borderRadius: '50%', background: 'conic-gradient(from 210deg, var(--accent), var(--accent-soft), var(--accent))', boxShadow: 'var(--shadow-1)' }} />
+            <div style={{ width: 26, height: 26, borderRadius: '50%', background: 'conic-gradient(from 210deg, var(--accent), var(--accent-soft), var(--accent))', }} />
             <span style={{ fontWeight: 700, fontSize: 14 }}>مدار أدمن</span>
           </div>
           <div style={{ fontSize: 10.5, fontWeight: 600, letterSpacing: '0.1em', color: 'var(--text-3)', padding: '4px 10px 6px' }}>مساحة العمل</div>
           {NAV.map((n, i) => (
-            <button key={n.label} onClick={() => setNav(i)} className={i === nav ? undefined : 'i-surface2-text'} style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: 10, height: 36, padding: '0 10px', borderRadius: 10, border: 'none', cursor: 'pointer', fontFamily: 'inherit', fontSize: 13, fontWeight: i === nav ? 600 : 500, color: i === nav ? 'var(--text)' : 'var(--text-2)', background: i === nav ? 'var(--surface)' : 'transparent', boxShadow: i === nav ? 'var(--shadow-1)' : 'none', textAlign: 'start', transition: 'background 140ms' }}>
+            <button key={n.label} onClick={() => setNav(i)} className={i === nav ? undefined : 'i-surface2-text'} style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: 10, height: 36, padding: '0 10px', borderRadius: 6, border: 'none', cursor: 'pointer', fontFamily: 'inherit', fontSize: 13, fontWeight: i === nav ? 600 : 500, color: i === nav ? 'var(--text)' : 'var(--text-2)', background: i === nav ? 'var(--surface)' : 'transparent', boxShadow: i === nav ? 'var(--shadow-1)' : 'none', textAlign: 'start', transition: 'background 140ms' }}>
               {i === nav && <span style={{ position: 'absolute', insetInlineStart: -12, top: 8, bottom: 8, width: 3, borderRadius: 3, background: 'var(--accent)' }} />}
               <NavIcon d={n.path} extra={n.extra} />{n.label}
             </button>
           ))}
-          <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', gap: 9, padding: '10px', borderRadius: 12, background: 'var(--surface)', border: '1px solid var(--border)' }}>
+          <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', gap: 9, padding: '10px', borderRadius: 6, background: 'var(--surface)', border: '1px solid var(--border)' }}>
             <MemojiAvatar name="نورة المطيري" size={30} />
             <span style={{ minWidth: 0 }}>
               <span style={{ display: 'block', fontSize: 12, fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis' }}>نورة المطيري</span>
@@ -119,11 +119,11 @@ export function AdminAccess() {
             <span style={{ fontSize: 12.5, color: 'var(--text-3)' }}>مساحة العمل</span>
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="i-chevron-dir"><path d="M9 6l6 6-6 6" /></svg>
             <span style={{ fontSize: 12.5, fontWeight: 700 }}>الوصول والصلاحيات</span>
-            <span style={{ marginInlineStart: 'auto', display: 'flex', alignItems: 'center', gap: 8, height: 34, borderRadius: 999, border: '1px solid var(--border-strong)', background: 'var(--surface-2)', padding: '0 14px', color: 'var(--text-3)', fontSize: 12.5 }}>
+            <span style={{ marginInlineStart: 'auto', display: 'flex', alignItems: 'center', gap: 8, height: 34, borderRadius: 6, border: '1px solid var(--border-strong)', background: 'var(--surface-2)', padding: '0 14px', color: 'var(--text-3)', fontSize: 12.5 }}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><circle cx="11" cy="11" r="7" /><path d="M20 20l-3.5-3.5" /></svg>
               بحث في الأعضاء…
             </span>
-            <button className="i-lift i-press-97" style={{ height: 34, padding: '0 16px', borderRadius: 999, border: 'none', background: 'var(--ink)', color: 'var(--on-ink)', fontFamily: 'inherit', fontSize: 13, fontWeight: 600, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 7 }}>
+            <button className="i-lift i-press-97" style={{ height: 34, padding: '0 16px', borderRadius: 6, border: 'none', background: 'var(--ink)', color: 'var(--on-ink)', fontFamily: 'inherit', fontSize: 13, fontWeight: 600, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 7 }}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M12 5v14M5 12h14" /></svg>دعوة عضو
             </button>
           </div>
@@ -134,9 +134,9 @@ export function AdminAccess() {
               {/* role cards */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 12 }}>
                 {ROLES.map((role, i) => (
-                  <button key={role.key} onClick={() => setRoleFilter(roleFilter === i ? -1 : i)} className="i-lift-shadow" style={{ textAlign: 'start', padding: 14, borderRadius: 16, cursor: 'pointer', border: roleFilter === i ? `1.5px solid var(--${role.tone})` : '1px solid var(--border)', background: roleFilter === i ? `var(--${role.tone}-soft)` : 'var(--surface)', boxShadow: 'var(--shadow-1)', transition: 'transform 220ms, box-shadow 220ms, border-color 200ms, background 200ms' }}>
+                  <button key={role.key} onClick={() => setRoleFilter(roleFilter === i ? -1 : i)} className="i-lift-shadow" style={{ textAlign: 'start', padding: 14, borderRadius: 6, cursor: 'pointer', border: roleFilter === i ? `1.5px solid var(--${role.tone})` : '1px solid var(--border)', background: roleFilter === i ? `var(--${role.tone}-soft)` : 'var(--surface)', transition: 'transform 220ms, box-shadow 220ms, border-color 200ms, background 200ms' }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <span style={{ width: 30, height: 30, borderRadius: 9, background: `var(--${role.tone}-soft)`, color: `var(--${role.tone})`, display: 'grid', placeItems: 'center' }}>
+                      <span style={{ width: 30, height: 30, borderRadius: 6, background: `var(--${role.tone}-soft)`, color: `var(--${role.tone})`, display: 'grid', placeItems: 'center' }}>
                         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3l8 4v5c0 4-3.4 7.5-8 9-4.6-1.5-8-5-8-9V7l8-4z" /></svg>
                       </span>
                       <span style={{ fontSize: 22, fontWeight: 700, fontVariantNumeric: 'tabular-nums', letterSpacing: '-0.01em' }}>{role.members}</span>
@@ -148,7 +148,7 @@ export function AdminAccess() {
               </div>
 
               {/* permission matrix */}
-              <div style={{ borderRadius: 18, border: '1px solid var(--border)', overflow: 'hidden' }}>
+              <div style={{ borderRadius: 6, border: '1px solid var(--border)', overflow: 'hidden' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '13px 16px', background: 'var(--bg-deep)', borderBottom: '1px solid var(--border)' }}>
                   <span style={{ fontSize: 13.5, fontWeight: 700 }}>مصفوفة الصلاحيات</span>
                   <span style={{ fontSize: 11.5, color: 'var(--text-3)', fontVariantNumeric: 'tabular-nums' }}>{grantedCount} صلاحية ممنوحة</span>
@@ -173,9 +173,9 @@ export function AdminAccess() {
                                 <button
                                   onClick={() => toggleCell(ri, ci)} disabled={locked} aria-pressed={on}
                                   aria-label={`${cap} · ${r.name}`}
-                                  style={{ width: 30, height: 20, borderRadius: 999, border: 'none', padding: 0, position: 'relative', cursor: locked ? 'not-allowed' : 'pointer', background: on ? `var(--${r.tone})` : 'var(--surface-2)', opacity: locked ? 0.7 : 1, transition: 'background 220ms' }}
+                                  style={{ width: 30, height: 20, borderRadius: 6, border: 'none', padding: 0, position: 'relative', cursor: locked ? 'not-allowed' : 'pointer', background: on ? `var(--${r.tone})` : 'var(--surface-2)', opacity: locked ? 0.7 : 1, transition: 'background 220ms' }}
                                 >
-                                  <span style={{ position: 'absolute', top: 2, insetInlineStart: on ? 12 : 2, width: 16, height: 16, borderRadius: '50%', background: '#fff', boxShadow: '0 1px 2px rgba(0,0,0,0.3)', transition: 'inset-inline-start 260ms cubic-bezier(0.34,1.45,0.64,1)' }} />
+                                  <span style={{ position: 'absolute', top: 2, insetInlineStart: on ? 12 : 2, width: 16, height: 16, borderRadius: '50%', background: '#fff', transition: 'inset-inline-start 260ms cubic-bezier(0.34,1.45,0.64,1)' }} />
                                 </button>
                               </td>
                             );
@@ -188,7 +188,7 @@ export function AdminAccess() {
               </div>
 
               {/* members table */}
-              <div style={{ borderRadius: 18, border: '1px solid var(--border)', overflow: 'hidden' }}>
+              <div style={{ borderRadius: 6, border: '1px solid var(--border)', overflow: 'hidden' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '13px 16px', background: 'var(--bg-deep)', borderBottom: '1px solid var(--border)' }}>
                   <span style={{ fontSize: 13.5, fontWeight: 700 }}>الأعضاء {roleFilter >= 0 && <span style={{ color: 'var(--text-3)', fontWeight: 500 }}>· {ROLES[roleFilter].name}</span>}</span>
                   <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
@@ -208,15 +208,15 @@ export function AdminAccess() {
                       </span>
                       {/* inline role editor */}
                       <span style={{ position: 'relative' }}>
-                        <button onClick={() => setOpenRole(openRole === globalIdx ? -1 : globalIdx)} className="i-soft" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, height: 30, padding: '0 10px', borderRadius: 999, border: '1px solid var(--border)', background: 'var(--surface)', color: 'var(--text)', fontFamily: 'inherit', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>
+                        <button onClick={() => setOpenRole(openRole === globalIdx ? -1 : globalIdx)} className="i-soft" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, height: 30, padding: '0 10px', borderRadius: 6, border: '1px solid var(--border)', background: 'var(--surface)', color: 'var(--text)', fontFamily: 'inherit', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>
                           <span style={{ width: 6, height: 6, borderRadius: '50%', background: `var(--${ROLES[mem.role].tone})` }} />
                           {ROLES[mem.role].name}
                           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6" /></svg>
                         </button>
                         {openRole === globalIdx && (
-                          <div style={{ position: 'absolute', top: 'calc(100% + 6px)', insetInlineStart: 0, zIndex: 20, minWidth: 150, borderRadius: 12, border: '1px solid var(--border)', background: 'var(--surface)', boxShadow: 'var(--shadow-3)', padding: 5, animation: 'modalIn 260ms cubic-bezier(0.22,1,0.36,1)' }}>
+                          <div style={{ position: 'absolute', top: 'calc(100% + 6px)', insetInlineStart: 0, zIndex: 20, minWidth: 150, borderRadius: 6, border: '1px solid var(--border)', background: 'var(--surface)', padding: 5, animation: 'modalIn 260ms cubic-bezier(0.22,1,0.36,1)' }}>
                             {ROLES.map((r, ri) => (
-                              <div key={r.key} onClick={() => { setMembers((prev) => prev.map((p, pi) => (pi === globalIdx ? { ...p, role: ri } : p))); setOpenRole(-1); }} className={ri === mem.role ? undefined : 'i-surface2'} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '7px 10px', borderRadius: 8, fontSize: 12.5, fontWeight: ri === mem.role ? 700 : 500, background: ri === mem.role ? 'var(--accent-soft)' : undefined, cursor: 'pointer' }}>
+                              <div key={r.key} onClick={() => { setMembers((prev) => prev.map((p, pi) => (pi === globalIdx ? { ...p, role: ri } : p))); setOpenRole(-1); }} className={ri === mem.role ? undefined : 'i-surface2'} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '7px 10px', borderRadius: 6, fontSize: 12.5, fontWeight: ri === mem.role ? 700 : 500, background: ri === mem.role ? 'var(--accent-soft)' : undefined, cursor: 'pointer' }}>
                                 <span style={{ width: 6, height: 6, borderRadius: '50%', background: `var(--${r.tone})` }} />{r.name}
                                 {ri === mem.role && <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" style={{ marginInlineStart: 'auto' }}><path d="M5 13l4 4L19 7" /></svg>}
                               </div>
@@ -226,7 +226,7 @@ export function AdminAccess() {
                       </span>
                       <StatusPill status={mem.status} />
                       <span style={{ fontSize: 11.5, color: 'var(--text-3)' }}>{mem.last}</span>
-                      <button aria-label="خيارات" className="i-soft-text" style={{ width: 30, height: 30, borderRadius: 8, border: 'none', background: 'transparent', color: 'var(--text-3)', cursor: 'pointer', display: 'grid', placeItems: 'center' }}>
+                      <button aria-label="خيارات" className="i-soft-text" style={{ width: 30, height: 30, borderRadius: 6, border: 'none', background: 'transparent', color: 'var(--text-3)', cursor: 'pointer', display: 'grid', placeItems: 'center' }}>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.7" /><circle cx="12" cy="12" r="1.7" /><circle cx="19" cy="12" r="1.7" /></svg>
                       </button>
                     </div>
@@ -263,7 +263,7 @@ export function AdminAccess() {
                   </div>
                 ))}
               </div>
-              <button className="i-soft" style={{ height: 34, borderRadius: 999, border: '1px solid var(--border-strong)', background: 'var(--surface)', color: 'var(--text)', fontFamily: 'inherit', fontSize: 12.5, fontWeight: 600, cursor: 'pointer' }}>عرض السجل الكامل</button>
+              <button className="i-soft" style={{ height: 34, borderRadius: 6, border: '1px solid var(--border-strong)', background: 'var(--surface)', color: 'var(--text)', fontFamily: 'inherit', fontSize: 12.5, fontWeight: 600, cursor: 'pointer' }}>عرض السجل الكامل</button>
             </aside>
           </div>
         </div>

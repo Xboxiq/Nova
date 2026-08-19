@@ -14,10 +14,10 @@ import {
   PiPlus,
   PiShareNetwork,
   PiShoppingBag,
-  PiSparkle,
   PiSpinnerGap,
   PiTruck,
   PiX,
+  PiStack,
 } from "react-icons/pi";
 import type { DemoProps } from "./shared";
 
@@ -105,7 +105,7 @@ function DialogDemo({ onNotify }: Pick<DemoProps, "onNotify">) {
     <div className="demo demo-dialog">
       <div className="dialog-teaser"><span><PiInfo /></span><div><h4>اتفاقية الاستخدام</h4><p>محتوى طويل مع عنوان وإجراء ثابتين.</p></div></div>
       <button className="demo-primary" type="button" onClick={() => setOpen(true)}>فتح النافذة</button>
-      {open && <div className="modal-backdrop" role="presentation" onMouseDown={(event) => { if (event.currentTarget === event.target) setOpen(false); }}><div ref={dialogRef} className="mini-dialog" role="dialog" aria-modal="true" aria-labelledby="dialog-title"><header><div><small>آخر تحديث: تموز 2026</small><h4 id="dialog-title">شروط استخدام NOVA</h4></div><button ref={closeRef} type="button" aria-label="إغلاق النافذة" onClick={() => setOpen(false)}><PiX /></button></header><div className="dialog-scroll" tabIndex={0}><p>باستخدام هذه المكتبة، أنت تحتفظ بالتحكّم الكامل في مشروعك وملفاتك.</p><h5>الاستخدام الشخصي</h5><p>يمكنك تعديل المكوّنات وتكييفها مع منتجاتك دون نشرها في سجل خارجي.</p><h5>المصادر</h5><p>نحتفظ بروابط الإلهام الأصلية داخل كل بطاقة لضمان الشفافية.</p><h5>الوصول</h5><p>يجب الحفاظ على التركيز المرئي وتسميات الأزرار ودعم لوحة المفاتيح.</p></div><footer><button type="button" className="demo-secondary" onClick={() => setOpen(false)}>إلغاء</button><button type="button" className="demo-primary" onClick={() => { setOpen(false); onNotify("تم قبول الشروط"); }}><PiCheck /> أوافق</button></footer></div></div>}
+      {open && <div className="modal-backdrop" role="presentation" onMouseDown={(event) => { if (event.currentTarget === event.target) setOpen(false); }}><div ref={dialogRef} className="mini-dialog" role="dialog" aria-modal="true" aria-labelledby="dialog-title"><header><div><small>آخر تحديث: تموز 2026</small><h4 id="dialog-title">شروط استخدام NOVA</h4></div><button ref={closeRef} type="button" aria-label="إغلاق النافذة" onClick={() => setOpen(false)}><PiX /></button></header><div className="dialog-scroll" tabIndex={0}><p>باستخدام هذه المكتبة، أنت تحتفظ بالتحكّم الكامل في مشروعك وملفاتك.</p><h5>الاستخدام الشخصي</h5><p>يمكنك تعديل المكوّنات وتكييفها مع منتجاتك دون نشرها في سجل خارجي.</p><h5>المصادر</h5><p>نحتفظ بروابط الإلهام الأصلية داخل كل بطاقة لضمان الشفافية.</p><h5>الوصول</h5><p>يجب الحفاظ على التركيز المرئي وتسميات الأزرار ودعم لوحة المفاتيح.</p></div><footer><button type="button" className="demo-secondary" onClick={() => setOpen(false)}>إلغاء</button><button type="button" className="demo-primary" onClick={() => { setOpen(false); onNotify("تم قبول الشروط"); }}>أوافق</button></footer></div></div>}
     </div>
   );
 }
@@ -146,7 +146,7 @@ function DisplayCards() {
   const cards = [["استراتيجية المنتج", "12 ملفًا", "card-sky"], ["بحث المستخدم", "8 مقابلات", "card-coral"], ["نظام NOVA", "72 مكوّنًا", "card-mint"]];
   return (
     <div className="demo demo-display-cards">
-      <div className="card-stack">{cards.map(([title, detail, tone], index) => <button type="button" key={title} className={`${tone} ${active === index ? "active" : ""}`} style={{ "--order": index } as React.CSSProperties} onClick={() => setActive(index)}><span><PiSparkle /></span><div><small>COLLECTION 0{index + 1}</small><h4>{title}</h4><p>{detail}</p></div><PiArrowLeft /></button>)}</div>
+      <div className="card-stack">{cards.map(([title, detail, tone], index) => <button type="button" key={title} className={`${tone} ${active === index ? "active" : ""}`} style={{ "--order": index } as React.CSSProperties} onClick={() => setActive(index)}><span><PiStack /></span><div><small>COLLECTION 0{index + 1}</small><h4>{title}</h4><p>{detail}</p></div><PiArrowLeft /></button>)}</div>
       <small>اختر بطاقة لإحضارها إلى المقدّمة.</small>
     </div>
   );

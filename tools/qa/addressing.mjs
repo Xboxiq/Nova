@@ -12,6 +12,7 @@
  *
  *   node tools/qa/addressing.mjs
  */
+import { readFileSync } from "node:fs";
 import { spawn, execSync } from "node:child_process";
 import { createRequire } from "node:module";
 
@@ -54,11 +55,16 @@ const landed = await page.evaluate(() => {
 if (landed.scrolled < 200) failures.push(`a deep link did not scroll to the library (scrollY=${landed.scrolled})`);
 
 // ── the addition is visible from where the page lands ───────────────────────
+/* The expected number comes from the registry, not from a literal: hardcoding it
+   made this check fail the next time something was added, which is the test
+   breaking rather than the code. */
+const expected = (readFileSync("src/madar/sections.ts", "utf8").match(/^\s*added: true,$/gm) ?? []).length;
+if (expected < 1) failures.push("nothing in the registry is marked as an addition");
 const strip = await page.locator(".madar-whats-new button");
 const stripCount = await strip.count();
-if (stripCount !== 2) failures.push(`the recently-added row lists ${stripCount} sections, expected 2`);
+if (stripCount !== expected) failures.push(`the recently-added row lists ${stripCount} sections, registry says ${expected}`);
 const marks = await page.locator(".madar-picker-list .madar-new").count();
-if (marks !== 2) failures.push(`${marks} tabs carry the new mark, expected 2`);
+if (marks !== expected) failures.push(`${marks} tabs carry the new mark, registry says ${expected}`);
 
 // ── picking a section leaves a link behind ──────────────────────────────────
 await page.locator("#madar-upload-tab").click();

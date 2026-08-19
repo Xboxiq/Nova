@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Section, SectionHeader } from '../SectionHeader';
+import { SpecShelf } from '../SpecRow';
 import { useTheme } from '../../theme/ThemeContext';
 import {
   SquircleIcon, SpecularOrb, BurstSeal, MemojiAvatar,
@@ -10,7 +11,7 @@ import {
 } from '../../components';
 
 function Card({ children }: { children: React.ReactNode }) {
-  return <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 22, padding: 24, boxShadow: 'var(--shadow-1)', display: 'flex', flexDirection: 'column', gap: 18 }}>{children}</div>;
+  return <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, padding: 24, display: 'flex', flexDirection: 'column', gap: 18 }}>{children}</div>;
 }
 function Rule() { return <div style={{ height: 1, background: 'var(--border)' }} />; }
 function Hint({ children, mb = 12 }: { children: React.ReactNode; mb?: number }) {
@@ -73,7 +74,7 @@ export function LibraryVault() {
         </div>
       </AuroraMeshHero>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 20, alignItems: 'start', marginTop: 20 }}>
+      <SpecShelf>
         {/* soft primitives */}
         <Card>
           <Hint mb={4}>Soft primitives — squircle triple, orbs, seal, memoji</Hint>
@@ -131,7 +132,7 @@ export function LibraryVault() {
           <Hint mb={0}>Blueprint — engineering grid fades in on hover</Hint>
           <BlueprintCard>
             <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <span style={{ width: 38, height: 38, borderRadius: 11, background: 'var(--info-soft)', color: 'var(--info)', display: 'grid', placeItems: 'center', flex: 'none' }}>
+              <span style={{ width: 38, height: 38, borderRadius: 6, background: 'var(--info-soft)', color: 'var(--info)', display: 'grid', placeItems: 'center', flex: 'none' }}>
                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M8 3v3M16 3v3M8 18v3M16 18v3M3 8h3M3 16h3M18 8h3M18 16h3" /><rect x="6" y="6" width="12" height="12" rx="2" /></svg>
               </span>
               <div>
@@ -184,21 +185,21 @@ export function LibraryVault() {
             { title: 'فحص RTL والثيمات', state: 'pending' },
           ]} />
         </Card>
-      </div>
+      </SpecShelf>
 
       {/* row 3 — spotlight + magnifying dock */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 20, alignItems: 'stretch', marginTop: 20 }}>
+      <SpecShelf>
         <CursorSpotlight>
           <div style={{ fontSize: 12, fontWeight: 600, letterSpacing: '0.1em', color: 'var(--accent)' }}>CURSOR SPOTLIGHT</div>
           <div style={{ fontSize: 19, fontWeight: 600, margin: '8px 0 4px' }}>The light follows your pointer</div>
           <div style={{ fontSize: 13, color: 'var(--text-2)', maxWidth: '40ch', lineHeight: '20px' }}>A radial gradient recenters on mousemove over a faint dot grid. Tech product pages only.</div>
         </CursorSpotlight>
-        <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 22, padding: 24, boxShadow: 'var(--shadow-1)', display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, padding: 24, display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'center', justifyContent: 'center' }}>
           <Hint mb={0}>Magnifying dock — scale is a function of distance</Hint>
           <MagnifyingDock icons={DOCK_ICONS} labels={['Home', 'Browse', 'Search', 'Alerts', 'Profile', 'Menu']} />
           <div style={{ fontSize: 12, color: 'var(--text-3)' }}>hovered 1.32 · neighbors 1.14 · next 1.05</div>
         </div>
-      </div>
+      </SpecShelf>
     </Section>
   );
 }

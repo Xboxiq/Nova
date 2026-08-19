@@ -18,7 +18,7 @@ function PinIcon() {
 function GuardCard() {
   const [dirty, setDirty] = useState(false);
   return (
-    <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 22, padding: 24, boxShadow: 'var(--shadow-1)' }}>
+    <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, padding: 24, }}>
       <div style={{ fontSize: 13.5, fontWeight: 500, color: 'var(--text-2)', marginBottom: 12 }}>Unsaved-changes guard — type to trigger</div>
       <Field label="" placeholder="Edit the workspace description…" onInput={() => setDirty(true)} />
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: 16 }}>
@@ -35,7 +35,7 @@ export function FlowForms() {
         Multi-step registration, the unsaved-changes guard, delivery ETA and self-drawing charts — all reusable components from <code style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85em' }}>src/components</code>.
       </SectionHeader>
       <div style={{ display: 'grid', gridTemplateColumns: '1.25fr 1fr', gap: 20, alignItems: 'start' }}>
-        <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 22, padding: 28, boxShadow: 'var(--shadow-1)' }}>
+        <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, padding: 28, }}>
           <Stepper
             steps={[
               {
@@ -82,10 +82,10 @@ export function FlowForms() {
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
           <GuardCard />
-          <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 22, padding: 24, boxShadow: 'var(--shadow-1)' }}>
+          <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, padding: 24, }}>
             <EstimatedArrival minutes={18} progress={0.58} phases={['Picked up', 'On the way', 'Delivered']} />
           </div>
-          <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 22, padding: 24, boxShadow: 'var(--shadow-1)', display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, padding: 24, display: 'flex', flexDirection: 'column', gap: 16 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
               <div style={{ fontSize: 13.5, fontWeight: 500, color: 'var(--text-2)' }}>Number field</div>
               <NumberField defaultValue={2} max={20} />
@@ -96,7 +96,7 @@ export function FlowForms() {
               <Sparkline points={[10, 16, 13, 26, 22, 34, 30, 38]} />
             </div>
           </div>
-          <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 22, padding: 24, boxShadow: 'var(--shadow-1)' }}>
+          <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, padding: 24, }}>
             <div style={{ fontSize: 13.5, fontWeight: 500, color: 'var(--text-2)', marginBottom: 12 }}>Autocomplete — type «الري» or a city</div>
             <Autocomplete
               options={['الرياض', 'الريان', 'جدة', 'الدمام', 'مكة المكرمة', 'Dubai', 'Cairo', 'London']}

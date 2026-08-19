@@ -17,10 +17,10 @@ export function SlidingGradientButton({ children, onClick }: { children: React.R
       onMouseLeave={() => setHov(false)}
       className="i-press-97"
       style={{
-        height: 48, padding: '0 30px', borderRadius: 999, border: 'none', color: '#fff', fontFamily: 'inherit', fontSize: 14.5, fontWeight: 600, cursor: 'pointer',
+        height: 48, padding: '0 30px', borderRadius: 6, border: 'none', color: '#fff', fontFamily: 'inherit', fontSize: 14.5, fontWeight: 600, cursor: 'pointer',
         backgroundImage: 'linear-gradient(to right, oklch(from var(--accent) calc(l - 0.14) c calc(h - 20)) 0%, oklch(from var(--accent) calc(l + 0.06) c calc(h + 20)) 51%, oklch(from var(--accent) calc(l - 0.14) c calc(h - 20)) 100%)',
         backgroundSize: '200% auto', backgroundPosition: hov ? 'right center' : 'left center',
-        boxShadow: 'var(--shadow-2)', transform: hov ? 'translateY(-1px)' : 'none',
+ transform: hov ? 'translateY(-1px)' : 'none',
         transition: 'background-position 500ms ease, transform 220ms',
       }}
     >{children}</button>
@@ -87,7 +87,7 @@ export function IconMorphSwap({ iconA, iconB, 'aria-label': ariaLabel = 'Toggle'
     transition: 'opacity 300ms, transform 300ms, filter 300ms',
   });
   return (
-    <button aria-label={ariaLabel} onClick={() => setB((v) => !v)} className="i-press-94" style={{ position: 'relative', width: 52, height: 52, borderRadius: 16, border: '1px solid var(--border-strong)', background: 'var(--surface)', color: 'var(--accent)', cursor: 'pointer' }}>
+    <button aria-label={ariaLabel} onClick={() => setB((v) => !v)} className="i-press-94" style={{ position: 'relative', width: 52, height: 52, borderRadius: 6, border: '1px solid var(--border-strong)', background: 'var(--surface)', color: 'var(--accent)', cursor: 'pointer' }}>
       <span style={face(!b)}>{iconA}</span>
       <span style={face(b)}>{iconB}</span>
     </button>
@@ -162,8 +162,7 @@ export function EkgPath({ width = 180, height = 48 }: { width?: number; height?:
       </svg>
       <span style={{
         position: 'absolute', top: 0, left: 0, width: 8, height: 8, borderRadius: '50%',
-        background: 'var(--accent)', boxShadow: '0 0 10px var(--accent)',
-        offsetPath: `path('${d}')`, animation: 'ekgTravel 2.6s linear infinite',
+        background: 'var(--accent)',        offsetPath: `path('${d}')`, animation: 'ekgTravel 2.6s linear infinite',
       }} />
     </span>
   );
@@ -175,9 +174,9 @@ export function SegmentLoader({ segments = 4, done = 4 }: { segments?: number; d
   return (
     <div style={{ display: 'flex', gap: 6 }}>
       {Array.from({ length: segments }, (_, i) => (
-        <span key={i} style={{ flex: 1, height: 6, borderRadius: 999, background: 'var(--surface-2)', overflow: 'hidden' }}>
+        <span key={i} style={{ flex: 1, height: 6, borderRadius: 6, background: 'var(--surface-2)', overflow: 'hidden' }}>
           {i < done && (
-            <span style={{ display: 'block', height: '100%', borderRadius: 999, background: 'var(--accent)', transformOrigin: 'var(--underline-origin, left)', animation: `growBarX 500ms ${GLIDE} both`, animationDelay: `${i * 120}ms` }} />
+            <span style={{ display: 'block', height: '100%', borderRadius: 6, background: 'var(--accent)', transformOrigin: 'var(--underline-origin, left)', animation: `growBarX 500ms ${GLIDE} both`, animationDelay: `${i * 120}ms` }} />
           )}
         </span>
       ))}
@@ -206,13 +205,12 @@ export function UndoSnackbar({ visible, message = 'Item deleted', undoLabel = 'U
 
   return (
     <div style={{
-      position: 'relative', display: 'inline-flex', alignItems: 'center', gap: 14, padding: '12px 16px', borderRadius: 14, overflow: 'hidden',
-      background: 'oklch(0.2 0.03 274)', color: 'oklch(0.95 0.005 270)', boxShadow: 'var(--shadow-3)',
-      transform: visible ? 'translateY(0)' : 'translateY(20px)', opacity: visible ? 1 : 0, pointerEvents: visible ? 'auto' : 'none',
+      position: 'relative', display: 'inline-flex', alignItems: 'center', gap: 14, padding: '12px 16px', borderRadius: 6, overflow: 'hidden',
+      background: 'oklch(0.2 0.03 274)', color: 'oklch(0.95 0.005 270)',      transform: visible ? 'translateY(0)' : 'translateY(20px)', opacity: visible ? 1 : 0, pointerEvents: visible ? 'auto' : 'none',
       transition: `transform 480ms ${SPRING}, opacity 300ms`,
     }}>
       <span style={{ fontSize: 13, fontWeight: 500 }}>{message}</span>
-      <button onClick={onUndo} style={{ height: 30, padding: '0 14px', borderRadius: 999, border: 'none', background: 'rgba(255,255,255,0.14)', color: 'var(--accent)', fontFamily: 'inherit', fontSize: 12.5, fontWeight: 700, cursor: 'pointer' }}>{undoLabel}</button>
+      <button onClick={onUndo} style={{ height: 30, padding: '0 14px', borderRadius: 6, border: 'none', background: 'rgba(255,255,255,0.14)', color: 'var(--accent)', fontFamily: 'inherit', fontSize: 12.5, fontWeight: 700, cursor: 'pointer' }}>{undoLabel}</button>
       {visible && (
         <span key={String(visible)} style={{ position: 'absolute', bottom: 0, insetInline: 0, height: 3, background: 'var(--accent)', transformOrigin: 'var(--underline-origin, left)', animation: `drainX ${durationMs}ms linear forwards` }} />
       )}

@@ -21,7 +21,7 @@ export function RippleButton({ label = 'اضغط' }: { label?: string }) {
         setRipples((rs) => [...rs, { id, x: e.clientX - r.left, y: e.clientY - r.top }]);
         setTimeout(() => setRipples((rs) => rs.filter((x) => x.id !== id)), 600);
       }}
-      style={{ position: 'relative', overflow: 'hidden', height: 46, padding: '0 26px', borderRadius: 12, border: 'none', background: 'var(--ink)', color: 'var(--on-ink)', fontFamily: 'inherit', fontSize: 14.5, fontWeight: 600, cursor: 'pointer' }}
+      style={{ position: 'relative', overflow: 'hidden', height: 46, padding: '0 26px', borderRadius: 6, border: 'none', background: 'var(--ink)', color: 'var(--on-ink)', fontFamily: 'inherit', fontSize: 14.5, fontWeight: 600, cursor: 'pointer' }}
     >
       {ripples.map((rp) => (
         <span key={rp.id} style={{ position: 'absolute', insetInlineStart: rp.x, top: rp.y, width: 8, height: 8, borderRadius: '50%', background: 'rgba(255,255,255,0.5)', transform: 'translate(-50%,-50%)', animation: 'burst 600ms ease-out forwards', pointerEvents: 'none' }} />
@@ -53,7 +53,7 @@ export function CursorTrail({ dots = 6, label = 'حرّك المؤشر هنا' }
   }, []);
   return (
     <div ref={box} onPointerMove={(e) => { const r = box.current!.getBoundingClientRect(); target.current = { x: e.clientX - r.left, y: e.clientY - r.top }; }}
-      style={{ position: 'relative', height: 150, borderRadius: 16, border: '1px solid var(--border)', background: 'var(--bg-deep)', overflow: 'hidden', display: 'grid', placeItems: 'center', cursor: 'crosshair' }}>
+      style={{ position: 'relative', height: 150, borderRadius: 6, border: '1px solid var(--border)', background: 'var(--bg-deep)', overflow: 'hidden', display: 'grid', placeItems: 'center', cursor: 'crosshair' }}>
       <span style={{ fontSize: 12.5, color: 'var(--text-3)', pointerEvents: 'none' }}>{label}</span>
       {Array.from({ length: dots }, (_, i) => (
         <span key={i} ref={(el) => { spans.current[i] = el; }} style={{ position: 'absolute', top: 0, insetInlineStart: 0, width: 16 - i * 1.6, height: 16 - i * 1.6, borderRadius: '50%', background: 'var(--accent)', opacity: 1 - i / (dots + 1), pointerEvents: 'none' }} />
@@ -72,7 +72,7 @@ export function PasswordMeter({ placeholder = 'كلمة المرور' }: { place
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8, maxWidth: 280 }}>
       <input type="password" value={v} onChange={(e) => setV(e.target.value)} placeholder={placeholder} className="i-input"
-        style={{ height: 44, borderRadius: 12, border: '1px solid var(--border-strong)', background: 'var(--surface-2)', padding: '0 14px', fontFamily: 'inherit', fontSize: 14, color: 'var(--text)', outline: 'none' }} />
+        style={{ height: 44, borderRadius: 6, border: '1px solid var(--border-strong)', background: 'var(--surface-2)', padding: '0 14px', fontFamily: 'inherit', fontSize: 14, color: 'var(--text)', outline: 'none' }} />
       <div style={{ display: 'flex', gap: 5 }}>
         {[0, 1, 2, 3].map((i) => (
           <span key={i} style={{ flex: 1, height: 5, borderRadius: 3, background: i < filled ? tones[filled - 1] : 'var(--surface-2)', transition: `background 260ms ${GLIDE}, transform 260ms ${SPRING}`, transform: i < filled ? 'scaleY(1)' : 'scaleY(0.7)' }} />
@@ -94,7 +94,7 @@ export function RotaryKnob({ defaultValue = 40, label = 'المستوى' }: { de
         onPointerDown={(e) => { drag.current = { y: e.clientY, v: val }; (e.target as HTMLElement).setPointerCapture(e.pointerId); }}
         onPointerMove={(e) => { if (!drag.current) return; const dv = (drag.current.y - e.clientY) * 0.6; setVal(Math.max(0, Math.min(100, Math.round(drag.current.v + dv)))); }}
         onPointerUp={() => { drag.current = null; }}
-        style={{ position: 'relative', width: 84, height: 84, borderRadius: '50%', background: 'radial-gradient(circle at 50% 35%, var(--surface), var(--surface-2))', border: '1px solid var(--border-strong)', boxShadow: 'var(--shadow-2), inset 0 -3px 6px rgba(0,0,0,0.12)', cursor: 'ns-resize', transition: `transform 400ms ${SPRING}` }}
+        style={{ position: 'relative', width: 84, height: 84, borderRadius: '50%', background: 'radial-gradient(circle at 50% 35%, var(--surface), var(--surface-2))', border: '1px solid var(--border-strong)', boxShadow: 'inset 0 -3px 6px rgba(0,0,0,0.12)', cursor: 'ns-resize', transition: `transform 400ms ${SPRING}` }}
       >
         <span style={{ position: 'absolute', top: 8, insetInlineStart: '50%', width: 4, height: 22, borderRadius: 3, background: 'var(--accent)', transformOrigin: '50% 34px', transform: `translateX(-50%) rotate(${angle}deg)`, transition: `transform 220ms ${SPRING}` }} />
       </div>
@@ -135,7 +135,7 @@ export function SkeletonToContent() {
     </span>
   );
   return (
-    <div style={{ display: 'flex', gap: 12, alignItems: 'center', width: 260, padding: 14, borderRadius: 14, border: '1px solid var(--border)', background: 'var(--surface)' }}>
+    <div style={{ display: 'flex', gap: 12, alignItems: 'center', width: 260, padding: 14, borderRadius: 6, border: '1px solid var(--border)', background: 'var(--surface)' }}>
       {loaded
         ? <><span style={{ width: 40, height: 40, borderRadius: '50%', background: 'var(--accent-soft)', color: 'var(--accent)', display: 'grid', placeItems: 'center', fontWeight: 700, animation: 'fadeUp 400ms ease-out' }}>م</span>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6, animation: 'fadeUp 460ms ease-out' }}><b style={{ fontSize: 14 }}>مدار مصمّم</b><span style={{ fontSize: 12, color: 'var(--text-3)' }}>مكتبة مكوّنات</span></div></>
@@ -149,7 +149,7 @@ export function SkeletonToContent() {
 export function BatteryCharge({ width = 96 }: { width?: number }) {
   return (
     <div style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
-      <span style={{ position: 'relative', width, height: 44, borderRadius: 8, border: '2px solid var(--border-strong)', padding: 4, display: 'block' }}>
+      <span style={{ position: 'relative', width, height: 44, borderRadius: 6, border: '2px solid var(--border-strong)', padding: 4, display: 'block' }}>
         <span style={{ display: 'block', height: '100%', borderRadius: 3, background: 'linear-gradient(90deg, var(--accent), var(--success))', animation: 'k99-battery 3.2s ease-in-out infinite' }} />
       </span>
       <span style={{ width: 4, height: 16, borderRadius: 2, background: 'var(--border-strong)' }} />
@@ -240,16 +240,16 @@ export function BouncingBall() {
 /* ── Neon Glow Pulse — text (or chip) breathing with a neon glow. */
 export function NeonGlowPulse({ children = 'MADAR' }: { children?: React.ReactNode }) {
   return (
-    <span style={{ display: 'inline-block', padding: '10px 20px', borderRadius: 12, border: '1.5px solid var(--accent)', color: 'var(--accent)', fontWeight: 700, letterSpacing: '0.14em', fontFamily: 'var(--font-mono)', animation: 'k99-neon 2s ease-in-out infinite' }}>{children}</span>
+    <span style={{ display: 'inline-block', padding: '10px 20px', borderRadius: 6, border: '1.5px solid var(--accent)', color: 'var(--accent)', fontWeight: 700, letterSpacing: '0.14em', fontFamily: 'var(--font-mono)', animation: 'k99-neon 2s ease-in-out infinite' }}>{children}</span>
   );
 }
 
 /* ── Gradient Border Morph — a conic gradient border that rotates. */
 export function GradientBorderMorph({ children = 'محتوى مميّز', size = 200 }: { children?: React.ReactNode; size?: number }) {
   return (
-    <span style={{ position: 'relative', display: 'inline-grid', placeItems: 'center', width: size, height: 96, borderRadius: 16, overflow: 'hidden', isolation: 'isolate' }}>
+    <span style={{ position: 'relative', display: 'inline-grid', placeItems: 'center', width: size, height: 96, borderRadius: 6, overflow: 'hidden', isolation: 'isolate' }}>
       <span aria-hidden style={{ position: 'absolute', width: '200%', height: '200%', background: 'conic-gradient(from 0deg, var(--accent), oklch(from var(--accent) 0.7 0.2 calc(h + 90)), oklch(from var(--accent) 0.7 0.2 calc(h + 200)), var(--accent))', animation: 'k99-border 4s linear infinite', zIndex: -2 }} />
-      <span style={{ position: 'absolute', inset: 2, borderRadius: 14, background: 'var(--surface)', zIndex: -1 }} />
+      <span style={{ position: 'absolute', inset: 2, borderRadius: 6, background: 'var(--surface)', zIndex: -1 }} />
       <span style={{ fontSize: 14, fontWeight: 600 }}>{children}</span>
     </span>
   );
@@ -300,12 +300,12 @@ export function TextWave({ children = 'مدار · MADAR' }: { children?: string
 /* ── Flip Card — 3D front/back flip on hover. */
 export function FlipCard({ front, back, height = 150 }: { front?: React.ReactNode; back?: React.ReactNode; height?: number }) {
   const [flip, setFlip] = useState(false);
-  const face: React.CSSProperties = { position: 'absolute', inset: 0, backfaceVisibility: 'hidden', borderRadius: 16, display: 'grid', placeItems: 'center', padding: 16, textAlign: 'center' };
+  const face: React.CSSProperties = { position: 'absolute', inset: 0, backfaceVisibility: 'hidden', borderRadius: 6, display: 'grid', placeItems: 'center', padding: 16, textAlign: 'center' };
   return (
     <div onMouseEnter={() => setFlip(true)} onMouseLeave={() => setFlip(false)} onClick={() => setFlip((f) => !f)}
       style={{ width: 200, height, perspective: 900, cursor: 'pointer' }}>
       <div style={{ position: 'relative', width: '100%', height: '100%', transformStyle: 'preserve-3d', transition: `transform 620ms ${GLIDE}`, transform: flip ? 'rotateY(180deg)' : 'none' }}>
-        <div style={{ ...face, background: 'var(--surface)', border: '1px solid var(--border)', boxShadow: 'var(--shadow-1)' }}>{front ?? <b style={{ fontSize: 15 }}>الوجه الأمامي</b>}</div>
+        <div style={{ ...face, background: 'var(--surface)', border: '1px solid var(--border)', }}>{front ?? <b style={{ fontSize: 15 }}>الوجه الأمامي</b>}</div>
         <div style={{ ...face, transform: 'rotateY(180deg)', background: 'var(--ink)', color: 'var(--on-ink)' }}>{back ?? <span style={{ fontSize: 13.5, lineHeight: '20px' }}>الوجه الخلفي · مرّر لتقلب</span>}</div>
       </div>
     </div>
@@ -321,7 +321,7 @@ export function CubeRotate3D({ size = 96, faces = ['مدار', 'Madar', 'مكت�
     <div onMouseEnter={() => setSpin(true)} onMouseLeave={() => setSpin(false)} style={{ width: size, height: size, perspective: 600, margin: '10px auto' }}>
       <div style={{ position: 'relative', width: '100%', height: '100%', transformStyle: 'preserve-3d', transition: `transform 900ms ${GLIDE}`, transform: `translateZ(-${half}px) rotateY(${spin ? -90 : 0}deg)` }}>
         {faces.slice(0, 4).map((f, i) => (
-          <span key={i} style={{ position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', borderRadius: 12, background: i % 2 ? 'var(--ink)' : 'var(--accent)', color: i % 2 ? 'var(--on-ink)' : 'var(--on-accent)', fontWeight: 700, fontSize: 15, transform: `rotateY(${tf[i]}deg) translateZ(${half}px)` }}>{f}</span>
+          <span key={i} style={{ position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', borderRadius: 6, background: i % 2 ? 'var(--ink)' : 'var(--accent)', color: i % 2 ? 'var(--on-ink)' : 'var(--on-accent)', fontWeight: 700, fontSize: 15, transform: `rotateY(${tf[i]}deg) translateZ(${half}px)` }}>{f}</span>
         ))}
       </div>
     </div>
@@ -333,7 +333,7 @@ export function ClipWipe({ children = 'يُكشف بمسح' }: { children?: Reac
   const [on, setOn] = useState(false);
   return (
     <div onMouseEnter={() => setOn(true)} onMouseLeave={() => setOn(false)}
-      style={{ position: 'relative', width: 220, height: 80, borderRadius: 14, overflow: 'hidden', border: '1px solid var(--border)', cursor: 'pointer' }}>
+      style={{ position: 'relative', width: 220, height: 80, borderRadius: 6, overflow: 'hidden', border: '1px solid var(--border)', cursor: 'pointer' }}>
       <div style={{ position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', background: 'var(--surface)', color: 'var(--text-3)', fontSize: 13.5 }}>مرّر للكشف</div>
       <div style={{ position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', background: 'var(--accent)', color: 'var(--on-accent)', fontWeight: 700, fontSize: 15, clipPath: on ? 'inset(0 0 0 0)' : 'inset(0 100% 0 0)', transition: `clip-path 480ms ${GLIDE}` }}>{children}</div>
     </div>
@@ -346,7 +346,7 @@ export function FoldingDoors({ children = 'مُكتشَف', width = 220, height 
   const door: React.CSSProperties = { position: 'absolute', top: 0, width: '50%', height: '100%', background: 'var(--ink)', transition: `transform 620ms ${GLIDE}`, backfaceVisibility: 'hidden' };
   return (
     <div onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}
-      style={{ position: 'relative', width, height, borderRadius: 14, overflow: 'hidden', border: '1px solid var(--border)', perspective: 800, cursor: 'pointer' }}>
+      style={{ position: 'relative', width, height, borderRadius: 6, overflow: 'hidden', border: '1px solid var(--border)', perspective: 800, cursor: 'pointer' }}>
       <div style={{ position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', background: 'var(--accent-soft)', color: 'var(--accent)', fontWeight: 700, fontSize: 15 }}>{children}</div>
       <div style={{ ...door, insetInlineStart: 0, transformOrigin: 'left center', transform: open ? 'rotateY(-105deg)' : 'none' }} />
       <div style={{ ...door, insetInlineEnd: 0, transformOrigin: 'right center', transform: open ? 'rotateY(105deg)' : 'none' }} />
@@ -360,13 +360,13 @@ export function BeforeAfter({ width = 260, height = 150 }: { width?: number; hei
   const box = useRef<HTMLDivElement | null>(null);
   const move = (clientX: number) => { const r = box.current!.getBoundingClientRect(); setPos(Math.max(0, Math.min(100, ((clientX - r.left) / r.width) * 100))); };
   return (
-    <div ref={box} style={{ position: 'relative', width, height, borderRadius: 14, overflow: 'hidden', border: '1px solid var(--border)', userSelect: 'none', touchAction: 'none' }}
+    <div ref={box} style={{ position: 'relative', width, height, borderRadius: 6, overflow: 'hidden', border: '1px solid var(--border)', userSelect: 'none', touchAction: 'none' }}
       onPointerDown={(e) => { move(e.clientX); (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId); }}
       onPointerMove={(e) => { if (e.buttons) move(e.clientX); }}>
       <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, var(--surface-2), var(--surface))', display: 'grid', placeItems: 'center', color: 'var(--text-3)', fontWeight: 600, fontSize: 13 }}>قبل</div>
       <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, var(--accent), oklch(from var(--accent) 0.6 0.2 calc(h + 60)))', color: 'var(--on-accent)', display: 'grid', placeItems: 'center', fontWeight: 700, fontSize: 14, clipPath: `inset(0 ${100 - pos}% 0 0)` }}>بعد</div>
-      <span style={{ position: 'absolute', top: 0, bottom: 0, insetInlineStart: `${pos}%`, width: 2, background: '#fff', boxShadow: '0 0 6px rgba(0,0,0,0.4)', transform: 'translateX(-50%)' }}>
-        <span style={{ position: 'absolute', top: '50%', insetInlineStart: '50%', transform: 'translate(-50%,-50%)', width: 28, height: 28, borderRadius: '50%', background: '#fff', boxShadow: 'var(--shadow-2)', display: 'grid', placeItems: 'center', cursor: 'ew-resize', color: '#333' }}>
+      <span style={{ position: 'absolute', top: 0, bottom: 0, insetInlineStart: `${pos}%`, width: 2, background: '#fff', transform: 'translateX(-50%)' }}>
+        <span style={{ position: 'absolute', top: '50%', insetInlineStart: '50%', transform: 'translate(-50%,-50%)', width: 28, height: 28, borderRadius: '50%', background: '#fff', display: 'grid', placeItems: 'center', cursor: 'ew-resize', color: '#333' }}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 6l-6 6 6 6M15 6l6 6-6 6" /></svg>
         </span>
       </span>
@@ -379,7 +379,7 @@ export function PagePeel({ children = 'بطاقة', hint = 'اقلب', size = 15
   const [on, setOn] = useState(false);
   return (
     <div onMouseEnter={() => setOn(true)} onMouseLeave={() => setOn(false)}
-      style={{ position: 'relative', width: size, height: size, borderRadius: 16, overflow: 'hidden', background: 'var(--surface)', border: '1px solid var(--border)', boxShadow: 'var(--shadow-1)', display: 'grid', placeItems: 'center', cursor: 'pointer' }}>
+      style={{ position: 'relative', width: size, height: size, borderRadius: 6, overflow: 'hidden', background: 'var(--surface)', border: '1px solid var(--border)', display: 'grid', placeItems: 'center', cursor: 'pointer' }}>
       <span style={{ fontSize: 15, fontWeight: 600 }}>{children}</span>
       <span style={{ position: 'absolute', insetInlineEnd: 0, bottom: 0, display: 'grid', placeItems: 'center', color: 'var(--accent)', fontSize: 10, fontWeight: 700, width: on ? 52 : 24, height: on ? 52 : 24, background: 'linear-gradient(135deg, transparent 50%, var(--accent-soft) 50%)', transition: `all 320ms ${GLIDE}` }}>
         <span style={{ transform: 'rotate(-45deg) translate(6px,6px)', opacity: on ? 1 : 0, transition: 'opacity 200ms' }}>{hint}</span>

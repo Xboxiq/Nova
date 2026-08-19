@@ -38,12 +38,11 @@ export function DynamicIsland({
       aria-expanded={isOpen}
       style={{
         margin: '0 auto', cursor: 'pointer', overflow: 'hidden', background: 'oklch(0.17 0.02 274)', color: 'oklch(0.97 0.005 270)',
-        borderRadius: isOpen ? 24 : 999, maxWidth: isOpen ? expandedWidth : collapsedWidth, boxShadow: 'var(--shadow-3)',
-        transition: `max-width 480ms ${spring}, border-radius 480ms ${spring}`,
+        borderRadius: 6, maxWidth: isOpen ? expandedWidth : collapsedWidth,        transition: `max-width 480ms ${spring}, border-radius 480ms ${spring}`,
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 16px' }}>
-        <span style={{ width: 8, height: 8, borderRadius: '50%', background: dotColor, boxShadow: `0 0 8px ${dotColor}`, flex: 'none' }} />
+        <span style={{ width: 8, height: 8, borderRadius: '50%', background: dotColor, flex: 'none' }} />
         <span style={{ fontSize: 13, fontWeight: 600, whiteSpace: 'nowrap' }}>{title}</span>
         {meta && <span style={{ marginInlineStart: 'auto', fontSize: 12, opacity: 0.6, fontVariantNumeric: 'tabular-nums', whiteSpace: 'nowrap' }}>{meta}</span>}
       </div>
@@ -84,12 +83,12 @@ export function EstimatedArrival({ minutes, progress, phases = ['Picked up', 'On
             {minutes}<span style={{ fontSize: 14, color: 'var(--text-3)', fontWeight: 500 }}> min</span>
           </div>
         </div>
-        <span style={{ width: 44, height: 44, borderRadius: 14, background: 'var(--accent-soft)', color: 'var(--accent)', display: 'grid', placeItems: 'center' }}>
+        <span style={{ width: 44, height: 44, borderRadius: 6, background: 'var(--accent-soft)', color: 'var(--accent)', display: 'grid', placeItems: 'center' }}>
           {icon ?? <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M3 16V6a1 1 0 0 1 1-1h9v11M13 8h4l3 4v4h-2.5M3 16h1.5M9.5 16h4" /><circle cx="7" cy="17.5" r="1.8" /><circle cx="17" cy="17.5" r="1.8" /></svg>}
         </span>
       </div>
-      <div style={{ position: 'relative', height: 5, borderRadius: 999, background: 'var(--surface-2)', margin: '6px 0 10px' }}>
-        <div style={{ position: 'absolute', insetInlineStart: 0, top: 0, bottom: 0, width: `${pct}%`, borderRadius: 999, background: 'var(--accent)', transition: 'width 560ms cubic-bezier(0.22,1,0.36,1)' }} />
+      <div style={{ position: 'relative', height: 5, borderRadius: 6, background: 'var(--surface-2)', margin: '6px 0 10px' }}>
+        <div style={{ position: 'absolute', insetInlineStart: 0, top: 0, bottom: 0, width: `${pct}%`, borderRadius: 6, background: 'var(--accent)', transition: 'width 560ms cubic-bezier(0.22,1,0.36,1)' }} />
         <span style={{ position: 'absolute', top: -4.5, insetInlineStart: `${pct}%`, width: 14, height: 14, borderRadius: '50%', background: 'var(--accent)', border: '3px solid var(--surface)', boxShadow: '0 0 0 3px var(--accent-soft)', animation: 'pulseDot 1.6s ease-in-out infinite', transform: 'translateX(-50%)' }} />
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11.5, color: 'var(--text-3)' }}>
@@ -117,12 +116,12 @@ export interface Agent {
 
 export function AgentDock({ agents, title = 'AGENT DOCK' }: { agents: Agent[]; title?: string }) {
   return (
-    <div style={{ borderRadius: 22, padding: 18, background: 'oklch(0.2 0.03 274)', color: 'oklch(0.94 0.008 270)' }}>
+    <div style={{ borderRadius: 6, padding: 18, background: 'oklch(0.2 0.03 274)', color: 'oklch(0.94 0.008 270)' }}>
       <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.09em', opacity: 0.55, marginBottom: 12 }}>{title}</div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
         {agents.map((a) => (
-          <div key={a.name} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 12px', borderRadius: 13, background: a.state === 'thinking' ? 'rgba(255,255,255,0.07)' : undefined, cursor: a.state === 'thinking' ? undefined : 'pointer', transition: 'background 180ms' }}>
-            <span style={{ width: 26, height: 26, borderRadius: 9, background: a.gradient, display: 'grid', placeItems: 'center', fontSize: 10, fontWeight: 800, color: '#fff' }}>{a.initial}</span>
+          <div key={a.name} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 12px', borderRadius: 6, background: a.state === 'thinking' ? 'rgba(255,255,255,0.07)' : undefined, cursor: a.state === 'thinking' ? undefined : 'pointer', transition: 'background 180ms' }}>
+            <span style={{ width: 26, height: 26, borderRadius: 6, background: a.gradient, display: 'grid', placeItems: 'center', fontSize: 10, fontWeight: 800, color: '#fff' }}>{a.initial}</span>
             <span style={{ fontSize: 13, fontWeight: 600, flex: 1, opacity: a.state === 'thinking' ? 1 : 0.85 }}>{a.name}</span>
             {a.state === 'thinking' && (
               <span style={{ display: 'inline-flex', gap: 3 }}>
@@ -145,7 +144,7 @@ export function AgentDock({ agents, title = 'AGENT DOCK' }: { agents: Agent[]; t
 ──────────────────────────────────────────────────────────────────────── */
 export function LocationTag({ label, live = true }: { label: string; live?: boolean }) {
   return (
-    <span className="i-lift-shadow" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '8px 16px 8px 12px', borderRadius: 999, background: 'var(--surface-2)', border: '1px solid var(--border)', fontSize: 13, fontWeight: 600, cursor: 'pointer', transition: 'transform 220ms, box-shadow 220ms' }}>
+    <span className="i-lift-shadow" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '8px 16px 8px 12px', borderRadius: 6, background: 'var(--surface-2)', border: '1px solid var(--border)', fontSize: 13, fontWeight: 600, cursor: 'pointer', transition: 'transform 220ms, box-shadow 220ms' }}>
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11z" /><circle cx="12" cy="10" r="2.4" /></svg>
       {label}
       {live && <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--success)', animation: 'pulseDot 1.8s ease-in-out infinite' }} />}

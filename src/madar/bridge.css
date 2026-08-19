@@ -50,10 +50,10 @@
   /* material */
   --glass: var(--nova-glass);
   --shadow-color: var(--nova-shadow-tint);
-  --shadow-1: 0 1px 2px oklch(from var(--shadow-color) l c h / 0.06);
-  --shadow-2: 0 2px 6px oklch(from var(--shadow-color) l c h / 0.07), 0 8px 24px oklch(from var(--shadow-color) l c h / 0.07);
-  --shadow-3: 0 4px 12px oklch(from var(--shadow-color) l c h / 0.10), 0 20px 48px oklch(from var(--shadow-color) l c h / 0.14);
-  --shadow-4: 0 8px 24px oklch(from var(--shadow-color) l c h / 0.14), 0 32px 80px oklch(from var(--shadow-color) l c h / 0.22);
+  --shadow-1: none;
+  --shadow-2: none;
+  --shadow-3: none;
+  --shadow-4: none;
 
   /* spacing — 4px base, matched to the NOVA scale where the steps coincide */
   --sp-1: 4px; --sp-2: var(--nova-space-2); --sp-3: var(--nova-space-3); --sp-4: var(--nova-space-4);
@@ -61,11 +61,11 @@
   --sp-9: var(--nova-space-12); --sp-10: var(--nova-space-16); --sp-11: var(--nova-space-20); --sp-12: 120px;
 
   /* radius */
-  --r-xs: 8px;
-  --r-sm: 12px;
+  --r-xs: 3px;
+  --r-sm: 4px;
   --r-md: var(--nova-radius-field);
-  --r-lg: 22px;
-  --r-xl: 30px;
+  --r-lg: 6px;
+  --r-xl: 6px;
   --r-full: var(--nova-radius-pill);
 
   /* motion */
@@ -83,7 +83,25 @@
   --glass-hl: var(--nova-glass-specular);
 }
 
-/* glass system — design.md §5 */
+/* glass system — design.md §5, plus its zero.
+
+   g0 is not "less blur": it rebinds the glass tokens themselves to solid
+   surfaces, so every surface that reads them — the shell's top bar and toast as
+   much as the library's cards — becomes opaque at once. A `backdrop-filter` over
+   an opaque background has nothing to filter, so the hardcoded blurs in the
+   shell stop mattering rather than needing to be hunted down one by one. */
+[data-glass="g0"] {
+  --glass-blur: 0px;
+  --glass-sat: 100%;
+  --glass-hl: transparent;
+  --nova-glass: var(--nova-surface);
+  --nova-glass-strong: var(--nova-surface);
+  --nova-glass-edge: var(--nova-border);
+  --nova-glass-edge-shade: var(--nova-border);
+  --nova-glass-specular: transparent;
+  --nova-glass-caustic: transparent;
+}
+
 [data-glass="g1"] { --glass-blur: 10px; --glass-sat: 140%; --glass-hl: transparent; }
 [data-glass="g2"] { --glass-blur: 20px; --glass-sat: 160%; --glass-hl: var(--nova-glass-edge); }
 [data-glass="g3"] { --glass-blur: 36px; --glass-sat: 180%; --glass-hl: var(--nova-glass-specular); }
@@ -314,4 +332,134 @@
     animation-duration: 1ms !important;
     transition-duration: 1ms !important;
   }
+}
+
+/* The showcase's composition — anti-slop-ui #13's REQUIRED half, and §21.
+
+   The ordinal is a counter and the alternation is `:nth-child(even)`, which keeps
+   both out of the call sites: a section's own card wrapper can be reimplemented as
+   a single SpecRow, so twenty-one legacy sections migrate by editing one function
+   each instead of thirty JSX call sites. Rewriting that JSX by regex broke two
+   files first; this is the version that does not need to. */
+.madar-spec-list {
+  counter-reset: madar-spec;
+}
+
+.madar-spec-row {
+  display: grid;
+  /* unequal on purpose: a half each says the statement and the specimen weigh
+     the same, and they do not */
+  grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+  gap: var(--sp-6);
+  align-items: start;
+  padding-block: 34px;
+  border-block-start: 1px solid var(--border);
+  counter-increment: madar-spec;
+}
+
+.madar-spec-row:nth-child(even) {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.45fr);
+}
+
+.madar-spec-stage {
+  grid-column: 1;
+  grid-row: 1;
+  display: grid;
+  place-items: center;
+  padding: 26px;
+  /* tone contrast rather than a card: #7's own replacement for the shadow */
+  background: var(--surface-2);
+  border-radius: var(--r-xs);
+}
+
+/* a table or a board is not an object on a plinth: it wants the whole stage */
+.madar-spec-stage[data-spec-stage='fill'] {
+  place-items: stretch;
+  padding: 18px;
+}
+
+/* a specimen that paints its own surface needs no plinth under it */
+.madar-spec-stage[data-spec-stage='bare'] {
+  background: none;
+  padding: 0;
+}
+
+.madar-spec-copy {
+  display: grid;
+  grid-column: 2;
+  grid-row: 1;
+  gap: 10px;
+  padding-block-start: 4px;
+}
+
+.madar-spec-row:nth-child(even) .madar-spec-stage { grid-column: 2; }
+.madar-spec-row:nth-child(even) .madar-spec-copy { grid-column: 1; }
+
+.madar-spec-ordinal::before {
+  content: counter(madar-spec, decimal-leading-zero);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-3);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 860px) {
+  .madar-spec-row,
+  .madar-spec-row:nth-child(even) { grid-template-columns: minmax(0, 1fr); }
+  .madar-spec-row .madar-spec-stage,
+  .madar-spec-row .madar-spec-copy,
+  .madar-spec-row:nth-child(even) .madar-spec-stage,
+  .madar-spec-row:nth-child(even) .madar-spec-copy { grid-column: 1; grid-row: auto; }
+}
+
+/* ── The lit edge, and the four-sided edge ──────────────────────────────────
+   Earned by re-reading the fifteen repositories I had refused wholesale for
+   their surfaces. `Curved-Glassmorphism-Login-Form-UI` is glass and its corners
+   are 220px, both banned here — but underneath it draws its border as a
+   *gradient*, with a padding-box/border-box mask XOR, so the hairline is bright
+   on one side of the object and faint on the other. That is not a shadow: zero
+   blur, one hairline, drawn. And it is exactly what a system with no drop
+   shadows is starved of — the owner's own recorded cost of deleting them was
+   that the objects read thinner.
+
+   Two changes to the reference on the way in:
+
+   · its gradient runs at 135deg, which means the light comes from the top-left
+     and therefore flips meaning between Arabic and English. Light comes from
+     above in both, so the gradient runs `to bottom` — direction-neutral, and
+     closer to §1's single light overhead than the reference was.
+   · its stops are raw white alphas. Here the lit end is `--border-strong` and
+     the dim end is `--border`, so it rides the seven packs and adds no colour.
+
+   `.madar-lit` is the perimeter version, for an object that should read as
+   having a top. `[data-edge='lit']` is the four-sided inset version from the
+   same file's `.edge`: four 1px insets with *unequal* alphas — brightest on top,
+   faintest underneath — which is one material lit from overhead expressed as an
+   edge rather than as a shadow. */
+.madar-lit {
+  position: relative;
+  border: 0;
+}
+
+.madar-lit::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  background: linear-gradient(to bottom, var(--border-strong), var(--border));
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+[data-edge='lit'] {
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--border-strong) 90%, transparent),
+    inset 0 -1px 0 color-mix(in srgb, var(--border) 35%, transparent),
+    inset 1px 0 0 color-mix(in srgb, var(--border) 60%, transparent),
+    inset -1px 0 0 color-mix(in srgb, var(--border) 60%, transparent);
 }

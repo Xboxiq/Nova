@@ -2,7 +2,6 @@ import { useState } from "react";
 import {
   PiBell,
   PiChartLine,
-  PiCheck,
   PiFilePlus,
   PiFolderPlus,
   PiGear,
@@ -12,7 +11,6 @@ import {
   PiMoon,
   PiPlus,
   PiSignOut,
-  PiSparkle,
   PiSun,
   PiUserCircle,
   PiX,
@@ -80,7 +78,7 @@ function Announcement() {
   const [visible, setVisible] = useState(true);
   return (
     <div className="demo demo-announcement">
-      {visible ? <div className="announcement-bar"><span className="announcement-tag"><PiSparkle /> جديد</span><p>أصبح NOVA يدعم أكثر من 60 نمطًا تفاعليًا.</p><a href="#components">استكشفها</a><button type="button" aria-label="إخفاء الإعلان" onClick={() => setVisible(false)}><PiX /></button></div> : <button className="demo-secondary" type="button" onClick={() => setVisible(true)}><PiBell /> إظهار الإعلان</button>}
+      {visible ? <div className="announcement-bar"><span className="announcement-tag">جديد</span><p>أصبح NOVA يدعم أكثر من 60 نمطًا تفاعليًا.</p><a href="#components">استكشفها</a><button type="button" aria-label="إخفاء الإعلان" onClick={() => setVisible(false)}><PiX /></button></div> : <button className="demo-secondary" type="button" onClick={() => setVisible(true)}><PiBell /> إظهار الإعلان</button>}
     </div>
   );
 }
@@ -113,7 +111,7 @@ function ExpandableTabs() {
   return (
     <div className="demo demo-expandable-tabs">
       <nav aria-label="تنقّل قابل للتوسّع">{tabs.map(([Icon, label], index) => <button type="button" key={label} className={active === index ? "active" : ""} aria-current={active === index ? "page" : undefined} onClick={() => setActive(index)}><Icon /><span>{label}</span>{active === index && <i />}</button>)}</nav>
-      <small><PiCheck /> يعرض اسم الوجهة النشطة فقط.</small>
+      <small>يعرض اسم الوجهة النشطة فقط.</small>
     </div>
   );
 }

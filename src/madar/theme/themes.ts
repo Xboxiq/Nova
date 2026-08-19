@@ -1,5 +1,5 @@
 export type ThemeName = "light" | "dark" | "mint" | "coral" | "sky" | "iris" | "night";
-export type GlassLevel = "g1" | "g2" | "g3";
+export type GlassLevel = "g0" | "g1" | "g2" | "g3";
 
 export interface ThemeMeta {
   name: ThemeName;
@@ -30,7 +30,12 @@ export const THEMES: ThemeMeta[] = [
 
 export const DARK_THEMES: ThemeName[] = THEMES.filter((theme) => theme.dark).map((theme) => theme.name);
 
+/* g0 exists because anti-slop-ui #8 refuses translucent milky surfaces, and the
+   system had three glass levels and no way to turn glass off. Deleting the
+   material would have removed a feature the owner built; adding its zero makes
+   the standard reachable without taking anything away. */
 export const GLASS_LEVELS: { level: GlassLevel; label: string; labelAr: string }[] = [
+  { level: "g0", label: "G0", labelAr: "سطح مصمت" },
   { level: "g1", label: "G1", labelAr: "زجاج خفيف" },
   { level: "g2", label: "G2", labelAr: "زجاج متوسط" },
   { level: "g3", label: "G3", labelAr: "زجاج كثيف" },
@@ -41,5 +46,5 @@ export function isThemeName(value: unknown): value is ThemeName {
 }
 
 export function isGlassLevel(value: unknown): value is GlassLevel {
-  return value === "g1" || value === "g2" || value === "g3";
+  return value === "g0" || value === "g1" || value === "g2" || value === "g3";
 }
