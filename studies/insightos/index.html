@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>InsightOS — dashboard replica</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; background: #ebeafd; }
+  body { font-family: 'Poppins', 'Helvetica Neue', Arial, sans-serif; -webkit-font-smoothing: antialiased; color: #101312; }
+
+  .board { position: relative; width: 1080px; height: 1350px; background: #eceafc; overflow: hidden; }
+
+  .app {
+    position: absolute; left: 50px; top: 318px; width: 980px; height: 726px;
+    border-radius: 16px; overflow: hidden; display: grid; grid-template-columns: 192px 1fr;
+    background: #fff;
+    box-shadow: 0 28px 56px rgba(60,50,120,0.14), 0 6px 16px rgba(60,50,120,0.08);
+  }
+
+  /* ── sidebar ───────────────────────────────────────────────────────────── */
+  .side { padding: 18px 14px; border-right: 1px solid #f1f1f4; display: flex; flex-direction: column; }
+  .logo { display: flex; align-items: center; gap: 9px; font-size: 17px; font-weight: 600; letter-spacing: -0.02em; }
+  .logo i { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center;
+            background: radial-gradient(66% 66% at 32% 26%, #3a3f3c, #0d100e); }
+  .grp { font-size: 9.5px; color: #a7a7ad; margin: 22px 0 8px; }
+  .nv { display: flex; align-items: center; gap: 10px; height: 34px; padding: 0 11px; border-radius: 9px;
+        font-size: 12.5px; color: #4d4f52; }
+  .nv--on {
+    color: #fff; font-weight: 500;
+    /* the active item is a black plate with a green pool lit inside it — the
+       signature of this system, repeated on the big dark card below */
+    background:
+      radial-gradient(78% 120% at 82% 130%, #79b41c 0%, rgba(121,180,28,0) 62%),
+      linear-gradient(160deg, #1e211f 0%, #0c0f0d 100%);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.16), inset 0 -1px 0 rgba(0,0,0,0.5), 0 3px 8px rgba(0,0,0,0.2);
+  }
+  .out { margin-top: auto; }
+
+  /* ── main ──────────────────────────────────────────────────────────────── */
+  .main { padding: 16px 18px; background: #fcfcfd; overflow: hidden; }
+  .topbar { display: flex; align-items: center; gap: 12px; }
+  .search { flex: 1; max-width: 300px; height: 34px; border-radius: 17px; background: #f4f4f7;
+            display: flex; align-items: center; gap: 9px; padding: 0 6px 0 13px; font-size: 12px; color: #9a9aa1; }
+  .kbd { margin-inline-start: auto; height: 24px; padding: 0 11px; border-radius: 12px; background: #ddf2a8; color: #3f5310;
+         font-size: 11px; font-weight: 500; display: grid; place-items: center; }
+  .spacer { flex: 1; }
+  .toggle { height: 32px; padding: 3px; border-radius: 16px; background: #f4f4f7; display: flex; align-items: center; gap: 2px; }
+  .tg { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; }
+  .tg--on { background: #c8ef52; box-shadow: inset 0 1px 0 rgba(255,255,255,0.6), 0 1px 3px rgba(0,0,0,0.12); }
+  .rico { width: 32px; height: 32px; border-radius: 50%; background: #f4f4f7; display: grid; place-items: center; position: relative; }
+  .rico b { position: absolute; top: 6px; right: 7px; width: 6px; height: 6px; border-radius: 50%; background: #e2483d; }
+  .who { display: flex; align-items: center; gap: 8px; }
+  .who .av { width: 32px; height: 32px; border-radius: 50%; background: radial-gradient(70% 70% at 34% 26%, #4b5b6e, #1b2430); display: grid; place-items: center; }
+  .who .nm b { display: block; font-size: 11.5px; font-weight: 500; }
+  .who .nm span { font-size: 9.5px; color: #a7a7ad; }
+
+  .h1row { display: flex; align-items: center; justify-content: space-between; margin-top: 16px; }
+  h1 { margin: 0; font-size: 27px; font-weight: 600; letter-spacing: -0.032em; }
+  .pillrow { display: flex; gap: 8px; align-items: center; }
+  .pill { height: 32px; padding: 0 14px; border-radius: 16px; background: #fff; font-size: 11.5px;
+          display: flex; align-items: center; gap: 8px; box-shadow: inset 0 0 0 1px #eceaf2; }
+
+  /* The orb card spans both rows on the right, which is why the hero above it is
+     short: they are one column each, not one row. */
+  .mid { display: grid; grid-template-columns: 1.42fr 0.82fr; grid-template-rows: auto auto; gap: 12px; margin-top: 14px; }
+  .mid > .orb { grid-column: 2; grid-row: 1 / span 2; }
+  .mid > .hero { grid-column: 1; grid-row: 1; }
+  .mid > .row2 { grid-column: 1; grid-row: 2; }
+
+  /* the dark hero card */
+  .hero {
+    border-radius: 15px; padding: 15px; color: #fff; position: relative; overflow: hidden;
+    background:
+      radial-gradient(58% 130% at 20% 150%, #7fb81f 0%, rgba(127,184,31,0) 58%),
+      radial-gradient(50% 110% at 86% 140%, #4d7412 0%, rgba(77,116,18,0) 56%),
+      linear-gradient(158deg, #232624 0%, #131614 46%, #0a0c0a 100%);
+    box-shadow: inset 0 1.5px 0 rgba(255,255,255,0.14), inset 0 -1.5px 0 rgba(0,0,0,0.6);
+  }
+  .hero h3 { margin: 0; font-size: 16px; font-weight: 500; letter-spacing: -0.02em; }
+  .hero p { margin: 3px 0 0; font-size: 10.5px; color: rgba(255,255,255,0.6); line-height: 1.45; }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; margin-top: 13px; }
+  .stat {
+    border-radius: 11px; padding: 10px;
+    background: linear-gradient(160deg, rgba(255,255,255,0.09) 0%, rgba(255,255,255,0.03) 100%);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.14), inset 0 0 0 1px rgba(255,255,255,0.06);
+  }
+  .stat .h { display: flex; align-items: center; gap: 7px; font-size: 10.5px; color: rgba(255,255,255,0.82); }
+  .stat .h i { width: 20px; height: 20px; border-radius: 6px; background: rgba(255,255,255,0.1); display: grid; place-items: center; }
+  .stat .v { font-size: 19px; font-weight: 500; letter-spacing: -0.03em; margin-top: 9px; }
+  .stat .v small { font-size: 11px; color: rgba(255,255,255,0.5); font-weight: 400; }
+
+  /* the AI orb card */
+  .orb {
+    border-radius: 15px; padding: 14px; color: #fff; text-align: center;
+    background: linear-gradient(160deg, #1d201e 0%, #0d100e 100%);
+    box-shadow: inset 0 1.5px 0 rgba(255,255,255,0.12), inset 0 -1.5px 0 rgba(0,0,0,0.6);
+    display: flex; flex-direction: column;
+  }
+  .orbhead { display: flex; align-items: center; justify-content: space-between; font-size: 13px; font-weight: 500; }
+  .orbhead b { width: 24px; height: 24px; border-radius: 50%; background: #262927; display: grid; place-items: center; font-weight: 400; font-size: 15px; line-height: 1; }
+  .ball { width: 128px; height: 128px; margin: 10px auto 0; border-radius: 50%; position: relative;
+    background:
+      radial-gradient(38% 38% at 34% 30%, #ffffff 0%, rgba(255,255,255,0) 62%),
+      radial-gradient(74% 74% at 62% 40%, #6ff0c0 0%, rgba(111,240,192,0) 66%),
+      radial-gradient(80% 80% at 40% 70%, #b9f53a 0%, rgba(185,245,58,0) 68%),
+      radial-gradient(96% 96% at 50% 50%, #2fbf8a 0%, #0f7a58 74%, #063a29 100%);
+    box-shadow: 0 0 42px rgba(120,230,140,0.5), inset 0 -6px 14px rgba(0,0,0,0.4);
+  }
+  .ball::after { content: ''; position: absolute; inset: -22px; border-radius: 50%;
+                 background: radial-gradient(50% 50% at 50% 50%, rgba(140,240,150,0.28) 0%, rgba(140,240,150,0) 70%); }
+  .ask { font-size: 11.5px; color: rgba(255,255,255,0.82); margin-top: 12px; }
+  .twobtn { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+  .tb { border-radius: 11px; padding: 10px 8px; font-size: 10.5px;
+        background: linear-gradient(160deg, rgba(255,255,255,0.09), rgba(255,255,255,0.03));
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.14), inset 0 0 0 1px rgba(255,255,255,0.06);
+        display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .inrow { display: flex; gap: 7px; margin-top: 10px; align-items: center; }
+  .inbox { flex: 1; height: 34px; border-radius: 17px; background: rgba(255,255,255,0.08);
+           box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1); display: flex; align-items: center;
+           padding: 0 6px 0 14px; font-size: 11px; color: rgba(255,255,255,0.5); }
+  .send { width: 26px; height: 26px; border-radius: 50%; background: #2c2f2d; display: grid; place-items: center; margin-inline-start: auto; }
+  .mic { width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,0.1); display: grid; place-items: center;
+         box-shadow: inset 0 0 0 1px rgba(255,255,255,0.12); }
+
+  /* light cards */
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .card { border-radius: 15px; padding: 13px; background: #fff; box-shadow: inset 0 0 0 1px #f0eef6; }
+  .card--lime { background: linear-gradient(165deg, #e6fbaa 0%, #dbf78f 100%); box-shadow: inset 0 1px 0 rgba(255,255,255,0.7); }
+  .chead { display: flex; align-items: center; justify-content: space-between; }
+  .chead .t { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; letter-spacing: -0.015em; }
+  .chead .t i { width: 24px; height: 24px; border-radius: 8px; background: #edf7cd; display: grid; place-items: center; }
+  .drop { height: 26px; padding: 0 10px; border-radius: 13px; background: #fff; font-size: 10.5px;
+          display: flex; align-items: center; gap: 6px; box-shadow: inset 0 0 0 1px #eceaf2; }
+
+  .donutrow { display: flex; align-items: center; gap: 14px; margin-top: 8px; }
+  .leg { font-size: 10.5px; color: #4d4f52; display: flex; flex-direction: column; gap: 7px; }
+  .leg span { display: flex; align-items: center; gap: 7px; }
+  .leg i { width: 9px; height: 9px; border-radius: 3px; display: inline-block; }
+  .leg b { font-weight: 600; }
+  .note { font-size: 9.5px; color: #a7a7ad; display: flex; align-items: center; gap: 5px; margin-top: 8px; }
+
+  .dealgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; height: 118px; }
+  .dl { border-radius: 10px; position: relative; padding: 8px; font-size: 10px; }
+  .dl--hatch { background: repeating-linear-gradient(118deg, #b6e83a 0 6px, #d6f47e 6px 12px); }
+  .dl--white { background: #fbfef2; }
+  .tagm { position: absolute; height: 22px; padding: 0 9px; border-radius: 11px; background: #fff; font-size: 10px;
+          display: flex; align-items: center; gap: 6px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+  .tagm b { font-weight: 600; }
+  .blk { position: absolute; left: 8px; bottom: 8px; width: 72px; height: 40px; border-radius: 9px;
+         background: linear-gradient(160deg, #2b2f2c, #0b0d0b); box-shadow: inset 0 1px 0 rgba(255,255,255,0.12); }
+
+  /* table */
+  .tbl { margin-top: 12px; border-radius: 15px; background: #fff; padding: 13px; box-shadow: inset 0 0 0 1px #f0eef6; }
+  .th, .tr { display: grid; grid-template-columns: 1.5fr 0.9fr 1.1fr 1fr 1fr 1.1fr; align-items: center; }
+  .th { font-size: 10px; color: #a7a7ad; padding: 6px 8px; }
+  .tr { font-size: 11px; padding: 8px; border-radius: 11px; box-shadow: inset 0 0 0 1px #f2f0f7; margin-top: 7px; }
+  .tr .who2 { display: flex; align-items: center; gap: 8px; font-weight: 500; }
+  .tr .who2 i { width: 22px; height: 22px; border-radius: 50%; background: radial-gradient(60% 60% at 34% 28%, #4fd08a, #0a2e1c); }
+  .bars { display: flex; gap: 2px; }
+  .bars i { width: 5px; height: 15px; border-radius: 2px; }
+
+  .tag {
+    position: absolute; height: 44px; padding: 0 24px; border-radius: 22px; background: #fff;
+    display: flex; align-items: center; font-size: 15px; font-weight: 500;
+    box-shadow: 0 2px 8px rgba(60,50,120,0.08);
+  }
+</style>
+</head>
+<body>
+<div class="board">
+  <div class="app">
+    <!-- ── sidebar ── -->
+    <div class="side">
+      <div class="logo"><i><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="7" stroke="#c8ef52" stroke-width="2.4"/><circle cx="15.5" cy="8.5" r="2.6" fill="#c8ef52"/></svg></i>InsightOS</div>
+      <div class="grp">Main</div>
+      <div class="nv nv--on"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"><path d="M4 11l8-7 8 7v8a1 1 0 0 1-1 1h-5v-6H10v6H5a1 1 0 0 1-1-1z"/></svg>Dashboard</div>
+      <div class="nv"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4d4f52" stroke-width="1.7"><path d="M12 3a9 9 0 1 0 9 9h-9z"/><path d="M12 3v9h9A9 9 0 0 0 12 3z" opacity=".4"/></svg>Analytics</div>
+      <div class="nv"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4d4f52" stroke-width="1.7"><circle cx="12" cy="12" r="8.5"/><path d="M9 15l6-6M9.5 9.5h.01M14.5 14.5h.01"/></svg>Sales Performance</div>
+      <div class="nv"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4d4f52" stroke-width="1.7"><path d="M3 7h6l2 2h10v10H3z"/></svg>Campaigns</div>
+      <div class="nv"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4d4f52" stroke-width="1.7"><path d="M12 6v6l4 2"/><circle cx="12" cy="12" r="8.5"/></svg>Timelines</div>
+      <div class="nv"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4d4f52" stroke-width="1.7"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 10h5M8 14h7"/><path d="M15 8l3 3-3 3"/></svg>Contracts</div>
+      <div class="nv"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4d4f52" stroke-width="1.7"><rect x="5" y="3" width="14" height="18" rx="2.5"/><path d="M9 8h6M9 12h6M9 16h4"/></svg>Reports</div>
+      <div class="grp">Other</div>
+      <div class="nv"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4d4f52" stroke-width="1.7"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M6 6l2 2M16 16l2 2M6 18l2-2M16 8l2-2"/></svg>Settings</div>
+      <div class="nv"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4d4f52" stroke-width="1.7"><circle cx="12" cy="12" r="8.5"/><path d="M9.6 9.5a2.5 2.5 0 1 1 3.4 2.3c-.7.3-1 .8-1 1.7M12 17h.01"/></svg>Help</div>
+      <div class="nv out"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4d4f52" stroke-width="1.7"><path d="M10 4H5v16h5"/><path d="M14 8l4 4-4 4M9 12h9"/></svg>Log out</div>
+    </div>
+
+    <!-- ── main ── -->
+    <div class="main">
+      <div class="topbar">
+        <div class="search">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9a9aa1" stroke-width="2.1"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4 4"/></svg>
+          Search <span class="kbd">⌘ + Space</span>
+        </div>
+        <span class="spacer"></span>
+        <div class="toggle">
+          <span class="tg"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4d4f52" stroke-width="1.7"><path d="M20 13.5A8 8 0 0 1 10.5 4a8 8 0 1 0 9.5 9.5z"/></svg></span>
+          <span class="tg tg--on"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2b3a08" stroke-width="1.9"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M6 6l1.5 1.5M16.5 16.5L18 18M6 18l1.5-1.5M16.5 7.5L18 6"/></svg></span>
+        </div>
+        <span class="rico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#101312" stroke-width="1.7" stroke-linecap="round"><path d="M6 10a6 6 0 0 1 12 0c0 4 1.6 5 1.6 5H4.4S6 14 6 10z"/><path d="M10 18a2 2 0 0 0 4 0"/></svg><b></b></span>
+        <span class="who">
+          <span class="av"><svg width="19" height="19" viewBox="0 0 24 24" fill="#cdd6e0"><circle cx="12" cy="9" r="3.4"/><path d="M5 21c0-3.9 3.2-6 7-6s7 2.1 7 6z"/></svg></span>
+          <span class="nm"><b>Ryan Foster</b><span>@nathan_collins</span></span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#101312" stroke-width="2.2"><path d="M6 9l6 6 6-6"/></svg>
+        </span>
+      </div>
+
+      <div class="h1row">
+        <h1>Your Analytical Board</h1>
+        <div class="pillrow">
+          <span class="pill"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#101312" stroke-width="1.7"><rect x="4" y="5" width="16" height="16" rx="3"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>Select Date</span>
+          <span class="pill" style="padding:0 11px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#101312" stroke-width="1.9" stroke-linecap="round"><path d="M4 7h16M6 12h12M9 17h6"/></svg></span>
+        </div>
+      </div>
+
+      <div class="mid">
+        <div class="hero">
+          <h3>Smart Sales Distribution</h3>
+          <p>AI-enhanced sales metrics showing growth in leads, revenue, and overall performance.</p>
+          <div class="stats">
+            <div class="stat">
+              <div class="h"><i><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#c8ef52" stroke-width="1.8"><path d="M12 4l8 4-8 4-8-4z"/><path d="M4 12l8 4 8-4M4 16l8 4 8-4"/></svg></i>Total Income</div>
+              <div class="v">56,000.00 <small>$</small></div>
+            </div>
+            <div class="stat">
+              <div class="h"><i><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#c8ef52" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8 15l3-4 2 2 3-4"/></svg></i>ROI</div>
+              <div class="v">+312 <small>%</small></div>
+            </div>
+            <div class="stat">
+              <div class="h"><i><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#c8ef52" stroke-width="1.8"><circle cx="9" cy="9" r="3"/><path d="M3 19c0-3.3 2.7-5 6-5s6 1.7 6 5"/><circle cx="17" cy="9" r="2.4"/><path d="M15 14.4c3 .3 6 1.8 6 4.6"/></svg></i>Daily Active Users</div>
+              <div class="v">12,846</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="orb">
+          <div class="orbhead"><b>−</b>Bostie AI<b>+</b></div>
+          <div class="ball"></div>
+          <div class="ask">How can I assist you today?</div>
+          <div class="twobtn">
+            <div class="tb"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c8ef52" stroke-width="1.8"><path d="M12 3a9 9 0 1 0 9 9h-9z"/></svg>Pro Analysis</div>
+            <div class="tb"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c8ef52" stroke-width="1.8"><rect x="5" y="3" width="14" height="18" rx="2.5"/><path d="M9 8h6M9 12h6M9 16h4"/></svg>Report</div>
+          </div>
+          <div class="inrow">
+            <span class="inbox">Ask anything...
+              <span class="send"><svg width="12" height="12" viewBox="0 0 24 24" fill="#c8ef52"><path d="M3 20l18-8L3 4l4 8z"/></svg></span>
+            </span>
+            <span class="mic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.7"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></span>
+          </div>
+        </div>
+
+        <div class="row2">
+        <div class="card">
+          <div class="chead">
+            <span class="t"><i><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#3f5310" stroke-width="1.8"><path d="M12 3a9 9 0 1 0 9 9h-9z"/></svg></i>Sales Analysis</span>
+            <span class="drop">01-07 Jan <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#101312" stroke-width="2.6"><path d="M6 9l6 6 6-6"/></svg></span>
+          </div>
+          <div class="donutrow">
+            <svg width="128" height="128" viewBox="0 0 128 128" fill="none">
+              <defs><pattern id="hatch" width="7" height="7" patternTransform="rotate(120)" patternUnits="userSpaceOnUse">
+                <rect width="7" height="7" fill="#fff"/><path d="M0 0v7" stroke="#b6e83a" stroke-width="4"/></pattern></defs>
+              <circle cx="64" cy="64" r="44" stroke="url(#hatch)" stroke-width="21"/>
+              <circle cx="64" cy="64" r="44" stroke="#5b4bea" stroke-width="21" stroke-dasharray="276" stroke-dashoffset="96" transform="rotate(-64 64 64)" stroke-linecap="round"/>
+              <circle cx="64" cy="64" r="44" stroke="#b6e83a" stroke-width="21" stroke-dasharray="276" stroke-dashoffset="242" transform="rotate(-96 64 64)" stroke-linecap="round"/>
+              <text x="64" y="62" text-anchor="middle" font-family="Poppins, Arial" font-size="15" font-weight="600" fill="#101312">$728.000</text>
+              <text x="64" y="76" text-anchor="middle" font-family="Poppins, Arial" font-size="9" fill="#a7a7ad">Total Revenue</text>
+            </svg>
+            <div class="leg">
+              <span><i style="background:#5b4bea"></i><b>344</b> Leads</span>
+              <span><i style="background:repeating-linear-gradient(120deg,#b6e83a 0 3px,#fff 3px 6px)"></i><b>256</b> Revenue</span>
+              <span><i style="background:#b6e83a"></i><b>128</b> AI Uplift</span>
+            </div>
+          </div>
+          <div class="note"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#a7a7ad" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>Calculated from aggregated activity for the selected period</div>
+        </div>
+
+        <div class="card card--lime">
+          <div class="chead">
+            <span class="t"><i style="background:#fff"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#3f5310" stroke-width="1.9"><path d="M5 20V10M12 20V4M19 20v-7"/></svg></i>Deal Analysis</span>
+            <span class="drop">01-07 Jan <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#101312" stroke-width="2.6"><path d="M6 9l6 6 6-6"/></svg></span>
+          </div>
+          <div class="dealgrid">
+            <div class="dl dl--hatch">
+              <span class="tagm" style="top:8px;left:8px">Won Deals <b>6K</b></span>
+            </div>
+            <div class="dl dl--white">
+              <span class="tagm" style="top:8px;right:8px">AI Improved <b>4K</b></span>
+              <span class="tagm" style="top:44px;left:-52px">Lost Deals <b>2K</b></span>
+              <span class="blk"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      </div>
+
+      <div class="tbl">
+        <div class="chead">
+          <span class="t"><i><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#3f5310" stroke-width="1.9"><path d="M4 7h10M4 12h16M4 17h7"/></svg></i>Top opportunities</span>
+          <div class="pillrow">
+            <span class="drop">Month <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#101312" stroke-width="2.6"><path d="M6 9l6 6 6-6"/></svg></span>
+            <span class="drop" style="padding:0 9px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#101312" stroke-width="1.9" stroke-linecap="round"><path d="M4 7h16M6 12h12M9 17h6"/></svg></span>
+          </div>
+        </div>
+        <div class="th"><span>Name</span><span>Region</span><span>AI Success Score</span><span>Risks Level</span><span>Lead Increase</span><span>Account Value</span></div>
+        <div class="tr">
+          <span class="who2"><i></i>Quinta Starter</span><span>USA</span><span>88%</span>
+          <span class="bars"><i style="background:#b6e83a"></i><i style="background:#b6e83a"></i><i style="background:#b6e83a"></i><i style="background:#b6e83a"></i><i style="background:#b6e83a"></i><i style="background:#b6e83a"></i><i style="background:#b6e83a"></i></span>
+          <span>+8,000</span><span>+$48,569,09</span>
+        </div>
+        <div class="tr">
+          <span class="who2"><i style="background:radial-gradient(60% 60% at 34% 28%,#8b7bff,#231a58)"></i>Vertex Mode</span><span>Spain</span><span>74%</span>
+          <span class="bars"><i style="background:#5b4bea"></i><i style="background:#5b4bea"></i><i style="background:#5b4bea"></i><i style="background:#5b4bea"></i><i style="background:#dcdae8"></i><i style="background:#dcdae8"></i><i style="background:#dcdae8"></i></span>
+          <span>+3,400</span><span>+$21,140,00</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
