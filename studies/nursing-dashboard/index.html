@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Today's Nursing — dashboard replica</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; background: #cfcfcf; }
+  body { font-family: 'Poppins', 'Helvetica Neue', Arial, sans-serif; -webkit-font-smoothing: antialiased; color: #101510; }
+
+  .board { position: relative; width: 1080px; height: 1350px; background: #d2d2d2; overflow: hidden; }
+
+  .tag {
+    position: absolute; height: 44px; padding: 0 24px; border-radius: 22px; background: #fff;
+    display: flex; align-items: center; font-size: 15px; font-weight: 500;
+    box-shadow: inset 0 1px 0 #fff, 0 2px 6px rgba(0,0,0,0.05);
+  }
+  .tag--l { left: 44px; top: 48px; }
+  .tag--r2 { right: 44px; top: 48px; }
+  .tag--r1 { right: 216px; top: 48px; }
+  .wa {
+    position: absolute; left: 50%; transform: translateX(-50%); bottom: 46px;
+    height: 52px; padding: 0 26px 0 8px; border-radius: 26px; background: #fff;
+    display: flex; align-items: center; gap: 14px; font-size: 16px; font-weight: 500;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+  }
+  .wa i { width: 38px; height: 38px; border-radius: 50%; background: #25d366; display: grid; place-items: center; }
+
+  /* ── browser chrome ────────────────────────────────────────────────────── */
+  .win {
+    position: absolute; left: 50px; top: 286px; width: 980px; height: 786px;
+    border-radius: 12px; overflow: hidden; background: #fff;
+    box-shadow: 0 24px 50px rgba(0,0,0,0.14), 0 4px 12px rgba(0,0,0,0.06);
+  }
+  .bar1 { height: 34px; background: #dee1e6; display: flex; align-items: flex-end; gap: 8px; padding: 0 12px; }
+  .dots { display: flex; gap: 6px; align-items: center; height: 34px; }
+  .dots i { width: 10px; height: 10px; border-radius: 50%; }
+  .tab {
+    height: 27px; min-width: 210px; border-radius: 8px 8px 0 0; background: #fff;
+    display: flex; align-items: center; gap: 8px; padding: 0 10px; font-size: 11px; color: #3c4043;
+  }
+  .plus { font-size: 15px; color: #5f6368; padding-bottom: 4px; }
+  .bar2 { height: 36px; background: #fff; display: flex; align-items: center; gap: 12px; padding: 0 12px; border-bottom: 1px solid #e8eaed; }
+  .url { flex: 1; height: 24px; border-radius: 12px; background: #f1f3f4; display: flex; align-items: center; gap: 8px; padding: 0 12px; font-size: 11.5px; color: #3c4043; }
+  .barico { display: flex; gap: 12px; align-items: center; }
+
+  /* ── app ───────────────────────────────────────────────────────────────── */
+  .app { padding: 16px 18px; background: #eeeeee; height: calc(100% - 70px); }
+
+  .nav { display: flex; align-items: center; gap: 10px; }
+  .logo { width: 34px; height: 34px; border-radius: 11px; background: linear-gradient(165deg, #7fa05e, #5b7c3c); display: grid; place-items: center; box-shadow: inset 0 1px 0 rgba(255,255,255,0.4); }
+  .user { height: 34px; padding: 0 14px 0 8px; border-radius: 17px; background: #131a12; color: #fff; display: flex; align-items: center; gap: 9px; font-size: 12px; font-weight: 500; }
+  .navpills { margin-inline: auto; display: flex; align-items: center; gap: 2px; padding: 3px; border-radius: 18px; background: #fff; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.04); }
+  .np { height: 28px; padding: 0 14px; border-radius: 15px; display: grid; place-items: center; font-size: 12px; color: #55605a; }
+  .np--on { background: linear-gradient(170deg, #8fb06c, #6f9048); color: #fff; font-weight: 500; box-shadow: inset 0 1px 0 rgba(255,255,255,0.42); }
+  .cico { width: 34px; height: 34px; border-radius: 50%; background: #fff; display: grid; place-items: center; position: relative; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+  .cico b { position: absolute; top: 7px; right: 8px; width: 6px; height: 6px; border-radius: 50%; background: #e2483d; }
+
+  h1 { margin: 18px 0 0; font-size: 30px; font-weight: 600; letter-spacing: -0.03em; }
+  .sub { font-size: 12.5px; color: #6b736d; margin-top: 2px; }
+  .place { position: absolute; right: 36px; top: 74px; text-align: right; }
+  .place .n { font-size: 12.5px; font-weight: 500; display: flex; align-items: center; gap: 7px; justify-content: flex-end; }
+  .place .d { font-size: 11px; color: #8d948e; margin-top: 2px; }
+
+  .grid { display: grid; grid-template-columns: 1.34fr 0.86fr 0.94fr; gap: 12px; margin-top: 14px; }
+  .card { background: #fbfbfb; border-radius: 14px; padding: 14px; box-shadow: inset 0 1px 0 #fff, 0 1px 3px rgba(0,0,0,0.04); }
+  .card h4 { margin: 0; font-size: 14.5px; font-weight: 600; letter-spacing: -0.015em; }
+  .rowhead { display: flex; align-items: center; justify-content: space-between; }
+  .drop { height: 26px; padding: 0 10px; border-radius: 13px; background: #fff; font-size: 11px; display: flex; align-items: center; gap: 6px; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.07); }
+
+  /* progress with two pinned markers */
+  .prog { margin-top: 16px; }
+  .prog .lab { font-size: 11.5px; color: #6b736d; }
+  .track { position: relative; height: 13px; border-radius: 7px; margin-top: 8px; background: #ececec; overflow: hidden; }
+  .track .fill { position: absolute; inset: 0 25% 0 0; background: linear-gradient(90deg, #8fb06c 0%, #7ba055 46%, #5e7f3d 100%); }
+  .track .hatch { position: absolute; inset: 0 0 0 75%; background: repeating-linear-gradient(115deg, #e2e2e2 0 4px, #f2f2f2 4px 8px); }
+  .pin { position: absolute; top: -26px; transform: translateX(-50%); text-align: center; }
+  .pin i { width: 22px; height: 22px; border-radius: 50%; background: #fff; display: grid; place-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.12); }
+  .pin s { display: block; width: 1.4px; height: 13px; background: #131a12; margin: 0 auto; }
+  .scale { display: flex; justify-content: space-between; font-size: 10.5px; color: #9aa09b; margin-top: 6px; }
+
+  .metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 9px; margin-top: 14px; }
+  .metric { background: #f2f2f2; border-radius: 12px; padding: 12px 6px; text-align: center; box-shadow: inset 0 1px 0 #fff; }
+  .metric .ring { width: 40px; height: 40px; margin: 0 auto 8px; }
+  .metric .t { font-size: 11.5px; font-weight: 500; line-height: 1.3; }
+  .metric .v { font-size: 13px; margin-top: 8px; }
+  .metric .v small { color: #a4aaa5; }
+
+  /* doctor list */
+  .doc { display: flex; align-items: center; gap: 9px; padding: 7px 0; border-bottom: 1px solid #f0f0f0; }
+  .doc:last-child { border-bottom: 0; }
+  .doc .av { width: 30px; height: 30px; border-radius: 50%; flex: none; overflow: hidden; display: grid; place-items: center; }
+  .doc .nm { flex: 1; min-width: 0; }
+  .doc .nm b { display: block; font-size: 12px; font-weight: 500; }
+  .doc .nm span { font-size: 10.5px; color: #8d948e; }
+  .st { height: 22px; padding: 0 9px; border-radius: 11px; font-size: 10.5px; display: flex; align-items: center; gap: 5px; }
+  .st i { width: 5px; height: 5px; border-radius: 50%; }
+  .st--duty { background: #e3f0fb; color: #2c6ea8; } .st--duty i { background: #3b8ed0; }
+  .st--avail { background: #e8f3e2; color: #4c7a34; } .st--avail i { background: #6ca545; }
+  .st--leave { background: #fbe6e4; color: #b04236; } .st--leave i { background: #d9463a; }
+
+  /* appointments */
+  .apt { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-bottom: 1px solid #f0f0f0; }
+  .apt:last-child { border-bottom: 0; }
+  .apt .tm { font-size: 12.5px; font-weight: 600; width: 42px; flex: none; }
+  .apt .av { width: 26px; height: 26px; border-radius: 50%; flex: none; }
+  .apt .nm { flex: 1; }
+  .apt .nm b { display: block; font-size: 11.5px; font-weight: 500; }
+  .apt .nm span { font-size: 10px; color: #8d948e; }
+  .addnew { font-size: 11.5px; display: flex; align-items: center; gap: 5px; }
+  .count { height: 20px; min-width: 24px; padding: 0 7px; border-radius: 10px; background: #eeeeee; font-size: 11px; display: grid; place-items: center; }
+
+  /* bottom row */
+  .grid2 { display: grid; grid-template-columns: 0.72fr 0.98fr 0.86fr 0.98fr; gap: 12px; margin-top: 12px; }
+  .big { font-size: 25px; font-weight: 600; letter-spacing: -0.03em; }
+  .leg { display: flex; gap: 12px; font-size: 10.5px; color: #6b736d; }
+  .leg i { width: 6px; height: 6px; border-radius: 50%; display: inline-block; margin-inline-end: 5px; }
+  .trendcap { font-size: 12px; font-weight: 500; line-height: 1.3; margin-top: 6px; }
+
+  .shift { margin-top: 12px; }
+  .shift .r { display: flex; align-items: baseline; justify-content: space-between; font-size: 11.5px; }
+  .sbar { height: 7px; border-radius: 4px; background: #ececec; margin-top: 7px; overflow: hidden; }
+  .sbar i { display: block; height: 100%; width: 60%; background: linear-gradient(90deg, #8fb06c, #64863f); }
+
+  .twoup { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-top: 12px; }
+  .tile { background: #f2f2f2; border-radius: 12px; padding: 11px; box-shadow: inset 0 1px 0 #fff; }
+  .tile .ico { width: 24px; height: 24px; border-radius: 8px; background: #fff; display: grid; place-items: center; }
+  .tile .n { font-size: 20px; font-weight: 600; margin-top: 12px; letter-spacing: -0.02em; }
+  .tile .c { font-size: 10.5px; color: #8d948e; }
+
+  .flow { background: linear-gradient(168deg, #e7efdf, #dae8cd); }
+  .ai {
+    background:
+      radial-gradient(70% 50% at 20% 6%, #7fa25c 0%, rgba(127,162,92,0) 64%),
+      radial-gradient(80% 56% at 92% 88%, #3f5a2a 0%, rgba(63,90,42,0) 66%),
+      linear-gradient(160deg, #6d8e4d 0%, #55743a 52%, #405b2b 100%);
+    color: #fff;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.28), inset 0 -1px 0 rgba(0,0,0,0.16);
+    position: relative; overflow: hidden;
+  }
+  .ai h4 { color: #fff; font-weight: 500; }
+  .chips { display: flex; gap: 7px; margin-top: 46px; }
+  .chip { height: 24px; padding: 0 10px; border-radius: 12px; font-size: 10px; display: flex; align-items: center;
+          background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.26); backdrop-filter: blur(8px); }
+  .ask { margin-top: 9px; border-radius: 12px; background: #fff; color: #101510; padding: 8px 10px; }
+  .ask .cr { display: flex; align-items: center; justify-content: space-between; font-size: 9.5px; color: #8d948e; }
+  .ask .cr b { color: #4c7a34; font-weight: 500; }
+  .ask .in { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; font-size: 11.5px; color: #a4aaa5; }
+  .send { width: 26px; height: 26px; border-radius: 50%; background: #55743a; display: grid; place-items: center; }
+</style>
+</head>
+<body>
+<div class="board">
+  <div class="tag tag--l">Sajibur Design</div>
+  <div class="tag tag--r1">2026</div>
+  <div class="tag tag--r2">Dashboard Design</div>
+
+  <div class="win">
+    <div class="bar1">
+      <div class="dots"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i></div>
+      <div class="tab">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#5f6368" stroke-width="2"><circle cx="12" cy="12" r="9"/></svg>
+        Rexora - Sales Management
+        <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#5f6368" stroke-width="2.6" style="margin-inline-start:auto"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </div>
+      <span class="plus">+</span>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#5f6368" stroke-width="2.4" style="margin-inline-start:auto;margin-bottom:9px"><path d="M6 9l6 6 6-6"/></svg>
+    </div>
+    <div class="bar2">
+      <div class="barico">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5f6368" stroke-width="2.2" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#c0c4c8" stroke-width="2.2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5f6368" stroke-width="2.2" stroke-linecap="round"><path d="M20 12a8 8 0 1 1-2.5-5.8"/><path d="M20 4v4h-4"/></svg>
+      </div>
+      <div class="url">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#5f6368" stroke-width="2.2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+        rexora.com
+      </div>
+      <div class="barico">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5f6368" stroke-width="2"><path d="M12 15V4M8 8l4-4 4 4"/><path d="M5 15v4h14v-4"/></svg>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5f6368" stroke-width="2"><path d="M12 4l2.5 5.3 5.5.6-4 3.9 1 5.4-5-2.8-5 2.8 1-5.4-4-3.9 5.5-.6z"/></svg>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5f6368" stroke-width="2"><path d="M10 4h4v4h-4zM4 10h6v10H4zM14 10h6v10h-6z"/></svg>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5f6368" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M14 4v16"/></svg>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="#5f6368"><circle cx="12" cy="5" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="12" cy="19" r="1.8"/></svg>
+      </div>
+    </div>
+
+    <div class="app" style="position:relative">
+      <div class="nav">
+        <span class="logo"><svg width="17" height="17" viewBox="0 0 24 24" fill="#fff"><path d="M10 4h4v6h6v4h-6v6h-4v-6H4v-4h6z"/></svg></span>
+        <span class="user"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><circle cx="7" cy="7" r="1.6"/><circle cx="12" cy="7" r="1.6"/><circle cx="17" cy="7" r="1.6"/><circle cx="7" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="17" cy="12" r="1.6"/><circle cx="7" cy="17" r="1.6"/><circle cx="12" cy="17" r="1.6"/><circle cx="17" cy="17" r="1.6"/></svg>Elisa Nillson</span>
+        <span class="navpills">
+          <span class="np np--on">Dashboard</span><span class="np">Patients</span><span class="np">Doctors</span><span class="np">Schedules</span>
+        </span>
+        <span class="cico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#131a12" stroke-width="1.8" stroke-linecap="round"><path d="M6 10a6 6 0 0 1 12 0c0 4 1.6 5 1.6 5H4.4S6 14 6 10z"/><path d="M10 18a2 2 0 0 0 4 0"/></svg><b></b></span>
+        <span class="cico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#131a12" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></span>
+      </div>
+
+      <h1>Today's Nursing</h1>
+      <div class="sub">Manage patient care, medications, vital checks, and shift tasks from one place.</div>
+
+      <div class="place">
+        <div class="n"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#131a12" stroke-width="1.6"><path d="M5 21V7l7-4 7 4v14"/><path d="M10 12h4M12 10v4"/></svg>St. Mary's Medical Center</div>
+        <div class="d">Thursday, 18 December 2026</div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <div class="rowhead"><h4>Patient Care Overview</h4><span class="drop">This Week <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#131a12" stroke-width="2.6"><path d="M6 9l6 6 6-6"/></svg></span></div>
+          <div class="prog">
+            <div class="lab">Total progress</div>
+            <div style="position:relative">
+              <div class="pin" style="left:45%"><i><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#131a12" stroke-width="1.8"><circle cx="10" cy="8" r="3"/><path d="M4 20c0-3.3 2.7-5 6-5s6 1.7 6 5"/><path d="M18 6v4M16 8h4"/></svg></i><s></s></div>
+              <div class="pin" style="left:75%"><i><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#131a12" stroke-width="1.8"><path d="M12 20s-7-4.3-7-9a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 4.7-7 9-7 9z"/></svg></i><s></s></div>
+              <div class="track" style="margin-top:24px"><span class="fill"></span><span class="hatch"></span></div>
+            </div>
+            <div class="scale"><span>0%</span><span>45%</span><span>75%</span><span>100%</span></div>
+          </div>
+          <div class="metrics">
+            <div class="metric">
+              <svg class="ring" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="none" stroke="#e2e2e2" stroke-width="2.4"/><circle cx="20" cy="20" r="17" fill="none" stroke="#7ba055" stroke-width="2.4" stroke-dasharray="107" stroke-dashoffset="30" transform="rotate(-90 20 20)" stroke-linecap="round"/><g transform="translate(12 12)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#131a12" stroke-width="1.7"><circle cx="10" cy="8" r="3"/><path d="M4 20c0-3.3 2.7-5 6-5s6 1.7 6 5"/><path d="M18 6v4M16 8h4"/></svg></g></svg>
+              <div class="t">Total<br>Patients</div><div class="v">128</div>
+            </div>
+            <div class="metric">
+              <svg class="ring" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="none" stroke="#e2e2e2" stroke-width="2.4"/><circle cx="20" cy="20" r="17" fill="none" stroke="#5e7f3d" stroke-width="2.4" stroke-dasharray="107" stroke-dashoffset="36" transform="rotate(-90 20 20)" stroke-linecap="round"/><g transform="translate(12 12)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#131a12" stroke-width="1.7"><circle cx="10" cy="8" r="3"/><path d="M4 20c0-3.3 2.7-5 6-5s6 1.7 6 5"/><path d="M18 6v4M16 8h4"/></svg></g></svg>
+              <div class="t">Stable<br>Patients</div><div class="v">86 <small>/ 128</small></div>
+            </div>
+            <div class="metric">
+              <svg class="ring" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="none" stroke="#e2e2e2" stroke-width="2.4"/><circle cx="20" cy="20" r="17" fill="none" stroke="#7ba055" stroke-width="2.4" stroke-dasharray="107" stroke-dashoffset="86" transform="rotate(-90 20 20)" stroke-linecap="round"/><g transform="translate(12 12)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#131a12" stroke-width="1.7"><path d="M12 20s-7-4.3-7-9a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 4.7-7 9-7 9z"/></svg></g></svg>
+              <div class="t">Critical<br>Patients</div><div class="v">12 <small>/ 128</small></div>
+            </div>
+            <div class="metric">
+              <svg class="ring" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="none" stroke="#e2e2e2" stroke-width="2.4"/><circle cx="20" cy="20" r="17" fill="none" stroke="#a8c98a" stroke-width="2.4" stroke-dasharray="107" stroke-dashoffset="72" transform="rotate(-90 20 20)" stroke-linecap="round"/><g transform="translate(12 12)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#131a12" stroke-width="1.7"><circle cx="10" cy="8" r="3"/><path d="M4 20c0-3.3 2.7-5 6-5s6 1.7 6 5"/><path d="M20 8l-4 4M16 8l4 4"/></svg></g></svg>
+              <div class="t">Discharges<br>Patients</div><div class="v">24 <small>/ 128</small></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="rowhead"><h4>Doctor</h4><span class="cico" style="width:26px;height:26px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.07)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#131a12" stroke-width="2.2"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4 4"/></svg></span></div>
+          <div style="margin-top:6px">
+            <div class="doc"><span class="av" style="background:#c8dced"><svg width="18" height="18" viewBox="0 0 24 24" fill="#7f9db3"><circle cx="12" cy="9" r="3.4"/><path d="M5 21c0-3.9 3.2-6 7-6s7 2.1 7 6z"/></svg></span><span class="nm"><b>Dr. Olivia Bennett</b><span>Cardiologist</span></span><span class="st st--duty"><i></i>On Duty</span></div>
+            <div class="doc"><span class="av" style="background:#cfe0cd"><svg width="18" height="18" viewBox="0 0 24 24" fill="#86a583"><circle cx="12" cy="9" r="3.4"/><path d="M5 21c0-3.9 3.2-6 7-6s7 2.1 7 6z"/></svg></span><span class="nm"><b>Dr. Marcus Lee</b><span>Neurologist</span></span><span class="st st--avail"><i></i>Available</span></div>
+            <div class="doc"><span class="av" style="background:#d9d9d4"><svg width="18" height="18" viewBox="0 0 24 24" fill="#9a9a93"><circle cx="12" cy="9" r="3.4"/><path d="M5 21c0-3.9 3.2-6 7-6s7 2.1 7 6z"/></svg></span><span class="nm"><b>Dr. Samuel Ortiz</b><span>Orthopedic Surgeon</span></span><span class="st st--duty"><i></i>On Duty</span></div>
+            <div class="doc"><span class="av" style="background:#ecd8cf"><svg width="18" height="18" viewBox="0 0 24 24" fill="#bb9384"><circle cx="12" cy="9" r="3.4"/><path d="M5 21c0-3.9 3.2-6 7-6s7 2.1 7 6z"/></svg></span><span class="nm"><b>Dr. Milang Carter</b><span>Pediatrician</span></span><span class="st st--leave"><i></i>On Leave</span></div>
+            <div class="doc"><span class="av" style="background:#d2ccdd"><svg width="18" height="18" viewBox="0 0 24 24" fill="#948aa8"><circle cx="12" cy="9" r="3.4"/><path d="M5 21c0-3.9 3.2-6 7-6s7 2.1 7 6z"/></svg></span><span class="nm"><b>Dr. Marco Singh</b><span>Dermatologist</span></span><span class="st st--avail"><i></i>Available</span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="rowhead">
+            <div style="display:flex;align-items:center;gap:8px"><h4>Appointments</h4><span class="count">3</span></div>
+            <span class="addnew"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#131a12" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>Add new</span>
+          </div>
+          <div style="margin-top:6px">
+            <div class="apt"><span class="tm">09:20</span><span class="av" style="background:#7fd0c8"></span><span class="nm"><b>Michael Chen</b><span>Follow-up Consultation</span></span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#b7bdb8" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></div>
+            <div class="apt"><span class="tm">10:20</span><span class="av" style="background:#f0cf5e"></span><span class="nm"><b>Michael Chen</b><span>Follow-up Consultation</span></span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#b7bdb8" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></div>
+            <div class="apt"><span class="tm">12:20</span><span class="av" style="background:#8fb0d8"></span><span class="nm"><b>Michael Chen</b><span>Follow-up Consultation</span></span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#b7bdb8" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></div>
+            <div class="apt"><span class="tm">2:20</span><span class="av" style="background:#f0b45e"></span><span class="nm"><b>Michael Chen</b><span>Follow-up Consultation</span></span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#b7bdb8" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></div>
+            <div class="apt"><span class="tm">3:20</span><span class="av" style="background:#7fbf7a"></span><span class="nm"><b>Michael Chen</b><span>Follow-up Consultation</span></span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#b7bdb8" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div class="card">
+            <div style="display:flex;align-items:baseline;justify-content:space-between">
+              <span class="big">86%</span>
+              <span class="leg"><span><i style="background:#7ba055"></i>Recovery</span><span><i style="background:#d9b6dd"></i>Target</span></span>
+            </div>
+            <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:10px">
+              <div class="trendcap">Recovery<br>progress trend</div>
+              <svg width="118" height="52" viewBox="0 0 118 52" fill="none">
+                <path d="M6 40c14-2 20-14 28-14s14 12 22 12 16-14 24-14 14 8 22 6" stroke="#d9b6dd" stroke-width="7" stroke-linecap="round" opacity="0.85"/>
+                <path d="M6 40c14-1 20-8 28-8s14 8 22 8 16-8 24-8 14 5 22 4" stroke="#a8c98a" stroke-width="5" stroke-linecap="round"/>
+                <path d="M46 8v40" stroke="#131a12" stroke-width="1.4"/>
+                <circle cx="46" cy="48" r="3" fill="#131a12"/>
+                <g transform="translate(30 0)"><rect width="34" height="17" rx="8.5" fill="#22331b"/><path d="M9 11l5-5 3 3 6-5" stroke="#c3e08f" stroke-width="1.7" fill="none" stroke-linecap="round"/></g>
+              </svg>
+            </div>
+          </div>
+          <div class="card">
+            <div class="rowhead"><h4>Shift Info</h4><span class="drop">Today <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#131a12" stroke-width="2.6"><path d="M6 9l6 6 6-6"/></svg></span></div>
+            <div class="shift">
+              <div class="r"><span>Day Shift</span><span>60%</span></div>
+              <div class="sbar"><i></i></div>
+              <div class="r" style="margin-top:7px;font-size:10.5px;color:#8d948e"><span>7:00 AM - 4:00PM</span><span>3h 12m remaining</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4>Patient Health Analysis</h4>
+          <div class="twoup">
+            <div class="tile">
+              <span class="ico"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#131a12" stroke-width="1.7"><path d="M12 20s-7-4.3-7-9a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 4.7-7 9-7 9z"/></svg></span>
+              <div class="c" style="margin-top:8px">Critical Care</div>
+              <div class="n">8</div><div class="c">Patients</div>
+            </div>
+            <div class="tile">
+              <span class="ico"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#131a12" stroke-width="1.7"><circle cx="10" cy="8" r="3"/><path d="M4 20c0-3.3 2.7-5 6-5s6 1.7 6 5"/><path d="M18 6v4M16 8h4"/></svg></span>
+              <div class="c" style="margin-top:8px">General Ward</div>
+              <div class="n">20</div><div class="c">+2 new today</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card flow">
+          <div class="rowhead"><h4>Patient Flow</h4><svg width="14" height="14" viewBox="0 0 24 24" fill="#6b736d"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg></div>
+          <div style="position:relative;margin-top:6px;display:grid;place-items:center">
+            <svg width="150" height="120" viewBox="0 0 150 120" fill="none">
+              <circle cx="75" cy="66" r="44" stroke="#f0f4ea" stroke-width="15"/>
+              <circle cx="75" cy="66" r="44" stroke="#d9b6dd" stroke-width="15" stroke-dasharray="276" stroke-dashoffset="70" transform="rotate(-108 75 66)" stroke-linecap="round"/>
+              <circle cx="75" cy="66" r="44" stroke="#e8d47a" stroke-width="15" stroke-dasharray="276" stroke-dashoffset="152" transform="rotate(-108 75 66)" stroke-linecap="round"/>
+              <circle cx="75" cy="66" r="44" stroke="#7ba055" stroke-width="15" stroke-dasharray="276" stroke-dashoffset="214" transform="rotate(38 75 66)" stroke-linecap="round"/>
+              <text x="75" y="66" text-anchor="middle" font-family="Poppins, Arial" font-size="20" font-weight="600" fill="#131a12">900</text>
+              <text x="75" y="80" text-anchor="middle" font-family="Poppins, Arial" font-size="9" fill="#6b736d">100% Capacity</text>
+              <g transform="translate(108 30)"><rect width="34" height="18" rx="9" fill="#22331b"/><text x="17" y="12.6" text-anchor="middle" font-family="Poppins, Arial" font-size="9.5" fill="#fff">400</text></g>
+            </svg>
+            <span class="leg" style="margin-top:2px"><span><i style="background:#7ba055"></i>Current Status</span><span><i style="background:#e8d47a"></i>Target Health</span></span>
+          </div>
+        </div>
+
+        <div class="card ai">
+          <h4>Ai Assistant</h4>
+          <div class="chips"><span class="chip">Why is my HRV low?</span><span class="chip">Why is my HRV low?</span></div>
+          <div class="ask">
+            <div class="cr"><span>200 Credits Remaining</span><b>Upgrade</b></div>
+            <div class="in">
+              <span>Ask anything...</span>
+              <span class="send"><svg width="12" height="12" viewBox="0 0 24 24" fill="#fff"><path d="M3 20l18-8L3 4l4 8z"/></svg></span>
+            </div>
+            <div style="display:flex;gap:9px;margin-top:8px">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#a4aaa5" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#a4aaa5" stroke-width="1.8"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wa">
+    <i><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M12 3a9 9 0 0 0-7.7 13.6L3 21l4.5-1.2A9 9 0 1 0 12 3zm4.6 12.3c-.2.6-1.2 1.1-1.7 1.1-.5 0-2.4-.3-4.4-2.2-2-1.9-2.3-3.6-2.3-4.1 0-.5.5-1.5 1.1-1.7.3-.1.6 0 .8.3l.8 1.3c.1.2.1.5-.1.7l-.4.5c-.1.2-.2.4 0 .7.3.5.8 1.1 1.4 1.5.3.2.5.2.7 0l.5-.5c.2-.2.5-.2.7-.1l1.3.8c.2.2.4.4.3.7z"/></svg></i>
+    +8801701076703
+  </div>
+</div>
+</body>
+</html>

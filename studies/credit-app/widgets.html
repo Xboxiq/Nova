@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Widget pairs — replica</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; background: #cfd3d6; }
+  body { font-family: 'Manrope', 'Helvetica Neue', Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+
+  .board { position: relative; width: 1080px; height: 1350px; overflow: hidden; }
+
+  /* The reference sits these widgets on a long-exposure photograph — a blurred
+     figure, a blurred flower. A photograph is not reproducible here, so the
+     backdrop is built the way the photograph reads: wide smears of hue at very
+     low frequency, streaked, with grain on top. It plays the same role — a soft
+     out-of-focus field for a sharp object to sit on. */
+  .backdrop { position: absolute; inset: -60px; }
+  .smear { position: absolute; inset: 0; }
+  .smear--sky {
+    background:
+      radial-gradient(60% 40% at 24% 12%, #8fc3d6 0%, rgba(143,195,214,0) 68%),
+      radial-gradient(70% 46% at 78% 6%, #6fa9c4 0%, rgba(111,169,196,0) 66%),
+      radial-gradient(80% 50% at 50% 46%, #d9d3c2 0%, rgba(217,211,194,0) 70%),
+      radial-gradient(90% 60% at 20% 88%, #e9dcc8 0%, rgba(233,220,200,0) 72%),
+      linear-gradient(178deg, #a9cfdd 0%, #cfd6cf 46%, #ece2d2 100%);
+    filter: blur(38px);
+  }
+  .smear--dark {
+    /* the blurred figure: a dark mass with motion streaks across it */
+    background:
+      radial-gradient(30% 46% at 58% 26%, rgba(12,14,18,0.92) 0%, rgba(12,14,18,0) 72%),
+      radial-gradient(40% 40% at 62% 72%, rgba(12,14,18,0.8) 0%, rgba(12,14,18,0) 74%),
+      radial-gradient(24% 16% at 34% 58%, rgba(214,116,60,0.55) 0%, rgba(214,116,60,0) 76%);
+    filter: blur(30px);
+  }
+  .streaks {
+    position: absolute; inset: 0; opacity: 0.5; mix-blend-mode: screen;
+    background: repeating-linear-gradient(96deg,
+      rgba(255,255,255,0.10) 0 2px, rgba(255,255,255,0) 2px 9px);
+    filter: blur(2px);
+  }
+  .grain {
+    position: absolute; inset: 0; pointer-events: none; opacity: 0.5; mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ── the widgets ───────────────────────────────────────────────────────── */
+  .row { position: absolute; inset-inline: 0; display: flex; justify-content: center; gap: 20px; }
+  .row--loans { top: 288px; }
+  .row--score { top: 800px; }
+
+  .w {
+    width: 316px; height: 316px; border-radius: 52px; padding: 26px;
+    display: flex; flex-direction: column; color: #fff;
+    /* the bevel every widget in this system carries: a lit top lip, a dark
+       bottom lip, and a wide soft cast underneath */
+    box-shadow:
+      inset 0 1.5px 0 rgba(255,255,255,0.5),
+      inset 0 -1.5px 0 rgba(0,0,0,0.16),
+      inset 0 0 0 1px rgba(255,255,255,0.14),
+      0 26px 44px rgba(12,16,24,0.24),
+      0 6px 14px rgba(12,16,24,0.14);
+    position: relative;
+    overflow: hidden;
+  }
+  .w::after {
+    /* the inner glow: a soft pool of light in the upper third */
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(64% 40% at 30% 6%, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%);
+  }
+
+  .w--green {
+    background:
+      radial-gradient(76% 52% at 16% 2%, #6d8f1c 0%, rgba(109,143,28,0) 62%),
+      radial-gradient(72% 46% at 92% 8%, #3d4d14 0%, rgba(61,77,20,0) 60%),
+      radial-gradient(110% 70% at 42% 104%, #c9ec3a 0%, rgba(201,236,58,0) 68%),
+      linear-gradient(160deg, #5f7d18 0%, #7d9c22 46%, #b6d833 100%);
+  }
+  .w--peach {
+    background:
+      radial-gradient(74% 50% at 18% 2%, #e0c0a4 0%, rgba(224,192,164,0) 62%),
+      radial-gradient(70% 46% at 90% 10%, #cf9f84 0%, rgba(207,159,132,0) 60%),
+      radial-gradient(110% 72% at 46% 104%, #f0c8b4 0%, rgba(240,200,180,0) 70%),
+      linear-gradient(160deg, #d8b49a 0%, #d5a488 48%, #eec4b2 100%);
+    backdrop-filter: blur(20px);
+  }
+  .w--white {
+    background: linear-gradient(178deg, #ffffff 0%, #fbfbfa 100%);
+    color: #101010;
+    box-shadow:
+      inset 0 1.5px 0 #ffffff,
+      inset 0 -1px 0 rgba(0,0,0,0.05),
+      0 26px 44px rgba(12,16,24,0.16),
+      0 6px 14px rgba(12,16,24,0.08);
+  }
+  .w--glass {
+    background: linear-gradient(168deg, rgba(255,255,255,0.34) 0%, rgba(255,255,255,0.16) 100%);
+    backdrop-filter: blur(26px);
+    box-shadow:
+      inset 0 1.5px 0 rgba(255,255,255,0.6),
+      inset 0 -1.5px 0 rgba(0,0,0,0.1),
+      inset 0 0 0 1px rgba(255,255,255,0.3),
+      0 26px 44px rgba(12,16,24,0.2);
+  }
+
+  .whead { display: flex; align-items: flex-start; justify-content: space-between; }
+  .badge {
+    width: 58px; height: 58px; border-radius: 50%; display: grid; place-items: center; position: relative;
+    box-shadow: inset 0 0 0 1.2px rgba(255,255,255,0.6);
+  }
+  .w--white .badge { box-shadow: inset 0 0 0 1.2px rgba(16,16,16,0.14); }
+  .warn {
+    position: absolute; top: -4px; right: -4px; width: 22px; height: 22px;
+    display: grid; place-items: center;
+  }
+  .go {
+    width: 58px; height: 58px; border: 0; border-radius: 50%; cursor: pointer;
+    display: grid; place-items: center; background: #0c0c0c;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.16), 0 6px 16px rgba(0,0,0,0.26);
+  }
+  .go--quiet { background: rgba(255,255,255,0.24); box-shadow: inset 0 1px 0 rgba(255,255,255,0.42); }
+  .w--white .go--quiet { background: #f2f2f0; box-shadow: inset 0 1px 0 #fff; }
+
+  .bankname { font-size: 25px; font-weight: 400; line-height: 1.12; letter-spacing: -0.015em; flex: 1; padding-inline-start: 14px; padding-top: 4px; }
+
+  .cap { font-size: 16px; color: rgba(255,255,255,0.66); margin-top: auto; }
+  .w--white .cap, .w--glass .cap { color: rgba(16,16,16,0.55); }
+  .amtrow { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; }
+  .amt { font-size: 46px; font-weight: 300; letter-spacing: -0.035em; line-height: 1.05; display: flex; align-items: baseline; gap: 3px; }
+  .amt .cur { font-size: 22px; color: rgba(255,255,255,0.6); }
+  .term { font-size: 14px; color: rgba(255,255,255,0.72); text-align: right; line-height: 1.35; padding-bottom: 6px; }
+
+  .footrow { display: flex; align-items: baseline; justify-content: space-between; font-size: 15px; margin-top: auto; }
+  .footrow .l { color: rgba(255,255,255,0.66); }
+
+  .title { font-size: 21px; font-weight: 400; letter-spacing: -0.012em; margin-top: 26px; }
+  .w--glass .title { color: #fff; }
+  .bignum { display: flex; align-items: baseline; gap: 2px; font-size: 44px; font-weight: 600; letter-spacing: -0.03em; margin-top: auto; }
+  .bignum small { font-size: 22px; font-weight: 400; color: rgba(16,16,16,0.4); }
+  .w--glass .bignum { font-weight: 500; color: #fff; }
+  .w--glass .bignum small { color: rgba(255,255,255,0.66); }
+  .numrow { display: flex; align-items: flex-end; justify-content: space-between; margin-top: auto; }
+
+  .brand { position: absolute; left: 44px; top: 40px; display: flex; align-items: center; gap: 10px; color: #fff; }
+  .brand small { font-size: 11px; line-height: 1.1; letter-spacing: 0.04em; opacity: 0.9; }
+  .handle {
+    position: absolute; right: 44px; top: 40px; height: 44px; padding: 0 26px;
+    display: flex; align-items: center; border-radius: 22px; color: #fff; font-size: 17px;
+    border: 1px solid rgba(255,255,255,0.5);
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(10px);
+  }
+</style>
+</head>
+<body>
+<div class="board">
+  <div class="backdrop">
+    <div class="smear smear--sky"></div>
+    <div class="smear smear--dark"></div>
+    <div class="streaks"></div>
+  </div>
+
+  <div class="brand">
+    <small>RON<br>DESIGN</small>
+    <svg width="34" height="30" viewBox="0 0 34 30" fill="#fff"><path d="M2 2h16c8 0 13 4 13 10 0 5-3 8-8 9l9 7h-9l-9-8v8H2z" /></svg>
+  </div>
+  <div class="handle">@rondesignlab</div>
+
+  <!-- ── the loan pair (green + peach) ── -->
+  <div class="row row--loans">
+    <div class="w w--green">
+      <div class="whead">
+        <span class="badge">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="6" width="14" height="11" rx="2.5"/><path d="M3 10h14"/><circle cx="17.5" cy="15.5" r="4"/><path d="M17.5 14v3"/>
+          </svg>
+        </span>
+        <div class="bankname">TD Bank<br>USA</div>
+        <button class="go"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></button>
+      </div>
+
+      <div style="margin-top:34px">
+        <div class="cap" style="margin:0">Paid Amount</div>
+        <div class="amtrow">
+          <div class="amt"><span class="cur">$</span>12.340</div>
+          <div class="term">Term<br>36 m.</div>
+        </div>
+      </div>
+
+      <!-- the counted progress: dots, and the paid ones lit -->
+      <svg width="100%" height="26" viewBox="0 0 264 26" style="margin-top:auto" fill="none">
+        <g fill="rgba(255,255,255,0.42)">
+          <!-- 12 columns x 3 rows of dots; the last 4 columns are lime -->
+          <g id="col"></g>
+        </g>
+        <script/>
+        <g fill="rgba(255,255,255,0.42)">
+          <circle cx="6" cy="6" r="1.8"/><circle cx="6" cy="14" r="1.8"/><circle cx="6" cy="22" r="1.8"/>
+          <circle cx="24" cy="6" r="1.8"/><circle cx="24" cy="14" r="1.8"/><circle cx="24" cy="22" r="1.8"/>
+          <circle cx="42" cy="6" r="1.8"/><circle cx="42" cy="14" r="1.8"/><circle cx="42" cy="22" r="1.8"/>
+          <circle cx="60" cy="6" r="1.8"/><circle cx="60" cy="14" r="1.8"/><circle cx="60" cy="22" r="1.8"/>
+          <circle cx="78" cy="6" r="1.8"/><circle cx="78" cy="14" r="1.8"/><circle cx="78" cy="22" r="1.8"/>
+          <circle cx="96" cy="6" r="1.8"/><circle cx="96" cy="14" r="1.8"/><circle cx="96" cy="22" r="1.8"/>
+          <circle cx="114" cy="6" r="1.8"/><circle cx="114" cy="14" r="1.8"/><circle cx="114" cy="22" r="1.8"/>
+          <circle cx="132" cy="6" r="1.8"/><circle cx="132" cy="14" r="1.8"/><circle cx="132" cy="22" r="1.8"/>
+          <circle cx="150" cy="6" r="1.8"/><circle cx="150" cy="14" r="1.8"/><circle cx="150" cy="22" r="1.8"/>
+        </g>
+        <g fill="#d8fa4e">
+          <circle cx="176" cy="6" r="1.9"/><circle cx="176" cy="14" r="1.9"/><circle cx="176" cy="22" r="1.9"/>
+          <circle cx="194" cy="6" r="1.9"/><circle cx="194" cy="14" r="1.9"/><circle cx="194" cy="22" r="1.9"/>
+          <circle cx="212" cy="6" r="1.9"/><circle cx="212" cy="14" r="1.9"/><circle cx="212" cy="22" r="1.9"/>
+          <circle cx="230" cy="6" r="1.9"/><circle cx="230" cy="14" r="1.9"/><circle cx="230" cy="22" r="1.9"/>
+          <circle cx="248" cy="6" r="1.9"/><circle cx="248" cy="14" r="1.9"/><circle cx="248" cy="22" r="1.9"/>
+        </g>
+      </svg>
+
+      <div class="footrow"><span class="l">Next Payment</span><span>03.05.2024</span></div>
+    </div>
+
+    <div class="w w--peach">
+      <div class="whead">
+        <span class="badge">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 9l8-5 8 5"/><path d="M5 9v9M19 9v5"/><path d="M9 18v-6M15 12v2"/><path d="M3 21h12"/><circle cx="18.5" cy="18" r="3.4"/><path d="M18.5 16.6v1.6"/>
+          </svg>
+        </span>
+        <div class="bankname">TD Bank<br>USA</div>
+        <button class="go"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></button>
+      </div>
+
+      <div style="margin-top:34px">
+        <div class="cap" style="margin:0">Paid Amount</div>
+        <div class="amtrow">
+          <div class="amt"><span class="cur">$</span>56.000</div>
+          <div class="term">Term<br>48 m.</div>
+        </div>
+      </div>
+
+      <!-- the same reading as bars rather than dots, with one lit tick -->
+      <svg width="100%" height="26" viewBox="0 0 264 26" style="margin-top:auto" fill="none">
+        <g stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linecap="round">
+          <path d="M6 4v18M18 4v18M30 4v18M42 4v18M54 4v18M66 4v18M78 4v18M90 4v18M102 4v18M114 4v18M126 4v18M138 4v18M150 4v18M162 4v18M174 4v18"/>
+        </g>
+        <path d="M186 0v26" stroke="#e8fa62" stroke-width="2.6" stroke-linecap="round"/>
+        <g stroke="rgba(255,255,255,0.34)" stroke-width="2" stroke-linecap="round">
+          <path d="M198 6v14M210 6v14M222 6v14M234 6v14M246 6v14M258 6v14"/>
+        </g>
+      </svg>
+
+      <div class="footrow"><span class="l">Next Payment</span><span>03.05.2024</span></div>
+    </div>
+  </div>
+
+  <!-- ── the score pair (white + glass) ── -->
+  <div class="row row--score">
+    <div class="w w--white">
+      <div class="whead">
+        <span class="badge">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#101010" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3.5" y="5" width="17" height="16" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/>
+          </svg>
+          <span class="warn">
+            <svg width="20" height="20" viewBox="0 0 24 24"><path d="M12 3.5l9 16H3z" fill="#f5a623"/><path d="M12 9v5M12 16.4v.3" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </span>
+        </span>
+        <span style="flex:1"></span>
+        <button class="go go--quiet"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#101010" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></button>
+      </div>
+
+      <div class="title">Payments on Time</div>
+
+      <div class="numrow">
+        <div class="bignum">24<small>/38</small></div>
+        <svg width="118" height="46" viewBox="0 0 118 46" fill="none" style="margin-bottom:6px">
+          <g fill="#d8d8d5">
+            <circle cx="8" cy="8" r="3"/><circle cx="30" cy="8" r="3"/><circle cx="52" cy="8" r="3"/><circle cx="74" cy="8" r="3"/><circle cx="96" cy="8" r="3"/>
+            <circle cx="8" cy="30" r="3"/><circle cx="30" cy="30" r="3"/>
+          </g>
+          <g fill="#101010">
+            <circle cx="52" cy="30" r="4"/><circle cx="74" cy="30" r="4"/><circle cx="96" cy="30" r="4"/>
+            <circle cx="63" cy="42" r="4"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <div class="w w--glass">
+      <div class="whead">
+        <span class="badge">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="6" width="14" height="11" rx="2.5"/><path d="M3 10h14"/><circle cx="17.5" cy="15.5" r="4"/><path d="M17.5 14v3"/>
+          </svg>
+          <span class="warn">
+            <svg width="20" height="20" viewBox="0 0 24 24"><path d="M12 3.5l9 16H3z" fill="#f5721f"/><path d="M12 9v5M12 16.4v.3" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </span>
+        </span>
+        <span style="flex:1"></span>
+        <button class="go go--quiet"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></button>
+      </div>
+
+      <div class="title">Credit Utilization</div>
+
+      <div class="numrow">
+        <div class="bignum">23<small>%</small></div>
+        <svg width="132" height="34" viewBox="0 0 132 34" fill="none" style="margin-bottom:8px">
+          <circle cx="14" cy="17" r="11" stroke="rgba(255,255,255,0.5)" stroke-width="1.6"/>
+          <circle cx="44" cy="17" r="11" stroke="rgba(255,255,255,0.5)" stroke-width="1.6"/>
+          <circle cx="74" cy="17" r="11" stroke="rgba(255,255,255,0.5)" stroke-width="1.6"/>
+          <circle cx="108" cy="17" r="15" stroke="#ffffff" stroke-width="2.2"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="grain"></div>
+</div>
+</body>
+</html>

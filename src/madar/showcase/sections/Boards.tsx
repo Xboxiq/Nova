@@ -1,0 +1,70 @@
+import { Section, SectionHeader } from '../SectionHeader';
+import { SpecList, SpecRow } from '../SpecRow';
+import { AssistantCard, CareOverview, DarkPlate, FlowDonut, OppsTable, PaletteSlide, SplitDonut, StaffList } from '../../components/boards';
+
+export function Boards() {
+  return (
+    <Section label="Boards">
+      <SectionHeader eyebrow="37 · BOARDS" title="اللوح تكوين، والمكتبة تحفظ قطعه">
+        ثلاث صور من المراجع كانت لوحَ تمريضٍ واحدًا — قصّتان مقرَّبتان ثم اللوح كاملًا — وواحدة لوحَ بيع. واللوح <b>تكوين</b>، والذي يدخل مكتبةً ليس اللوح بل قطعه، وهي بالضبط ما كانت القصّات تُبرزه. وبنيةٌ واحدة تخفيها اللقطة: بطاقة المساعد <b>تمتدّ صفَّين</b>، ولذلك تكون اللوحة السوداء فوقها قصيرة — قُرِئت أوّل مرّة شبكةً مستوية فبدت البطاقة فيها فراغًا أسود.
+      </SectionHeader>
+
+      <SpecList>
+        <SpecRow name="DarkPlate: لوحة سوداء وبِركة ضوء داخلها" bare specimen={(
+          <div style={{ width: '100%' }}><DarkPlate /></div>
+        )}>
+          ليست بطاقةً سوداء ولا تدرّجًا أسود-إلى-أخضر: لوحةٌ سوداء و<b>بِركتان</b> شعاعيّتان مضاءتان من أسفلها تتسرّبان صعودًا. ولذلك يبقى أعلاها أسودَ صافيًا فيقرأ النصّ عليه، ويلتفّ أسفلها أخضر فيقرأ الجسمُ عمقًا. والإحصاءات داخلها لوحاتٌ صغيرة بنفس الشفة المضاءة — الضوء واحدٌ في الأب والابن.
+        </SpecRow>
+
+        <SpecRow name="AssistantCard: الكرة تسع طبقات، والبطاقة تمتدّ صفَّين" bare specimen={(
+          <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 0.85fr', gap: 12, alignItems: 'stretch', width: '100%' }}>
+            <div style={{ display: 'grid', gap: 12, alignContent: 'start' }}>
+              <DarkPlate />
+              <div style={{ borderRadius: 'var(--r-panel)', background: '#fff', padding: 13, boxShadow: 'inset 0 0 0 1px #f0eef6' }}>
+                <SplitDonut />
+              </div>
+            </div>
+            <AssistantCard />
+          </div>
+        )}>
+          هذا هو التصحيح: البطاقة على اليمين تمتدّ <b>صفَّين</b>، فالسوداء فوقها قصيرة بالضرورة لا بالخطأ. والكرة تسع طبقات كلٌّ منها تعمل — لمعةٌ بيضاء، بِركةٌ نعناعية، بِركةٌ ليمونية، جسمٌ زمرديّ، هالةٌ خارجية بـ٤٢px، وغائرٌ أسفل يعطيها الحجم. انزع أيّها شئت فتسطّح إلى دائرة.
+        </SpecRow>
+
+        <SpecRow name="SplitDonut: المخطَّط يعني «معدود ولم يتحقّق»" bare specimen={(
+          <div style={{ width: '100%', padding: 20, borderRadius: 'var(--r-panel)', background: '#fff', boxShadow: 'inset 0 0 0 1px #f0eef6' }}>
+            <SplitDonut />
+          </div>
+        )}>
+          ثلاث قطع: مصمتةٌ للمتحقّق، وليمونيةٌ لما أضافه النموذج، و<b>مخطَّطةٌ</b> لِما عُدّ ولم يتحقّق بعد (§١٥-ب) — فالتخطيط في هذه المكتبة معناه واحدٌ حيث ظهر. والزوايا مُشتقّة من المجموع، فلا يمكن أن تجتمع قِطعٌ لا تُساوي كلًّا.
+        </SpecRow>
+
+        <SpecRow name="OppsTable: مستوى الخطر معدودٌ لا مُسعَّر" bare specimen={(
+          <div style={{ width: '100%' }}><OppsTable /></div>
+        )}>
+          عمودُ الخطر <b>سبع شرطات</b> والمملوء منها هو القراءة — لا شريطًا يمكن أن يكون بأي عرض. وهذا الفرق بين رقمٍ يُقرأ وشكلٍ يُصدَّق: من يرى أربعًا من سبع يعرف كم بقي، ومن يرى ٥٧٪ يعرف نسبةً بلا مقياس. و`DataTable` موجودٌ في المكتبة وفُحِص، والفرق هذا العمود بعينه.
+        </SpecRow>
+
+        <SpecRow name="CareOverview: ما تحقّق مصمت، وما بعده مخطَّط" bare specimen={(
+          <div style={{ width: '100%' }}><CareOverview /></div>
+        )}>
+          شريطٌ بعلامتَين مثبَّتتَين على ٤٥٪ و٧٥٪، وما تحقّق مصمتٌ وما بعده <b>مخطَّط</b> — لأن الخطّة ليست قياسًا. والحلقات الأربع تقرأ رقمًا مقابل كلّيته لا مقابل بعضها: ٨٦ من ١٢٨ حلقةٌ بثلثين، و١٢ من ١٢٨ حلقةٌ بعُشر. والنسبة مُشتقّة، فلا حلقةَ تكذب رقمها.
+        </SpecRow>
+
+        <SpecRow name="StaffList + FlowDonut: الحالة حالة، والسعة مقابل الهدف" bare specimen={(
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 0.86fr', gap: 12, width: '100%', alignItems: 'start' }}>
+            <StaffList />
+            <FlowDonut />
+          </div>
+        )}>
+          ثلاث حالاتٍ في الطاقم لها ثلاثة ترميزات ثابتة — على المناوبة، متاح، في إجازة — كلٌّ بلونٍ ونقطة، والترميز مربوطٌ بالحالة لا بالصفّ. ودائرة السعة تُظهر ثلاث قِطع وشارةَ الوارد فوقها: <b>السعة الحاضرة مقابل الهدف</b>، فالرقم في المركز يعني شيئًا لأن له مرجعًا مرسومًا (§١٤).
+        </SpecRow>
+
+        <SpecRow name="PaletteSlide: الحبّة كُرَيةٌ مضاءة لا نقطة" bare specimen={(
+          <div style={{ width: '100%' }}><PaletteSlide /></div>
+        )}>
+          حبّة اللون في هذه العائلة <b>كُرَيةٌ مضاءة</b>: اللمعة أعلى ويسار المركز، ثم حدُّ الظلّ، ثم ضوءٌ مرتدّ على الحافّة السفلى. والثلاثة معًا تعطي جسمًا؛ وواحدٌ منها وحده يعطي لاصقة. واسم الخطّ في المرجع <code>Neue Montreal</code> وليس متاحًا هنا، فالبديل الأقرب مذكورٌ لا مخفيّ.
+        </SpecRow>
+      </SpecList>
+    </Section>
+  );
+}
