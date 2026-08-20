@@ -463,3 +463,139 @@
     inset 1px 0 0 color-mix(in srgb, var(--border) 60%, transparent),
     inset -1px 0 0 color-mix(in srgb, var(--border) 60%, transparent);
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   THE PHOTOGRAPHED SYSTEM — tokens
+
+   The owner repealed `anti-slop-ui` 07 and 09 for this family: blurred drop
+   shadows and large radii are permitted, and the reference designs are to be
+   carried into the library **unchanged** — same colours, same angles, same
+   gradients, same shadows. VISUAL-LAW §1 and §3 are amended to record it.
+
+   Additive on purpose. `--shadow-1..4` stay `none` and `--r-xs..lg` stay small,
+   so the thirty-four existing sections do not move; this is a second depth
+   policy for a second family, not a restyle of the first. And the values are
+   named rather than inlined — a token holds the reference's exact number, so
+   nothing is sacrificed visually and there is still one place to read it from.
+   ═══════════════════════════════════════════════════════════════════════════ */
+:root {
+  /* ── the mesh: five radial pools turning green → olive → sand → peach → rose.
+        Two stops fade; five pools *turn*, which is the whole reading. ── */
+  --mesh-green-a: #93b12a;
+  --mesh-green-b: #55661c;
+  --mesh-sand: #b9a45f;
+  --mesh-peach: #dda183;
+  --mesh-rose: #e7a5a2;
+  --mesh-ramp-1: #7d9724;
+  --mesh-ramp-2: #a89355;
+  --mesh-ramp-3: #d29d85;
+  --mesh-ramp-4: #e5a5a3;
+
+  /* the loan widgets, which are the mesh cropped tight */
+  --widget-green-a: #6d8f1c;
+  --widget-green-b: #3d4d14;
+  --widget-green-c: #c9ec3a;
+  --widget-peach-a: #e0c0a4;
+  --widget-peach-b: #cf9f84;
+  --widget-peach-c: #f0c8b4;
+
+  /* ── the accent. Reserved for what has been measured: a paid month, a paid
+        chip, the reading on a chart. Never decoration. ── */
+  --lime: #d2f54a;
+  --lime-bright: #d8fa4e;
+  --lime-ink: #1d2a02;
+  --lime-soft: #ddf2a8;
+  --lime-hatch: #b6e83a;
+
+  /* the dark family: a black plate with a green pool lit inside it */
+  --plate-a: #232624;
+  --plate-b: #131614;
+  --plate-c: #0a0c0a;
+  --plate-pool: #7fb81f;
+  --plate-pool-deep: #4d7412;
+
+  /* the olive slide */
+  --olive-a: #101312;
+  --olive-b: #262b13;
+  --olive-c: #47510f;
+  --olive-d: #62700f;
+  --olive-pool: #7f8f18;
+
+  /* ── bevel: one light, from above. A lit top lip, a darker bottom lip, and a
+        perimeter hairline between them. ── */
+  --bevel-lit: rgba(255, 255, 255, 0.5);
+  --bevel-lit-soft: rgba(255, 255, 255, 0.34);
+  --bevel-dark: rgba(0, 0, 0, 0.16);
+  --bevel-dark-deep: rgba(0, 0, 0, 0.6);
+  --bevel-hair: rgba(255, 255, 255, 0.14);
+
+  /* ── depth. Blurred, offset down, and named — the repeal with a policy. ── */
+  --depth-widget: 0 26px 44px rgba(12, 16, 24, 0.24), 0 6px 14px rgba(12, 16, 24, 0.14);
+  --depth-poster: 0 30px 50px rgba(8, 10, 16, 0.3), 0 8px 16px rgba(8, 10, 16, 0.18);
+  --depth-card: 0 10px 26px rgba(16, 16, 16, 0.07), 0 2px 6px rgba(16, 16, 16, 0.04);
+  --depth-window: 0 24px 50px rgba(0, 0, 0, 0.14), 0 4px 12px rgba(0, 0, 0, 0.06);
+  --depth-float: 0 8px 22px rgba(16, 16, 16, 0.1);
+  --depth-press: 0 6px 16px rgba(0, 0, 0, 0.26);
+  --depth-lime: 0 0 14px rgba(210, 245, 74, 0.45);
+  --depth-lime-halo: 0 0 18px rgba(210, 245, 74, 0.16);
+  --depth-hairline: 0 1px 3px rgba(0, 0, 0, 0.04);
+  --depth-pin: 0 1px 3px rgba(0, 0, 0, 0.12);
+  --depth-sphere: 0 3px 10px rgba(0, 0, 0, 0.28);
+  --depth-avatar: 0 2px 8px rgba(16, 16, 16, 0.18);
+  --depth-round: 0 2px 6px rgba(16, 16, 16, 0.05);
+  --depth-orb: 0 0 42px rgba(120, 230, 140, 0.5);
+
+  /* ── radii on the reference's own scale, not the library's small one ── */
+  --r-screen: 54px;
+  --r-widget: 52px;
+  --r-sheet: 30px;
+  --r-pill: 999px;
+  --r-panel: 15px;
+  --r-tile: 12px;
+
+  /* the inner glow: a pool of light in the upper third of a surface */
+  --glow-top: radial-gradient(64% 40% at 30% 6%, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 70%);
+}
+
+/* ── grain. One layer, over everything, in overlay. It is the single reason the
+      family reads as photographed rather than drawn. ── */
+.madar-grain::after {
+  content: '';
+  position: absolute;
+  inset: -20px;
+  pointer-events: none;
+  opacity: 0.42;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.madar-grain--light::after { opacity: 0.22; mix-blend-mode: multiply; }
+.madar-grain--heavy::after { opacity: 0.55; }
+
+/* ── the bevel, as one class instead of four repeated shadows ── */
+.madar-bevel {
+  box-shadow:
+    inset 0 1.5px 0 var(--bevel-lit),
+    inset 0 -1.5px 0 var(--bevel-dark),
+    inset 0 0 0 1px var(--bevel-hair),
+    var(--depth-widget);
+}
+.madar-bevel--deep {
+  box-shadow:
+    inset 0 1.5px 0 var(--bevel-lit-soft),
+    inset 0 -1.5px 0 var(--bevel-dark-deep);
+}
+
+/* the pool of light every surface in this family carries in its upper third */
+.madar-glow { position: relative; }
+.madar-glow::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: var(--glow-top);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .madar-grain::after { opacity: 0.3; }
+}

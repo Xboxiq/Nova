@@ -189,7 +189,14 @@
   display: -webkit-box;
   margin-block-start: 2px;
   overflow: hidden;
-  color: var(--nova-ink-secondary);
+  /* Not plain secondary ink. The *active* tab paints an accent tint at 16% over
+     the surface, and on the night pack secondary ink over that composite is
+     4.37:1 — under AA. The token sweep could not see it because it measures
+     tokens, not composited states; axe caught it only once a section with a long
+     description made it the reported node. A quarter step toward the primary ink
+     clears AA on both the plain and the tinted background and still reads as a
+     secondary line. */
+  color: color-mix(in srgb, var(--nova-ink) 25%, var(--nova-ink-secondary));
   font-size: var(--nova-text-label-md);
   font-weight: var(--nova-weight-regular);
   line-height: 1.45;

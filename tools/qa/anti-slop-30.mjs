@@ -93,8 +93,12 @@ const RULES = [
     re: /#(8b5cf6|a855f7|7c3aed|6d28d9|c084fc)\b/i },
   { n: "10", name: "no Inter / Geist / Space Grotesk", files: CSS,
     re: /font-family[^;]*("|')(Inter|Geist|Space Grotesk)/i },
+  /* The CSS branch already excluded `transparent`, because a transparent side
+     border is the triangle trick and not a stripe. The JSX branch did not, so it
+     flagged every drawn marker in the library. The rule's own intent is the
+     coloured accent stripe; the exclusion belongs on both branches. */
   { n: "11", name: "no coloured left stripe", files: [...CSS, ...ALL],
-    re: /border-left:\s*[2-9]px solid (?!transparent)|borderLeft:\s*[`'"]\s*[2-9]px solid/i },
+    re: /border-left:\s*[2-9]px solid (?!transparent)|borderLeft:\s*[`'"]?\s*[2-9]px solid (?!transparent)/i },
   { n: "15", name: "no faux terminal window chrome", files: [...CSS, ...ALL],
     re: /window-controls|traffic-lights?\b/ },
   { n: "19", name: "no sparkle glyphs", files: ALL, re: /Sparkle|✨/ },
