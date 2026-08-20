@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { useMemo, useRef, useState, type CSSProperties, type KeyboardEvent, type ReactNode } from 'react';
 import { AiOrb, MeshSurface } from './mesh';
 
 /* ────────────────────────────────────────────────────────────────────────
@@ -14,6 +14,14 @@ import { AiOrb, MeshSurface } from './mesh';
    is why the dark plate above it is short. Read as a flat grid it looks like a
    card with dead space in it; read as two columns of unequal row counts it is
    the layout the reference actually has.
+
+   And the thing the first pass got wrong, which the owner caught: every one of
+   these eight had **zero** state, zero handlers and zero keyboard. Eight cards
+   that looked exactly right and did nothing — a legend that could not hide a
+   series, a table that could not sort, a search box that could not search, an
+   input that could not be typed into. Faithful to the image and useless as a
+   library. Fixed here: each piece is operable, answers the keyboard, and shows
+   the result of what you did to it.
 
    Checked and not reused: `DataTable` covers a plain table, but `OppsTable`'s
    risk column is a counted bar rather than a value, which is §15-a; `Heatmap`
@@ -31,17 +39,49 @@ const LIGHT_INK = '#101312';
 const n = (v: number, digits = 0) =>
   v.toLocaleString('en-US', { minimumFractionDigits: digits, maximumFractionDigits: digits });
 
+const isRtl = () =>
+  typeof document !== 'undefined' && getComputedStyle(document.documentElement).direction === 'rtl';
+
+/** Roving-tabindex mover shared by every strip and list in this file. */
+function move(key: string, at: number, count: number, cols?: number): number | null {
+  const rtl = isRtl();
+  const step: Record<string, number> = {
+    [rtl ? 'ArrowLeft' : 'ArrowRight']: 1,
+    [rtl ? 'ArrowRight' : 'ArrowLeft']: -1,
+    Home: -count,
+    End: count,
+    ...(cols ? { ArrowDown: cols, ArrowUp: -cols } : { ArrowDown: 1, ArrowUp: -1 }),
+  };
+  if (!(key in step)) return null;
+  return Math.min(count - 1, Math.max(0, at + step[key]));
+}
+
 /* ═══════════════════════════════════════════════════════════════════════════
    DarkPlate — a black card with a green pool lit inside it
    ═══════════════════════════════════════════════════════════════════════════ */
 
-export interface PlateStat { label: string; value: string; unit?: string; icon?: ReactNode }
+export interface PlateStat { label: string; value: string; unit?: string; icon?: ReactNode; note?: string }
 
 export function DarkPlate({
   title = 'Smart Sales Distribution',
   note = 'AI-enhanced sales metrics showing growth in leads, revenue, and overall performance.',
   stats = DEFAULT_STATS,
-}: { title?: string; note?: string; stats?: PlateStat[] }) {
+  onStat,
+}: { title?: string; note?: string; stats?: PlateStat[]; onStat?: (i: number) => void }) {
+  /* The three figures are the point of the card, so they are selectable and the
+     note line follows the selection: the card explains the number you asked
+     about rather than repeating one sentence forever. */
+  const [at, setAt] = useState<number | null>(null);
+  const tiles = useRef<(HTMLButtonElement | null)[]>([]);
+
+  const go = (i: number) => { setAt(i); tiles.current[i]?.focus(); onStat?.(i); };
+  const onKey = (e: KeyboardEvent) => {
+    const next = move(e.key, at ?? 0, stats.length);
+    if (next === null) return;
+    e.preventDefault();
+    go(next);
+  };
+
   return (
     <MeshSurface
       variant="plate"
@@ -51,27 +91,48 @@ export function DarkPlate({
       style={{ padding: 15 }}
     >
       <h3 style={{ margin: 0, fontSize: 16, fontWeight: 500, letterSpacing: '-0.02em' }}>{title}</h3>
-      <p style={{ margin: '3px 0 0', fontSize: 10.5, color: 'rgba(255,255,255,0.6)', lineHeight: 1.45 }}>{note}</p>
-      <div style={{ display: 'grid', gridTemplateColumns: `repeat(${stats.length}, 1fr)`, gap: 9, marginTop: 13 }}>
-        {stats.map((s) => (
-          <div
+      <p
+        data-plate-note=""
+        aria-live="polite"
+        style={{ margin: '3px 0 0', fontSize: 10.5, color: 'rgba(255,255,255,0.6)', lineHeight: 1.45, minHeight: 30 }}
+      >
+        {at === null ? note : (stats[at].note ?? `${stats[at].label} — ${stats[at].value}${stats[at].unit ? ` ${stats[at].unit}` : ''}.`)}
+      </p>
+      <div
+        role="radiogroup"
+        aria-label={title}
+        onKeyDown={onKey}
+        style={{ display: 'grid', gridTemplateColumns: `repeat(${stats.length}, 1fr)`, gap: 9, marginTop: 13 }}
+      >
+        {stats.map((s, i) => (
+          <button
             key={s.label}
+            ref={(el) => { tiles.current[i] = el; }}
+            type="button"
+            role="radio"
+            aria-checked={at === i}
+            tabIndex={at === i || (at === null && i === 0) ? 0 : -1}
+            onClick={() => go(i)}
             data-plate-stat={s.label}
+            data-on={at === i ? '' : undefined}
             style={{
-              borderRadius: 11, padding: 10,
+              borderRadius: 11, padding: 10, border: 0, cursor: 'pointer',
+              textAlign: 'start', fontFamily: 'inherit', color: '#fff',
               background: 'linear-gradient(160deg, rgba(255,255,255,0.09) 0%, rgba(255,255,255,0.03) 100%)',
               boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.14), inset 0 0 0 1px rgba(255,255,255,0.06)',
+              outline: at === i ? '2px solid var(--lime)' : 'none',
+              outlineOffset: 2,
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: 7, fontSize: 10.5, color: 'rgba(255,255,255,0.82)' }}>
+            <span style={{ display: 'flex', alignItems: 'center', gap: 7, fontSize: 10.5, color: 'rgba(255,255,255,0.82)' }}>
               <span style={{ width: 20, height: 20, borderRadius: 6, background: 'rgba(255,255,255,0.1)', display: 'grid', placeItems: 'center' }}>{s.icon}</span>
               {s.label}
-            </div>
-            <div style={{ fontSize: 19, fontWeight: 500, letterSpacing: '-0.03em', marginTop: 9 }}>
+            </span>
+            <span style={{ display: 'block', fontSize: 19, fontWeight: 500, letterSpacing: '-0.03em', marginTop: 9 }}>
               <bdi dir="ltr">{s.value}</bdi>
               {s.unit && <small style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', fontWeight: 400 }}> {s.unit}</small>}
-            </div>
-          </div>
+            </span>
+          </button>
         ))}
       </div>
     </MeshSurface>
@@ -80,16 +141,50 @@ export function DarkPlate({
 
 const stroke = { fill: 'none', stroke: 'var(--lime)', strokeWidth: 1.8, strokeLinecap: 'round' } as const;
 const DEFAULT_STATS: PlateStat[] = [
-  { label: 'Total Income', value: '56,000.00', unit: '$', icon: <svg width="12" height="12" viewBox="0 0 24 24" {...stroke}><path d="M12 4l8 4-8 4-8-4z" /><path d="M4 12l8 4 8-4M4 16l8 4 8-4" /></svg> },
-  { label: 'ROI', value: '+312', unit: '%', icon: <svg width="12" height="12" viewBox="0 0 24 24" {...stroke}><rect x="4" y="4" width="16" height="16" rx="4" /><path d="M8 15l3-4 2 2 3-4" /></svg> },
-  { label: 'Daily Active Users', value: '12,846', icon: <svg width="12" height="12" viewBox="0 0 24 24" {...stroke}><circle cx="9" cy="9" r="3" /><path d="M3 19c0-3.3 2.7-5 6-5s6 1.7 6 5" /></svg> },
+  {
+    label: 'Total Income', value: '56,000.00', unit: '$',
+    note: 'Total Income — 56,000.00 $ booked in the period, before AI-attributed uplift.',
+    icon: <svg width="12" height="12" viewBox="0 0 24 24" {...stroke}><path d="M12 4l8 4-8 4-8-4z" /><path d="M4 12l8 4 8-4M4 16l8 4 8-4" /></svg>,
+  },
+  {
+    label: 'ROI', value: '+312', unit: '%',
+    note: 'ROI — +312 % against spend, which is the figure the uplift is measured on.',
+    icon: <svg width="12" height="12" viewBox="0 0 24 24" {...stroke}><rect x="4" y="4" width="16" height="16" rx="4" /><path d="M8 15l3-4 2 2 3-4" /></svg>,
+  },
+  {
+    label: 'Daily Active Users', value: '12,846',
+    note: 'Daily Active Users — 12,846, counted on the last full day rather than averaged.',
+    icon: <svg width="12" height="12" viewBox="0 0 24 24" {...stroke}><circle cx="9" cy="9" r="3" /><path d="M3 19c0-3.3 2.7-5 6-5s6 1.7 6 5" /></svg>,
+  },
 ];
 
 /* ═══════════════════════════════════════════════════════════════════════════
    AssistantCard — the orb, and the card that is tall because it spans two rows
    ═══════════════════════════════════════════════════════════════════════════ */
 
-export function AssistantCard({ name = 'Bostie AI', prompt = 'How can I assist you today?' }: { name?: string; prompt?: string }) {
+export function AssistantCard({
+  name = 'Bostie AI',
+  prompt = 'How can I assist you today?',
+  onAsk,
+}: { name?: string; prompt?: string; onAsk?: (text: string) => void }) {
+  /* A card with a text field that cannot be typed into is the clearest possible
+     case of the defect this file was rewritten for. So: controlled input, a real
+     transcript, the two shortcut buttons fill the field, and the orb's size is
+     state rather than a constant with buttons next to it. */
+  const [text, setText] = useState('');
+  const [said, setSaid] = useState<string[]>([]);
+  const [size, setSize] = useState(128);
+  const [listening, setListening] = useState(false);
+  const field = useRef<HTMLInputElement>(null);
+
+  const send = () => {
+    const t = text.trim();
+    if (!t) return;
+    setSaid((s) => [...s, t].slice(-3));
+    setText('');
+    onAsk?.(t);
+  };
+
   return (
     <div
       data-assistant=""
@@ -101,23 +196,42 @@ export function AssistantCard({ name = 'Bostie AI', prompt = 'How can I assist y
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: 13, fontWeight: 500 }}>
-        <button type="button" aria-label="Smaller" style={orbBtn}>−</button>
+        <button
+          type="button"
+          aria-label="Smaller orb"
+          onClick={() => setSize((s) => Math.max(72, s - 20))}
+          style={orbBtn}
+        >
+          −
+        </button>
         {name}
-        <button type="button" aria-label="Larger" style={orbBtn}>+</button>
+        <button
+          type="button"
+          aria-label="Larger orb"
+          onClick={() => setSize((s) => Math.min(168, s + 20))}
+          style={orbBtn}
+        >
+          +
+        </button>
       </div>
 
-      <div style={{ display: 'grid', placeItems: 'center', marginTop: 10 }}><AiOrb /></div>
+      <div data-orb-size={size} style={{ display: 'grid', placeItems: 'center', marginTop: 10 }}>
+        <AiOrb size={size} />
+      </div>
 
-      <div style={{ fontSize: 11.5, color: 'rgba(255,255,255,0.82)', marginTop: 12 }}>{prompt}</div>
+      <div style={{ fontSize: 11.5, color: 'rgba(255,255,255,0.82)', marginTop: 12, minHeight: 17 }} aria-live="polite">
+        {said.length ? said[said.length - 1] : prompt}
+      </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginTop: 12 }}>
         {[
-          { label: 'Pro Analysis', icon: <svg width="16" height="16" viewBox="0 0 24 24" {...stroke}><path d="M12 3a9 9 0 1 0 9 9h-9z" /></svg> },
-          { label: 'Report', icon: <svg width="16" height="16" viewBox="0 0 24 24" {...stroke}><rect x="5" y="3" width="14" height="18" rx="2.5" /><path d="M9 8h6M9 12h6M9 16h4" /></svg> },
+          { label: 'Pro Analysis', fill: 'Run a pro analysis on this period', icon: <svg width="16" height="16" viewBox="0 0 24 24" {...stroke}><path d="M12 3a9 9 0 1 0 9 9h-9z" /></svg> },
+          { label: 'Report', fill: 'Draft the weekly report', icon: <svg width="16" height="16" viewBox="0 0 24 24" {...stroke}><rect x="5" y="3" width="14" height="18" rx="2.5" /><path d="M9 8h6M9 12h6M9 16h4" /></svg> },
         ].map((b) => (
           <button
             key={b.label}
             type="button"
+            onClick={() => { setText(b.fill); field.current?.focus(); }}
             style={{
               border: 0, borderRadius: 11, padding: '10px 8px', fontSize: 10.5, cursor: 'pointer',
               fontFamily: 'inherit', color: '#fff',
@@ -131,31 +245,68 @@ export function AssistantCard({ name = 'Bostie AI', prompt = 'How can I assist y
         ))}
       </div>
 
-      <div style={{ display: 'flex', gap: 7, marginTop: 'auto', paddingTop: 10, alignItems: 'center' }}>
+      <form
+        onSubmit={(e) => { e.preventDefault(); send(); }}
+        style={{ display: 'flex', gap: 7, marginTop: 'auto', paddingTop: 10, alignItems: 'center' }}
+      >
         <span
           style={{
             flex: 1, height: 34, borderRadius: 17, display: 'flex', alignItems: 'center',
-            padding: '0 6px 0 14px', fontSize: 11, color: 'rgba(255,255,255,0.5)',
+            padding: '0 6px 0 14px',
             background: 'rgba(255,255,255,0.08)', boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.1)',
           }}
         >
-          Ask anything...
-          <span style={{ width: 26, height: 26, borderRadius: '50%', background: '#2c2f2d', display: 'grid', placeItems: 'center', marginInlineStart: 'auto' }}>
+          <input
+            ref={field}
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            aria-label="Ask the assistant"
+            placeholder="Ask anything..."
+            style={{
+              flex: 1, minWidth: 0, border: 0, outline: 'none', background: 'transparent',
+              fontFamily: 'inherit', fontSize: 11, color: '#fff',
+            }}
+          />
+          <button
+            type="submit"
+            aria-label="Send"
+            disabled={!text.trim()}
+            style={{
+              width: 26, height: 26, borderRadius: '50%', border: 0, flex: 'none',
+              background: '#2c2f2d', display: 'grid', placeItems: 'center',
+              cursor: text.trim() ? 'pointer' : 'default', opacity: text.trim() ? 1 : 0.45,
+              marginInlineStart: 'auto',
+            }}
+          >
             <svg width="12" height="12" viewBox="0 0 24 24" fill="var(--lime)" aria-hidden="true"><path d="M3 20l18-8L3 4l4 8z" /></svg>
-          </span>
+          </button>
         </span>
-        <span style={{ width: 34, height: 34, borderRadius: '50%', background: 'rgba(255,255,255,0.1)', display: 'grid', placeItems: 'center', boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.12)' }}>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="1.7" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3" /><path d="M5 11a7 7 0 0 0 14 0M12 18v3" /></svg>
-        </span>
-      </div>
+        <button
+          type="button"
+          role="switch"
+          aria-checked={listening}
+          aria-label="Dictate"
+          onClick={() => setListening((v) => !v)}
+          style={{
+            width: 34, height: 34, borderRadius: '50%', border: 0, flex: 'none', cursor: 'pointer',
+            background: listening ? 'var(--lime)' : 'rgba(255,255,255,0.1)',
+            display: 'grid', placeItems: 'center',
+            boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.12)',
+          }}
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={listening ? 'var(--lime-ink)' : '#fff'} strokeWidth="1.7" aria-hidden="true">
+            <rect x="9" y="3" width="6" height="11" rx="3" /><path d="M5 11a7 7 0 0 0 14 0M12 18v3" />
+          </svg>
+        </button>
+      </form>
     </div>
   );
 }
 
-const orbBtn = {
+const orbBtn: CSSProperties = {
   width: 24, height: 24, border: 0, borderRadius: '50%', background: '#262927',
   color: '#fff', fontSize: 15, lineHeight: 1, cursor: 'pointer', display: 'grid', placeItems: 'center',
-} as const;
+};
 
 /* ═══════════════════════════════════════════════════════════════════════════
    SplitDonut — one revenue figure split three ways, with the hatch meaning
@@ -164,24 +315,39 @@ const orbBtn = {
 
 export interface Slice { label: string; value: number; kind: 'solid' | 'hatch' | 'accent' }
 
+const SLICES: Slice[] = [
+  { label: 'Leads', value: 344, kind: 'solid' },
+  { label: 'Revenue', value: 256, kind: 'hatch' },
+  { label: 'AI Uplift', value: 128, kind: 'accent' },
+];
+
+const paint = (kind: Slice['kind']) =>
+  kind === 'hatch' ? 'url(#madar-donut-hatch)' : kind === 'accent' ? 'var(--lime-hatch)' : '#5b4bea';
+
 export function SplitDonut({
-  total = '$728.000',
   caption = 'Total Revenue',
-  slices = [
-    { label: 'Leads', value: 344, kind: 'solid' },
-    { label: 'Revenue', value: 256, kind: 'hatch' },
-    { label: 'AI Uplift', value: 128, kind: 'accent' },
-  ],
-}: { total?: string; caption?: string; slices?: Slice[] }) {
-  const sum = slices.reduce((t, s) => t + s.value, 0);
+  slices = SLICES,
+  /** Money per unit, so the centre figure is derived from the visible slices
+      rather than typed beside them. */
+  rate = 1000,
+}: { caption?: string; slices?: Slice[]; rate?: number }) {
+  /* A legend whose items cannot be switched off is a caption. Toggling one
+     recomputes the arcs *and* the centre total, so hiding a slice cannot leave
+     a total that no longer matches the ring. */
+  const [off, setOff] = useState<string[]>([]);
+  const shown = slices.filter((s) => !off.includes(s.label));
+  const sum = shown.reduce((t, s) => t + s.value, 0);
   const C = 2 * Math.PI * 44;
-  let acc = 0;
-  const arcs = slices.map((s) => {
-    const frac = s.value / sum;
-    const arc = { ...s, dash: C * frac, offset: -C * acc };
-    acc += frac;
-    return arc;
-  });
+
+  const arcs = useMemo(() => {
+    let acc = 0;
+    return shown.map((s) => {
+      const frac = sum ? s.value / sum : 0;
+      const arc = { ...s, dash: C * frac, offset: -C * acc };
+      acc += frac;
+      return arc;
+    });
+  }, [shown, sum, C]);
 
   return (
     <div data-donut={sum} style={{ color: LIGHT_INK, display: 'flex', alignItems: 'center', gap: 14 }}>
@@ -192,11 +358,12 @@ export function SplitDonut({
             <path d="M0 0v7" stroke="var(--lime-hatch)" strokeWidth="4" />
           </pattern>
         </defs>
+        <circle cx="64" cy="64" r="44" stroke="#f1f0f7" strokeWidth="21" />
         {arcs.map((a) => (
           <circle
             key={a.label}
             cx="64" cy="64" r="44"
-            stroke={a.kind === 'hatch' ? 'url(#madar-donut-hatch)' : a.kind === 'accent' ? 'var(--lime-hatch)' : '#5b4bea'}
+            stroke={paint(a.kind)}
             strokeWidth="21"
             strokeDasharray={`${a.dash} ${C}`}
             strokeDashoffset={a.offset}
@@ -204,23 +371,43 @@ export function SplitDonut({
             strokeLinecap="butt"
           />
         ))}
-        <text x="64" y="62" textAnchor="middle" fontSize="15" fontWeight="600" fill="#101312">{total}</text>
+        <text x="64" y="62" textAnchor="middle" fontSize="15" fontWeight="600" fill="#101312">
+          ${n(sum * rate)}
+        </text>
         <text x="64" y="76" textAnchor="middle" fontSize="9" fill="#a7a7ad">{caption}</text>
       </svg>
-      <div style={{ fontSize: 10.5, color: '#4d4f52', display: 'flex', flexDirection: 'column', gap: 7 }}>
-        {slices.map((s) => (
-          <span key={s.label} style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
-            <i
+      <div style={{ fontSize: 10.5, color: '#4d4f52', display: 'flex', flexDirection: 'column', gap: 4 }}>
+        {slices.map((s) => {
+          const on = !off.includes(s.label);
+          return (
+            <button
+              key={s.label}
+              type="button"
+              role="switch"
+              aria-checked={on}
+              onClick={() => setOff((v) => (on ? [...v, s.label] : v.filter((l) => l !== s.label)))}
+              data-slice={s.label}
+              data-on={on ? '' : undefined}
               style={{
-                width: 9, height: 9, borderRadius: 3, display: 'inline-block',
-                background: s.kind === 'hatch'
-                  ? 'repeating-linear-gradient(120deg, var(--lime-hatch) 0 3px, #fff 3px 6px)'
-                  : s.kind === 'accent' ? 'var(--lime-hatch)' : '#5b4bea',
+                display: 'flex', alignItems: 'center', gap: 7, border: 0, background: 'transparent',
+                cursor: 'pointer', fontFamily: 'inherit', fontSize: 10.5, padding: '3px 2px',
+                color: on ? '#4d4f52' : '#b8b8be', textDecoration: on ? 'none' : 'line-through',
               }}
-            />
-            <b style={{ fontWeight: 600 }}><bdi dir="ltr">{n(s.value)}</bdi></b> {s.label}
-          </span>
-        ))}
+            >
+              <i
+                style={{
+                  width: 9, height: 9, borderRadius: 3, display: 'inline-block',
+                  background: !on
+                    ? '#dcdae8'
+                    : s.kind === 'hatch'
+                      ? 'repeating-linear-gradient(120deg, var(--lime-hatch) 0 3px, #fff 3px 6px)'
+                      : s.kind === 'accent' ? 'var(--lime-hatch)' : '#5b4bea',
+                }}
+              />
+              <b style={{ fontWeight: 600 }}><bdi dir="ltr">{n(s.value)}</bdi></b> {s.label}
+            </button>
+          );
+        })}
       </div>
     </div>
   );
@@ -232,45 +419,125 @@ export function SplitDonut({
 
 export interface Opp { name: string; region: string; score: number; risk: number; leads: number; value: string; tone: 'lime' | 'iris' }
 
+type SortKey = 'name' | 'region' | 'score' | 'risk' | 'leads';
+const COLS: { key: SortKey | null; label: string }[] = [
+  { key: 'name', label: 'Name' },
+  { key: 'region', label: 'Region' },
+  { key: 'score', label: 'AI Success Score' },
+  { key: 'risk', label: 'Risks Level' },
+  { key: 'leads', label: 'Lead Increase' },
+  { key: null, label: 'Account Value' },
+];
+
 export function OppsTable({ rows = OPPS }: { rows?: Opp[] }) {
   const cols = '1.5fr 0.9fr 1.1fr 1fr 1fr 1.1fr';
+  /* Sorting is the one thing every table is asked for and this one could not do.
+     `aria-sort` on the header is what makes it announced rather than merely
+     working. */
+  const [sort, setSort] = useState<{ key: SortKey; dir: 1 | -1 }>({ key: 'score', dir: -1 });
+  const [at, setAt] = useState(0);
+  const cells = useRef<(HTMLButtonElement | null)[]>([]);
+
+  const sorted = useMemo(() => {
+    const v = (r: Opp) => (typeof r[sort.key] === 'string' ? String(r[sort.key]) : Number(r[sort.key]));
+    return [...rows].sort((a, b) => {
+      const av = v(a); const bv = v(b);
+      if (typeof av === 'string' && typeof bv === 'string') return av.localeCompare(bv) * sort.dir;
+      return ((av as number) - (bv as number)) * sort.dir;
+    });
+  }, [rows, sort]);
+
+  const onKey = (e: KeyboardEvent) => {
+    const next = move(e.key, at, sorted.length);
+    if (next === null) return;
+    e.preventDefault();
+    setAt(next);
+    cells.current[next]?.focus();
+  };
+
   return (
-    <div data-opps={rows.length} style={{ color: LIGHT_INK, borderRadius: 'var(--r-panel)', background: '#fff', padding: 13, boxShadow: 'inset 0 0 0 1px #f0eef6' }}>
+    <div data-opps={rows.length} data-sort={`${sort.key}:${sort.dir}`} style={{ color: LIGHT_INK, borderRadius: 'var(--r-panel)', background: '#fff', padding: 13, boxShadow: 'inset 0 0 0 1px #f0eef6' }}>
       <div style={{ display: 'grid', gridTemplateColumns: cols, fontSize: 10, color: '#a7a7ad', padding: '6px 8px' }}>
-        <span>Name</span><span>Region</span><span>AI Success Score</span><span>Risks Level</span><span>Lead Increase</span><span>Account Value</span>
-      </div>
-      {rows.map((r) => (
-        <div key={r.name} style={{ display: 'grid', gridTemplateColumns: cols, alignItems: 'center', fontSize: 11, padding: 8, borderRadius: 11, boxShadow: 'inset 0 0 0 1px #f2f0f7', marginTop: 7 }}>
-          <span style={{ display: 'flex', alignItems: 'center', gap: 8, fontWeight: 500 }}>
-            <i
+        {COLS.map((c) => (
+          c.key ? (
+            <button
+              key={c.label}
+              type="button"
+              /* `aria-sort` belongs on a columnheader, not on a button — axe was
+                 right to refuse it. Without table roles here the state has to
+                 travel in the label, which is announced either way. */
+              aria-label={`${c.label}${sort.key === c.key ? `, sorted ${sort.dir === 1 ? 'ascending' : 'descending'}` : ''}. Activate to sort.`}
+              onClick={() => setSort((s) => ({ key: c.key as SortKey, dir: s.key === c.key && s.dir === -1 ? 1 : -1 }))}
               style={{
-                width: 22, height: 22, borderRadius: '50%',
-                background: r.tone === 'lime'
-                  ? 'radial-gradient(60% 60% at 34% 28%, #4fd08a, #0a2e1c)'
-                  : 'radial-gradient(60% 60% at 34% 28%, #8b7bff, #231a58)',
+                border: 0, background: 'transparent', cursor: 'pointer', fontFamily: 'inherit',
+                fontSize: 10, textAlign: 'start', padding: 0, display: 'flex', alignItems: 'center', gap: 4,
+                color: sort.key === c.key ? LIGHT_INK : '#a7a7ad',
+                fontWeight: sort.key === c.key ? 600 : 400,
               }}
-            />
-            {r.name}
-          </span>
-          <span>{r.region}</span>
-          <span><bdi dir="ltr">{r.score}%</bdi></span>
-          {/* seven ticks, and the filled ones are the reading — a counted level,
-              not a bar that could be any width */}
-          <span role="img" aria-label={`risk ${r.risk} of 7`} style={{ display: 'flex', gap: 2 }}>
-            {Array.from({ length: 7 }, (_, i) => (
+            >
+              {c.label}
+              {sort.key === c.key && (
+                <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" aria-hidden="true" style={{ transform: sort.dir === 1 ? 'rotate(180deg)' : undefined }}>
+                  <path d="M6 9l6 6 6-6" />
+                </svg>
+              )}
+            </button>
+          ) : <span key={c.label}>{c.label}</span>
+        ))}
+      </div>
+
+      <div role="radiogroup" aria-label="Opportunities" onKeyDown={onKey}>
+        {sorted.map((r, i) => (
+          <button
+            key={r.name}
+            ref={(el) => { cells.current[i] = el; }}
+            type="button"
+            role="radio"
+            aria-checked={i === at}
+            tabIndex={i === at ? 0 : -1}
+            onClick={() => setAt(i)}
+            data-row={r.name}
+            data-on={i === at ? '' : undefined}
+            style={{
+              width: '100%', display: 'grid', gridTemplateColumns: cols, alignItems: 'center',
+              fontSize: 11, padding: 8, borderRadius: 11, border: 0, cursor: 'pointer',
+              fontFamily: 'inherit', color: LIGHT_INK, textAlign: 'start',
+              background: i === at ? '#f8f7fd' : 'transparent',
+              boxShadow: i === at ? 'inset 0 0 0 1.4px #5b4bea' : 'inset 0 0 0 1px #f2f0f7',
+              marginTop: 7,
+            }}
+          >
+            <span style={{ display: 'flex', alignItems: 'center', gap: 8, fontWeight: 500 }}>
               <i
-                key={i}
                 style={{
-                  width: 5, height: 15, borderRadius: 2,
-                  background: i < r.risk ? (r.tone === 'lime' ? 'var(--lime-hatch)' : '#5b4bea') : '#dcdae8',
+                  width: 22, height: 22, borderRadius: '50%', flex: 'none',
+                  background: r.tone === 'lime'
+                    ? 'radial-gradient(60% 60% at 34% 28%, #4fd08a, #0a2e1c)'
+                    : 'radial-gradient(60% 60% at 34% 28%, #8b7bff, #231a58)',
                 }}
               />
-            ))}
-          </span>
-          <span><bdi dir="ltr">+{n(r.leads)}</bdi></span>
-          <span><bdi dir="ltr">{r.value}</bdi></span>
-        </div>
-      ))}
+              {r.name}
+            </span>
+            <span>{r.region}</span>
+            <span><bdi dir="ltr">{r.score}%</bdi></span>
+            {/* seven ticks, and the filled ones are the reading — a counted level,
+                not a bar that could be any width */}
+            <span role="img" aria-label={`risk ${r.risk} of 7`} style={{ display: 'flex', gap: 2 }}>
+              {Array.from({ length: 7 }, (_, k) => (
+                <i
+                  key={k}
+                  style={{
+                    width: 5, height: 15, borderRadius: 2,
+                    background: k < r.risk ? (r.tone === 'lime' ? 'var(--lime-hatch)' : '#5b4bea') : '#dcdae8',
+                  }}
+                />
+              ))}
+            </span>
+            <span><bdi dir="ltr">+{n(r.leads)}</bdi></span>
+            <span><bdi dir="ltr">{r.value}</bdi></span>
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
@@ -278,6 +545,7 @@ export function OppsTable({ rows = OPPS }: { rows?: Opp[] }) {
 const OPPS: Opp[] = [
   { name: 'Quinta Starter', region: 'USA', score: 88, risk: 7, leads: 8000, value: '+$48,569,09', tone: 'lime' },
   { name: 'Vertex Mode', region: 'Spain', score: 74, risk: 4, leads: 3400, value: '+$21,140,00', tone: 'iris' },
+  { name: 'Northwind Co', region: 'Iraq', score: 61, risk: 2, leads: 1250, value: '+$9,480,00', tone: 'iris' },
 ];
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -286,19 +554,44 @@ const OPPS: Opp[] = [
 
 export interface CareMetric { label: string; value: number; of?: number; icon: 'person' | 'heart' | 'discharge' }
 
+const PERIODS = ['This Week', 'This Month', 'This Quarter'] as const;
+
 export function CareOverview({
   progress = 75,
   pins = [45, 75],
   metrics = CARE,
-}: { progress?: number; pins?: number[]; metrics?: CareMetric[] }) {
+  onMetric,
+}: { progress?: number; pins?: number[]; metrics?: CareMetric[]; onMetric?: (i: number) => void }) {
+  const [period, setPeriod] = useState(0);
+  const [at, setAt] = useState(0);
+  const tiles = useRef<(HTMLButtonElement | null)[]>([]);
+  const cur = metrics[at];
+
+  const go = (i: number) => { setAt(i); tiles.current[i]?.focus(); onMetric?.(i); };
+  const onKey = (e: KeyboardEvent) => {
+    const next = move(e.key, at, metrics.length);
+    if (next === null) return;
+    e.preventDefault();
+    go(next);
+  };
+
   return (
-    <div data-care={progress} style={{ color: LIGHT_INK, background: '#fbfbfb', borderRadius: 14, padding: 14, boxShadow: 'inset 0 1px 0 #fff, var(--depth-hairline)' }}>
+    <div data-care={progress} data-period={PERIODS[period]} style={{ color: LIGHT_INK, background: '#fbfbfb', borderRadius: 14, padding: 14, boxShadow: 'inset 0 1px 0 #fff, var(--depth-hairline)' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <h4 style={{ margin: 0, fontSize: 14.5, fontWeight: 600, letterSpacing: '-0.015em' }}>Patient Care Overview</h4>
-        <span style={{ height: 26, padding: '0 10px', borderRadius: 13, background: '#fff', fontSize: 11, display: 'flex', alignItems: 'center', gap: 6, boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.07)' }}>
-          This Week
+        <button
+          type="button"
+          onClick={() => setPeriod((p) => (p + 1) % PERIODS.length)}
+          aria-label={`Period: ${PERIODS[period]}. Activate to change.`}
+          style={{
+            height: 26, padding: '0 10px', borderRadius: 13, background: '#fff', fontSize: 11,
+            display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer', fontFamily: 'inherit',
+            color: LIGHT_INK, border: 0, boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.07)',
+          }}
+        >
+          {PERIODS[period]}
           <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#131a12" strokeWidth="2.6" aria-hidden="true"><path d="M6 9l6 6 6-6" /></svg>
-        </span>
+        </button>
       </div>
 
       <div style={{ marginTop: 16 }}>
@@ -328,13 +621,36 @@ export function CareOverview({
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 9, marginTop: 14 }}>
-        {metrics.map((m) => {
+      <div
+        role="radiogroup"
+        aria-label="Patient groups"
+        onKeyDown={onKey}
+        style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 9, marginTop: 14 }}
+      >
+        {metrics.map((m, i) => {
           const frac = m.of ? m.value / m.of : 1;
           const C = 2 * Math.PI * 17;
           return (
-            <div key={m.label} data-metric={m.label} style={{ background: '#f2f2f2', borderRadius: 12, padding: '12px 6px', textAlign: 'center', boxShadow: 'inset 0 1px 0 #fff' }}>
-              <svg width="40" height="40" viewBox="0 0 40 40" style={{ margin: '0 auto 8px', display: 'block' }}>
+            <button
+              key={m.label}
+              ref={(el) => { tiles.current[i] = el; }}
+              type="button"
+              role="radio"
+              aria-checked={i === at}
+              aria-label={`${m.label}: ${m.value}${m.of ? ` of ${m.of}` : ''}`}
+              tabIndex={i === at ? 0 : -1}
+              onClick={() => go(i)}
+              data-metric={m.label}
+              data-on={i === at ? '' : undefined}
+              style={{
+                background: '#f2f2f2', borderRadius: 12, padding: '12px 6px', textAlign: 'center',
+                border: 0, cursor: 'pointer', fontFamily: 'inherit', color: LIGHT_INK,
+                boxShadow: 'inset 0 1px 0 #fff',
+                outline: i === at ? '2px solid #5e7f3d' : 'none',
+                outlineOffset: 2,
+              }}
+            >
+              <svg width="40" height="40" viewBox="0 0 40 40" style={{ margin: '0 auto 8px', display: 'block' }} aria-hidden="true">
                 <circle cx="20" cy="20" r="17" fill="none" stroke="#e2e2e2" strokeWidth="2.4" />
                 <circle cx="20" cy="20" r="17" fill="none" stroke="#7ba055" strokeWidth="2.4" strokeDasharray={`${C * frac} ${C}`} transform="rotate(-90 20 20)" strokeLinecap="round" />
                 <g transform="translate(12 12)" stroke="#131a12" strokeWidth="1.7" fill="none">
@@ -343,15 +659,21 @@ export function CareOverview({
                     : <><circle cx="7" cy="5.6" r="2.1" /><path d="M2.8 14c0-2.3 1.9-3.5 4.2-3.5s4.2 1.2 4.2 3.5" />{m.icon === 'person' ? <path d="M12.6 4.2v2.8M11.2 5.6h2.8" /> : <path d="M14 4.2l-2.8 2.8M11.2 4.2l2.8 2.8" />}</>}
                 </g>
               </svg>
-              <div style={{ fontSize: 11.5, fontWeight: 500, lineHeight: 1.3 }}>{m.label}</div>
-              <div style={{ fontSize: 13, marginTop: 8 }}>
+              <span style={{ display: 'block', fontSize: 11.5, fontWeight: 500, lineHeight: 1.3 }}>{m.label}</span>
+              <span style={{ display: 'block', fontSize: 13, marginTop: 8 }}>
                 <bdi dir="ltr">{n(m.value)}</bdi>
                 {m.of && <small style={{ color: '#a4aaa5' }}> / <bdi dir="ltr">{n(m.of)}</bdi></small>}
-              </div>
-            </div>
+              </span>
+            </button>
           );
         })}
       </div>
+
+      <p data-care-says="" aria-live="polite" style={{ margin: '12px 0 0', fontSize: 11.5, color: '#6b736d' }}>
+        {cur.of
+          ? <><b style={{ fontWeight: 600, color: LIGHT_INK }}>{cur.label}</b> — <bdi dir="ltr">{n(cur.value)}</bdi> of <bdi dir="ltr">{n(cur.of)}</bdi>, {Math.round((cur.value / cur.of) * 100)}% · {PERIODS[period]}</>
+          : <><b style={{ fontWeight: 600, color: LIGHT_INK }}>{cur.label}</b> — <bdi dir="ltr">{n(cur.value)}</bdi> on the ward · {PERIODS[period]}</>}
+      </p>
     </div>
   );
 }
@@ -367,10 +689,30 @@ const CARE: CareMetric[] = [
    FlowDonut — capacity against target, and the overflow badge
    ═══════════════════════════════════════════════════════════════════════════ */
 
+const FLOW = [
+  { label: 'Current Status', frac: 0.4, ink: '#7ba055' },
+  { label: 'Target Health', frac: 0.26, ink: '#e8d47a' },
+  { label: 'Discharged', frac: 0.22, ink: '#d9b6dd' },
+];
+
 export function FlowDonut({ total = 900, incoming = 400 }: { total?: number; incoming?: number }) {
+  const [off, setOff] = useState<string[]>([]);
   const C = 2 * Math.PI * 44;
+  const shown = FLOW.filter((f) => !off.includes(f.label));
+  /* The centre figure is the sum of what is *shown*, so switching a band off
+     cannot leave a number that the ring no longer accounts for. */
+  const sumFrac = shown.reduce((t, f) => t + f.frac, 0);
+  const arcs = useMemo(() => {
+    let acc = 0;
+    return shown.map((f) => {
+      const a = { ...f, dash: C * f.frac, offset: -C * acc };
+      acc += f.frac;
+      return a;
+    });
+  }, [shown, C]);
+
   return (
-    <div data-flow={total} style={{ color: LIGHT_INK, background: 'linear-gradient(168deg, #e7efdf, #dae8cd)', borderRadius: 14, padding: 14, boxShadow: 'inset 0 1px 0 #fff' }}>
+    <div data-flow={Math.round(total * sumFrac / 0.88)} style={{ color: LIGHT_INK, background: 'linear-gradient(168deg, #e7efdf, #dae8cd)', borderRadius: 14, padding: 14, boxShadow: 'inset 0 1px 0 #fff' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <h4 style={{ margin: 0, fontSize: 14.5, fontWeight: 600, letterSpacing: '-0.015em' }}>Patient Flow</h4>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="#6b736d" aria-hidden="true"><circle cx="5" cy="12" r="1.7" /><circle cx="12" cy="12" r="1.7" /><circle cx="19" cy="12" r="1.7" /></svg>
@@ -378,26 +720,55 @@ export function FlowDonut({ total = 900, incoming = 400 }: { total?: number; inc
       <div style={{ display: 'grid', placeItems: 'center', marginTop: 6 }}>
         <svg width="164" height="126" viewBox="0 0 164 126" fill="none">
           <circle cx="82" cy="66" r="44" stroke="#f0f4ea" strokeWidth="15" />
-          <circle cx="82" cy="66" r="44" stroke="#d9b6dd" strokeWidth="15" strokeDasharray={`${C * 0.22} ${C}`} transform="rotate(-108 82 66)" strokeLinecap="round" />
-          <circle cx="82" cy="66" r="44" stroke="#e8d47a" strokeWidth="15" strokeDasharray={`${C * 0.26} ${C}`} strokeDashoffset={-C * 0.22} transform="rotate(-108 82 66)" strokeLinecap="round" />
-          <circle cx="82" cy="66" r="44" stroke="#7ba055" strokeWidth="15" strokeDasharray={`${C * 0.4} ${C}`} strokeDashoffset={-C * 0.48} transform="rotate(-108 82 66)" strokeLinecap="round" />
-          <text x="82" y="66" textAnchor="middle" fontSize="20" fontWeight="600" fill="#131a12">{n(total)}</text>
-          <text x="82" y="80" textAnchor="middle" fontSize="9" fill="#6b736d">100% Capacity</text>
+          {arcs.map((a) => (
+            <circle
+              key={a.label}
+              cx="82" cy="66" r="44"
+              stroke={a.ink} strokeWidth="15"
+              strokeDasharray={`${a.dash} ${C}`}
+              strokeDashoffset={a.offset}
+              transform="rotate(-108 82 66)"
+              strokeLinecap="round"
+            />
+          ))}
+          <text x="82" y="66" textAnchor="middle" fontSize="20" fontWeight="600" fill="#131a12">
+            {n(Math.round(total * (sumFrac / 0.88)))}
+          </text>
+          <text x="82" y="80" textAnchor="middle" fontSize="9" fill="#6b736d">{Math.round((sumFrac / 0.88) * 100)}% Capacity</text>
           <g transform="translate(120 28)">
             <rect width="36" height="18" rx="9" fill="#22331b" />
             <text x="18" y="12.6" textAnchor="middle" fontSize="9.5" fill="#fff">{n(incoming)}</text>
           </g>
         </svg>
-        <span style={{ display: 'flex', gap: 12, fontSize: 10.5, color: '#6b736d', marginTop: 2 }}>
-          <span><i style={legendDot('#7ba055')} />Current Status</span>
-          <span><i style={legendDot('#e8d47a')} />Target Health</span>
+        <span style={{ display: 'flex', gap: 8, fontSize: 10.5, marginTop: 2 }}>
+          {FLOW.slice(0, 2).map((f) => {
+            const on = !off.includes(f.label);
+            return (
+              <button
+                key={f.label}
+                type="button"
+                role="switch"
+                aria-checked={on}
+                onClick={() => setOff((v) => (on ? [...v, f.label] : v.filter((l) => l !== f.label)))}
+                data-band={f.label}
+                data-on={on ? '' : undefined}
+                style={{
+                  border: 0, background: 'transparent', cursor: 'pointer', fontFamily: 'inherit',
+                  fontSize: 10.5, padding: '2px 3px',
+                  color: on ? '#6b736d' : '#a9b0a6', textDecoration: on ? 'none' : 'line-through',
+                }}
+              >
+                <i style={legendDot(on ? f.ink : '#c9cfc4')} />{f.label}
+              </button>
+            );
+          })}
         </span>
       </div>
     </div>
   );
 }
 
-const legendDot = (bg: string) => ({ width: 6, height: 6, borderRadius: '50%', display: 'inline-block', marginInlineEnd: 5, background: bg }) as const;
+const legendDot = (bg: string): CSSProperties => ({ width: 6, height: 6, borderRadius: '50%', display: 'inline-block', marginInlineEnd: 5, background: bg });
 
 /* ═══════════════════════════════════════════════════════════════════════════
    StaffList — a roster where the status is a state, not a colour swatch
@@ -412,20 +783,72 @@ const DUTY: Record<Duty, { label: string; bg: string; ink: string; dot: string }
   leave: { label: 'On Leave', bg: '#fbe6e4', ink: '#b04236', dot: '#d9463a' },
 };
 
-export function StaffList({ staff = STAFF }: { staff?: Staff[] }) {
+export function StaffList({ staff = STAFF, onPick }: { staff?: Staff[]; onPick?: (s: Staff) => void }) {
+  /* The reference draws a search affordance. Drawing one and not wiring it is
+     worse than leaving it out: it promises a capability the card does not have. */
+  const [q, setQ] = useState('');
+  const [at, setAt] = useState(0);
+  const rows = useRef<(HTMLButtonElement | null)[]>([]);
+
+  const found = useMemo(() => {
+    const t = q.trim().toLowerCase();
+    if (!t) return staff;
+    return staff.filter((s) => `${s.name} ${s.role} ${DUTY[s.duty].label}`.toLowerCase().includes(t));
+  }, [staff, q]);
+
+  const pos = Math.min(at, Math.max(0, found.length - 1));
+  const onKey = (e: KeyboardEvent) => {
+    const next = move(e.key, pos, found.length);
+    if (next === null) return;
+    e.preventDefault();
+    setAt(next);
+    rows.current[next]?.focus();
+    onPick?.(found[next]);
+  };
+
   return (
-    <div data-staff={staff.length} style={{ color: LIGHT_INK, background: '#fbfbfb', borderRadius: 14, padding: 14, boxShadow: 'inset 0 1px 0 #fff, var(--depth-hairline)' }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+    <div data-staff={found.length} style={{ color: LIGHT_INK, background: '#fbfbfb', borderRadius: 14, padding: 14, boxShadow: 'inset 0 1px 0 #fff, var(--depth-hairline)' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
         <h4 style={{ margin: 0, fontSize: 14.5, fontWeight: 600, letterSpacing: '-0.015em' }}>Doctor</h4>
-        <span style={{ width: 26, height: 26, borderRadius: '50%', display: 'grid', placeItems: 'center', boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.07)' }}>
+        <span
+          style={{
+            display: 'flex', alignItems: 'center', gap: 6, height: 26, paddingInline: 9,
+            borderRadius: 13, background: '#fff', boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.07)',
+          }}
+        >
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#131a12" strokeWidth="2.2" aria-hidden="true"><circle cx="11" cy="11" r="6.5" /><path d="M16 16l4 4" /></svg>
+          <input
+            value={q}
+            onChange={(e) => { setQ(e.target.value); setAt(0); }}
+            aria-label="Search the roster"
+            placeholder="Search"
+            style={{ width: 76, border: 0, outline: 'none', background: 'transparent', fontFamily: 'inherit', fontSize: 11, color: LIGHT_INK }}
+          />
         </span>
       </div>
-      <div style={{ marginTop: 6 }}>
-        {staff.map((s, i) => {
+
+      <div role="radiogroup" aria-label="Doctors" onKeyDown={onKey} style={{ marginTop: 6 }}>
+        {found.map((s, i) => {
           const d = DUTY[s.duty];
           return (
-            <div key={s.name} data-duty={s.duty} style={{ display: 'flex', alignItems: 'center', gap: 9, padding: '7px 0', borderBottom: i === staff.length - 1 ? 0 : '1px solid #f0f0f0' }}>
+            <button
+              key={s.name}
+              ref={(el) => { rows.current[i] = el; }}
+              type="button"
+              role="radio"
+              aria-checked={i === pos}
+              tabIndex={i === pos ? 0 : -1}
+              onClick={() => { setAt(i); onPick?.(s); }}
+              data-duty={s.duty}
+              data-on={i === pos ? '' : undefined}
+              style={{
+                width: '100%', display: 'flex', alignItems: 'center', gap: 9, padding: '7px 6px',
+                border: 0, cursor: 'pointer', fontFamily: 'inherit', color: LIGHT_INK, textAlign: 'start',
+                borderRadius: 10,
+                background: i === pos ? '#f1f4ef' : 'transparent',
+                borderBottom: i === found.length - 1 ? 0 : '1px solid #f0f0f0',
+              }}
+            >
               <span aria-hidden="true" style={{ width: 30, height: 30, borderRadius: '50%', flex: 'none', background: s.tint, display: 'grid', placeItems: 'center' }}>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="rgba(0,0,0,0.28)"><circle cx="12" cy="9" r="3.4" /><path d="M5 21c0-3.9 3.2-6 7-6s7 2.1 7 6z" /></svg>
               </span>
@@ -433,12 +856,17 @@ export function StaffList({ staff = STAFF }: { staff?: Staff[] }) {
                 <b style={{ display: 'block', fontSize: 12, fontWeight: 500 }}>{s.name}</b>
                 <span style={{ fontSize: 10.5, color: '#8d948e' }}>{s.role}</span>
               </span>
-              <span style={{ height: 22, padding: '0 9px', borderRadius: 11, fontSize: 10.5, display: 'flex', alignItems: 'center', gap: 5, background: d.bg, color: d.ink }}>
+              <span style={{ height: 22, padding: '0 9px', borderRadius: 11, fontSize: 10.5, display: 'flex', alignItems: 'center', gap: 5, background: d.bg, color: d.ink, flex: 'none' }}>
                 <i style={{ width: 5, height: 5, borderRadius: '50%', background: d.dot }} />{d.label}
               </span>
-            </div>
+            </button>
           );
         })}
+        {!found.length && (
+          <p style={{ margin: '12px 2px', fontSize: 11.5, color: '#8d948e' }}>
+            Nobody on the roster matches “{q}”.
+          </p>
+        )}
       </div>
     </div>
   );
@@ -463,6 +891,33 @@ export function PaletteSlide({
   weights = ['Regular', 'Medium'],
   swatches = SWATCHES,
 }: { face?: string; weights?: string[]; swatches?: Swatch[] }) {
+  /* The whole use of a palette slide is getting the hex out of it, so the pills
+     copy. Clipboard access is refused in plenty of contexts, so the state says
+     what actually happened rather than claiming success. */
+  const [copied, setCopied] = useState<string | null>(null);
+  const [failed, setFailed] = useState(false);
+  const pills = useRef<(HTMLButtonElement | null)[]>([]);
+  const [at, setAt] = useState(0);
+
+  const copy = async (hex: string, i: number) => {
+    setAt(i);
+    try {
+      await navigator.clipboard.writeText(hex);
+      setFailed(false);
+    } catch {
+      setFailed(true);
+    }
+    setCopied(hex);
+  };
+
+  const onKey = (e: KeyboardEvent) => {
+    const next = move(e.key, at, swatches.length);
+    if (next === null) return;
+    e.preventDefault();
+    setAt(next);
+    pills.current[next]?.focus();
+  };
+
   return (
     <MeshSurface variant="olive" grain="light" radius="var(--r-panel)" style={{ padding: '54px 40px 60px', textAlign: 'center' }}>
       <div style={{ fontSize: 15, color: 'rgba(255,255,255,0.9)' }}>Typography</div>
@@ -480,18 +935,30 @@ export function PaletteSlide({
       </div>
 
       <div style={{ fontSize: 15, color: 'rgba(255,255,255,0.9)', marginTop: 44 }}>Colour Palette</div>
-      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 14, marginTop: 18 }}>
-        {swatches.map((s) => (
-          <span
+      <div
+        onKeyDown={onKey}
+        style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 14, marginTop: 18 }}
+      >
+        {swatches.map((s, i) => (
+          <button
             key={s.hex}
+            ref={(el) => { pills.current[i] = el; }}
+            type="button"
+            onClick={() => copy(s.hex, i)}
+            tabIndex={i === at ? 0 : -1}
+            aria-label={`Copy ${s.hex}`}
             data-swatch={s.hex}
+            data-copied={copied === s.hex ? '' : undefined}
             style={{
-              height: 62, padding: '0 22px 0 9px', borderRadius: 31,
+              height: 62, padding: '0 22px 0 9px', borderRadius: 31, cursor: 'pointer',
               display: 'flex', alignItems: 'center', gap: 16, fontSize: 17,
+              fontFamily: 'inherit', color: '#fff',
               border: '1px solid rgba(255,255,255,0.22)',
               background: 'rgba(255,255,255,0.05)',
               boxShadow: 'inset 0 1.5px 0 rgba(255,255,255,0.24), inset 0 -1.5px 0 rgba(0,0,0,0.2)',
               backdropFilter: 'blur(6px)',
+              outline: copied === s.hex ? '2px solid var(--lime)' : 'none',
+              outlineOffset: 3,
             }}
           >
             <i
@@ -501,10 +968,17 @@ export function PaletteSlide({
                 boxShadow: 'inset 0 -3px 5px rgba(255,255,255,0.28), var(--depth-sphere)',
               }}
             />
-            <bdi dir="ltr">{s.hex}</bdi>
-          </span>
+            <bdi dir="ltr">{copied === s.hex ? (failed ? 'select it' : 'copied') : s.hex}</bdi>
+          </button>
         ))}
       </div>
+      <p data-palette-says="" aria-live="polite" style={{ margin: '18px 0 0', fontSize: 13, color: 'rgba(255,255,255,0.72)' }}>
+        {copied
+          ? (failed
+            ? <>The clipboard is not available here — <bdi dir="ltr">{copied}</bdi> is shown to be selected by hand.</>
+            : <><bdi dir="ltr">{copied}</bdi> copied.</>)
+          : 'Pick a colour to copy its hex.'}
+      </p>
     </MeshSurface>
   );
 }
