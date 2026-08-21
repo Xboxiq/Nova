@@ -65,8 +65,12 @@ export default function MadarLibrary({
             {copy.all}
             <small>{madarSections.length}</small>
           </button>
+          {/* A shelf with nothing on it is a promise, not a filter: `experiments`
+              exists in the taxonomy and stays out of the toolbar until something
+              is actually in it. */}
           {madarFamilies.map((entry) => {
             const count = madarSections.filter((section) => section.family === entry.id).length;
+            if (!count) return null;
             return (
               <button
                 key={entry.id}

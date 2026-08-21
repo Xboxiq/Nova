@@ -1,0 +1,171 @@
+/* ════════════════════════════════════════════════════════════════════════════
+   DESIGN DIRECTIONS — the third axis
+   ════════════════════════════════════════════════════════════════════════════
+
+   The library already had two document-level axes: `data-theme` for seven colour
+   packs and `data-glass` for three glass levels. Both change *colour and
+   material*. Neither changes the thing a designer actually means when they say
+   "make it feel more editorial" — which is shape, density, rhythm and pace.
+
+   So `data-direction` is the third axis, and it remaps twelve existing tokens.
+   It adds no component, no palette and no font: every one of the 112 patterns in
+   this library re-renders in six registers because the registers are the tokens
+   the patterns were already reading.
+
+   Six directions, and each one is a claim about a *reader*, not a mood board:
+
+     civic         a form you must fill in correctly, on a slow connection,
+                   possibly on someone else's device. Square, legible, quick.
+     editorial     a page you read for ten minutes. Air, rules, long measure.
+     data-dense    forty rows you scan for the one that is wrong. Tight, small,
+                   bordered, instant.
+     futuristic    a control surface. Sharp corners against full pills, wide
+                   label tracking, longer travel.
+     premium       one object you are meant to consider. Generous radius, slow
+                   pace, big display type.
+     experimental  the lane where a shape can be wrong on purpose. Widest radius
+                   contrast in the set, fastest and slowest side by side.
+
+   No attribute at all is the system as designed. A direction is opt-in, and the
+   default must keep working with none of this loaded — which is why every block
+   here only *overrides*, and declares nothing new.
+
+   Measured by `tools/qa/directions.mjs`: six labels that resolve to the same
+   numbers are six lies, so the harness asserts each direction differs from the
+   default in a minimum number of tokens, and that no two directions collide.
+   ════════════════════════════════════════════════════════════════════════════ */
+
+/* ── civic ───────────────────────────────────────────────────────────────────
+   Square because a square edge reads as "official" and, more usefully, because
+   a 2px radius survives being rendered at 90% zoom on a decade-old Android. The
+   body size goes UP: this is the one direction where the reader may not have
+   chosen to be here. */
+[data-direction='civic'] {
+  --nova-radius-control: 2px;
+  --nova-radius-field: 2px;
+  --nova-radius-card: 3px;
+  --nova-radius-feature: 3px;
+  --nova-radius-pill: 3px;
+
+  --nova-text-body-md: 1.0625rem;
+  --nova-text-body-sm: 0.9688rem;
+  --nova-text-label-md: 0.9063rem;
+  --nova-text-display-xl: clamp(2.25rem, 4.4vw, 3.75rem);
+
+  --nova-motion-fast: 120ms;
+  --nova-motion-base: 170ms;
+  --nova-motion-slow: 240ms;
+  --nova-ease-standard: cubic-bezier(0.3, 0.7, 0.4, 1);
+}
+
+/* ── editorial ───────────────────────────────────────────────────────────────
+   The radius nearly disappears and the hairline does the structural work, which
+   is how a printed page organises itself. Display leading opens up because the
+   headline is meant to be read, not shouted. */
+[data-direction='editorial'] {
+  --nova-radius-control: 2px;
+  --nova-radius-field: 2px;
+  --nova-radius-card: 2px;
+  --nova-radius-feature: 2px;
+  --nova-radius-pill: 999px;
+
+  --nova-text-body-md: 1.0938rem;
+  --nova-text-body-lg: 1.25rem;
+  --nova-text-display-xl: clamp(2.75rem, 6.5vw, 5rem);
+  --nova-text-headline-lg: clamp(1.75rem, 3vw, 2.5rem);
+
+  --nova-motion-base: 300ms;
+  --nova-motion-slow: 460ms;
+  --nova-ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ── data-dense ──────────────────────────────────────────────────────────────
+   Everything shrinks except the hit areas, which are governed by WCAG 2.5.8 and
+   are not a stylistic choice. Motion goes to near-instant: at forty rows, a
+   240ms transition on every one of them is forty simultaneous animations. */
+[data-direction='data-dense'] {
+  --nova-radius-control: 2px;
+  --nova-radius-field: 2px;
+  --nova-radius-card: 3px;
+  --nova-radius-feature: 3px;
+  --nova-radius-pill: 3px;
+
+  --nova-text-body-md: 0.8438rem;
+  --nova-text-body-sm: 0.7813rem;
+  --nova-text-label-md: 0.75rem;
+  --nova-text-label-sm: 0.6875rem;
+  --nova-text-display-xl: clamp(1.75rem, 3.2vw, 2.75rem);
+
+  --nova-motion-instant: 60ms;
+  --nova-motion-fast: 90ms;
+  --nova-motion-base: 120ms;
+  --nova-motion-slow: 170ms;
+  --nova-ease-standard: cubic-bezier(0.4, 0.7, 0.5, 1);
+}
+
+/* ── futuristic ──────────────────────────────────────────────────────────────
+   The interesting move is not "sharp": it is sharp *against* full pills. A 0px
+   card next to a 999px control is the only shape contrast in this file that
+   could not be reached by scaling one number. */
+[data-direction='futuristic'] {
+  --nova-radius-control: 0px;
+  --nova-radius-field: 0px;
+  --nova-radius-card: 0px;
+  --nova-radius-feature: 0px;
+  --nova-radius-pill: 999px;
+
+  --nova-text-label-md: 0.8125rem;
+  --nova-text-label-sm: 0.6875rem;
+  --nova-text-display-xl: clamp(2.5rem, 6vw, 5.25rem);
+
+  --nova-motion-base: 280ms;
+  --nova-motion-slow: 420ms;
+  --nova-motion-scene: 620ms;
+  --nova-ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ── premium ─────────────────────────────────────────────────────────────────
+   Generous radius and a slow pace. Both are legal because §26 replaced the
+   6px cap with a policy: a radius over 6px comes from a NAMED token, and these
+   are the named tokens. */
+[data-direction='premium'] {
+  --nova-radius-control: 10px;
+  --nova-radius-field: 12px;
+  --nova-radius-card: 18px;
+  --nova-radius-feature: 24px;
+  --nova-radius-pill: 999px;
+
+  --nova-text-body-md: 1.0625rem;
+  --nova-text-body-lg: 1.1875rem;
+  --nova-text-display-xl: clamp(2.75rem, 6.2vw, 5.5rem);
+  --nova-text-title-lg: 1.375rem;
+
+  --nova-motion-fast: 220ms;
+  --nova-motion-base: 340ms;
+  --nova-motion-slow: 520ms;
+  --nova-motion-scene: 720ms;
+  --nova-ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ── experimental ────────────────────────────────────────────────────────────
+   The only direction allowed to be inconsistent, and it is the reason the lane
+   exists: a shape can be wrong here without arguing with the law, because the
+   register itself declares that it is trying something. A 2px field inside a
+   28px card is deliberate discord. */
+[data-direction='experimental'] {
+  --nova-radius-control: 999px;
+  --nova-radius-field: 2px;
+  --nova-radius-card: 28px;
+  --nova-radius-feature: 4px;
+  --nova-radius-pill: 999px;
+
+  --nova-text-body-md: 1rem;
+  --nova-text-label-md: 0.6875rem;
+  --nova-text-display-xl: clamp(3rem, 7.5vw, 6rem);
+
+  --nova-motion-instant: 60ms;
+  --nova-motion-fast: 110ms;
+  --nova-motion-base: 420ms;
+  --nova-motion-scene: 900ms;
+  --nova-ease-standard: cubic-bezier(0.34, 1.45, 0.64, 1);
+}

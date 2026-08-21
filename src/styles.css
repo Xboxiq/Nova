@@ -466,7 +466,11 @@ button:disabled {
 .hero {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 0.86fr) minmax(520px, 1.14fr);
+  /* The words used to get 0.86fr and the mockup 1.14fr — the picture was given
+     more room than the sentence, in a library whose product IS the sentence and
+     the patterns. Measured, that column was 535px at 1440, and an 86px Arabic
+     headline in 535px can hold two words a line. */
+  grid-template-columns: minmax(0, 1.04fr) minmax(480px, 0.96fr);
   align-items: center;
   gap: clamp(var(--nova-space-12), 7vw, var(--nova-space-24));
   width: min(calc(100% - (var(--nova-gutter-page) * 2)), var(--nova-content-wide));
@@ -481,16 +485,26 @@ button:disabled {
 }
 
 .hero h1 {
-  max-width: 12ch;
+  /* `ch` is the width of the `0` glyph, which is a Latin measure. 12ch read as
+     "twelve characters" and this headline is thirty Arabic ones, so the line box
+     was forcing four lines at 1440 with a one-word rag — measured, not guessed.
+     16ch holds it in two. */
+  max-width: 16ch;
   margin: 0;
   font-size: var(--nova-text-display-xl);
-  line-height: 1.08;
+  /* Arabic needs more leading than Latin at display sizes, because the diacritics
+     sit above the line: at 1.08 the shadda of «حيّ» collided with the ascenders
+     below it. Latin has no marks up there and keeps the tighter figure. */
+  line-height: 1.24;
   letter-spacing: normal;
   text-wrap: balance;
   font-weight: 690;
 }
 
-[dir="ltr"] .hero h1 { letter-spacing: -0.055em; }
+[dir="ltr"] .hero h1 { line-height: 1.08; }
+
+/* -0.04em is the floor: below it display letters touch. This was -0.055em. */
+[dir="ltr"] .hero h1 { letter-spacing: -0.04em; }
 
 .hero h1 span {
   color: var(--nova-action);
@@ -860,7 +874,13 @@ button:disabled {
   margin: 0;
 }
 
-.stage-activity p strong,
+/* The label wraps; only the timestamp is held to one line. Truncating a word in
+   the middle ("تحديث نظام التص…") reads as a broken mockup rather than a busy
+   one, and this box narrowed when the hero gave its width back to the headline. */
+.stage-activity p strong {
+  overflow-wrap: anywhere;
+}
+
 .stage-activity p small {
   overflow: hidden;
   text-overflow: ellipsis;
