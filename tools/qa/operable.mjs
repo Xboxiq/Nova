@@ -120,6 +120,15 @@ const CASES = [
     ],
     keyboard: { group: "[data-directions]", cell: "[data-direction-pick]", attr: "data-directions", state: "aria-checked" },
   },
+  {
+    id: "madar-matrix",
+    name: "matrix",
+    controls: [
+      { what: "pick a cell", click: '[data-cell-pick]:not([aria-checked="true"])', watch: "[data-matrix]", attr: "data-matrix" },
+      { what: "the readout names the cell", click: '[data-cell-pick]:not([aria-checked="true"])', watch: "[data-matrix-says]", text: true },
+    ],
+    keyboard: { group: "[data-matrix]", cell: "[data-cell-pick]", attr: "data-matrix", state: "aria-checked" },
+  },
 ];
 
 let chromium;

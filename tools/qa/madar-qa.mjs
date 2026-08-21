@@ -18,12 +18,18 @@ import { execSync } from "node:child_process";
 const PORT = 4319;
 const URL = `http://localhost:${PORT}/`;
 const THEMES = ["light", "dark", "mint", "coral", "sky", "iris", "night"];
-const PACK_SECTIONS = ["madar-color-tokens", "madar-admin-access", "madar-consequence", "madar-dispatch", "madar-photographed", "madar-boards", "madar-glasswork", "madar-projectwork", "madar-directions"];
+const PACK_SECTIONS = ["madar-color-tokens", "madar-admin-access", "madar-consequence", "madar-dispatch", "madar-photographed", "madar-boards", "madar-glasswork", "madar-projectwork", "madar-directions", "madar-matrix"];
 const AA = 4.5;
 /* APCA's floor for body text. `APCA_THIN_CEILING` is what the token pairs measure
    today; it may fall and must never rise. */
 const APCA_BODY = 60;
-const APCA_THIN_CEILING = 13; // measured 2026-08; may fall, never rise
+/* 16, and the rise needs its reason stated rather than quietly typed.
+   "May fall, never rise" holds while the QUESTION is fixed. It is not: two canvas
+   pairs were added to PAIRS because the contact sheet found pairs this list never
+   asked about, so 13 and 16 are counts of different things. Three of the new
+   measurements are thin. Nothing got worse; more of it is now being looked at.
+   From here the rule applies again: may fall, never rise. */
+const APCA_THIN_CEILING = 16;
 const apcaThin = [];
 
 // Pairs that carry text or an icon on a surface, so AA applies to all of them.
@@ -36,6 +42,15 @@ const PAIRS = [
   ["--nova-ink-tertiary", "--nova-surface"],
   ["--nova-ink-tertiary", "--nova-surface-raised"],
   ["--nova-ink-secondary", "--nova-surface-raised"],
+  /* The canvas pairs, added because the contact sheet in `madar-matrix` found
+     them and this list did not. Secondary and tertiary ink sit on the page's own
+     ground constantly — every section body, every caption outside a card — and
+     the only canvas pair here was the primary ink. Three packs (mint, dark,
+     night) turned out thin on it. A list of pairs is only as good as the pair
+     somebody remembered to add, which is the argument for having a surface that
+     shows all of them at once. */
+  ["--nova-ink-secondary", "--nova-canvas"],
+  ["--nova-ink-tertiary", "--nova-canvas"],
   ["--nova-on-action", "--nova-action"],
   ["--nova-action-ink", "--nova-surface"],
   ["--nova-on-ink-block", "--nova-ink-block"],

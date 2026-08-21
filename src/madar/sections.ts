@@ -81,6 +81,21 @@ export const madarSections: MadarSection[] = [
     added: true,
   },
   {
+    id: "madar-matrix",
+    title: "Matrix",
+    titleAr: "المصفوفة",
+    /* Not `directions`: this is not a register, it is the instrument that reads
+       all three axes at once. `experiments` was an empty shelf held open for the
+       first thing that was an instrument rather than a pattern — and a shelf that
+       stops being a promise the moment something real lands on it. */
+    family: "experiments",
+    description: "A 7x7 contact sheet of every pack against every register, where each of the 49 live cells measures its own contrast in both lenses and marks itself.",
+    descriptionAr: "ورقةُ تلامسٍ ٧×٧ لكل حزمةٍ مقابل كل سجلّ، تقيس فيها كلُّ خليّةٍ من التسع والأربعين تباينَها بعدستَين وتحكم على نفسها.",
+    tags: ["matrix", "contrast", "apca", "audit", "مصفوفة", "تباين", "مراجعة"],
+    component: load("MatrixSection", () => import("./showcase/sections/Matrix")),
+    added: true,
+  },
+  {
     id: "madar-color-tokens",
     title: "Color Tokens",
     titleAr: "توكنز اللون",
