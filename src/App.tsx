@@ -91,14 +91,34 @@ function App() {
   const [legalDoc, setLegalDoc] = useState<LegalDoc | null>(null);
   const searchRef = useRef<HTMLInputElement>(null);
   const themeMenuRef = useRef<HTMLDivElement>(null);
+  const mounted = useRef(false);
   const copy = uiCopy[locale];
   const isDarkTheme = DARK_THEMES.includes(theme);
 
   useEffect(() => {
-    document.documentElement.dataset.theme = theme;
-    document.documentElement.style.colorScheme = isDarkTheme ? "dark" : "light";
+    /* Every transition in the app is suppressed for exactly one frame while the
+       pack changes. Without this, seven theme packs means every colour on screen
+       animates independently to its new value, and the flip reads as a smear
+       rather than a switch — the transitions exist to describe a *state change in
+       one element*, and a whole-document repaint is not one. The forced reflow
+       between the two class writes is required: without it the browser coalesces
+       them and nothing is suppressed.
+
+       Skipped on the very first paint, where there is nothing to smear. */
+    const root = document.documentElement;
+    if (mounted.current) {
+      root.dataset.themeSwitching = "";
+      root.getBoundingClientRect();
+    }
+    mounted.current = true;
+
+    root.dataset.theme = theme;
+    root.style.colorScheme = isDarkTheme ? "dark" : "light";
     document.querySelector('meta[name="theme-color"]')?.setAttribute("content", THEME_COLOR[theme]);
     window.localStorage.setItem("nova-theme", theme);
+
+    const frame = requestAnimationFrame(() => { delete root.dataset.themeSwitching; });
+    return () => cancelAnimationFrame(frame);
   }, [isDarkTheme, theme]);
 
   useEffect(() => {

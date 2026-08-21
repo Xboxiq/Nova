@@ -1559,7 +1559,9 @@
 .announcement-bar { display: grid; grid-template-columns: auto 1fr auto auto; align-items: center; gap: 12px; width: 100%; padding: 10px; background: var(--nova-surface); border: 1px solid var(--nova-border); border-radius: 6px; animation: pop-in var(--nova-motion-base) ease; }
 .announcement-tag { display: inline-flex; align-items: center; gap: 5px; min-height: 32px; padding-inline: 9px; color: var(--nova-action-ink); background: var(--nova-action-soft); border-radius: 6px; font-size: var(--nova-text-label-md); font-weight: var(--nova-weight-bold); }
 .announcement-bar p { color: var(--nova-ink); font-size: var(--nova-text-label-md); }
-.announcement-bar a { color: var(--nova-action-ink); font-size: var(--nova-text-label-md); font-weight: var(--nova-weight-bold); text-decoration: underline; text-underline-offset: 3px; }
+/* min-height 24 for WCAG 2.5.8: this link sits in a bar beside the copy, not
+   inside a sentence, so the text-inline exemption does not cover it. */
+.announcement-bar a { display: inline-flex; align-items: center; min-height: 24px; color: var(--nova-action-ink); font-size: var(--nova-text-label-md); font-weight: var(--nova-weight-bold); text-decoration: underline; text-underline-offset: 3px; }
 .announcement-bar > button { display: grid; place-items: center; width: 38px; height: 38px; padding: 0; color: var(--nova-ink-tertiary); background: transparent; border: 0; border-radius: 6px; }
 .announcement-bar > button:hover { background: var(--nova-surface-quiet); }
 

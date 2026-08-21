@@ -68,10 +68,38 @@ export function DataTable<R extends Record<string, Cell>>({ columns, rows, selec
 export interface DrawerProps { triggerLabel?: string; title?: string; side?: 'end' | 'start' | 'bottom'; children?: ReactNode; }
 export function Drawer({ triggerLabel = 'افتح اللوحة', title = 'اللوحة', side = 'end', children }: DrawerProps) {
   const [open, setOpen] = useState(false);
+  const trigger = useRef<HTMLButtonElement>(null);
+  const panel = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false);
     if (open) window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
+  }, [open]);
+
+  /* `role="dialog" aria-modal="true"` is a *claim*, and this drawer was making it
+     without keeping it: the page behind stayed in the tab order and in the screen
+     reader's document, so Tab walked straight out of the open sheet and the reader
+     read the page underneath as if nothing had opened.
+
+     The library's two other modals — `LegalDialog` and `CommandPalette` — are
+     native `<dialog>` with `showModal()`, and the platform gives them all of this
+     for nothing. This one is a `div`, so it has to do by hand exactly what
+     `showModal()` does: make the rest of the document `inert`, move focus in, and
+     put it back on the trigger when it closes. */
+  useEffect(() => {
+    if (!open) return;
+    const siblings = [...document.body.children].filter((el) => !el.contains(panel.current));
+    const held = siblings.filter((el) => !(el as HTMLElement).inert);
+    for (const el of held) (el as HTMLElement).inert = true;
+
+    const focusable = panel.current?.querySelector<HTMLElement>('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+    focusable?.focus();
+
+    return () => {
+      for (const el of held) (el as HTMLElement).inert = false;
+      trigger.current?.focus();
+    };
   }, [open]);
   const isBottom = side === 'bottom';
   const hidden = isBottom ? 'translateY(100%)' : side === 'end' ? 'translateX(calc(var(--dir-sign,1) * 100%))' : 'translateX(calc(var(--dir-sign,1) * -100%))';
@@ -80,10 +108,10 @@ export function Drawer({ triggerLabel = 'افتح اللوحة', title = 'الل
     : { insetBlock: 0, [side === 'end' ? 'insetInlineEnd' : 'insetInlineStart']: 0, width: 'min(380px, 86%)' } as React.CSSProperties;
   return (
     <>
-      <button onClick={() => setOpen(true)} className="i-press-97 i-lift" style={{ height: 42, padding: '0 20px', borderRadius: 6, border: '1px solid var(--border-strong)', background: 'var(--surface)', color: 'var(--text)', fontFamily: 'inherit', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>{triggerLabel}</button>
+      <button ref={trigger} onClick={() => setOpen(true)} className="i-press-97 i-lift" style={{ height: 42, padding: '0 20px', borderRadius: 6, border: '1px solid var(--border-strong)', background: 'var(--surface)', color: 'var(--text)', fontFamily: 'inherit', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>{triggerLabel}</button>
       <div aria-hidden={!open} style={{ position: 'fixed', inset: 0, zIndex: 60, pointerEvents: open ? 'auto' : 'none' }}>
         <div onClick={() => setOpen(false)} style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.42)', opacity: open ? 1 : 0, transition: `opacity 320ms ${GLIDE}`, backdropFilter: open ? 'blur(2px)' : 'none' }} />
-        <div role="dialog" aria-modal="true" style={{ position: 'absolute', ...panelPos, background: 'var(--surface)', borderInlineStart: side === 'end' ? '1px solid var(--border)' : undefined, borderInlineEnd: side === 'start' ? '1px solid var(--border)' : undefined, transform: open ? 'none' : hidden, transition: `transform 420ms ${SPRING}`, display: 'flex', flexDirection: 'column' }}>
+        <div ref={panel} role="dialog" aria-modal="true" style={{ position: 'absolute', ...panelPos, overscrollBehavior: 'contain', background: 'var(--surface)', borderInlineStart: side === 'end' ? '1px solid var(--border)' : undefined, borderInlineEnd: side === 'start' ? '1px solid var(--border)' : undefined, transform: open ? 'none' : hidden, transition: `transform 420ms ${SPRING}`, display: 'flex', flexDirection: 'column' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 18px', borderBottom: '1px solid var(--border)' }}>
             <b style={{ fontSize: 15.5 }}>{title}</b>
             <button aria-label="إغلاق" onClick={() => setOpen(false)} className="i-soft" style={{ width: 32, height: 32, borderRadius: 6, border: 'none', background: 'var(--surface-2)', color: 'var(--text-2)', cursor: 'pointer', display: 'grid', placeItems: 'center' }}>

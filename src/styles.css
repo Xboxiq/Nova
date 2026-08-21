@@ -2055,6 +2055,21 @@ footer#sources > a {
   }
 }
 
+/* ── The theme flip is a switch, not a transition ─────────────────────────────
+   Seven theme packs, and every transition in the app fires at once when one
+   replaces another: each colour animates independently to its new value and the
+   flip reads as a smear. A transition describes a state change in one element;
+   a whole-document repaint is not one. `App.tsx` sets this attribute, forces a
+   reflow, writes the new pack, and removes it on the next frame.
+
+   `*` and both pseudo-elements, because a transition anywhere shows. */
+html[data-theme-switching],
+html[data-theme-switching] *,
+html[data-theme-switching] *::before,
+html[data-theme-switching] *::after {
+  transition: none !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .brand-mark::after,
@@ -2103,7 +2118,15 @@ footer#sources > a {
 
 .footer-legal button,
 .footer-legal a {
+  /* WCAG 2.5.8 wants 24 CSS px on the short side. The criterion exempts a control
+     inside a sentence; a row of legal links is not a sentence, so these earn their
+     height. Block padding only — the underline stays on the word, and the gap
+     already separates them horizontally. */
   padding: 0;
+  padding-block: 3px;
+  min-height: 24px;
+  display: inline-flex;
+  align-items: center;
   color: var(--nova-ink-secondary);
   font-size: var(--nova-text-label-md);
   font-family: inherit;
@@ -2179,3 +2202,24 @@ footer#sources > a {
 }
 
 .legal-body p:last-child { margin-block-end: 0; }
+
+/* ── Forced colours ───────────────────────────────────────────────────────────
+   In a forced-colours mode the OS replaces the palette, and a focus ring drawn
+   from `--nova-*` is one of the colours it replaces — with something that may
+   not contrast against the new background at all. `Highlight` is the system's
+   own answer, and `forced-color-adjust: none` on a swatch keeps the one thing on
+   screen whose whole subject IS its colour from being replaced too.
+
+   Found by `better-accessibility`; four files use `:focus-visible` and none of
+   them handled this. */
+@media (forced-colors: active) {
+  :focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+  [data-swatch],
+  [data-orb],
+  [data-mesh] {
+    forced-color-adjust: none;
+  }
+}
