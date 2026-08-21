@@ -1884,6 +1884,14 @@ footer#sources > a {
 }
 
 @media (max-width: 1040px) {
+  /* The float hangs 24px outside the stage on purpose, and nothing bounded that
+     overhang to the viewport: below 1040 the stage reaches the page edge and the
+     overhang became 8px of horizontal document scroll — measured at 640 CSS px,
+     which is 200% zoom on a 1280 desktop, by the reflow case in
+     `tools/qa/madar-qa.mjs` (WCAG 1.4.10). Flush is the answer wherever the
+     gutter has run out; the 620 override below is redundant against this and was
+     removed. */
+  .stage-float { inset-inline-end: 0; }
   .top-nav { display: none; }
   .topbar { grid-template-columns: 1fr auto; }
   .hero { grid-template-columns: 1fr; min-height: auto; padding-block-start: var(--nova-space-16); }
@@ -2000,7 +2008,7 @@ footer#sources > a {
   .stage-bars { height: 110px; }
   .stage-side { grid-template-columns: 1fr; }
   .stage-activity { display: none; }
-  .stage-float { inset-inline-end: -8px; min-width: 170px; }
+  .stage-float { min-width: 170px; }
   .section-intro { margin-block-end: var(--nova-space-8); }
   .specimen-grid { gap: var(--nova-space-3); }
   .specimen-panel { min-height: 300px; padding: var(--nova-space-5); border-radius: var(--nova-radius-card); }
@@ -2222,4 +2230,13 @@ html[data-theme-switching] *::after {
   [data-mesh] {
     forced-color-adjust: none;
   }
+}
+
+/* Same policy as `demos.css`: the moving hovers only. The two `.stage-window`
+   rules already inside the narrow-screen and reduced-motion blocks are fixes,
+   not defects — they set `transform: none` themselves. */
+@media (hover: none), (pointer: coarse) {
+  .hero-stage:hover .stage-window,
+  .specimen-motion > a:hover svg,
+  [dir="rtl"] .specimen-motion > a:hover svg { transform: none; }
 }

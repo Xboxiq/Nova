@@ -345,6 +345,28 @@
   counter-reset: madar-spec;
 }
 
+/* ── `content-visibility` was measured, and refused ───────────────────────────
+   A spec section runs four to eight screens tall, and `content-visibility: auto`
+   on `.madar-spec-row` measured a real win: 541.7ms to 408.6ms across twelve
+   forced relayouts, medians of three runs, about 24 percent. The intrinsic
+   estimate was set from the measured median row height (481px of min 217 / median
+   481 / p75 695 / max 1181) so the scrollbar would not jump.
+
+   It was reverted anyway, because it broke six interactions in
+   `tools/qa/operable.mjs`: an offscreen subtree is *not rendered*, so its children
+   have no layout, and a click computed against that box lands nowhere. The loan
+   meter would not swap, the document fan would not turn, the time sheet would not
+   sort.
+
+   The trade is the wrong way round for this library in particular. The defect the
+   owner caught in the reference batch was components that looked right and did
+   nothing; buying a relayout micro-benchmark by making offscreen controls
+   unreliable is that defect with a performance justification. And the rule this
+   came from (`vercel-react-best-practices`, `rendering-content-visibility`) is
+   aimed at long *static* lists, not at panels full of controls.
+
+   If it comes back it needs a real interaction budget behind it, not a synthetic
+   relayout loop. */
 .madar-spec-row {
   display: grid;
   /* unequal on purpose: a half each says the statement and the specimen weigh

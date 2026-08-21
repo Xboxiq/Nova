@@ -2002,3 +2002,28 @@
     animation: none !important;
   }
 }
+
+/* ── Hover on a device that cannot hover ──────────────────────────────────────
+   A `:hover` that only changes colour is harmless on touch: it flashes on tap
+   and clears on the next one, and gating it would be noise. A `:hover` that
+   **moves** sticks until you tap elsewhere, and a `:hover` that **reveals**
+   hides the content from a touch user entirely — the dock's labels were
+   unreachable by finger, so an icon-only button had no visible name.
+
+   So the policy is scoped to those two, not to all 88 hover rules in the shell.
+   Found by `better-accessibility`; measured by `tools/qa/hover-policy.mjs`. */
+@media (hover: none), (pointer: coarse) {
+  .demo-listbox > button:hover,
+  [dir="ltr"] .demo-listbox > button:hover,
+  .skills-list button:hover,
+  [dir="ltr"] .skills-list button:hover,
+  .mini-bars button:hover i,
+  .shatter-stage > button:hover,
+  .foil-card:hover,
+  .liquid-options button:hover,
+  [dir="ltr"] .liquid-options button:hover,
+  .demo-theme-action > button:hover { transform: none; }
+
+  /* the label is the button's only visible name, so it stops being conditional */
+  .liquid-dock button span { opacity: 1; }
+}

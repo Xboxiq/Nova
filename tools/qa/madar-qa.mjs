@@ -20,6 +20,11 @@ const URL = `http://localhost:${PORT}/`;
 const THEMES = ["light", "dark", "mint", "coral", "sky", "iris", "night"];
 const PACK_SECTIONS = ["madar-color-tokens", "madar-admin-access", "madar-consequence", "madar-dispatch", "madar-photographed", "madar-boards", "madar-glasswork", "madar-projectwork"];
 const AA = 4.5;
+/* APCA's floor for body text. `APCA_THIN_CEILING` is what the token pairs measure
+   today; it may fall and must never rise. */
+const APCA_BODY = 60;
+const APCA_THIN_CEILING = 13; // measured 2026-08; may fall, never rise
+const apcaThin = [];
 
 // Pairs that carry text or an icon on a surface, so AA applies to all of them.
 const PAIRS = [
@@ -133,16 +138,53 @@ const measureOverflow = (page) =>
       const lum = (c) =>
         c.map((v) => v / 255).map((s) => (s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4))
           .reduce((acc, v, i) => acc + v * [0.2126, 0.7152, 0.0722][i], 0);
+      /* APCA (Lc), the second lens. WCAG 2.x contrast is one number and it is
+         known to be wrong in both directions — it passes some light-on-mid pairs a
+         reader cannot read, and fails some dark pairs that read fine. APCA models
+         polarity: light text on dark ground and dark text on light ground get
+         different exponents, which is exactly the asymmetry seven theme packs run
+         into. Constants are APCA 0.98G-4g.
+
+         It does not replace the 4.5 constant — WCAG AA is what the standard asks
+         for and what axe measures. This runs beside it, and disagreement between
+         the two lenses is the interesting signal. */
+      const Y = (c) => {
+        const y = c.map((v) => (v / 255) ** 2.4)
+          .reduce((acc, v, i) => acc + v * [0.2126729, 0.7151522, 0.072175][i], 0);
+        return y < 0.022 ? y + (0.022 - y) ** 1.414 : y;
+      };
+      const apca = (txt, bg) => {
+        const [yt, yb] = [Y(txt), Y(bg)];
+        let lc;
+        if (yb > yt) {
+          lc = (yb ** 0.56 - yt ** 0.57) * 1.14;
+          lc = lc < 0.1 ? 0 : lc - 0.027;
+        } else {
+          lc = (yb ** 0.65 - yt ** 0.62) * 1.14;
+          lc = lc > -0.1 ? 0 : lc + 0.027;
+        }
+        return Math.round(Math.abs(lc) * 1000) / 10;
+      };
+
       const out = pairs.map(([fg, bg]) => {
-        const [a, b] = [lum(rgb(fg)), lum(rgb(bg))];
-        return [`${fg}/${bg}`, Math.round(((Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05)) * 100) / 100];
+        const [cf, cb] = [rgb(fg), rgb(bg)];
+        const [a, b] = [lum(cf), lum(cb)];
+        return [
+          `${fg}/${bg}`,
+          Math.round(((Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05)) * 100) / 100,
+          apca(cf, cb),
+        ];
       });
       probe.remove();
       return out;
     }, PAIRS);
 
-    for (const [pair, ratio] of ratios) {
+    for (const [pair, ratio, lc] of ratios) {
       if (ratio < AA) contrastFailures.push(`${theme} ${pair} ${ratio}`);
+      /* Lc 60 is APCA's floor for body text. Printed with a ceiling rather than
+         made fatal on the day it was added: a new lens that breaks the build the
+         moment it is introduced gets deleted instead of acted on. */
+      if (lc < APCA_BODY) apcaThin.push(`${theme} ${pair} Lc${lc} (AA ${ratio})`);
     }
   }
   await ctx.close();
@@ -181,6 +223,14 @@ const CASES = [
   { theme: "sky", w: 1440, h: 1000, dir: "rtl" },
   { theme: "night", w: 390, h: 844, dir: "rtl" },
   { theme: "coral", w: 390, h: 844, dir: "ltr" },
+  /* WCAG 1.4.10 asks for 320 CSS px with no two-dimensional scrolling, and 200%
+     zoom on a 1280 desktop is 640 CSS px. Neither was measured: the narrow case
+     stopped at 390, which is a phone and not the criterion. `reflowOnly` skips axe
+     on these two — the question they answer is layout, and running the full
+     contrast pass twice more would add a third to the harness's runtime for an
+     answer the four wide cases and two phone cases already give. */
+  { theme: "light", w: 320, h: 640, dir: "rtl", reflowOnly: true },
+  { theme: "night", w: 640, h: 512, dir: "ltr", reflowOnly: true },
 ];
 
 for (const c of CASES) {
@@ -198,7 +248,7 @@ for (const c of CASES) {
       overflow.push(`${c.theme} ${c.w}px ${c.dir} ${section} scroll=${size.scroll} client=${size.client}`);
     }
 
-    if (AXE) {
+    if (AXE && !c.reflowOnly) {
       await page.addScriptTag({ path: AXE });
       const result = await page.evaluate(async () =>
         window.axe.run(document.querySelector("#madar"), {
@@ -234,6 +284,8 @@ stop();
 const report = [
   `CONTRAST_FAILURES=${contrastFailures.length}`,
   ...contrastFailures.map((f) => `  contrast: ${f}`),
+  `APCA_BELOW_BODY=${apcaThin.length} pairs under Lc ${APCA_BODY} (ceiling ${APCA_THIN_CEILING})`,
+  ...apcaThin.slice(0, 8).map((x) => `  apca: ${x}`),
   `OVERFLOW=${overflow.length ? overflow.join(" | ") : "none"}`,
   `AXE_VIOLATIONS_MADAR=${AXE ? axeViolations.length : "skipped-no-axe-core"}`,
   `REFERENCE_GREY_CONTRAST=${referenceGreyNodes} nodes below AA (ceiling ${REFERENCE_GREY_CEILING}, the reference's own greys — see design-system/REFERENCE-CONTRAST.md)`,
@@ -246,5 +298,6 @@ console.log(report.join("\n"));
 
 const failed =
   contrastFailures.length || overflow.length || axeViolations.length || runtimeErrors.length || menuFailures.length
-  || referenceGreyNodes > REFERENCE_GREY_CEILING;
+  || referenceGreyNodes > REFERENCE_GREY_CEILING
+  || apcaThin.length > APCA_THIN_CEILING;
 process.exit(failed ? 1 : 0);

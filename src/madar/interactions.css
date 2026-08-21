@@ -69,3 +69,12 @@
 /* draw-from-start-edge origins (underline, segment loader, snackbar drain) */
 :root, [dir='ltr'] { --underline-origin: left; --dir-sign: 1; }
 [dir='rtl'] { --underline-origin: right; --dir-sign: -1; }
+
+/* A moving hover sticks on a touch device until the next tap elsewhere. Colour-only
+   hover is deliberately not gated here — see the note in `demos.css`. */
+@media (hover: none), (pointer: coarse) {
+  .i-chevron:hover,
+  [dir='rtl'] .i-chevron:hover,
+  .hero-cta:hover .hero-cta-icon,
+  [dir='rtl'] .hero-cta:hover .hero-cta-icon { transform: none; }
+}

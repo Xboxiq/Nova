@@ -668,7 +668,10 @@ export function CareOverview({
               <span style={{ display: 'block', fontSize: 11.5, fontWeight: 500, lineHeight: 1.3 }}>{m.label}</span>
               <span style={{ display: 'block', fontSize: 13, marginTop: 8 }}>
                 <bdi dir="ltr">{n(m.value)}</bdi>
-                {m.of && <small style={{ color: '#9aa09b' }}> / <bdi dir="ltr">{n(m.of)}</bdi></small>}
+                {/* `!== undefined`, not truthiness: `of` is a number, and `{0 && …}`
+                renders a bare "0" next to the reading. A metric out of zero is a
+                real state — nobody discharged yet — and it printed a stray digit. */}
+            {m.of !== undefined && <small style={{ color: '#9aa09b' }}> / <bdi dir="ltr">{n(m.of)}</bdi></small>}
               </span>
             </button>
           );

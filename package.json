@@ -13,7 +13,12 @@
     "qa:madar": "node tools/qa/madar-qa.mjs",
     "qa:pages": "node tools/qa/pages-subpath.mjs",
     "qa:upload": "node tools/qa/upload-qa.mjs",
-    "slop": "node .claude/skills/kill-ai-slop/scripts/scan.mjs src"
+    "slop": "node .claude/skills/kill-ai-slop/scripts/scan.mjs src",
+    "qa:hover": "node tools/qa/hover-policy.mjs",
+    "qa:operable": "node tools/qa/operable.mjs",
+    "qa:geometry": "node tools/qa/geometry.mjs",
+    "qa:source": "for h in geometry composition depth-policy mono-usage no-raw-markdown anti-slop-30 hover-policy agents-skill-claims; do node tools/qa/$h.mjs || exit 1; done",
+    "qa:live": "for h in spec-row-qa operable madar-qa; do node tools/qa/$h.mjs || exit 1; done"
   },
   "dependencies": {
     "@fontsource-variable/ibm-plex-sans": "^5.2.8",
