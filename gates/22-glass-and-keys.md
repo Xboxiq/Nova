@@ -33,7 +33,8 @@ drift apart inside a week of edits, so the six numbers are five tokens in
 Run with `node .claude/skills/unlazy/scripts/gate-check.mjs --timeout 300` — G14's
 check drives six sections through seven theme packs at two viewports and outgrew the
 checker's 120-second default. At the default it reports `(no output)`, which is the
-timeout and not a failure.
+timeout and not a failure. Note also that the checker rewrites this file from the
+copy it read at startup, so an edit made while it runs is lost: edit it, then run it.
 
 - [x] G1: The batch was deduplicated before any code was written
   Fourteen crops, five artefacts: three of them assembled from crops of one screen.
@@ -140,7 +141,7 @@ timeout and not a failure.
   axe skips a gradient background; the day pills ghostly.
   CHECK: node tools/qa/madar-qa.mjs 2>&1 | grep -E 'AXE_VIOLATIONS_MADAR|CONTRAST_FAILURES'
   EXPECT: AXE_VIOLATIONS_MADAR=0
-  EVIDENCE: pending
+  EVIDENCE: CONTRAST_FAILURES=0 | AXE_VIOLATIONS_MADAR=0
 
 - [x] G15: The slop standard was obeyed where it was right
   Rule 04 bans five specific hexes and correctly flagged both of my first guesses at
