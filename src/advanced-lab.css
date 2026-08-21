@@ -196,7 +196,11 @@
 .signal-step { display: grid; place-items: center; width: 44px; height: 44px; padding: 0; color: var(--nova-ink-secondary); background: var(--nova-surface); border: 1px solid var(--nova-border); border-radius: 6px; }
 .signal-controls input,
 .range-editor input,
-.inspector-fields input[type="range"] { width: 100%; height: 5px; appearance: none; background: linear-gradient(90deg, var(--nova-action) 0 var(--signal-progress, var(--range-value, 50%)), var(--nova-border) var(--signal-progress, var(--range-value, 50%)) 100%); border-radius: var(--nova-radius-pill); }
+/* The track is 5px because that is what a track should look like; the *element*
+   was also 5px, which made the thing you drag five pixels tall. `height` sizes the
+   box and the track is painted with `background-size`, so the target is 24 and the
+   line is still 5. Found by the hit-area gate in tools/qa/operable.mjs. */
+.inspector-fields input[type="range"] { width: 100%; height: 24px; background-size: 100% 5px; background-position: center; background-repeat: no-repeat; appearance: none; background: linear-gradient(90deg, var(--nova-action) 0 var(--signal-progress, var(--range-value, 50%)), var(--nova-border) var(--signal-progress, var(--range-value, 50%)) 100%); border-radius: var(--nova-radius-pill); }
 .signal-controls input::-webkit-slider-thumb,
 .range-editor input::-webkit-slider-thumb,
 .inspector-fields input[type="range"]::-webkit-slider-thumb { width: 20px; height: 20px; appearance: none; background: var(--nova-surface); border: 5px solid var(--nova-action); border-radius: 50%; }

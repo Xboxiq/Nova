@@ -245,7 +245,7 @@ export function AssistantCard({
             aria-label="Ask the assistant"
             placeholder="Ask anything..."
             style={{
-              flex: 1, minWidth: 0, border: 0, outline: 'none', background: 'transparent',
+              flex: 1, minWidth: 0, minHeight: 24, border: 0, outline: 'none', background: 'transparent',
               fontFamily: 'inherit', fontSize: 11, color: '#fff',
             }}
           />
@@ -392,7 +392,9 @@ export function SplitDonut({
               data-on={on ? '' : undefined}
               style={{
                 display: 'flex', alignItems: 'center', gap: 7, border: 0, background: 'transparent',
-                cursor: 'pointer', fontFamily: 'inherit', fontSize: 10.5, padding: '3px 2px',
+                /* 5px block padding, not 3: at 3 the row measured 21px tall and the
+                   hit-area gate wants 24 on the short side (WCAG 2.5.8). */
+                cursor: 'pointer', fontFamily: 'inherit', fontSize: 10.5, padding: '5px 2px', minHeight: 24,
                 color: on ? '#4d4f52' : '#b8b8be', textDecoration: on ? 'none' : 'line-through',
               }}
             >
@@ -472,7 +474,9 @@ export function OppsTable({ rows = OPPS }: { rows?: Opp[] }) {
               onClick={() => setSort((s) => ({ key: c.key as SortKey, dir: s.key === c.key && s.dir === -1 ? 1 : -1 }))}
               style={{
                 border: 0, background: 'transparent', cursor: 'pointer', fontFamily: 'inherit',
-                fontSize: 10, textAlign: 'start', padding: 0, display: 'flex', alignItems: 'center', gap: 4,
+                /* block padding to 24: a sort header is a control, and it measured
+                   15px tall until the hit-area gate said so (WCAG 2.5.8). */
+                fontSize: 10, textAlign: 'start', padding: '5px 0', minHeight: 24, display: 'flex', alignItems: 'center', gap: 4,
                 color: sort.key === c.key ? LIGHT_INK : '#a7a7ad',
                 fontWeight: sort.key === c.key ? 600 : 400,
               }}
@@ -664,7 +668,10 @@ export function CareOverview({
               <span style={{ display: 'block', fontSize: 11.5, fontWeight: 500, lineHeight: 1.3 }}>{m.label}</span>
               <span style={{ display: 'block', fontSize: 13, marginTop: 8 }}>
                 <bdi dir="ltr">{n(m.value)}</bdi>
-                {m.of && <small style={{ color: '#9aa09b' }}> / <bdi dir="ltr">{n(m.of)}</bdi></small>}
+                {/* `!== undefined`, not truthiness: `of` is a number, and `{0 && …}`
+                renders a bare "0" next to the reading. A metric out of zero is a
+                real state — nobody discharged yet — and it printed a stray digit. */}
+            {m.of !== undefined && <small style={{ color: '#9aa09b' }}> / <bdi dir="ltr">{n(m.of)}</bdi></small>}
               </span>
             </button>
           );
@@ -756,7 +763,7 @@ export function FlowDonut({ total = 900, incoming = 400 }: { total?: number; inc
                 data-on={on ? '' : undefined}
                 style={{
                   border: 0, background: 'transparent', cursor: 'pointer', fontFamily: 'inherit',
-                  fontSize: 10.5, padding: '2px 3px',
+                  fontSize: 10.5, padding: '5px 3px', minHeight: 24,
                   color: on ? '#6b736d' : '#9aa09b', textDecoration: on ? 'none' : 'line-through',
                 }}
               >
@@ -824,7 +831,7 @@ export function StaffList({ staff = STAFF, onPick }: { staff?: Staff[]; onPick?:
             onChange={(e) => { setQ(e.target.value); setAt(0); }}
             aria-label="Search the roster"
             placeholder="Search"
-            style={{ width: 76, border: 0, outline: 'none', background: 'transparent', fontFamily: 'inherit', fontSize: 11, color: LIGHT_INK }}
+            style={{ width: 76, minHeight: 24, border: 0, outline: 'none', background: 'transparent', fontFamily: 'inherit', fontSize: 11, color: LIGHT_INK }}
           />
         </span>
       </div>

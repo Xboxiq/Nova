@@ -1559,7 +1559,9 @@
 .announcement-bar { display: grid; grid-template-columns: auto 1fr auto auto; align-items: center; gap: 12px; width: 100%; padding: 10px; background: var(--nova-surface); border: 1px solid var(--nova-border); border-radius: 6px; animation: pop-in var(--nova-motion-base) ease; }
 .announcement-tag { display: inline-flex; align-items: center; gap: 5px; min-height: 32px; padding-inline: 9px; color: var(--nova-action-ink); background: var(--nova-action-soft); border-radius: 6px; font-size: var(--nova-text-label-md); font-weight: var(--nova-weight-bold); }
 .announcement-bar p { color: var(--nova-ink); font-size: var(--nova-text-label-md); }
-.announcement-bar a { color: var(--nova-action-ink); font-size: var(--nova-text-label-md); font-weight: var(--nova-weight-bold); text-decoration: underline; text-underline-offset: 3px; }
+/* min-height 24 for WCAG 2.5.8: this link sits in a bar beside the copy, not
+   inside a sentence, so the text-inline exemption does not cover it. */
+.announcement-bar a { display: inline-flex; align-items: center; min-height: 24px; color: var(--nova-action-ink); font-size: var(--nova-text-label-md); font-weight: var(--nova-weight-bold); text-decoration: underline; text-underline-offset: 3px; }
 .announcement-bar > button { display: grid; place-items: center; width: 38px; height: 38px; padding: 0; color: var(--nova-ink-tertiary); background: transparent; border: 0; border-radius: 6px; }
 .announcement-bar > button:hover { background: var(--nova-surface-quiet); }
 
@@ -1999,4 +2001,29 @@
   .shiny-badge {
     animation: none !important;
   }
+}
+
+/* ── Hover on a device that cannot hover ──────────────────────────────────────
+   A `:hover` that only changes colour is harmless on touch: it flashes on tap
+   and clears on the next one, and gating it would be noise. A `:hover` that
+   **moves** sticks until you tap elsewhere, and a `:hover` that **reveals**
+   hides the content from a touch user entirely — the dock's labels were
+   unreachable by finger, so an icon-only button had no visible name.
+
+   So the policy is scoped to those two, not to all 88 hover rules in the shell.
+   Found by `better-accessibility`; measured by `tools/qa/hover-policy.mjs`. */
+@media (hover: none), (pointer: coarse) {
+  .demo-listbox > button:hover,
+  [dir="ltr"] .demo-listbox > button:hover,
+  .skills-list button:hover,
+  [dir="ltr"] .skills-list button:hover,
+  .mini-bars button:hover i,
+  .shatter-stage > button:hover,
+  .foil-card:hover,
+  .liquid-options button:hover,
+  [dir="ltr"] .liquid-options button:hover,
+  .demo-theme-action > button:hover { transform: none; }
+
+  /* the label is the button's only visible name, so it stops being conditional */
+  .liquid-dock button span { opacity: 1; }
 }

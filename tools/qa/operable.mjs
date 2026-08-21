@@ -197,6 +197,27 @@ for (const c of CASES) {
     operated += 1;
   }
 
+    /* ── 4. a control smaller than the finger meant to hit it ──────────────────
+     WCAG 2.5.8 asks for 24x24 CSS px, and `better-accessibility` raises it to 44
+     for a primary action. This harness measured whether a control could be
+     *reached* and whether it *did* something, and never whether it could be
+     *hit* — which is the failure a keyboard test can never see. Exempt: a control
+     inside a line of text (an inline link), and one with enough clear space
+     around it, both of which the criterion itself exempts. */
+  const small = await page.evaluate(() => {
+    const out = [];
+    for (const el of document.querySelectorAll('button, [role="radio"], [role="switch"], [role="tab"], a[href], input')) {
+      const r = el.getBoundingClientRect();
+      if (!r.width || !r.height) continue;
+      if (el.closest('p, li, bdi')) continue;
+      if (Math.min(r.width, r.height) < 24) {
+        out.push(`${el.tagName.toLowerCase()}${el.getAttribute('data-day') !== null ? '[data-day]' : ''} ${Math.round(r.width)}x${Math.round(r.height)} "${(el.getAttribute('aria-label') || el.textContent || '').trim().slice(0, 30)}"`);
+      }
+    }
+    return out;
+  });
+  if (small.length) failures.push(`${c.name}: ${small.length} control(s) under 24x24 CSS px: ${small.slice(0, 3).join(" | ")}`);
+
   /* ── 3. the arrow that moves forward follows the writing direction ── */
   if (c.keyboard) {
     for (const dir of ["rtl", "ltr"]) {
