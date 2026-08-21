@@ -26,7 +26,7 @@
  */
 import { readFileSync } from "node:fs";
 
-const TSX = ["mesh", "credit", "boards"].map((f) => `src/madar/components/${f}.tsx`);
+const TSX = ["mesh", "credit", "boards", "glasswork", "projectwork"].map((f) => `src/madar/components/${f}.tsx`);
 const CSS = "src/madar/bridge.css";
 
 /* Comments are not drawings. The first version of this audit counted a hex that

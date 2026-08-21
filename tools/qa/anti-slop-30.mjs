@@ -46,6 +46,14 @@ function scan(files, re, rule) {
   for (const path of files) {
     const lines = read(path).split("\n");
     lines.forEach((line, i) => {
+      /* A line that is nothing but prose is not a drawing. `geometry.mjs` learned
+         this when it counted a hex that appeared only inside a sentence explaining
+         a bug; this scanner then flagged the comment recording *why* a banned
+         violet was not used. A sentence about a rule is not a breach of it.
+         ponytail: the test is line-based, so a comment that closes and continues
+         into code on the same line is skipped too — no such line exists here, and
+         the fix if one appears is to strip block comments before splitting. */
+      if (/^(\/\/|\/\*|\*)/.test(line.trim())) return;
       const prev = lines[i - 1] ?? "";
       const exempt = new RegExp(`anti-slop-ignore-next-line[^\\n]*\\b${rule}\\b`).test(prev);
       if (!exempt && re.test(line)) hits.push(`${path}:${i + 1}  ${line.trim().slice(0, 90)}`);

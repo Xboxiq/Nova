@@ -69,6 +69,44 @@ const CASES = [
     typing: { field: '[data-assistant] input', send: '[data-assistant] button[aria-label="Send"]', watch: '[data-assistant] [aria-live]' },
     search: { field: '[data-staff] input', watch: "[data-staff]", attr: "data-staff" },
   },
+  {
+    id: "madar-glasswork",
+    name: "glasswork",
+    controls: [
+      { what: "document fan", click: '[data-fan] [data-sheet]:not([aria-checked="true"])', watch: "[data-fan]", attr: "data-fan" },
+      { what: "folder front line", click: '[data-fan] [data-sheet]:not([aria-checked="true"])', watch: "[data-folder-front]", text: true },
+      { what: "activity row", click: '[data-activity]:not([aria-checked="true"])', watch: "[data-compliance]", attr: "data-compliance" },
+      /* the eye is the only control here whose consequence is in a *different*
+         component — the header count. A switch that only recoloured itself would
+         pass a naive check and still be a decoration. */
+      { what: "read switch", click: "[data-eye]", watch: "[data-seen]", text: true },
+      { what: "day pill", click: '[data-curve] [data-day]:not([aria-checked="true"])', watch: "[data-curve]", attr: "data-curve" },
+      { what: "curve reading", click: '[data-curve] [data-day]:not([aria-checked="true"])', watch: "[data-reading]", text: true },
+      { what: "metric blob", click: '[data-blob]:not([aria-checked="true"])', watch: "[data-blob-says]", text: true },
+      { what: "log a reading", click: "[data-add]", watch: "[data-logged]", text: true },
+    ],
+    keyboard: { group: "[data-curve]", cell: "[data-day]", attr: "data-curve", state: "aria-checked" },
+  },
+  {
+    id: "madar-projectwork",
+    name: "projectwork",
+    controls: [
+      { what: "timesheet sort", click: '[data-sortby="name"]', watch: "[data-timesheet]", attr: "data-timesheet" },
+      /* sorting by name has to move the accent plate off row one, because the
+         first row is only the leader when the list is ordered by hours */
+      { what: "leader plate follows the sort", click: '[data-sortby="hours"]', watch: "[data-member]", attr: "data-member" },
+      { what: "period", click: "[data-period]", watch: "[data-period]", attr: "data-period" },
+      { what: "velocity band", click: '[data-band-pick]:not([aria-checked="true"])', watch: "[data-gauge]", attr: "data-gauge" },
+      { what: "band share", click: '[data-band-pick]:not([aria-checked="true"])', watch: "[data-share]", text: true },
+      { what: "subtasks open", click: "[data-subtasks]", watch: "[data-task]", appears: "[data-subtask]" },
+      { what: "advance a card", click: "[data-advance]", watch: "[data-lanes]", attr: "data-lanes" },
+      { what: "upload step", click: "[data-step]", watch: "[data-feed]", attr: "data-feed" },
+      { what: "course pick", click: '[data-course]:not([aria-checked="true"])', watch: "[data-hub]", attr: "data-hub" },
+      { what: "gantt row", click: '[data-gantt-row]:not([aria-checked="true"])', watch: "[data-gantt]", attr: "data-gantt" },
+      { what: "task pick", click: '[data-pick-task]:not([aria-checked="true"])', watch: "[data-tasklane]", attr: "data-tasklane" },
+    ],
+    keyboard: { group: "[data-gantt]", cell: "[data-gantt-row]", attr: "data-gantt", state: "aria-checked" },
+  },
 ];
 
 let chromium;
@@ -164,7 +202,13 @@ for (const c of CASES) {
     for (const dir of ["rtl", "ltr"]) {
       await page.evaluate((d) => { document.documentElement.dir = d; }, dir);
       await page.waitForTimeout(200);
-      const cell = page.locator(`${c.keyboard.group} ${c.keyboard.cell}[aria-selected="true"]`).first();
+      /* The probe followed `aria-selected` because the first family it was written
+         for was a grid. A radio group states itself with `aria-checked`, and a
+         harness that insists on the grid's attribute would be pushing components
+         towards the wrong ARIA pattern to satisfy the test. So the state
+         attribute is the case's to declare. */
+      const state = c.keyboard.state ?? "aria-selected";
+      const cell = page.locator(`${c.keyboard.group} ${c.keyboard.cell}[${state}="true"]`).first();
       await cell.focus();
       const before = await read(page, c.keyboard.group, c.keyboard.attr);
       /* forward is ArrowLeft in Arabic and ArrowRight in English */

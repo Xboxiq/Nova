@@ -40,7 +40,11 @@ export type MeshVariant =
   /** a black plate with a green pool lit inside it */
   | 'plate'
   /** the slide: black above turning olive below */
-  | 'olive';
+  | 'olive'
+  /** the compliance poster: deep emerald at the floor turning mint at the head */
+  | 'sage'
+  /** the vitals field: mint turning to a pale aqua sky */
+  | 'aqua';
 
 const MESH: Record<MeshVariant, string> = {
   run: [
@@ -80,11 +84,28 @@ const MESH: Record<MeshVariant, string> = {
     'radial-gradient(90% 44% at 50% 88%, #5c6a12 0%, transparent 70%)',
     'linear-gradient(var(--wash), var(--olive-a) 0%, #121512 34%, var(--olive-b) 62%, var(--olive-c) 84%, var(--olive-d) 100%)',
   ].join(','),
+  /* The compliance poster turns the other way from `run`: the light end is at the
+     head and the saturated end at the floor, because the glass folder floats in
+     the upper half and needs a pale ground behind it to read as glass at all. */
+  sage: [
+    'radial-gradient(84% 54% at 22% 2%, var(--sage-mint) 0%, transparent 64%)',
+    'radial-gradient(70% 46% at 88% 8%, var(--sage-haze) 0%, transparent 60%)',
+    'radial-gradient(96% 60% at 8% 58%, var(--sage-mid) 0%, transparent 66%)',
+    'radial-gradient(110% 70% at 74% 92%, var(--sage-deep) 0%, transparent 70%)',
+    'linear-gradient(var(--sheen), #b7dcc0 0%, #86bd97 42%, #3f7a58 100%)',
+  ].join(','),
+  aqua: [
+    'radial-gradient(72% 48% at 14% 4%, var(--aqua-sky) 0%, transparent 62%)',
+    'radial-gradient(66% 44% at 90% 6%, var(--aqua-haze) 0%, transparent 60%)',
+    'radial-gradient(104% 66% at 46% 102%, var(--aqua-mint) 0%, transparent 68%)',
+    'linear-gradient(var(--wash), #dff3ee 0%, #c3e6de 46%, #a9d9cf 100%)',
+  ].join(','),
 };
 
 /** Which variants carry light text, so a caller cannot get the ink wrong. */
 const DARK_GROUND: Record<MeshVariant, boolean> = {
   run: true, green: true, peach: true, light: false, plate: true, olive: true,
+  sage: true, aqua: false,
 };
 
 export interface MeshSurfaceProps {
@@ -100,6 +121,12 @@ export interface MeshSurfaceProps {
   style?: CSSProperties;
   className?: string;
   as?: 'div' | 'section' | 'article';
+  /* A caller marking its own surface for a harness or a stylesheet — `data-vitals`,
+     `data-folder`. Without the passthrough TypeScript accepts the hyphenated
+     attribute (it exempts them from prop checking) and the component silently
+     drops it, so the selector exists in the source and never in the DOM. That is
+     exactly the shape of bug the operability harness was written for. */
+  [attr: `data-${string}`]: unknown;
 }
 
 export function MeshSurface({
@@ -112,6 +139,7 @@ export function MeshSurface({
   style,
   className,
   as: Tag = 'div',
+  ...rest
 }: MeshSurfaceProps) {
   const cls = [
     grain !== 'none' && 'madar-grain',
@@ -125,6 +153,7 @@ export function MeshSurface({
 
   return (
     <Tag
+      {...rest}
       data-mesh={variant}
       className={cls}
       style={{

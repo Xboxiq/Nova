@@ -1,5 +1,6 @@
 import { useMemo, useRef, useState, type CSSProperties, type KeyboardEvent, type ReactNode } from 'react';
 import { AiOrb, MeshSurface } from './mesh';
+import { move, n } from './roving';
 
 /* ────────────────────────────────────────────────────────────────────────
    The board family — the primitives the two dashboard references are made of.
@@ -36,25 +37,6 @@ import { AiOrb, MeshSurface } from './mesh';
    its foreground. */
 const LIGHT_INK = '#101312';
 
-const n = (v: number, digits = 0) =>
-  v.toLocaleString('en-US', { minimumFractionDigits: digits, maximumFractionDigits: digits });
-
-const isRtl = () =>
-  typeof document !== 'undefined' && getComputedStyle(document.documentElement).direction === 'rtl';
-
-/** Roving-tabindex mover shared by every strip and list in this file. */
-function move(key: string, at: number, count: number, cols?: number): number | null {
-  const rtl = isRtl();
-  const step: Record<string, number> = {
-    [rtl ? 'ArrowLeft' : 'ArrowRight']: 1,
-    [rtl ? 'ArrowRight' : 'ArrowLeft']: -1,
-    Home: -count,
-    End: count,
-    ...(cols ? { ArrowDown: cols, ArrowUp: -cols } : { ArrowDown: 1, ArrowUp: -1 }),
-  };
-  if (!(key in step)) return null;
-  return Math.min(count - 1, Math.max(0, at + step[key]));
-}
 
 /* ═══════════════════════════════════════════════════════════════════════════
    DarkPlate — a black card with a green pool lit inside it
@@ -330,7 +312,9 @@ export function SplitDonut({
   /** Money per unit, so the centre figure is derived from the visible slices
       rather than typed beside them. */
   rate = 1000,
-}: { caption?: string; slices?: Slice[]; rate?: number }) {
+  ground = true,
+  pad = 16,
+}: { caption?: string; slices?: Slice[]; rate?: number; ground?: boolean; pad?: number }) {
   /* A legend whose items cannot be switched off is a caption. Toggling one
      recomputes the arcs *and* the centre total, so hiding a slice cannot leave
      a total that no longer matches the ring. */
@@ -350,8 +334,26 @@ export function SplitDonut({
   }, [shown, sum, C]);
 
   return (
-    <div data-donut={sum} style={{ color: LIGHT_INK, display: 'flex', alignItems: 'center', gap: 14 }}>
-      <svg width="128" height="128" viewBox="0 0 128 128" fill="none">
+    /* The donut owns its ground. Every value in it — the #f0eef6 track, the
+       #101312 centre reading, the #4d4f52 legend — is chosen for white, and both
+       original call sites wrapped it in a white card to make that true. A third
+       call site forgot, and the night pack put the legend on #282d46 at 1.64:1.
+       This is the same defect `ScoreBands` had and the same fix: a component that
+       owns its background owns its foreground. `ground={false}` is for a caller
+       that has already painted one. */
+    <div
+      data-donut={sum}
+      style={{
+        color: LIGHT_INK,
+        display: 'flex',
+        alignItems: 'center',
+        gap: 14,
+        ...(ground
+          ? { padding: pad, borderRadius: 'var(--r-panel)', background: '#fff', boxShadow: 'inset 0 0 0 1px #f0eef6' }
+          : null),
+      }}
+    >
+      <svg width="128" height="128" viewBox="0 0 128 128" fill="none" style={{ flex: 'none' }}>
         <defs>
           <pattern id="madar-donut-hatch" width="7" height="7" patternTransform="rotate(135)" patternUnits="userSpaceOnUse">
             <rect width="7" height="7" fill="#fff" />
@@ -886,11 +888,42 @@ const STAFF: Staff[] = [
 
 export interface Swatch { hex: string; from: string; mid: string; to: string }
 
+/* The batch after this one carried the same slide on a lavender ground instead of
+   an olive one. That is a key, not a second component: the type, the pills, the
+   spheres, the copy behaviour and the live region are identical, and the only
+   things that change are the field behind them and which way the ink runs. So
+   `tone` is one prop and the light twin costs nine lines — building it twice is
+   how a library ends up with two slides that drift apart. */
+const SLIDE = {
+  dark: {
+    field: 'olive' as const,
+    ink: 'rgba(255,255,255,0.9)',
+    soft: 'rgba(255,255,255,0.72)',
+    pillInk: '#fff',
+    pillEdge: 'rgba(255,255,255,0.22)',
+    pillFill: 'rgba(255,255,255,0.05)',
+    lip: 'inset 0 1.5px 0 rgba(255,255,255,0.24), inset 0 -1.5px 0 rgba(0,0,0,0.2)',
+    type: 'linear-gradient(var(--wash), #fff 0%, #f2f2ee 42%, #c9c9c2 100%)',
+  },
+  light: {
+    field: 'light' as const,
+    ink: '#1c1a2e',
+    soft: 'rgba(28,26,46,0.62)',
+    pillInk: '#1c1a2e',
+    pillEdge: 'rgba(28,26,46,0.14)',
+    pillFill: 'rgba(255,255,255,0.55)',
+    lip: 'inset 0 1.5px 0 rgba(255,255,255,0.9), inset 0 -1.5px 0 rgba(28,26,46,0.08)',
+    type: 'linear-gradient(var(--wash), #3a3752 0%, #1c1a2e 52%, #100f1c 100%)',
+  },
+};
+
 export function PaletteSlide({
   face = 'Neue Montreal',
   weights = ['Regular', 'Medium'],
   swatches = SWATCHES,
-}: { face?: string; weights?: string[]; swatches?: Swatch[] }) {
+  tone = 'dark',
+}: { face?: string; weights?: string[]; swatches?: Swatch[]; tone?: 'dark' | 'light' }) {
+  const t = SLIDE[tone];
   /* The whole use of a palette slide is getting the hex out of it, so the pills
      copy. Clipboard access is refused in plenty of contexts, so the state says
      what actually happened rather than claiming success. */
@@ -919,22 +952,22 @@ export function PaletteSlide({
   };
 
   return (
-    <MeshSurface variant="olive" grain="light" radius="var(--r-panel)" style={{ padding: '54px 40px 60px', textAlign: 'center' }}>
-      <div style={{ fontSize: 15, color: 'rgba(255,255,255,0.9)' }}>Typography</div>
+    <MeshSurface variant={t.field} grain="light" radius="var(--r-panel)" data-slide={tone} style={{ padding: '54px 40px 60px', textAlign: 'center' }}>
+      <div style={{ fontSize: 15, color: t.ink }}>Typography</div>
       <div
         style={{
           fontSize: 62, fontWeight: 300, letterSpacing: '-0.045em', lineHeight: 1, marginTop: 10,
-          background: 'linear-gradient(var(--wash), #fff 0%, #f2f2ee 42%, #c9c9c2 100%)',
+          background: t.type,
           WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent',
         }}
       >
         {face}
       </div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 15, color: 'rgba(255,255,255,0.72)', marginTop: 14, padding: '0 6%' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 15, color: t.soft, marginTop: 14, padding: '0 6%' }}>
         {weights.map((w) => <span key={w}>{w}</span>)}
       </div>
 
-      <div style={{ fontSize: 15, color: 'rgba(255,255,255,0.9)', marginTop: 44 }}>Colour Palette</div>
+      <div style={{ fontSize: 15, color: t.ink, marginTop: 44 }}>Colour Palette</div>
       <div
         onKeyDown={onKey}
         style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 14, marginTop: 18 }}
@@ -952,10 +985,10 @@ export function PaletteSlide({
             style={{
               height: 62, padding: '0 22px 0 9px', borderRadius: 'var(--r-pill)', cursor: 'pointer',
               display: 'flex', alignItems: 'center', gap: 16, fontSize: 17,
-              fontFamily: 'inherit', color: '#fff',
-              border: '1px solid rgba(255,255,255,0.22)',
-              background: 'rgba(255,255,255,0.05)',
-              boxShadow: 'inset 0 1.5px 0 rgba(255,255,255,0.24), inset 0 -1.5px 0 rgba(0,0,0,0.2)',
+              fontFamily: 'inherit', color: t.pillInk,
+              border: `1px solid ${t.pillEdge}`,
+              background: t.pillFill,
+              boxShadow: t.lip,
               backdropFilter: 'blur(6px)',
               outline: copied === s.hex ? '2px solid var(--lime)' : 'none',
               outlineOffset: 3,
@@ -972,7 +1005,7 @@ export function PaletteSlide({
           </button>
         ))}
       </div>
-      <p data-palette-says="" aria-live="polite" style={{ margin: '18px 0 0', fontSize: 13, color: 'rgba(255,255,255,0.72)' }}>
+      <p data-palette-says="" aria-live="polite" style={{ margin: '18px 0 0', fontSize: 13, color: t.soft }}>
         {copied
           ? (failed
             ? <>The clipboard is not available here — <bdi dir="ltr">{copied}</bdi> is shown to be selected by hand.</>

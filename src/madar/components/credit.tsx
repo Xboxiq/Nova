@@ -1,5 +1,6 @@
 import { useCallback, useId, useMemo, useRef, useState, type CSSProperties, type KeyboardEvent } from 'react';
 import { MeshSurface, glass, ink } from './mesh';
+import { move, smooth } from './roving';
 
 /* ────────────────────────────────────────────────────────────────────────
    The credit family — the reference set, carried in and made operable.
@@ -35,31 +36,8 @@ import { MeshSurface, glass, ink } from './mesh';
 const n = (v: number, digits = 0) =>
   v.toLocaleString('en-US', { minimumFractionDigits: digits, maximumFractionDigits: digits });
 
-/** Reading direction, read once per interaction rather than assumed. */
-const isRtl = () =>
-  typeof document !== 'undefined' && getComputedStyle(document.documentElement).direction === 'rtl';
-
-/**
- * One roving-tabindex mover for every strip in this file.
- *
- * `forward` is the arrow that moves along the writing direction, so the same
- * component reads correctly in Arabic and in English without a second code path.
- * Returns the new index, or null when the key was not ours to handle.
- */
-function move(key: string, at: number, count: number, cols?: number): number | null {
-  const rtl = isRtl();
-  const fwd = rtl ? 'ArrowLeft' : 'ArrowRight';
-  const back = rtl ? 'ArrowRight' : 'ArrowLeft';
-  const step: Record<string, number> = {
-    [fwd]: 1,
-    [back]: -1,
-    Home: -count,
-    End: count,
-    ...(cols ? { ArrowDown: cols, ArrowUp: -cols } : null),
-  };
-  if (!(key in step)) return null;
-  return Math.min(count - 1, Math.max(0, at + step[key]));
-}
+/* Direction and the roving mover live in `roving.ts`: this file and `boards.tsx`
+   had drifted copies of both. */
 
 /* ═══════════════════════════════════════════════════════════════════════════
    LoanWidget — the square card, green or peach
@@ -976,18 +954,6 @@ const BUREAUS: BureauSeries[] = [
 const WHEN = ['12 Feb', '19 Mar', '2 Apr', '16 Jun', '30 Jul', '11 Sep', '24 Oct', '7 Nov', '19 Dec'];
 
 /** A cubic through the points, so a series of numbers becomes one smooth run. */
-function smooth(pts: { x: number; y: number }[]) {
-  if (pts.length < 2) return '';
-  let d = `M${pts[0].x} ${pts[0].y}`;
-  for (let i = 0; i < pts.length - 1; i += 1) {
-    const p = pts[i];
-    const q = pts[i + 1];
-    const mx = (p.x + q.x) / 2;
-    d += ` C${mx} ${p.y} ${mx} ${q.y} ${q.x} ${q.y}`;
-  }
-  return d;
-}
-
 export function CreditHistory({
   score = 730,
   series = BUREAUS,
