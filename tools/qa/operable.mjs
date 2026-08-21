@@ -107,6 +107,19 @@ const CASES = [
     ],
     keyboard: { group: "[data-gantt]", cell: "[data-gantt-row]", attr: "data-gantt", state: "aria-checked" },
   },
+  {
+    id: "madar-directions",
+    name: "directions",
+    controls: [
+      { what: "pick a register", click: '[data-direction-pick]:not([aria-checked="true"])', watch: "[data-directions]", attr: "data-directions" },
+      /* the sentence naming the reader has to follow the register, or the six are
+         six labels on one design — which is what tools/qa/directions.mjs measures
+         in the tokens and this measures on the page */
+      { what: "the reader sentence follows", click: '[data-direction-pick]:not([aria-checked="true"])', watch: "[data-direction-reader]", text: true },
+      { what: "the compared specimen follows", click: '[data-direction-pick]:not([aria-checked="true"])', watch: '[data-register]:not([data-register="default"])', attr: "data-register" },
+    ],
+    keyboard: { group: "[data-directions]", cell: "[data-direction-pick]", attr: "data-directions", state: "aria-checked" },
+  },
 ];
 
 let chromium;

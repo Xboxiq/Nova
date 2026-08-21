@@ -10,6 +10,7 @@ import "@fontsource/ibm-plex-mono/latin-600.css";
 import App from "./App";
 import "../design-system/nova-design-os/tokens/tokens.css";
 import "../design-system/nova-design-os/tokens/theme-packs.css";
+import "../design-system/nova-design-os/tokens/directions.css";
 import "./styles.css";
 
 createRoot(document.getElementById("root")!).render(
