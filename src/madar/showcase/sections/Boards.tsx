@@ -22,9 +22,7 @@ export function Boards() {
           <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 0.85fr', gap: 12, alignItems: 'stretch', width: '100%' }}>
             <div style={{ display: 'grid', gap: 12, alignContent: 'start' }}>
               <DarkPlate />
-              <div style={{ borderRadius: 'var(--r-panel)', background: '#fff', padding: 13, boxShadow: 'inset 0 0 0 1px #f0eef6' }}>
-                <SplitDonut />
-              </div>
+              <SplitDonut pad={13} />
             </div>
             <AssistantCard />
           </div>
@@ -32,11 +30,7 @@ export function Boards() {
           هذا هو التصحيح: البطاقة على اليمين تمتدّ <b>صفَّين</b>، فالسوداء فوقها قصيرة بالضرورة لا بالخطأ. والكرة تسع طبقات كلٌّ منها تعمل — لمعةٌ بيضاء، بِركةٌ نعناعية، بِركةٌ ليمونية، جسمٌ زمرديّ، هالةٌ خارجية بـ٤٢px، وغائرٌ أسفل يعطيها الحجم. انزع أيّها شئت فتسطّح إلى دائرة.
         </SpecRow>
 
-        <SpecRow name="SplitDonut: المخطَّط يعني «معدود ولم يتحقّق»" bare specimen={(
-          <div style={{ width: '100%', padding: 20, borderRadius: 'var(--r-panel)', background: '#fff', boxShadow: 'inset 0 0 0 1px #f0eef6' }}>
-            <SplitDonut />
-          </div>
-        )}>
+        <SpecRow name="SplitDonut: المخطَّط يعني «معدود ولم يتحقّق»" bare specimen={<SplitDonut pad={20} />}>
           ثلاث قطع: مصمتةٌ للمتحقّق، وليمونيةٌ لما أضافه النموذج، و<b>مخطَّطةٌ</b> لِما عُدّ ولم يتحقّق بعد (§١٥-ب) — فالتخطيط في هذه المكتبة معناه واحدٌ حيث ظهر. والزوايا مُشتقّة من المجموع، فلا يمكن أن تجتمع قِطعٌ لا تُساوي كلًّا.
         </SpecRow>
 

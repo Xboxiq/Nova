@@ -521,6 +521,16 @@
   --olive-d: #62700f;
   --olive-pool: #7f8f18;
 
+  /* ── the compliance field and the vitals field. Named on the same pattern as
+        the mesh above so a variant is read, not decoded. ── */
+  --sage-mint: #cfe9d4;
+  --sage-haze: #a9d2bb;
+  --sage-mid: #6ea886;
+  --sage-deep: #2f6a4a;
+  --aqua-sky: #eaf6f3;
+  --aqua-haze: #cfe9e4;
+  --aqua-mint: #9ed2c8;
+
   /* ── bevel: one light, from above. A lit top lip, a darker bottom lip, and a
         perimeter hairline between them. ── */
   --bevel-lit: rgba(255, 255, 255, 0.5);
@@ -544,6 +554,9 @@
   --depth-avatar: 0 2px 8px rgba(16, 16, 16, 0.18);
   --depth-round: 0 2px 6px rgba(16, 16, 16, 0.05);
   --depth-orb: 0 0 42px rgba(120, 230, 140, 0.5);
+  --depth-pane: 0 8px 30px rgba(16, 18, 24, 0.12);
+  --depth-blob: 0 14px 30px rgba(38, 30, 74, 0.18);
+  --depth-lane: 0 2px 0 rgba(16, 16, 16, 0.03);
 
   /* ── radii on the reference's own scale, not the library's small one ── */
   --r-screen: 54px;
@@ -551,10 +564,47 @@
   --r-sheet: 30px;
   --r-pill: 999px;
   --r-panel: 15px;
+
+  /* ── the shape ladder, and the named angles ────────────────────────────────
+     The owner asked for a full review of the angles, the shadows, the gradients
+     and how the shapes are built. Measured, the family had: eleven pill shapes
+     drawn with seven different radii, twelve distinct radii for rectangles that
+     do three jobs, and thirteen linear-gradient angles in a system whose law is
+     one light from above.
+
+     A pill is a pill — seven numbers for it were seven ways of writing the same
+     shape. The rectangles collapse to five steps because they only ever do five
+     jobs: a mark, an icon box, a tile inside a card, a card, a block. And the
+     angles are named rather than typed, so "the sheen" is one angle everywhere
+     and the hatch cannot quietly become a fourth dialect of itself. */
+  --r-block: 18px;   /* a block: a month cell, a menu, a plinth */
+
+  --sheen: 160deg;   /* the surface sheen — one light, from above the object */
+  --wash: 180deg;    /* a straight vertical wash */
+  --hatch-angle: 135deg; /* §15-b: counted but not realised. ONE angle, always */
+  --drag: 92deg;     /* motion streaks — a different mark, declared so it is not
+                        mistaken for the hatch */
   --r-tile: 12px;
 
   /* the inner glow: a pool of light in the upper third of a surface */
   --glow-top: radial-gradient(64% 40% at 30% 6%, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 70%);
+
+  /* ── the glass recipe, as the reference states it ────────────────────────────
+     One of the reference slides is not a design at all — it is the recipe, with
+     the six numbers written on it: Background Blur 20, White Stroke 35%, Soft
+     Shadow Y:8 Blur:30 12%, Top Highlight 1px White, Inner Shadow 0/1/8 20%,
+     Transparent Fill 25%.
+
+     Handed numbers get named, not typed (§27). Typed, they would drift into
+     eleven blurs and nine strokes across the two families that use them; named,
+     the recipe is one place and a change to the pane is one edit. `--pane-blur`
+     is deliberately larger than `--glass-blur`: the library's chrome blurs to
+     stay legible over content, this pane blurs to become an object. */
+  --pane-blur: 20px;
+  --pane-fill: rgba(255, 255, 255, 0.25);
+  --pane-stroke: rgba(255, 255, 255, 0.35);
+  --pane-highlight: rgba(255, 255, 255, 0.95);
+  --pane-inner: rgba(16, 18, 24, 0.2);
 }
 
 /* ── grain. One layer, over everything, in overlay. It is the single reason the

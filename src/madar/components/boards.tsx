@@ -1,5 +1,6 @@
 import { useMemo, useRef, useState, type CSSProperties, type KeyboardEvent, type ReactNode } from 'react';
 import { AiOrb, MeshSurface } from './mesh';
+import { move, n } from './roving';
 
 /* ────────────────────────────────────────────────────────────────────────
    The board family — the primitives the two dashboard references are made of.
@@ -36,25 +37,6 @@ import { AiOrb, MeshSurface } from './mesh';
    its foreground. */
 const LIGHT_INK = '#101312';
 
-const n = (v: number, digits = 0) =>
-  v.toLocaleString('en-US', { minimumFractionDigits: digits, maximumFractionDigits: digits });
-
-const isRtl = () =>
-  typeof document !== 'undefined' && getComputedStyle(document.documentElement).direction === 'rtl';
-
-/** Roving-tabindex mover shared by every strip and list in this file. */
-function move(key: string, at: number, count: number, cols?: number): number | null {
-  const rtl = isRtl();
-  const step: Record<string, number> = {
-    [rtl ? 'ArrowLeft' : 'ArrowRight']: 1,
-    [rtl ? 'ArrowRight' : 'ArrowLeft']: -1,
-    Home: -count,
-    End: count,
-    ...(cols ? { ArrowDown: cols, ArrowUp: -cols } : { ArrowDown: 1, ArrowUp: -1 }),
-  };
-  if (!(key in step)) return null;
-  return Math.min(count - 1, Math.max(0, at + step[key]));
-}
 
 /* ═══════════════════════════════════════════════════════════════════════════
    DarkPlate — a black card with a green pool lit inside it
@@ -116,16 +98,16 @@ export function DarkPlate({
             data-plate-stat={s.label}
             data-on={at === i ? '' : undefined}
             style={{
-              borderRadius: 11, padding: 10, border: 0, cursor: 'pointer',
+              borderRadius: 'var(--r-tile)', padding: 10, border: 0, cursor: 'pointer',
               textAlign: 'start', fontFamily: 'inherit', color: '#fff',
-              background: 'linear-gradient(160deg, rgba(255,255,255,0.09) 0%, rgba(255,255,255,0.03) 100%)',
+              background: 'linear-gradient(var(--sheen), rgba(255,255,255,0.09) 0%, rgba(255,255,255,0.03) 100%)',
               boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.14), inset 0 0 0 1px rgba(255,255,255,0.06)',
               outline: at === i ? '2px solid var(--lime)' : 'none',
               outlineOffset: 2,
             }}
           >
             <span style={{ display: 'flex', alignItems: 'center', gap: 7, fontSize: 10.5, color: 'rgba(255,255,255,0.82)' }}>
-              <span style={{ width: 20, height: 20, borderRadius: 6, background: 'rgba(255,255,255,0.1)', display: 'grid', placeItems: 'center' }}>{s.icon}</span>
+              <span style={{ width: 20, height: 20, borderRadius: 'var(--r-lg)', background: 'rgba(255,255,255,0.1)', display: 'grid', placeItems: 'center' }}>{s.icon}</span>
               {s.label}
             </span>
             <span style={{ display: 'block', fontSize: 19, fontWeight: 500, letterSpacing: '-0.03em', marginTop: 9 }}>
@@ -191,7 +173,7 @@ export function AssistantCard({
       style={{
         borderRadius: 'var(--r-panel)', padding: 14, color: '#fff', textAlign: 'center',
         display: 'flex', flexDirection: 'column', height: '100%',
-        background: 'linear-gradient(160deg, #1d201e 0%, #0d100e 100%)',
+        background: 'linear-gradient(var(--sheen), #1d201e 0%, #0d100e 100%)',
         boxShadow: 'inset 0 1.5px 0 rgba(255,255,255,0.12), inset 0 -1.5px 0 var(--bevel-dark-deep)',
       }}
     >
@@ -233,9 +215,9 @@ export function AssistantCard({
             type="button"
             onClick={() => { setText(b.fill); field.current?.focus(); }}
             style={{
-              border: 0, borderRadius: 11, padding: '10px 8px', fontSize: 10.5, cursor: 'pointer',
+              border: 0, borderRadius: 'var(--r-tile)', padding: '10px 8px', fontSize: 10.5, cursor: 'pointer',
               fontFamily: 'inherit', color: '#fff',
-              background: 'linear-gradient(160deg, rgba(255,255,255,0.09), rgba(255,255,255,0.03))',
+              background: 'linear-gradient(var(--sheen), rgba(255,255,255,0.09), rgba(255,255,255,0.03))',
               boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.14), inset 0 0 0 1px rgba(255,255,255,0.06)',
               display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
             }}
@@ -251,7 +233,7 @@ export function AssistantCard({
       >
         <span
           style={{
-            flex: 1, height: 34, borderRadius: 17, display: 'flex', alignItems: 'center',
+            flex: 1, height: 34, borderRadius: 'var(--r-pill)', display: 'flex', alignItems: 'center',
             padding: '0 6px 0 14px',
             background: 'rgba(255,255,255,0.08)', boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.1)',
           }}
@@ -330,7 +312,9 @@ export function SplitDonut({
   /** Money per unit, so the centre figure is derived from the visible slices
       rather than typed beside them. */
   rate = 1000,
-}: { caption?: string; slices?: Slice[]; rate?: number }) {
+  ground = true,
+  pad = 16,
+}: { caption?: string; slices?: Slice[]; rate?: number; ground?: boolean; pad?: number }) {
   /* A legend whose items cannot be switched off is a caption. Toggling one
      recomputes the arcs *and* the centre total, so hiding a slice cannot leave
      a total that no longer matches the ring. */
@@ -350,15 +334,33 @@ export function SplitDonut({
   }, [shown, sum, C]);
 
   return (
-    <div data-donut={sum} style={{ color: LIGHT_INK, display: 'flex', alignItems: 'center', gap: 14 }}>
-      <svg width="128" height="128" viewBox="0 0 128 128" fill="none">
+    /* The donut owns its ground. Every value in it — the #f0eef6 track, the
+       #101312 centre reading, the #4d4f52 legend — is chosen for white, and both
+       original call sites wrapped it in a white card to make that true. A third
+       call site forgot, and the night pack put the legend on #282d46 at 1.64:1.
+       This is the same defect `ScoreBands` had and the same fix: a component that
+       owns its background owns its foreground. `ground={false}` is for a caller
+       that has already painted one. */
+    <div
+      data-donut={sum}
+      style={{
+        color: LIGHT_INK,
+        display: 'flex',
+        alignItems: 'center',
+        gap: 14,
+        ...(ground
+          ? { padding: pad, borderRadius: 'var(--r-panel)', background: '#fff', boxShadow: 'inset 0 0 0 1px #f0eef6' }
+          : null),
+      }}
+    >
+      <svg width="128" height="128" viewBox="0 0 128 128" fill="none" style={{ flex: 'none' }}>
         <defs>
-          <pattern id="madar-donut-hatch" width="7" height="7" patternTransform="rotate(120)" patternUnits="userSpaceOnUse">
+          <pattern id="madar-donut-hatch" width="7" height="7" patternTransform="rotate(135)" patternUnits="userSpaceOnUse">
             <rect width="7" height="7" fill="#fff" />
             <path d="M0 0v7" stroke="var(--lime-hatch)" strokeWidth="4" />
           </pattern>
         </defs>
-        <circle cx="64" cy="64" r="44" stroke="#f1f0f7" strokeWidth="21" />
+        <circle cx="64" cy="64" r="44" stroke="#f0eef6" strokeWidth="21" />
         {arcs.map((a) => (
           <circle
             key={a.label}
@@ -396,11 +398,11 @@ export function SplitDonut({
             >
               <i
                 style={{
-                  width: 9, height: 9, borderRadius: 3, display: 'inline-block',
+                  width: 9, height: 9, borderRadius: 'var(--r-xs)', display: 'inline-block',
                   background: !on
                     ? '#dcdae8'
                     : s.kind === 'hatch'
-                      ? 'repeating-linear-gradient(120deg, var(--lime-hatch) 0 3px, #fff 3px 6px)'
+                      ? 'repeating-linear-gradient(var(--hatch-angle), var(--lime-hatch) 0 3px, #fff 3px 6px)'
                       : s.kind === 'accent' ? 'var(--lime-hatch)' : '#5b4bea',
                 }}
               />
@@ -500,10 +502,10 @@ export function OppsTable({ rows = OPPS }: { rows?: Opp[] }) {
             data-on={i === at ? '' : undefined}
             style={{
               width: '100%', display: 'grid', gridTemplateColumns: cols, alignItems: 'center',
-              fontSize: 11, padding: 8, borderRadius: 11, border: 0, cursor: 'pointer',
+              fontSize: 11, padding: 8, borderRadius: 'var(--r-tile)', border: 0, cursor: 'pointer',
               fontFamily: 'inherit', color: LIGHT_INK, textAlign: 'start',
               background: i === at ? '#f8f7fd' : 'transparent',
-              boxShadow: i === at ? 'inset 0 0 0 1.4px #5b4bea' : 'inset 0 0 0 1px #f2f0f7',
+              boxShadow: i === at ? 'inset 0 0 0 1.4px #5b4bea' : 'inset 0 0 0 1px #f0eef6',
               marginTop: 7,
             }}
           >
@@ -527,7 +529,7 @@ export function OppsTable({ rows = OPPS }: { rows?: Opp[] }) {
                 <i
                   key={k}
                   style={{
-                    width: 5, height: 15, borderRadius: 2,
+                    width: 5, height: 15, borderRadius: 'var(--r-xs)',
                     background: k < r.risk ? (r.tone === 'lime' ? 'var(--lime-hatch)' : '#5b4bea') : '#dcdae8',
                   }}
                 />
@@ -576,7 +578,7 @@ export function CareOverview({
   };
 
   return (
-    <div data-care={progress} data-period={PERIODS[period]} style={{ color: LIGHT_INK, background: '#fbfbfb', borderRadius: 14, padding: 14, boxShadow: 'inset 0 1px 0 #fff, var(--depth-hairline)' }}>
+    <div data-care={progress} data-period={PERIODS[period]} style={{ color: LIGHT_INK, background: '#fbfbfa', borderRadius: 'var(--r-panel)', padding: 14, boxShadow: 'inset 0 1px 0 #fff, var(--depth-hairline)' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <h4 style={{ margin: 0, fontSize: 14.5, fontWeight: 600, letterSpacing: '-0.015em' }}>Patient Care Overview</h4>
         <button
@@ -584,7 +586,7 @@ export function CareOverview({
           onClick={() => setPeriod((p) => (p + 1) % PERIODS.length)}
           aria-label={`Period: ${PERIODS[period]}. Activate to change.`}
           style={{
-            height: 26, padding: '0 10px', borderRadius: 13, background: '#fff', fontSize: 11,
+            height: 26, padding: '0 10px', borderRadius: 'var(--r-pill)', background: '#fff', fontSize: 11,
             display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer', fontFamily: 'inherit',
             color: LIGHT_INK, border: 0, boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.07)',
           }}
@@ -611,9 +613,9 @@ export function CareOverview({
           ))}
           {/* the reached part is solid; beyond it is hatched, because a plan is
               not a measurement (§15-b) */}
-          <div style={{ position: 'relative', height: 13, borderRadius: 7, marginTop: 24, background: '#ececec', overflow: 'hidden' }}>
+          <div style={{ position: 'relative', height: 13, borderRadius: 'var(--r-pill)', marginTop: 24, background: '#ececec', overflow: 'hidden' }}>
             <span style={{ position: 'absolute', inset: 0, insetInlineEnd: `${100 - progress}%`, background: 'linear-gradient(90deg, #8fb06c 0%, #7ba055 46%, #5e7f3d 100%)' }} />
-            <span style={{ position: 'absolute', inset: 0, insetInlineStart: `${progress}%`, background: 'repeating-linear-gradient(115deg, #e2e2e2 0 4px, #f2f2f2 4px 8px)' }} />
+            <span style={{ position: 'absolute', inset: 0, insetInlineStart: `${progress}%`, background: 'repeating-linear-gradient(var(--hatch-angle), #e2e2e2 0 4px, #f2f2f0 4px 8px)' }} />
           </div>
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 10.5, color: '#9aa09b', marginTop: 6 }}>
@@ -643,7 +645,7 @@ export function CareOverview({
               data-metric={m.label}
               data-on={i === at ? '' : undefined}
               style={{
-                background: '#f2f2f2', borderRadius: 12, padding: '12px 6px', textAlign: 'center',
+                background: '#f2f2f0', borderRadius: 'var(--r-tile)', padding: '12px 6px', textAlign: 'center',
                 border: 0, cursor: 'pointer', fontFamily: 'inherit', color: LIGHT_INK,
                 boxShadow: 'inset 0 1px 0 #fff',
                 outline: i === at ? '2px solid #5e7f3d' : 'none',
@@ -662,7 +664,7 @@ export function CareOverview({
               <span style={{ display: 'block', fontSize: 11.5, fontWeight: 500, lineHeight: 1.3 }}>{m.label}</span>
               <span style={{ display: 'block', fontSize: 13, marginTop: 8 }}>
                 <bdi dir="ltr">{n(m.value)}</bdi>
-                {m.of && <small style={{ color: '#a4aaa5' }}> / <bdi dir="ltr">{n(m.of)}</bdi></small>}
+                {m.of && <small style={{ color: '#9aa09b' }}> / <bdi dir="ltr">{n(m.of)}</bdi></small>}
               </span>
             </button>
           );
@@ -712,7 +714,7 @@ export function FlowDonut({ total = 900, incoming = 400 }: { total?: number; inc
   }, [shown, C]);
 
   return (
-    <div data-flow={Math.round(total * sumFrac / 0.88)} style={{ color: LIGHT_INK, background: 'linear-gradient(168deg, #e7efdf, #dae8cd)', borderRadius: 14, padding: 14, boxShadow: 'inset 0 1px 0 #fff' }}>
+    <div data-flow={Math.round(total * sumFrac / 0.88)} style={{ color: LIGHT_INK, background: 'linear-gradient(var(--sheen), #e7efdf, #dae8cd)', borderRadius: 'var(--r-panel)', padding: 14, boxShadow: 'inset 0 1px 0 #fff' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <h4 style={{ margin: 0, fontSize: 14.5, fontWeight: 600, letterSpacing: '-0.015em' }}>Patient Flow</h4>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="#6b736d" aria-hidden="true"><circle cx="5" cy="12" r="1.7" /><circle cx="12" cy="12" r="1.7" /><circle cx="19" cy="12" r="1.7" /></svg>
@@ -755,7 +757,7 @@ export function FlowDonut({ total = 900, incoming = 400 }: { total?: number; inc
                 style={{
                   border: 0, background: 'transparent', cursor: 'pointer', fontFamily: 'inherit',
                   fontSize: 10.5, padding: '2px 3px',
-                  color: on ? '#6b736d' : '#a9b0a6', textDecoration: on ? 'none' : 'line-through',
+                  color: on ? '#6b736d' : '#9aa09b', textDecoration: on ? 'none' : 'line-through',
                 }}
               >
                 <i style={legendDot(on ? f.ink : '#c9cfc4')} />{f.label}
@@ -807,13 +809,13 @@ export function StaffList({ staff = STAFF, onPick }: { staff?: Staff[]; onPick?:
   };
 
   return (
-    <div data-staff={found.length} style={{ color: LIGHT_INK, background: '#fbfbfb', borderRadius: 14, padding: 14, boxShadow: 'inset 0 1px 0 #fff, var(--depth-hairline)' }}>
+    <div data-staff={found.length} style={{ color: LIGHT_INK, background: '#fbfbfa', borderRadius: 'var(--r-panel)', padding: 14, boxShadow: 'inset 0 1px 0 #fff, var(--depth-hairline)' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
         <h4 style={{ margin: 0, fontSize: 14.5, fontWeight: 600, letterSpacing: '-0.015em' }}>Doctor</h4>
         <span
           style={{
             display: 'flex', alignItems: 'center', gap: 6, height: 26, paddingInline: 9,
-            borderRadius: 13, background: '#fff', boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.07)',
+            borderRadius: 'var(--r-pill)', background: '#fff', boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.07)',
           }}
         >
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#131a12" strokeWidth="2.2" aria-hidden="true"><circle cx="11" cy="11" r="6.5" /><path d="M16 16l4 4" /></svg>
@@ -844,7 +846,7 @@ export function StaffList({ staff = STAFF, onPick }: { staff?: Staff[]; onPick?:
               style={{
                 width: '100%', display: 'flex', alignItems: 'center', gap: 9, padding: '7px 6px',
                 border: 0, cursor: 'pointer', fontFamily: 'inherit', color: LIGHT_INK, textAlign: 'start',
-                borderRadius: 10,
+                borderRadius: 'var(--r-tile)',
                 background: i === pos ? '#f1f4ef' : 'transparent',
                 borderBottom: i === found.length - 1 ? 0 : '1px solid #f0f0f0',
               }}
@@ -856,7 +858,7 @@ export function StaffList({ staff = STAFF, onPick }: { staff?: Staff[]; onPick?:
                 <b style={{ display: 'block', fontSize: 12, fontWeight: 500 }}>{s.name}</b>
                 <span style={{ fontSize: 10.5, color: '#8d948e' }}>{s.role}</span>
               </span>
-              <span style={{ height: 22, padding: '0 9px', borderRadius: 11, fontSize: 10.5, display: 'flex', alignItems: 'center', gap: 5, background: d.bg, color: d.ink, flex: 'none' }}>
+              <span style={{ height: 22, padding: '0 9px', borderRadius: 'var(--r-pill)', fontSize: 10.5, display: 'flex', alignItems: 'center', gap: 5, background: d.bg, color: d.ink, flex: 'none' }}>
                 <i style={{ width: 5, height: 5, borderRadius: '50%', background: d.dot }} />{d.label}
               </span>
             </button>
@@ -886,11 +888,42 @@ const STAFF: Staff[] = [
 
 export interface Swatch { hex: string; from: string; mid: string; to: string }
 
+/* The batch after this one carried the same slide on a lavender ground instead of
+   an olive one. That is a key, not a second component: the type, the pills, the
+   spheres, the copy behaviour and the live region are identical, and the only
+   things that change are the field behind them and which way the ink runs. So
+   `tone` is one prop and the light twin costs nine lines — building it twice is
+   how a library ends up with two slides that drift apart. */
+const SLIDE = {
+  dark: {
+    field: 'olive' as const,
+    ink: 'rgba(255,255,255,0.9)',
+    soft: 'rgba(255,255,255,0.72)',
+    pillInk: '#fff',
+    pillEdge: 'rgba(255,255,255,0.22)',
+    pillFill: 'rgba(255,255,255,0.05)',
+    lip: 'inset 0 1.5px 0 rgba(255,255,255,0.24), inset 0 -1.5px 0 rgba(0,0,0,0.2)',
+    type: 'linear-gradient(var(--wash), #fff 0%, #f2f2ee 42%, #c9c9c2 100%)',
+  },
+  light: {
+    field: 'light' as const,
+    ink: '#1c1a2e',
+    soft: 'rgba(28,26,46,0.62)',
+    pillInk: '#1c1a2e',
+    pillEdge: 'rgba(28,26,46,0.14)',
+    pillFill: 'rgba(255,255,255,0.55)',
+    lip: 'inset 0 1.5px 0 rgba(255,255,255,0.9), inset 0 -1.5px 0 rgba(28,26,46,0.08)',
+    type: 'linear-gradient(var(--wash), #3a3752 0%, #1c1a2e 52%, #100f1c 100%)',
+  },
+};
+
 export function PaletteSlide({
   face = 'Neue Montreal',
   weights = ['Regular', 'Medium'],
   swatches = SWATCHES,
-}: { face?: string; weights?: string[]; swatches?: Swatch[] }) {
+  tone = 'dark',
+}: { face?: string; weights?: string[]; swatches?: Swatch[]; tone?: 'dark' | 'light' }) {
+  const t = SLIDE[tone];
   /* The whole use of a palette slide is getting the hex out of it, so the pills
      copy. Clipboard access is refused in plenty of contexts, so the state says
      what actually happened rather than claiming success. */
@@ -919,22 +952,22 @@ export function PaletteSlide({
   };
 
   return (
-    <MeshSurface variant="olive" grain="light" radius="var(--r-panel)" style={{ padding: '54px 40px 60px', textAlign: 'center' }}>
-      <div style={{ fontSize: 15, color: 'rgba(255,255,255,0.9)' }}>Typography</div>
+    <MeshSurface variant={t.field} grain="light" radius="var(--r-panel)" data-slide={tone} style={{ padding: '54px 40px 60px', textAlign: 'center' }}>
+      <div style={{ fontSize: 15, color: t.ink }}>Typography</div>
       <div
         style={{
           fontSize: 62, fontWeight: 300, letterSpacing: '-0.045em', lineHeight: 1, marginTop: 10,
-          background: 'linear-gradient(178deg, #ffffff 0%, #f2f2ee 42%, #c9c9c2 100%)',
+          background: t.type,
           WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent',
         }}
       >
         {face}
       </div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 15, color: 'rgba(255,255,255,0.72)', marginTop: 14, padding: '0 6%' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 15, color: t.soft, marginTop: 14, padding: '0 6%' }}>
         {weights.map((w) => <span key={w}>{w}</span>)}
       </div>
 
-      <div style={{ fontSize: 15, color: 'rgba(255,255,255,0.9)', marginTop: 44 }}>Colour Palette</div>
+      <div style={{ fontSize: 15, color: t.ink, marginTop: 44 }}>Colour Palette</div>
       <div
         onKeyDown={onKey}
         style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 14, marginTop: 18 }}
@@ -950,12 +983,12 @@ export function PaletteSlide({
             data-swatch={s.hex}
             data-copied={copied === s.hex ? '' : undefined}
             style={{
-              height: 62, padding: '0 22px 0 9px', borderRadius: 31, cursor: 'pointer',
+              height: 62, padding: '0 22px 0 9px', borderRadius: 'var(--r-pill)', cursor: 'pointer',
               display: 'flex', alignItems: 'center', gap: 16, fontSize: 17,
-              fontFamily: 'inherit', color: '#fff',
-              border: '1px solid rgba(255,255,255,0.22)',
-              background: 'rgba(255,255,255,0.05)',
-              boxShadow: 'inset 0 1.5px 0 rgba(255,255,255,0.24), inset 0 -1.5px 0 rgba(0,0,0,0.2)',
+              fontFamily: 'inherit', color: t.pillInk,
+              border: `1px solid ${t.pillEdge}`,
+              background: t.pillFill,
+              boxShadow: t.lip,
               backdropFilter: 'blur(6px)',
               outline: copied === s.hex ? '2px solid var(--lime)' : 'none',
               outlineOffset: 3,
@@ -972,7 +1005,7 @@ export function PaletteSlide({
           </button>
         ))}
       </div>
-      <p data-palette-says="" aria-live="polite" style={{ margin: '18px 0 0', fontSize: 13, color: 'rgba(255,255,255,0.72)' }}>
+      <p data-palette-says="" aria-live="polite" style={{ margin: '18px 0 0', fontSize: 13, color: t.soft }}>
         {copied
           ? (failed
             ? <>The clipboard is not available here — <bdi dir="ltr">{copied}</bdi> is shown to be selected by hand.</>
@@ -985,8 +1018,8 @@ export function PaletteSlide({
 
 const SWATCHES: Swatch[] = [
   { hex: '#BAF91A', from: '#e6ff7a', mid: '#baf91a', to: '#93c810' },
-  { hex: '#E2FF99', from: '#ffffff', mid: '#e2ff99', to: '#c2e072' },
+  { hex: '#E2FF99', from: '#fff', mid: '#e2ff99', to: '#c2e072' },
   { hex: '#876DFF', from: '#c4b6ff', mid: '#876dff', to: '#6650d9' },
   { hex: '#101312', from: '#4a4f4c', mid: '#1c201e', to: '#101312' },
-  { hex: '#FFFFFF', from: '#ffffff', mid: '#ffffff', to: '#dcdcd6' },
+  { hex: '#FFFFFF', from: '#fff', mid: '#fff', to: '#dcdcd6' },
 ];
