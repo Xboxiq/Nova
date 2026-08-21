@@ -96,6 +96,25 @@ for (const d of DIRECTIONS) {
   console.log(`${d.padEnd(14)} moves ${String(changed.length).padStart(2)}/${TOKENS.length} tokens · card radius ${got.tokens["--nova-radius-card"]} · body ${got.tokens["--nova-text-body-md"]} · base motion ${got.tokens["--nova-motion-base"]} · min hit ${got.minHit}px`);
 }
 
+/* ── the two compared specimens must not overlap ────────────────────────────
+   They overlapped by 30px on first build: a grid item defaults to
+   `min-width: auto`, which is min-content, so the chip + field + button row
+   pushed the card 44px past its track. A comment saying so is not a check —
+   this measures the rendered boxes. */
+await page.goto(`${URL}#madar-directions`, { waitUntil: "networkidle" });
+await page.waitForTimeout(1100);
+const overlap = await page.evaluate(() => {
+  const regs = [...document.querySelectorAll("[data-register]")]
+    .map((el) => el.querySelector("article")?.getBoundingClientRect())
+    .filter(Boolean);
+  if (regs.length < 2) return null;
+  const [a, b] = regs;
+  return Math.max(0, Math.round(Math.min(a.right, b.right) - Math.max(a.left, b.left)));
+});
+if (overlap === null) failures.push("the two compared specimens were not found on the page");
+else if (overlap > 0) failures.push(`the compared specimens overlap by ${overlap}px`);
+console.log(`SPECIMEN_OVERLAP=${overlap ?? "missing"}px`);
+
 /* the default has to survive with the attribute removed again */
 const after = await read(null);
 for (const t of TOKENS) {

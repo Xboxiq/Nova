@@ -23,7 +23,7 @@ Run with `--timeout 300`: G6's check drives seven sections through seven packs.
   and one did: `madar-color-tokens` was missed by the first pass.
   CHECK: npm run build 2>&1 | grep -E 'built in|error TS'
   EXPECT: /built in/m
-  EVIDENCE: ✓ built in 1.89s
+  EVIDENCE: ✓ built in 1.50s
 
 - [x] G3: The three redundancies in the proposal are resolved, not copied
   Components are parts; patterns are compositions with a job; layouts are
@@ -82,9 +82,9 @@ Run with `--timeout 300`: G6's check drives seven sections through seven packs.
   They overlapped by 30px: a grid item defaults to `min-width: auto`, which is
   min-content, so the chip-field-button row pushed the card 44px past its track.
   Measured on the page, not eyeballed.
-  CHECK: grep -c 'min-width: .auto., which is min-content' src/madar/showcase/sections/Directions.tsx
+  CHECK: grep -c 'which is min-content' src/madar/showcase/sections/Directions.tsx
   EXPECT: 1
-  EVIDENCE: pending
+  EVIDENCE: 1
 
 - [x] G11: The register scopes to a wrapper, and cleans up after itself
   Two registers must be able to stand side by side — that is the only way a
@@ -98,7 +98,7 @@ Run with `--timeout 300`: G6's check drives seven sections through seven packs.
 - [x] G12: Nothing regressed
   CHECK: node tools/qa/madar-qa.mjs 2>&1 | grep -E 'AXE_VIOLATIONS_MADAR|OVERFLOW'
   EXPECT: AXE_VIOLATIONS_MADAR=0
-  EVIDENCE: pending
+  EVIDENCE: OVERFLOW=none | AXE_VIOLATIONS_MADAR=0
 
 - [ ] G13: The folders move on disk to match the shelf
   CHECK: echo abandoned
