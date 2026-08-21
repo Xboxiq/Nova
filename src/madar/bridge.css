@@ -551,6 +551,26 @@
   --r-sheet: 30px;
   --r-pill: 999px;
   --r-panel: 15px;
+
+  /* ── the shape ladder, and the named angles ────────────────────────────────
+     The owner asked for a full review of the angles, the shadows, the gradients
+     and how the shapes are built. Measured, the family had: eleven pill shapes
+     drawn with seven different radii, twelve distinct radii for rectangles that
+     do three jobs, and thirteen linear-gradient angles in a system whose law is
+     one light from above.
+
+     A pill is a pill — seven numbers for it were seven ways of writing the same
+     shape. The rectangles collapse to five steps because they only ever do five
+     jobs: a mark, an icon box, a tile inside a card, a card, a block. And the
+     angles are named rather than typed, so "the sheen" is one angle everywhere
+     and the hatch cannot quietly become a fourth dialect of itself. */
+  --r-block: 18px;   /* a block: a month cell, a menu, a plinth */
+
+  --sheen: 160deg;   /* the surface sheen — one light, from above the object */
+  --wash: 180deg;    /* a straight vertical wash */
+  --hatch-angle: 135deg; /* §15-b: counted but not realised. ONE angle, always */
+  --drag: 92deg;     /* motion streaks — a different mark, declared so it is not
+                        mistaken for the hatch */
   --r-tile: 12px;
 
   /* the inner glow: a pool of light in the upper third of a surface */

@@ -49,36 +49,36 @@ const MESH: Record<MeshVariant, string> = {
     'radial-gradient(96% 60% at 4% 34%, var(--mesh-sand) 0%, transparent 64%)',
     'radial-gradient(96% 62% at 98% 52%, var(--mesh-peach) 0%, transparent 66%)',
     'radial-gradient(120% 74% at 46% 104%, var(--mesh-rose) 0%, transparent 72%)',
-    'linear-gradient(166deg, var(--mesh-ramp-1) 0%, var(--mesh-ramp-2) 38%, var(--mesh-ramp-3) 70%, var(--mesh-ramp-4) 100%)',
+    'linear-gradient(var(--sheen), var(--mesh-ramp-1) 0%, var(--mesh-ramp-2) 38%, var(--mesh-ramp-3) 70%, var(--mesh-ramp-4) 100%)',
   ].join(','),
   green: [
     'radial-gradient(76% 52% at 16% 2%, var(--widget-green-a) 0%, transparent 62%)',
     'radial-gradient(72% 46% at 92% 8%, var(--widget-green-b) 0%, transparent 60%)',
     'radial-gradient(110% 70% at 42% 104%, var(--widget-green-c) 0%, transparent 68%)',
-    'linear-gradient(160deg, #5f7d18 0%, #7d9c22 46%, #b6d833 100%)',
+    'linear-gradient(var(--sheen), #5f7d18 0%, #7d9c22 46%, #b6d833 100%)',
   ].join(','),
   peach: [
     'radial-gradient(74% 50% at 18% 2%, var(--widget-peach-a) 0%, transparent 62%)',
     'radial-gradient(70% 46% at 90% 10%, var(--widget-peach-b) 0%, transparent 60%)',
     'radial-gradient(110% 72% at 46% 104%, var(--widget-peach-c) 0%, transparent 70%)',
-    'linear-gradient(160deg, #d8b49a 0%, #d5a488 48%, #eec4b2 100%)',
+    'linear-gradient(var(--sheen), #d8b49a 0%, #d5a488 48%, #eec4b2 100%)',
   ].join(','),
   light: [
     'radial-gradient(52% 34% at 88% 2%, rgba(214,246,120,0.5) 0%, transparent 62%)',
     'radial-gradient(56% 36% at 6% 6%, rgba(236,214,240,0.55) 0%, transparent 64%)',
     'radial-gradient(60% 40% at 96% 30%, rgba(255,222,196,0.55) 0%, transparent 66%)',
     'radial-gradient(70% 46% at 4% 40%, rgba(212,232,255,0.42) 0%, transparent 68%)',
-    'linear-gradient(178deg, #f7f7f5 0%, #fbfbfa 44%, #ffffff 100%)',
+    'linear-gradient(var(--wash), #f7f7f5 0%, #fbfbfa 44%, #fff 100%)',
   ].join(','),
   plate: [
     'radial-gradient(58% 130% at 20% 150%, var(--plate-pool) 0%, transparent 58%)',
     'radial-gradient(50% 110% at 86% 140%, var(--plate-pool-deep) 0%, transparent 56%)',
-    'linear-gradient(158deg, var(--plate-a) 0%, var(--plate-b) 46%, var(--plate-c) 100%)',
+    'linear-gradient(var(--sheen), var(--plate-a) 0%, var(--plate-b) 46%, var(--plate-c) 100%)',
   ].join(','),
   olive: [
     'radial-gradient(120% 62% at 50% 106%, var(--olive-pool) 0%, transparent 66%)',
     'radial-gradient(90% 44% at 50% 88%, #5c6a12 0%, transparent 70%)',
-    'linear-gradient(180deg, var(--olive-a) 0%, #121512 34%, var(--olive-b) 62%, var(--olive-c) 84%, var(--olive-d) 100%)',
+    'linear-gradient(var(--wash), var(--olive-a) 0%, #121512 34%, var(--olive-b) 62%, var(--olive-c) 84%, var(--olive-d) 100%)',
   ].join(','),
 };
 
@@ -132,7 +132,7 @@ export function MeshSurface({
         overflow: 'hidden',
         borderRadius: radius,
         background: MESH[variant],
-        color: DARK_GROUND[variant] ? '#fff' : '#101010',
+        color: DARK_GROUND[variant] ? '#fff' : '#101312',
         ...style,
       }}
     >
@@ -150,7 +150,7 @@ export const ink = {
   strong: '#fff',
   label: 'rgba(255,255,255,0.66)',
   soft: 'rgba(255,255,255,0.72)',
-  onLight: '#101010',
+  onLight: '#101312',
   labelOnLight: '#8f8f8c',
 } as const;
 
@@ -204,7 +204,7 @@ export function AiOrb({ size = 128 }: { size?: number }) {
         borderRadius: '50%',
         position: 'relative',
         background: [
-          'radial-gradient(38% 38% at 34% 30%, #ffffff 0%, rgba(255,255,255,0) 62%)',
+          'radial-gradient(38% 38% at 34% 30%, #fff 0%, rgba(255,255,255,0) 62%)',
           'radial-gradient(74% 74% at 62% 40%, #6ff0c0 0%, rgba(111,240,192,0) 66%)',
           'radial-gradient(80% 80% at 40% 70%, #b9f53a 0%, rgba(185,245,58,0) 68%)',
           'radial-gradient(96% 96% at 50% 50%, #2fbf8a 0%, #0f7a58 74%, #063a29 100%)',
@@ -243,7 +243,7 @@ export function Smear({ tone = 'figure' }: { tone?: 'figure' | 'sky' }) {
           'radial-gradient(60% 40% at 24% 12%, #8fc3d6 0%, transparent 68%)',
           'radial-gradient(70% 46% at 78% 6%, #6fa9c4 0%, transparent 66%)',
           'radial-gradient(80% 50% at 50% 46%, #d9d3c2 0%, transparent 70%)',
-          'linear-gradient(178deg, #a9cfdd 0%, #cfd6cf 46%, #ece2d2 100%)',
+          'linear-gradient(var(--wash), #a9cfdd 0%, #cfd6cf 46%, #ece2d2 100%)',
         ].join(',');
 
   return (
@@ -269,7 +269,7 @@ export function Smear({ tone = 'figure' }: { tone?: 'figure' | 'sky' }) {
           inset: 0,
           opacity: 0.5,
           filter: 'blur(1.5px)',
-          background: 'repeating-linear-gradient(92deg, rgba(255,255,255,0.12) 0 2px, rgba(255,255,255,0) 2px 10px)',
+          background: 'repeating-linear-gradient(var(--drag), rgba(255,255,255,0.12) 0 2px, rgba(255,255,255,0) 2px 10px)',
           maskImage: 'radial-gradient(46% 60% at 42% 44%, #000 0%, transparent 76%)',
           WebkitMaskImage: 'radial-gradient(46% 60% at 42% 44%, #000 0%, transparent 76%)',
         }}

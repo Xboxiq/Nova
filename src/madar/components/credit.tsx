@@ -120,7 +120,7 @@ function OpenButton({
           : 'inset 0 1px 0 rgba(255,255,255,0.16), var(--depth-press)',
       }}
     >
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={quiet && !dark ? '#101010' : '#fff'} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={quiet && !dark ? '#101312' : '#fff'} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
         <path d="M7 17 17 7" /><path d="M9 7h8v8" />
       </svg>
     </button>
@@ -213,7 +213,7 @@ export function LoanWidget({
             <span
               key={i}
               style={{
-                width: 2, height: on ? 26 : 18, borderRadius: 1,
+                width: 2, height: on ? 26 : 18, borderRadius: 'var(--r-pill)',
                 background: on ? 'var(--lime-bright)' : 'rgba(255,255,255,0.44)',
               }}
             />
@@ -270,13 +270,13 @@ export function StatWidget({
       style={{
         width: size, height: size, padding: 26, borderRadius: 'var(--r-widget)',
         display: 'flex', flexDirection: 'column', position: 'relative', overflow: 'hidden',
-        color: light ? '#101010' : '#fff',
+        color: light ? '#101312' : '#fff',
         background: light
-          ? 'linear-gradient(178deg, #ffffff 0%, #fbfbfa 100%)'
-          : 'linear-gradient(168deg, rgba(255,255,255,0.34) 0%, rgba(255,255,255,0.16) 100%)',
+          ? 'linear-gradient(var(--wash), #fff 0%, #fbfbfa 100%)'
+          : 'linear-gradient(var(--sheen), rgba(255,255,255,0.34) 0%, rgba(255,255,255,0.16) 100%)',
         backdropFilter: light ? undefined : 'blur(26px)',
         boxShadow: light
-          ? 'inset 0 1.5px 0 #ffffff, inset 0 -1px 0 rgba(0,0,0,0.05), var(--depth-widget)'
+          ? 'inset 0 1.5px 0 #fff, inset 0 -1px 0 rgba(0,0,0,0.05), var(--depth-widget)'
           : 'inset 0 1.5px 0 rgba(255,255,255,0.6), inset 0 -1.5px 0 rgba(0,0,0,0.1), inset 0 0 0 1px rgba(255,255,255,0.3), var(--depth-widget)',
       }}
     >
@@ -289,11 +289,11 @@ export function StatWidget({
           }}
         >
           {icon === 'calendar' ? (
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={light ? '#101010' : '#fff'} strokeWidth="1.4" strokeLinecap="round">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={light ? '#101312' : '#fff'} strokeWidth="1.4" strokeLinecap="round">
               <rect x="3.5" y="5" width="17" height="16" rx="3" /><path d="M3.5 10h17M8 3v4M16 3v4" />
             </svg>
           ) : (
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={light ? '#101010' : '#fff'} strokeWidth="1.4" strokeLinecap="round">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={light ? '#101312' : '#fff'} strokeWidth="1.4" strokeLinecap="round">
               <rect x="3" y="6" width="14" height="11" rx="2.5" /><path d="M3 10h14" /><circle cx="17.5" cy="15.5" r="4" /><path d="M17.5 14v3" />
             </svg>
           )}
@@ -343,7 +343,7 @@ export function StatWidget({
                 key={i}
                 style={{
                   width: 7, height: 7, borderRadius: '50%',
-                  background: i >= 12 - dots ? '#101010' : '#d8d8d5',
+                  background: i >= 12 - dots ? '#101312' : '#d8d8d5',
                 }}
               />
             ))}
@@ -427,7 +427,7 @@ export function PaidSplit({
         style={{
           position: 'relative', height: 96,
           background: side === 'paid'
-            ? 'linear-gradient(180deg, var(--lime) 0%, rgba(255,255,255,0.3) 46%, rgba(255,255,255,0.12) 100%)'
+            ? 'linear-gradient(var(--wash), var(--lime) 0%, rgba(255,255,255,0.3) 46%, rgba(255,255,255,0.12) 100%)'
             : 'linear-gradient(0deg, var(--lime) 0%, rgba(255,255,255,0.3) 46%, rgba(255,255,255,0.12) 100%)',
         }}
       >
@@ -465,7 +465,7 @@ function Chip({
       data-chip={lit ? 'paid' : 'due'}
       data-on={on ? '' : undefined}
       style={{
-        width: '100%', height: 52, padding: '0 18px', borderRadius: 26, cursor: 'pointer',
+        width: '100%', height: 52, padding: '0 18px', borderRadius: 'var(--r-pill)', cursor: 'pointer',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12,
         fontSize: 17, fontFamily: 'inherit', color: '#fff',
         ...glass(lit),
@@ -586,7 +586,7 @@ export function MonthGrid({
                       data-month={m.state}
                       data-on={on ? '' : undefined}
                       style={{
-                        height: 92, borderRadius: 18, paddingTop: 11, cursor: 'pointer',
+                        height: 92, borderRadius: 'var(--r-block)', paddingTop: 11, cursor: 'pointer',
                         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between',
                         fontSize: 15, fontFamily: 'inherit', color: '#fff',
                         opacity: m.state === 'due' ? 0.72 : 1,
@@ -796,14 +796,14 @@ export function LoanScreen({
           type="button"
           onClick={() => setAction('Payment started')}
           style={{
-            flex: 1.05, height: 62, border: 0, borderRadius: 31, cursor: 'pointer',
+            flex: 1.05, height: 62, border: 0, borderRadius: 'var(--r-pill)', cursor: 'pointer',
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
             fontFamily: 'inherit', fontSize: 17, fontWeight: 500,
-            background: '#fff', color: '#101010',
+            background: '#fff', color: '#101312',
             boxShadow: 'inset 0 1px 0 #fff, var(--depth-float)',
           }}
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#101010" strokeWidth="1.7" strokeLinecap="round" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#101312" strokeWidth="1.7" strokeLinecap="round" aria-hidden="true">
             <rect x="2.5" y="6" width="14" height="10" rx="2.4" /><path d="M2.5 10h14" /><path d="M20 9v6M17 12h6" />
           </svg>
           Make Payment
@@ -812,7 +812,7 @@ export function LoanScreen({
           type="button"
           onClick={() => setAction('Dispute opened')}
           style={{
-            flex: 1, height: 62, borderRadius: 31, cursor: 'pointer',
+            flex: 1, height: 62, borderRadius: 'var(--r-pill)', cursor: 'pointer',
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
             fontFamily: 'inherit', fontSize: 17, fontWeight: 500, color: '#fff',
             ...glass(),
@@ -831,7 +831,7 @@ export function LoanScreen({
           aria-live="polite"
           style={{
             position: 'absolute', insetInline: 18, bottom: 92, margin: 0, textAlign: 'center',
-            fontSize: 14, color: '#fff', padding: '10px 16px', borderRadius: 20, ...glass(true),
+            fontSize: 14, color: '#fff', padding: '10px 16px', borderRadius: 'var(--r-pill)', ...glass(true),
           }}
         >
           {action}
@@ -846,9 +846,9 @@ export function LoanScreen({
    ═══════════════════════════════════════════════════════════════════════════ */
 
 const BANDS = [
-  { name: 'Poor to fair', from: 300, to: 629, dot: '#e8703f', soft: '#e8825c', bg: 'linear-gradient(150deg, #fdece4, #fbdccf)' },
-  { name: 'Good', from: 630, to: 689, dot: '#e0a11c', soft: '#e0ab34', bg: 'linear-gradient(150deg, #fdf4d8, #fbedc0)' },
-  { name: 'Very good to excellent', from: 690, to: 850, dot: '#3f8f2f', soft: '#4e9b3f', bg: 'linear-gradient(150deg, #e8f5e0, #d9efcd)' },
+  { name: 'Poor to fair', from: 300, to: 629, dot: '#e8703f', soft: '#e8825c', bg: 'linear-gradient(var(--sheen), #fdece4, #fbdccf)' },
+  { name: 'Good', from: 630, to: 689, dot: '#e0a11c', soft: '#e0ab34', bg: 'linear-gradient(var(--sheen), #fdf4d8, #fbedc0)' },
+  { name: 'Very good to excellent', from: 690, to: 850, dot: '#3f8f2f', soft: '#4e9b3f', bg: 'linear-gradient(var(--sheen), #e8f5e0, #d9efcd)' },
 ];
 
 /**
@@ -861,7 +861,7 @@ export function ScoreBands({
   onBand,
   /* This is a light-ground component: pale bands, a near-black marker, grey
      scale numerals. It used to rely on whoever placed it being light, and in the
-     night pack that put a #101010 label on a #2f3550 stage at 1.58 — invisible,
+     night pack that put a #101312 label on a #2f3550 stage at 1.58 — invisible,
      not merely poor. `boards.tsx` already settled the rule for this family: a
      design that owns its background owns its foreground. So it paints its own
      ground, and `ScoreScreen` turns it off because the light mesh is already
@@ -893,7 +893,7 @@ export function ScoreBands({
     <div
       data-bands={at.idx}
       data-looking={look}
-      style={ground ? { background: '#fbfbfa', borderRadius: 18, padding: 14, boxShadow: 'inset 0 0 0 1px rgba(16,16,16,0.05)' } : undefined}
+      style={ground ? { background: '#fbfbfa', borderRadius: 'var(--r-block)', padding: 14, boxShadow: 'inset 0 0 0 1px rgba(16,16,16,0.05)' } : undefined}
     >
       <div
         role="radiogroup"
@@ -914,7 +914,7 @@ export function ScoreBands({
             data-band={i}
             data-on={look === i ? '' : undefined}
             style={{
-              height: 62, borderRadius: 15, background: b.bg, position: 'relative', overflow: 'hidden',
+              height: 62, borderRadius: 'var(--r-panel)', background: b.bg, position: 'relative', overflow: 'hidden',
               border: 0, padding: 0, cursor: 'pointer',
               boxShadow: 'inset 0 0 0 1px rgba(16,16,16,0.05)',
               outline: look === i ? `2px solid ${b.dot}` : 'none',
@@ -940,12 +940,12 @@ export function ScoreBands({
             insetInlineStart: `calc(${(at.idx / 3) * 100}% + ${at.within * 30 + 2}%)`,
           }}
         >
-          <span style={{ display: 'block', width: 0, height: 0, margin: '0 auto', borderLeft: '7px solid transparent', borderRight: '7px solid transparent', borderTop: '9px solid #101010' }} />
-          <span style={{ display: 'block', width: 1.4, height: 62, background: '#101010', margin: '0 auto' }} />
+          <span style={{ display: 'block', width: 0, height: 0, margin: '0 auto', borderLeft: '7px solid transparent', borderRight: '7px solid transparent', borderTop: '9px solid #101312' }} />
+          <span style={{ display: 'block', width: 1.4, height: 62, background: '#101312', margin: '0 auto' }} />
           {/* the triangle and stem state their ink; the number was inheriting the
               pack's, which in the night pack put #edf0f7 on this white ground at
               1.1 — the same omission, one node deep */}
-          <span style={{ display: 'block', fontSize: 13, fontWeight: 600, marginTop: 8, color: '#101010' }}><bdi dir="ltr">{n(score)}</bdi></span>
+          <span style={{ display: 'block', fontSize: 13, fontWeight: 600, marginTop: 8, color: '#101312' }}><bdi dir="ltr">{n(score)}</bdi></span>
         </span>
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', marginTop: 9, fontSize: 13, color: '#9a9a97' }}>
@@ -953,8 +953,8 @@ export function ScoreBands({
       </div>
       <p data-band-says="" aria-live="polite" style={{ margin: '10px 0 0', fontSize: 13, color: '#5c5c59' }}>
         {look === at.idx
-          ? <><b style={{ fontWeight: 600, color: '#101010' }}>{BANDS[look].name}</b> — where you are, at <bdi dir="ltr">{n(score)}</bdi>.</>
-          : <><b style={{ fontWeight: 600, color: '#101010' }}>{BANDS[look].name}</b> — <bdi dir="ltr">{n(BANDS[look].from)}</bdi> to <bdi dir="ltr">{n(BANDS[look].to)}</bdi>, {score > BANDS[look].to ? 'behind you' : `${n(BANDS[look].from - score)} points away`}.</>}
+          ? <><b style={{ fontWeight: 600, color: '#101312' }}>{BANDS[look].name}</b> — where you are, at <bdi dir="ltr">{n(score)}</bdi>.</>
+          : <><b style={{ fontWeight: 600, color: '#101312' }}>{BANDS[look].name}</b> — <bdi dir="ltr">{n(BANDS[look].from)}</bdi> to <bdi dir="ltr">{n(BANDS[look].to)}</bdi>, {score > BANDS[look].to ? 'behind you' : `${n(BANDS[look].from - score)} points away`}.</>}
       </p>
     </div>
   );
@@ -1032,17 +1032,17 @@ export function CreditHistory({
       data-history=""
       data-at={at}
       style={{
-        borderRadius: 'var(--r-sheet)', padding: '18px 18px 12px', background: '#fff', color: '#101010',
+        borderRadius: 'var(--r-sheet)', padding: '18px 18px 12px', background: '#fff', color: '#101312',
         boxShadow: 'inset 0 1.5px 0 #fff, var(--depth-card)',
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
         <span aria-hidden="true" style={{ width: 42, height: 42, borderRadius: '50%', display: 'grid', placeItems: 'center', boxShadow: 'inset 0 0 0 1.2px rgba(16,16,16,0.16)' }}>
-          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#101010" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#101312" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
             <path d="M12 7v5l3.5 2" /><path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1" /><path d="M3 5v4h4" />
           </svg>
         </span>
-        <h3 style={{ margin: 0, flex: 1, fontSize: 19, fontWeight: 500, letterSpacing: '-0.015em', color: '#101010' }}>Credit History</h3>
+        <h3 style={{ margin: 0, flex: 1, fontSize: 19, fontWeight: 500, letterSpacing: '-0.015em', color: '#101312' }}>Credit History</h3>
         <OpenButton quiet dark={false} label="Open credit history" />
       </div>
 
@@ -1058,7 +1058,7 @@ export function CreditHistory({
         <g stroke="#e6e6e3" strokeWidth="1" strokeDasharray="3 4">
           {[730, 720, 710, 700].map((v) => <path key={v} d={`M${X0- 2} ${py(v)}h${X1 - X0 + 8}`} />)}
         </g>
-        <g fill="#a5a5a2" fontSize="11">
+        <g fill="#9a9a97" fontSize="11">
           {[730, 720, 710, 700].map((v) => <text key={v} x="14" y={py(v) + 4}>{v}</text>)}
         </g>
 
@@ -1103,9 +1103,9 @@ export function CreditHistory({
           <>
             <path d={`M${bubbleX} ${bubbleY + 23}V${Y1 - 6}`} stroke="#8f8f8c" strokeWidth="1.2" strokeDasharray="4 4" />
             <circle cx={bubbleX} cy={bubbleY} r="23" fill="var(--lime)" />
-            <text x={bubbleX} y={bubbleY + 5} textAnchor="middle" fontSize="15" fontWeight="600" fill="#101010">{reading}</text>
+            <text x={bubbleX} y={bubbleY + 5} textAnchor="middle" fontSize="15" fontWeight="600" fill="#101312">{reading}</text>
             <g transform={`translate(${bubbleX} ${Y1})`}>
-              <circle r="13" fill="#f4f4f2" /><path d="M-6 -4h12l-6 8z" fill="#101010" />
+              <circle r="13" fill="#f2f2f0" /><path d="M-6 -4h12l-6 8z" fill="#101312" />
             </g>
             <text x={bubbleX} y={Y1 + 28} textAnchor="middle" fontSize="12" fill="#8f8f8c">{when[at]}</text>
           </>
@@ -1157,15 +1157,15 @@ export function ScoreScreen({ name = 'Stewart', delta = 6 }: { name?: string; de
     <MeshSurface variant="light" grain="light" radius="var(--r-screen)" style={{ width: 430, height: 932 }}>
       <div style={{ position: 'absolute', inset: 0, padding: '56px 24px 0' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#101010" strokeWidth="2.6" strokeLinecap="round" aria-hidden="true">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#101312" strokeWidth="2.6" strokeLinecap="round" aria-hidden="true">
             <path d="M4 16c0-5 3-8 6-8s6 3 6 8" /><path d="M8 8c0 5 3 8 6 8s6-3 6-8" />
           </svg>
           <button type="button" aria-label="Menu" style={roundBtn}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#101010" strokeWidth="1.9" strokeLinecap="round"><path d="M4 7h16M4 12h11M4 17h7" /></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#101312" strokeWidth="1.9" strokeLinecap="round"><path d="M4 7h16M4 12h11M4 17h7" /></svg>
           </button>
           <span style={{ flex: 1 }} />
           <button type="button" aria-label="Support" style={roundBtn}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#101010" strokeWidth="1.5" strokeLinecap="round"><path d="M6 20V8a6 6 0 0 1 12 0v3" /><path d="M18 11h1.5a2 2 0 0 1 0 4H18" /></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#101312" strokeWidth="1.5" strokeLinecap="round"><path d="M6 20V8a6 6 0 0 1 12 0v3" /><path d="M18 11h1.5a2 2 0 0 1 0 4H18" /></svg>
           </button>
           <span
             aria-hidden="true"
@@ -1179,8 +1179,8 @@ export function ScoreScreen({ name = 'Stewart', delta = 6 }: { name?: string; de
           </span>
         </div>
 
-        <div style={{ marginTop: 34, fontSize: 30, fontWeight: 500, letterSpacing: '-0.028em', lineHeight: 1.18, color: '#101010' }}>
-          Hey, {name}!<span style={{ display: 'block', color: '#a9a9a6' }}>Let’s analyze your stats!</span>
+        <div style={{ marginTop: 34, fontSize: 30, fontWeight: 500, letterSpacing: '-0.028em', lineHeight: 1.18, color: '#101312' }}>
+          Hey, {name}!<span style={{ display: 'block', color: '#9a9a97' }}>Let’s analyze your stats!</span>
         </div>
 
         <div style={{ marginTop: 22, fontSize: 15, color: ink.labelOnLight }}>
@@ -1188,7 +1188,7 @@ export function ScoreScreen({ name = 'Stewart', delta = 6 }: { name?: string; de
         </div>
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginTop: 2 }}>
           <div style={{ display: 'flex', alignItems: 'flex-end', gap: 12 }}>
-            <span data-score="" style={{ fontSize: 68, fontWeight: 500, letterSpacing: '-0.045em', lineHeight: 0.92, color: '#101010' }}>
+            <span data-score="" style={{ fontSize: 68, fontWeight: 500, letterSpacing: '-0.045em', lineHeight: 0.92, color: '#101312' }}>
               <bdi dir="ltr">{n(score)}</bdi>
             </span>
             <span style={{ fontSize: 13.5, color: ink.labelOnLight, lineHeight: 1.45, paddingBottom: 8 }}>
@@ -1203,13 +1203,13 @@ export function ScoreScreen({ name = 'Stewart', delta = 6 }: { name?: string; de
               aria-expanded={menu}
               onClick={() => setMenu((v) => !v)}
               style={{
-                height: 46, padding: '0 18px', borderRadius: 23, background: 'transparent',
+                height: 46, padding: '0 18px', borderRadius: 'var(--r-pill)', background: 'transparent',
                 border: '1.2px solid rgba(16,16,16,0.28)', fontFamily: 'inherit', fontSize: 15,
-                cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 10, color: '#101010',
+                cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 10, color: '#101312',
               }}
             >
               {BUREAUS[bureau].name}
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#101010" strokeWidth="2" strokeLinecap="round" aria-hidden="true" style={{ transform: menu ? 'rotate(180deg)' : undefined }}><path d="M6 9l6 6 6-6" /></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#101312" strokeWidth="2" strokeLinecap="round" aria-hidden="true" style={{ transform: menu ? 'rotate(180deg)' : undefined }}><path d="M6 9l6 6 6-6" /></svg>
             </button>
             {menu && (
               <ul
@@ -1217,7 +1217,7 @@ export function ScoreScreen({ name = 'Stewart', delta = 6 }: { name?: string; de
                 aria-label="Bureau"
                 style={{
                   position: 'absolute', insetInlineEnd: 0, top: 52, zIndex: 2, margin: 0, padding: 6,
-                  listStyle: 'none', borderRadius: 18, background: '#fff', minWidth: 176,
+                  listStyle: 'none', borderRadius: 'var(--r-block)', background: '#fff', minWidth: 176,
                   boxShadow: 'inset 0 0 0 1px rgba(16,16,16,0.08), var(--depth-card)',
                 }}
               >
@@ -1230,8 +1230,8 @@ export function ScoreScreen({ name = 'Stewart', delta = 6 }: { name?: string; de
                       onClick={() => { setBureau(i); setMenu(false); }}
                       style={{
                         width: '100%', textAlign: 'start', border: 0, cursor: 'pointer',
-                        fontFamily: 'inherit', fontSize: 14.5, padding: '10px 12px', borderRadius: 12,
-                        background: i === bureau ? '#f2f2f0' : 'transparent', color: '#101010',
+                        fontFamily: 'inherit', fontSize: 14.5, padding: '10px 12px', borderRadius: 'var(--r-tile)',
+                        background: i === bureau ? '#f2f2f0' : 'transparent', color: '#101312',
                       }}
                     >
                       {b.name}
@@ -1251,7 +1251,7 @@ export function ScoreScreen({ name = 'Stewart', delta = 6 }: { name?: string; de
         aria-label="Sections"
         style={{
           position: 'absolute', insetInlineStart: 22, bottom: 24,
-          display: 'flex', alignItems: 'center', gap: 8, padding: 8, borderRadius: 36,
+          display: 'flex', alignItems: 'center', gap: 8, padding: 8, borderRadius: 'var(--r-pill)',
           background: 'rgba(255,255,255,0.72)', backdropFilter: 'blur(18px)',
           boxShadow: 'inset 0 1px 0 #fff, var(--depth-float)',
         }}
@@ -1267,11 +1267,11 @@ export function ScoreScreen({ name = 'Stewart', delta = 6 }: { name?: string; de
             style={{
               width: 52, height: 52, border: 0, borderRadius: '50%', cursor: 'pointer',
               display: 'grid', placeItems: 'center',
-              background: i === dock ? '#101010' : '#f4f4f2',
+              background: i === dock ? '#101312' : '#f2f2f0',
               boxShadow: i === dock ? 'inset 0 1px 0 rgba(255,255,255,0.2), var(--depth-press)' : undefined,
             }}
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={i === dock ? '#fff' : '#101010'} strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={i === dock ? '#fff' : '#101312'} strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
               {i === 0 && <><rect x="4" y="4" width="7" height="7" rx="2" /><rect x="13" y="4" width="7" height="7" rx="2" /><rect x="4" y="13" width="7" height="7" rx="2" /><rect x="13" y="13" width="7" height="7" rx="2" /></>}
               {i === 1 && <><path d="M12 7v5l3.5 2" /><path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1" /><path d="M3 5v4h4" /></>}
               {i === 2 && <><circle cx="12" cy="12" r="8.5" /><path d="M9 15l6-6" /></>}
