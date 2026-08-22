@@ -53,8 +53,15 @@ Lc 60 is not a fix, it is a **change to the product's look** — and this repo's
 rule is that a decided design decision is not reversed by a scanner.
 
 So it is measured with a ceiling, exactly as `REFERENCE_GREY_CONTRAST` is:
-`APCA_THIN_CEILING = 13`. **It may fall and must never rise.** A fourteenth thin
-pair fails the harness; these thirteen are named above and the owner decides.
+`APCA_THIN_CEILING = 16`. **It may fall and must never rise** — with one recorded
+exception, which is this one: the ceiling went from 13 to 16 because **two canvas
+pairs were added to the list**, not because anything got worse. `madar-matrix`
+found that `--nova-ink-secondary` and `--nova-ink-tertiary` were measured against
+every surface tier and never against `--nova-canvas`, which is the ground every
+secondary line outside a card actually sits on. Three of the new measurements are
+thin (`mint`, `dark`, `night`). 13 and 16 are counts of different questions.
+
+From here the rule applies again: a seventeenth thin pair fails the harness.
 
 Three ways forward, if the owner wants one:
 
