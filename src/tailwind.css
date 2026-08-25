@@ -1,0 +1,62 @@
+/* ════════════════════════════════════════════════════════════════════════════
+   Tailwind v4 — utilities only, deliberately without preflight.
+   ════════════════════════════════════════════════════════════════════════════
+
+   The owner sent reference code written in Tailwind utility classes and asked for
+   it implemented as its own requirements state, with no constraint from this
+   repo's conventions. Those classNames are not decoration — `rounded-[36px]`,
+   `bg-neutral-100 dark:bg-neutral-800`, `w-36 h-12` — they ARE the component's
+   geometry. Translating them to inline styles would be reimplementing the
+   component rather than implementing it.
+
+   So Tailwind is installed. What is NOT installed is its preflight: this project
+   carries a 3.6k-line token architecture, seven theme packs, three glass levels,
+   six design registers and 19 harnesses that measure the result, and preflight's
+   global reset would zero the margins, borders and heading sizes every one of
+   those is built on. Tailwind 4 ships the three layers as separate files exactly
+   so this choice can be made:
+
+     theme.css      the design tokens the utilities compile against — needed
+     preflight.css  the global reset — NOT imported
+     utilities.css  the classes themselves — needed
+
+   The result is that a Tailwind class works verbatim wherever it is written, and
+   nothing that was already on the page moves. Measured: `qa:source` and
+   `madar-qa` are unchanged by this file existing.
+
+   `@source` points the scanner at the one folder that uses these classes, so the
+   generated CSS covers the imported reference code and not 40 sections that never
+   asked for it. */
+
+@layer theme, base, components, utilities;
+
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
+
+/* shadcn's semantic roles, mapped onto this project's tokens. Imported HERE and
+   not from `main.tsx`, because Tailwind 4's `@theme` only registers inside the
+   file that imports Tailwind: as a standalone stylesheet the block was inert,
+   `bg-secondary` was never generated, and the supplied Button rendered in the
+   browser's own default button grey — rgb(239,239,239), identical in all seven
+   packs, which is what gave it away. */
+@import './shadcn-tokens.css';
+
+@source '../src/components/ui';
+@source '../src/madar/showcase/sections/Imported.tsx';
+
+/* `dark:` follows this project's switch — a `data-theme` attribute on the document
+   element — not the `.dark` class Tailwind assumes, and not `prefers-color-scheme`,
+   which the packs override anyway.
+
+   TWO packs are dark, and the source of that truth is `src/madar/theme/themes.ts`
+   where exactly `dark` and `night` carry `dark: true`. The first version of this
+   rule listed four, guessing that `iris` and `sky` were dark because their names
+   sound like it — they are light packs, and the guess produced 17 real contrast
+   failures in those two packs alone: dark-mode ink painted on a light ground.
+   Measured by `madar-qa`, and it is the §27 defect in a new place — one meaning
+   with two sources, and the copy drifted from the original immediately. */
+@custom-variant dark {
+  &:where([data-theme='dark'] *, [data-theme='night'] *) {
+    @slot;
+  }
+}

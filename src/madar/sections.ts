@@ -81,6 +81,17 @@ export const madarSections: MadarSection[] = [
     added: true,
   },
   {
+    id: "madar-imported",
+    title: "Imported",
+    titleAr: "المستورَد",
+    family: "experiments",
+    description: "Reference code implemented against its own requirements: its four dependencies installed, its Tailwind classes kept verbatim, every divergence from this repo's law recorded rather than hidden.",
+    descriptionAr: "كودٌ مرجعيّ مُنفَّذٌ بمتطلّباته: تبعيّاتُه الأربع مثبَّتة، وأصنافُ Tailwind حرفيّة، وكلُّ مخالفةٍ لقانوننا مسجَّلةٌ لا مخفيّة.",
+    tags: ["imported", "vaul", "drawer", "tailwind", "مستورَد", "درج"],
+    component: load("Imported", () => import("./showcase/sections/Imported")),
+    added: true,
+  },
+  {
     id: "madar-matrix",
     title: "Matrix",
     titleAr: "المصفوفة",

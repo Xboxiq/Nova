@@ -129,6 +129,16 @@ const CASES = [
     ],
     keyboard: { group: "[data-matrix]", cell: "[data-cell-pick]", attr: "data-matrix", state: "aria-checked" },
   },
+  {
+    id: "madar-imported",
+    name: "imported",
+    controls: [
+      /* The imported drawer's whole mechanism is that the sheet's height animates
+         to the measured height of the view inside it, so the consequence to watch
+         is not a class or an attribute — it is the sheet getting taller. */
+      { what: "open the drawer", click: "text=Click Me To Open Drawer", watch: "[data-vaul-drawer]", exists: true },
+    ],
+  },
 ];
 
 let chromium;

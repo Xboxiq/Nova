@@ -18,7 +18,7 @@ import { execSync } from "node:child_process";
 const PORT = 4319;
 const URL = `http://localhost:${PORT}/`;
 const THEMES = ["light", "dark", "mint", "coral", "sky", "iris", "night"];
-const PACK_SECTIONS = ["madar-color-tokens", "madar-admin-access", "madar-consequence", "madar-dispatch", "madar-photographed", "madar-boards", "madar-glasswork", "madar-projectwork", "madar-directions", "madar-matrix"];
+const PACK_SECTIONS = ["madar-color-tokens", "madar-admin-access", "madar-consequence", "madar-dispatch", "madar-photographed", "madar-boards", "madar-glasswork", "madar-projectwork", "madar-directions", "madar-matrix", "madar-imported"];
 const AA = 4.5;
 /* APCA's floor for body text. `APCA_THIN_CEILING` is what the token pairs measure
    today; it may fall and must never rise. */
