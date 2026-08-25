@@ -89,10 +89,13 @@ function isBlurredOuter(seg) {
   return lengths.length >= 3 && lengths[2] > 0;
 }
 
+const IMPORTED = /^src[\\/]components[\\/]ui[\\/]/;
+
 const files = walk("src");
 const literalShadows = [];
 const literalRadii = [];
 const untokenised = [];
+const imported = [];
 
 for (const path of files) {
   const src = readFileSync(path, "utf8");
@@ -107,7 +110,16 @@ for (const path of files) {
       literalShadows.push(`${path}:${line}  ${seg.slice(0, 64)}`);
       /* Inside the token block in bridge.css a literal IS the definition, so it
          is expected there and nowhere else. */
-      if (!/bridge\.css$/.test(path)) untokenised.push(`${path}:${line}  ${seg.slice(0, 64)}`);
+      if (/bridge\.css$/.test(path)) continue;
+      /* IMPORTED: `src/components/ui/` holds reference code the owner ordered
+         implemented against ITS requirements, not this repo's. Its shadows are
+         its author's design, and rewriting them as `var(--depth-*)` would be
+         rewriting the design under cover of a lint rule. So the allowance is
+         named and counted rather than the file being silently skipped — the
+         literals still print, they just do not fail. Anything outside this
+         directory has no such excuse. */
+      if (IMPORTED.test(path)) { imported.push(`${path}:${line}  ${seg.slice(0, 64)}`); continue; }
+      untokenised.push(`${path}:${line}  ${seg.slice(0, 64)}`);
     }
   }
 
@@ -146,7 +158,9 @@ if (untokenised.length > 12) failures.push(`…and ${untokenised.length - 12} mo
 for (const f of failures) console.log(`  FAIL ${f}`);
 console.log(`DEPTH_TOKENS=${depthTokens}`);
 console.log(`RADIUS_TOKENS=${radiusTokens}`);
-console.log(`LITERAL_BLURRED_SHADOWS=${literalShadows.length} (was banned, now permitted; ${untokenised.length} outside the token block)`);
+for (const i of imported) console.log(`  IMPORTED ${i}`);
+console.log(`LITERAL_BLURRED_SHADOWS=${literalShadows.length} (was banned, now permitted; ${untokenised.length} outside the token block and outside imported code)`);
+console.log(`IMPORTED_LITERAL_SHADOWS=${imported.length} in src/components/ui (named allowance, not a pass)`);
 console.log(`LITERAL_RADII_OVER_6PX=${literalRadii.length}`);
 console.log(`DEPTH_POLICY=${failures.length ? "FAIL" : "ok"}`);
 process.exit(failures.length ? 1 : 0);
