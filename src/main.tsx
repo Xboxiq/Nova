@@ -12,6 +12,7 @@ import "../design-system/nova-design-os/tokens/tokens.css";
 import "../design-system/nova-design-os/tokens/theme-packs.css";
 import "../design-system/nova-design-os/tokens/directions.css";
 import "./styles.css";
+import "./tailwind.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
