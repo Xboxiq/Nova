@@ -4,6 +4,7 @@ import { Section, SectionHeader } from '../SectionHeader';
 import { SpecList, SpecRow } from '../SpecRow';
 import { AnimatedDrawer } from '@/components/ui/animated-drawer';
 import EnterpriseAIPipeline from '@/components/ui/ai-agent-pipeline';
+import SendMessageButton from '@/components/ui/send-message-button';
 
 /* The pipeline runs sixteen infinite animations: eleven SVG `animateMotion` dots
    and five framer loops. Reduced motion is not a design preference, it is what
@@ -49,7 +50,7 @@ export function Imported() {
   return (
     <Section label="Imported">
       <SectionHeader eyebrow="42 · IMPORTED" title="كودٌ مستورَد، مُنفَّذٌ بمتطلّباته لا بمتطلّباتنا">
-        أرسل المالك كودًا مرجعيًّا وأمر أن يُنفَّذ <b>كما تنصّ متطلّباته</b>، بلا تقييدٍ بشروط هذا المستودع. فثُبِّتت تبعيّاتُه الأربع — <code>vaul</code> و<code>react-use-measure</code> و<code>motion</code> و<code>lucide-react</code> — وثُبِّت Tailwind، وبُقيَت أصنافُه ونصفُ أقطارِه وألوانُه <b>حرفيًّا</b> كما هي، حتى حيث تخالف قانونَنا. والمخالفاتُ مسجَّلةٌ في <code>design-system/IMPORTED.md</code> لا مخفيّة.
+        أرسل المالك كودًا مرجعيًّا وأمر أن يُنفَّذ <b>كما تنصّ متطلّباته</b>، بلا تقييدٍ بشروط هذا المستودع. فثُبِّتت تبعيّاتُه — <code>vaul</code> و<code>react-use-measure</code> و<code>motion</code> و<code>lucide-react</code> و<code>framer-motion</code> و<code>styled-components</code>، بل وأُسرةُ <code>Ubuntu</code> التي يطلبها أحدُها بالاسم — وثُبِّت Tailwind، وبُقيَت أصنافُه ونصفُ أقطارِه وألوانُه <b>حرفيًّا</b> كما هي، حتى حيث تخالف قانونَنا. والمخالفاتُ مسجَّلةٌ في <code>design-system/IMPORTED.md</code> لا مخفيّة.
       </SectionHeader>
 
       <SpecList>
@@ -103,6 +104,19 @@ export function Imported() {
           وصل هذا الملفُّ <b>سليمًا</b> — بكلّ وسومه — فنُسِخ حرفيًّا إلى المسار الذي تطلبه التعليمات: <code>src/components/ui/ai-agent-pipeline.tsx</code>. وبنيةُ shadcn والكنيةُ <code>@/</code> كانتا جاهزتَين من الدفعة السابقة، فلم يبقَ إلا <code>framer-motion</code>. وثلاثةُ أشياء أُضيفت ولا واحدٌ منها يغيّر بكسلًا: <code>role="img"</code> ووصفٌ للرسم — إذ كان تسعةَ عشرَ نصًّا داخل SVG بلا اسمٍ للشكل كلّه؛ و<code>aria-live</code> على سطر السجلّ المتبدّل كلَّ ٢٧٠٠ms؛ و<b>احترامُ تفضيل تقليل الحركة</b> — وهو ليس ذوقًا بل ما يحتاجه صاحبُ اضطرابٍ دهليزيّ لينظر إلى الصفحة أصلًا. وتلك الثالثةُ في <b>العَرض</b> لا في المكوّن، وبآليّتَين لأن النظامَين لا يتشاركان واحدة: <code>MotionConfig</code> لحركات framer، و<code>endElement()</code> لأن SMIL في SVG لا يسمع CSS ولا MotionConfig.
         </SpecRow>
 
+        <SpecRow name="Send Message: صفيحةٌ داخليّةٌ تُضغَط، وطائرةٌ تُقلِع عند التركيز" bare specimen={
+          /* `dir="ltr"`: `.send-icon { margin-right: 5px }` خاصّيّةٌ فيزيائيّة لا
+             منطقيّة، فهي لا تنقلب. تحت RTL يقع الفراغُ بين الأيقونة والحافّة لا
+             بينها وبين النصّ — والأيقونةُ تلتصق بكلمة Send. وصاحبُ الكود كتب سطحًا
+             LTR، فيُعرَض كواحد. ولم تُبدَّل الخاصّيّةُ بـ`margin-inline-end` لأن
+             ذاك تصحيحُ تصميمٍ لا تشغيلُه. */
+          <div className="flex w-full justify-center py-6" dir="ltr">
+            <SendMessageButton />
+          </div>
+        }>
+          هذا الملفُّ الثالثُ الذي يأكلُ محوِّلُ النصِّ الغنيّ وسومَه — لكنه أكلها <b>وأبقى ما يكفي</b>: الـCSS كاملًا (مكرَّرًا مرّتَين)، ومَسارَي الـ<code>path</code> سليمَين حرفًا حرفًا. فالبنيةُ ليست تخمينًا. و<b>ثلاثُ حِيَلٍ</b> في هذا الكود تستحقّ أن تُقرأ: نصفُ قطرِ الصفيحةِ الداخليّة <code>30px</code> <b>أكبرُ</b> من نصفِ قطرِ الزرِّ <code>12px</code> — فتنحسرُ زواياها داخل <code>overflow: hidden</code> وتبدو الصفيحةُ لينةً داخل إطارٍ حادّ. وعند التمرير تتّسعُ حدودُها من <code>3px</code> إلى <code>1px</code> بينما يكبرُ هامشُها من <code>2px</code> إلى <code>5px</code> — أي أنها <b>تتقلّصُ صافيًا</b>: صفيحةٌ تُضغَط. وعند التركيز تدورُ الطائرةُ <code>-40deg</code>: تُقلِع.
+        </SpecRow>
+
         <SpecRow name="ما بقي حرفيًّا، وما أُضيف" specimen={
           <div className="grid w-full gap-2 text-[12.5px]">
             {[
@@ -111,6 +125,10 @@ export function Imported() {
               ['bg-red-50 / text-red-600', 'حرفيًّا', 'زوجُ حالةٍ بصبغةٍ واحدة'],
               ['bg-sky-400', 'حرفيًّا', 'لونٌ خارج الرموز'],
               ['المفتاح "pharse"', 'حرفيًّا', 'مُعرِّفٌ داخليّ، وتصحيحُه صمتًا إعادةُ كتابة'],
+              ['border-radius: 30px', 'حرفيًّا', 'خارج سُلَّمِنا التساعيّ، وهو الحيلة'],
+              ['margin-right', 'حرفيًّا', 'فيزيائيّة، فعُرِضت LTR لا صُحِّحت'],
+              ['ظلٌّ بتمويهِ 44px', 'حرفيًّا', 'أوسعُ من كلِّ depth-* عندنا'],
+              ['<button type="button">', 'أُضيف', 'الكودُ يهجّي <a>، ولا مقصدَ له'],
               ['Drawer.Title / Description', 'أُضيف', 'vaul يطلب اسمًا للحوار'],
               ['aria-label على الإغلاق', 'أُضيف', 'زرٌّ محتواه أيقونةٌ بلا اسم'],
               ['العودة إلى default عند الإغلاق', 'أُضيف', 'درجٌ يتذكّر قرارًا تُرك'],
