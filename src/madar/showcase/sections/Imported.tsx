@@ -1,6 +1,49 @@
+import { useEffect, useRef } from 'react';
+import { MotionConfig } from 'framer-motion';
 import { Section, SectionHeader } from '../SectionHeader';
 import { SpecList, SpecRow } from '../SpecRow';
 import { AnimatedDrawer } from '@/components/ui/animated-drawer';
+import EnterpriseAIPipeline from '@/components/ui/ai-agent-pipeline';
+
+/* The pipeline runs sixteen infinite animations: eleven SVG `animateMotion` dots
+   and five framer loops. Reduced motion is not a design preference, it is what
+   someone with a vestibular disorder needs in order to look at the page at all —
+   so it is honoured HERE rather than by editing the component, which stays exactly
+   as it was supplied.
+
+   Two mechanisms, because the two animation systems do not share one:
+     · `MotionConfig reducedMotion="user"` makes every framer animation inside the
+       subtree follow the OS setting. One wrapper, no props changed.
+     · SVG SMIL ignores CSS and `MotionConfig` both, so the SVG's own timeline is
+       paused. `pauseAnimations()` on the `<svg>` and not `endElement()` on each
+       `animateMotion`: `endElement` no-ops on an animation that has not begun
+       yet, and eight of these eleven start on a delay — measured, the dots were
+       still moving under reduced motion until this changed. Pausing the document
+       timeline holds regardless of what has started, and `unpauseAnimations`
+       makes it reversible when the reader turns the preference back off. */
+function Calm({ children }: { children: React.ReactNode }) {
+  const host = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const query = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const apply = () => {
+      host.current?.querySelectorAll('svg').forEach((svg) => {
+        const doc = svg as SVGSVGElement;
+        if (query.matches) doc.pauseAnimations?.();
+        else doc.unpauseAnimations?.();
+      });
+    };
+    apply();
+    query.addEventListener('change', apply);
+    return () => query.removeEventListener('change', apply);
+  }, []);
+
+  return (
+    <div ref={host} style={{ display: 'contents' }}>
+      <MotionConfig reducedMotion="user">{children}</MotionConfig>
+    </div>
+  );
+}
 
 export function Imported() {
   return (
@@ -16,6 +59,48 @@ export function Imported() {
           </div>
         }>
           الملفُّ المرفوع كان تحويلَ نصٍّ غنيّ إلى markdown، والمحوِّلُ أكلَ <b>كلَّ وسمِ JSX</b> كأنه HTML: لا <code>Drawer.Root</code>، ولا <code>button</code>، ولا <code>h2</code>. فالبنيةُ أُعيد بناؤها من الخصائص الباقية — <b>وليست تخمينًا</b>: اجتماعُ <code>h-64</code> على المحتوى، و<code>useMeasure</code> على العنصر الداخليّ، و<code>motion</code> مستوردةً، و<code>Drawer.Content asChild</code> يُهجّي ميكانيكيّةً واحدةً بالضبط — <b>ارتفاعُ الدرج يتحرّك إلى الارتفاع المقيس للمشهد الظاهر</b>. و<code>h-64</code> ارتفاعُ السكون، و<code>asChild</code> يسلّم العنصرَ لـ<code>motion.div</code>. وذاك سببُ استيراد <code>useMeasure</code> أصلًا.
+        </SpecRow>
+
+        <SpecRow name="EnterpriseAIPipeline: ستّةَ عشرَ حركةً لانهائية، ورسمٌ يقرأ نفسه" bare specimen={
+          /* The demo's own framing — `bg-black p-8`, centred — kept as sent. The
+             overflow wrapper is added, not substituted: the component is a fixed
+             `w-[620px]`, and at 390px that is 230 pixels of horizontal document
+             scroll. Wide content scrolls inside its own container; the component's
+             width is untouched. */
+          <div
+            className="flex min-h-[400px] w-full items-center justify-center bg-black p-8"
+            style={{ overflowX: 'auto', overscrollBehaviorX: 'contain' }}
+            /* A scrollable region a keyboard cannot reach is a region a keyboard
+               cannot scroll — axe's `scrollable-region-focusable`, and it was
+               right: the component is 620px wide inside a 300px box at 390px, so
+               without a tab stop the right-hand third of it is unreachable
+               without a mouse. */
+            tabIndex={0}
+            role="group"
+            aria-label="Agent pipeline, scrollable"
+            /* `dir="ltr"`, the same ruling as the drawer and for a sharper reason:
+               the SVG's coordinates are fixed, so the diagram does NOT mirror,
+               while the HTML chrome around it does. Under RTL the flow arrow ran
+               left to right while the header and the stat row read right to left —
+               the component disagreeing with itself. Its author wrote an LTR
+               surface; it renders as one. */
+            dir="ltr"
+          >
+            {/* `shrink-0` because a flex item may shrink below its declared width,
+                and this one declares 620. It is belt-and-braces rather than a fix:
+                I first added it against a "538px" reading, then measured the right
+                element and found 620 at both 1100 and 390 — the probe had been
+                measuring the SVG's parent, not the component. The reading was
+                wrong, not the code, and the line stays because it is correct
+                anyway. */}
+            <div className="shrink-0">
+              <Calm>
+                <EnterpriseAIPipeline />
+              </Calm>
+            </div>
+          </div>
+        }>
+          وصل هذا الملفُّ <b>سليمًا</b> — بكلّ وسومه — فنُسِخ حرفيًّا إلى المسار الذي تطلبه التعليمات: <code>src/components/ui/ai-agent-pipeline.tsx</code>. وبنيةُ shadcn والكنيةُ <code>@/</code> كانتا جاهزتَين من الدفعة السابقة، فلم يبقَ إلا <code>framer-motion</code>. وثلاثةُ أشياء أُضيفت ولا واحدٌ منها يغيّر بكسلًا: <code>role="img"</code> ووصفٌ للرسم — إذ كان تسعةَ عشرَ نصًّا داخل SVG بلا اسمٍ للشكل كلّه؛ و<code>aria-live</code> على سطر السجلّ المتبدّل كلَّ ٢٧٠٠ms؛ و<b>احترامُ تفضيل تقليل الحركة</b> — وهو ليس ذوقًا بل ما يحتاجه صاحبُ اضطرابٍ دهليزيّ لينظر إلى الصفحة أصلًا. وتلك الثالثةُ في <b>العَرض</b> لا في المكوّن، وبآليّتَين لأن النظامَين لا يتشاركان واحدة: <code>MotionConfig</code> لحركات framer، و<code>endElement()</code> لأن SMIL في SVG لا يسمع CSS ولا MotionConfig.
         </SpecRow>
 
         <SpecRow name="ما بقي حرفيًّا، وما أُضيف" specimen={

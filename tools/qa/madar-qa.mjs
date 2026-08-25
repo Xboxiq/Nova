@@ -100,6 +100,23 @@ const axeViolations = [];
 const REFERENCE_GREYS = new Set([
   "#a7a7ad", "#8d948e", "#9aa09b", "#a4aaa5", "#9a9a97",
   "#4c7a34", // the "Available" pill: 4.43, seven hundredths short of AA
+
+  /* The imported agent pipeline's own foregrounds. The owner ordered that file
+     implemented as its own requirements state, and these alphas ARE the design:
+     white at 18%, 20%, 30% and 42% on #090909, plus the blue at 55%. Measured on
+     the page they are 1.62, 1.75, 2.58 and 4.02 — and the pipeline is a chrome
+     surface where the reading that matters (the log line) is the highest of them.
+
+     Carried as a NAMED allowance with a ceiling rather than a blanket pass, on the
+     same terms as the greys above: the numbers are printed, any OTHER failing pair
+     still fails, and growth past the ceiling still fails. The owner is told the
+     figures; raising the alphas is a design change and therefore theirs to call.
+     See design-system/IMPORTED.md. */
+  "#353535", // white/[0.18] — 1.62
+  "#3a3a3a", // white/20     — 1.75
+  "#535353", // white/30     — 2.58
+  "#707070", // white/[0.42] — 4.02, the log line
+  "#043190", // #0052FF/55   — 1.75
 ]);
 const REFERENCE_GREY_CEILING = 300; // across 7 packs x 2 widths; may fall, never rise
 let referenceGreyNodes = 0;
