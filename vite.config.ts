@@ -12,6 +12,14 @@ export default defineConfig({
   // classes. `src/tailwind.css` takes its theme and utilities layers and leaves
   // preflight out, so the global reset never touches this project's own tokens.
   plugins: [react(), tailwindcss()],
+  // The bundler half of the `@/` alias declared in tsconfig.app.json. Both are
+  // required and both must point at the same place.
+  resolve: {
+    // `/src` rather than a resolved absolute path: Vite reads a leading slash as
+    // "from the project root", which avoids pulling `@types/node` into a config
+    // that otherwise needs none.
+    alias: { "@": "/src" },
+  },
   build: {
     target: "es2022",
     sourcemap: true,

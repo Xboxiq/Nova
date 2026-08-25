@@ -3,7 +3,7 @@ import { Drawer } from 'vaul';
 import useMeasure from 'react-use-measure';
 import { motion } from 'motion/react';
 import { X } from 'lucide-react';
-import { Button } from './button';
+import { Button } from '@/components/ui/button';
 import {
   BannedIcon,
   DangerIcon,
@@ -14,7 +14,7 @@ import {
   RecoveryPhraseIcon,
   ShieldIcon,
   WarningIcon,
-} from './demo-icons';
+} from '@/components/ui/animated-drawer-utils/demo-icons';
 
 /* ────────────────────────────────────────────────────────────────────────
    AnimatedDrawer — imported reference code, implemented as its own

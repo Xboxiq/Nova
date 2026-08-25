@@ -1,5 +1,13 @@
 {
   "compilerOptions": {
+    /* The `@/` alias shadcn components assume. Every file the CLI generates
+       imports `@/lib/utils` and `@/components/ui/*`, so without this the imports
+       resolve to nothing. Declared twice — here for the type checker, and in
+       `vite.config.ts` for the bundler — and the two must agree.
+
+       No `baseUrl`: TypeScript 6 removed it, and `paths` now resolves relative to
+       this file's own directory, which is what we want anyway. */
+    "paths": { "@/*": ["./src/*"] },
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
     "target": "ES2022",
     "useDefineForClassFields": true,

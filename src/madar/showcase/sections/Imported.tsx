@@ -1,6 +1,6 @@
 import { Section, SectionHeader } from '../SectionHeader';
 import { SpecList, SpecRow } from '../SpecRow';
-import { AnimatedDrawer } from '../../components/imported/animated-drawer';
+import { AnimatedDrawer } from '@/components/ui/animated-drawer';
 
 export function Imported() {
   return (

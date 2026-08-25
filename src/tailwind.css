@@ -33,7 +33,15 @@
 @import 'tailwindcss/theme.css' layer(theme);
 @import 'tailwindcss/utilities.css' layer(utilities);
 
-@source '../src/madar/components/imported';
+/* shadcn's semantic roles, mapped onto this project's tokens. Imported HERE and
+   not from `main.tsx`, because Tailwind 4's `@theme` only registers inside the
+   file that imports Tailwind: as a standalone stylesheet the block was inert,
+   `bg-secondary` was never generated, and the supplied Button rendered in the
+   browser's own default button grey — rgb(239,239,239), identical in all seven
+   packs, which is what gave it away. */
+@import './shadcn-tokens.css';
+
+@source '../src/components/ui';
 @source '../src/madar/showcase/sections/Imported.tsx';
 
 /* `dark:` follows this project's switch — a `data-theme` attribute on the document

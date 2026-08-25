@@ -1,0 +1,84 @@
+/* ════════════════════════════════════════════════════════════════════════════
+   shadcn's semantic layer, mapped onto this project's tokens.
+   ════════════════════════════════════════════════════════════════════════════
+
+   The supplied `Button` is written against shadcn's vocabulary — `bg-primary`,
+   `text-primary-foreground`, `bg-secondary`, `ring-ring`, `ring-offset-background`.
+   Those are not Tailwind palette colours; they are semantic names shadcn expects
+   the project to define. Undefined, `bg-primary` compiles to nothing and the
+   button renders transparent.
+
+   There are two ways to define them:
+
+     1. Paste shadcn's default neutral palette. The button works, and the project
+        now has **two** colour systems: `--nova-*` with seven measured theme packs,
+        and shadcn's greys that know about none of them. Switch to the mint pack
+        and every shadcn component stays grey.
+
+     2. Map shadcn's ROLES onto the roles this project already has. `--primary` is
+        already `--nova-action`. `--secondary` is already `--nova-surface-quiet`.
+        `--ring` is already `--nova-focus`.
+
+   The second, because the roles genuinely correspond — this is not a coercion.
+   And it buys something worth more than the button: **every shadcn component
+   dropped in from here on inherits all seven theme packs, three glass levels and
+   six design registers for free**, because it reads a name that resolves to a
+   token those axes already move. That is the difference between installing
+   shadcn and integrating it.
+
+   `@theme inline` is Tailwind 4's mechanism: `inline` means the utility emits
+   `var(--nova-action)` at the use site rather than baking today's value, so a
+   pack switch reaches it. Without `inline`, the mapping would freeze on load and
+   the seven packs would stop working — which is the whole point of doing it.
+   ════════════════════════════════════════════════════════════════════════════ */
+
+@theme inline {
+  /* the page and its ink */
+  --color-background: var(--nova-canvas);
+  --color-foreground: var(--nova-ink);
+
+  /* a raised surface — cards, popovers, dropdowns */
+  --color-card: var(--nova-surface);
+  --color-card-foreground: var(--nova-ink);
+  --color-popover: var(--nova-surface-raised);
+  --color-popover-foreground: var(--nova-ink);
+
+  /* the action, and what is legible on it */
+  --color-primary: var(--nova-action);
+  --color-primary-foreground: var(--nova-on-action);
+
+  /* the quiet action */
+  --color-secondary: var(--nova-surface-quiet);
+  --color-secondary-foreground: var(--nova-ink);
+
+  /* de-emphasised text and its ground */
+  --color-muted: var(--nova-surface-quiet);
+  --color-muted-foreground: var(--nova-ink-secondary);
+
+  /* hover and selection */
+  --color-accent: var(--nova-surface-quiet);
+  --color-accent-foreground: var(--nova-ink);
+
+  /* the one destructive role */
+  --color-destructive: var(--nova-danger);
+  --color-destructive-foreground: var(--nova-on-action);
+
+  /* edges, fields, and the focus ring */
+  --color-border: var(--nova-border);
+  --color-input: var(--nova-border-strong);
+  --color-ring: var(--nova-focus, var(--nova-action));
+
+  /* shadcn's radius scale, on this project's own ladder rather than a second one */
+  --radius-sm: var(--nova-radius-control);
+  --radius-md: var(--nova-radius-field);
+  --radius-lg: var(--nova-radius-card);
+  --radius-xl: var(--nova-radius-feature);
+}
+
+/* `ring-offset-background` in the supplied Button needs the offset colour to be a
+   real value at the moment the ring paints, and the utility takes it from this
+   custom property rather than from the theme. One line, and the focus ring stops
+   sitting on a transparent halo. */
+:root {
+  --tw-ring-offset-color: var(--nova-canvas);
+}
