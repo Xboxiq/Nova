@@ -8,6 +8,8 @@ import SendMessageButton from '@/components/ui/send-message-button';
 import { YieldCard } from '@/components/ui/yield-card';
 import { BookmarkToggle } from '@/components/ui/bookmark-toggle';
 import { CodeLoader } from '@/components/ui/code-loader';
+import { GlassCheckbox } from '@/components/ui/glass-checkbox';
+import { InnerGlowButton } from '@/components/ui/inner-glow-button';
 
 /* The pipeline runs sixteen infinite animations: eleven SVG `animateMotion` dots
    and five framer loops. Reduced motion is not a design preference, it is what
@@ -172,6 +174,38 @@ export function Imported() {
           <b>والقيدُ الرابعُ أدقُّها:</b> <code>--len</code> هو <b>الشُّرطةُ والإزاحةُ معًا</b>. فطولُ كلِّ سطرٍ هندسيًّا يجبُ أن يساويَ <code>--len</code> الخاصَّ به بالضبط، وإلا كشفَ الكشفُ أقلَّ من السطر أو أكثر. فـ<code>x2 − x1</code> هي <code>20</code> و<code>14</code> و<code>24</code> و<code>10</code> — <b>وقِيست</b>. و<code>.indent</code> بالأزرق: سطورُ التداخُلِ في كتلةِ الكود.
         </SpecRow>
 
+        <SpecRow name="GlassCheckbox: أوّلُ رفعٍ لم يحذف أداتَه" bare specimen={
+          /* أرضٌ داكنةٌ ذاتُ نقشٍ، وهي **شرطُ تشغيلٍ** لا خلفيّةً: الصندوقُ أبيضُ بـ١٢٪
+             فوق `backdrop-filter: blur(16px) saturate(180%)`. ومُرشِّحُ الخلفيّةِ لا
+             يُرشِّحُ شيئًا فوق أرضٍ مسطّحة — فالزجاجُ يحتاجُ ما يُشوِّشه ليُرى أصلًا. */
+          <div
+            className="flex w-full items-center justify-center gap-12 py-14"
+            style={{
+              background:
+                'radial-gradient(120% 120% at 18% 12%, #1b3a8f 0%, #0a1030 46%, #05060f 100%)',
+            }}
+            dir="ltr"
+          >
+            <GlassCheckbox label="Glass checkbox" />
+          </div>
+        }>
+          هذا أوّلُ رفعٍ يُخفي مربّعَه <b>بالطريقة الصحيحة</b>، ويستحقُّ أن يُقال: <code>opacity: 0</code> مع صندوقٍ صفريٍّ <b>ليس</b> <code>display: none</code>. الأداةُ تبقى في شجرةِ الوصولِ وتبقى قابلةً للتركيز، فتصلُها الجدولةُ والمسافةُ تقلبُها <b>بلا تغييرِ حرفٍ واحد</b>. وقِيس لا افتُرِض.
+          <br /><br />
+          وبنيتُه تُغلِقُها ثلاثةُ قيود: <code>cursor</code> و<code>user-select</code> على الحاوية يجعلانها <b>لافتة</b>؛ و<code>~ .checkmark</code> يجعلُ الصندوقَ <b>شقيقَ</b> المُدخَل؛ و<code>.checkmark:after</code> يجعلُ علامةَ الصحِّ <b>عنصرًا زائفًا</b> — فلا شيءَ داخلَ الصندوق. و<code>font-size: 20px</code> على الحاويةِ هو <b>أساسُ الـem</b> الذي كُتِبت به كلُّ الأبعاد: <code>1.6em</code> للصندوق، و<code>0.53em</code> لإزاحةِ العلامة، و<code>0.16em</code> لسُمكِها.
+          <br /><br />
+          <b>والإضافةُ واحدة:</b> الرفعُ لا يكتبُ قاعدةَ تركيزٍ إطلاقًا. وأداةٌ تُدرَكُ بالجدولةِ ولا تُرى <b>أسوأُ</b> من أداةٍ لا تُدرَك — القارئُ داخلَها ولا يعلم. فحلقةٌ على الصندوقِ المرسوم، لا تلمسُ حالةً أخرى.
+        </SpecRow>
+
+        <SpecRow name="InnerGlowButton: أيقونةٌ غائبةٌ استُدِلَّ عليها من الحركة" bare specimen={
+          <div className="flex w-full items-center justify-center bg-[#0b0f14] py-12" dir="ltr">
+            <InnerGlowButton />
+          </div>
+        }>
+          وصلَ الـCSS كاملًا <b>وشظيّةٌ واحدةٌ من الوسم</b> نجت — <code>button class="inner-glow-btn" type="button"{'>'}  Explore Universe</code> — فثبتَ العنصرُ ونوعُه ولافتتُه. والباقي تسمّيه الأصنافُ نفسُها: <code>__text</code> و<code>__icon-wrapper</code> أبناءُ الكتلةِ و<code>__icon</code> داخلَ الغلاف. و<code>space-between</code> مع حشوٍ غيرِ متناظرٍ <code>24px</code> يسارًا و<code>10px</code> يمينًا يقولُ <b>ابنانِ بالضبط</b>: نصٌّ ثم قرصٌ مُعبَّأٌ يوفِّرُ حشوَه بنفسه.
+          <br /><br />
+          <b>والأيقونةُ ليست في الرفع.</b> فما يقولُه الـCSS عنها: <code>18×18</code> و<code>stroke</code> لا <code>fill</code> — أيقونةُ خطّ. وما يقولُه التصميمُ: الغلافُ يتمدّدُ من قرصٍ <code>36px</code> إلى شقٍّ <code>50px</code> <b>وينزلقُ 4px يمينًا</b> عند التمرير، أي دفعةٌ في <b>اتّجاهٍ واحد</b>، واللافتةُ «Explore Universe». وذاك سهمٌ يشيرُ حيث تذهبُ الحركة. فهي <code>ArrowRight</code> من <code>lucide-react</code> — <b>تبعيّةٌ مثبَّتةٌ سلفًا</b>، ورسمُ سهمٍ جديدٍ بيدي اختراعٌ حيث يُجيبُ المُثبَّت. وهذا <b>الجزءُ الوحيدُ المُستدَلُّ</b> في المكوّن، ومُعلَنٌ لذلك.
+        </SpecRow>
+
         <SpecRow name="ما بقي حرفيًّا، وما أُضيف" specimen={
           <div className="grid w-full gap-2 text-[12.5px]">
             {[
@@ -192,6 +226,9 @@ export function Imported() {
               ['pathLength={100}', 'استُنتِج', 'القيمةُ الوحيدةُ التي تُغلِقُ الدورة'],
               ['role=status للمُحمِّل', 'أُضيف', 'مُحمِّلٌ لا يُنطَق زخرفة'],
               ['نبضةٌ بدل الدوران', 'أُضيف', 'عند تقليلِ الحركة: الإيقافُ تراجُع'],
+              ['opacity:0 على المربّع', 'حرفيًّا', 'صحيحٌ أصلًا: يبقى قابلًا للتركيز'],
+              ['حلقةُ تركيزٍ للزجاج', 'أُضيف', 'الرفعُ بلا قاعدةِ تركيزٍ إطلاقًا'],
+              ['ArrowRight من lucide', 'استُدِلّ', 'الأيقونةُ غائبةٌ، والحركةُ تسمّيها'],
               ['Drawer.Title / Description', 'أُضيف', 'vaul يطلب اسمًا للحوار'],
               ['aria-label على الإغلاق', 'أُضيف', 'زرٌّ محتواه أيقونةٌ بلا اسم'],
               ['العودة إلى default عند الإغلاق', 'أُضيف', 'درجٌ يتذكّر قرارًا تُرك'],
