@@ -120,6 +120,23 @@ const REFERENCE_GREYS = new Set([
      deeper darkening than needed. */
   "#808080", // "Type your email to recover" on #ffffff — 3.94
 
+  /* Upload 29/79's two hint lines: `color: #0006` -- rgba(0,0,0,0.4) -- declared
+     in the upload, composited on the ground this showcase gives it to
+     rgb(140,145,148) = #8c9194, measured 2.79 at 12px.
+
+     The ground here is mine (#eaf1f7, chosen because the button's four corner
+     points are #ffffff and vanish on white), so the question the folder card
+     answered had to be asked again: is the failing half mine? Computed, no. An
+     alpha of 0.4 over PURE WHITE -- the lightest ground that exists, and therefore
+     the ceiling for this declaration -- composites to #999999 and measures 2.85.
+     No ground reaches AA for this alpha, so there is no decoration of mine to
+     delete; the value is the defect and the value is the author's.
+
+     Named, printed, ceilinged, as above. The minimal remedy for the owner:
+     #0006 -> #0009 measures 5.53 on this ground (the exact threshold is alpha
+     0.55, 4.63; #0008 is 4.37 and still short). REFERENCE-CONTRAST.md lists it. */
+  "#8c9194", // "Hover to reveal address" on #eaf1f7 — 2.79
+
   /* The imported agent pipeline's own foregrounds. The owner ordered that file
      implemented as its own requirements state, and these alphas ARE the design:
      white at 18%, 20%, 30% and 42% on #090909, plus the blue at 55%. Measured on
