@@ -26,6 +26,7 @@ import { CharSwapJoinButton } from '@/components/ui/char-swap-join-button';
 import { LiquidGlassGenerateButton } from '@/components/ui/liquid-glass-generate-button';
 import { CornerBracketOfferButton } from '@/components/ui/corner-bracket-offer-button';
 import { FifteenZoneBatteryCard } from '@/components/ui/fifteen-zone-battery-card';
+import { ElectricCookButton } from '@/components/ui/electric-cook-button';
 
 export function Imported3() {
   return (
@@ -267,6 +268,38 @@ export function Imported3() {
           <b>ومُحدِّدٌ يُملي وَسمًا:</b> <code>.content:first-of-type</code> — <b>و<code>:first-of-type</code> يعُدُّ الوسوم</b>، فلا يُطابِقُ إلا إن كان أوّلُ <code>.content</code> أوّلَ عنصرٍ من وسمِه بينَ أبناءِ الجسم، <b>أي أن <code>.battery-level-text</code> الذي يسبِقُه يجبُ أن يكونَ وَسمًا <em>آخر</em></b>. <b>فالمُحدِّدُ هو الذي يقولُ للوسمِ ما يكون</b>: هنا <code>.battery-level-text</code> <code>span</code> (وهو <code>display: flex</code> على أيِّ حال) والصفوفُ الثلاثةُ <code>div</code>. <b>ولو كُتِبَت كلُّها <code>div</code> لَما طابَقَتِ القاعدةُ شيئًا</b> — ثالثةَ مرّةٍ في هذا السجلِّ يحسِمُ فيها <code>-of-type</code> ما كان يُنتظَرُ من صنفٍ أن يحسِمَه.
           <br /><br />
           <b>ولمعةٌ تُسافِرُ من قَصٍّ وخمسةِ تأخيرات:</b> <code>inset(0 100% 0 0)</code> إلى <code>inset(0 10% 0 10%)</code> عند ٥٪ إلى <code>inset(0 0 0 100%)</code> عند ١٠٪، <b>ثم تُثبَتُ تسعينَ في المئةِ من حلقةِ ثانيتَين</b> — فتَعبُرُ الشريطَ في ٢٠٠ مِلّي ويَنتظِرُ ١٨٠٠. <b>وحاشيةُ الحبرِ نصفُ شفافيّة:</b> <code>#eee</code> على <code>#212121</code> بشفافيّةِ ٠٫٥ يُركَّبُ <code>#888888</code>، <b>وقِيسَ ٤٫٥٤ — فوقَ الحدِّ بأربعةِ أجزاءٍ من مئة</b>. وحُسِبَ لا فُرِض، <b>لأن حبرًا نصفَ شفّافٍ على أرضٍ داكنةٍ هو الموضعُ الذي وجدَ فيه هذا السجلُّ فشلًا مرّتَين</b>.
+        </SpecRow>
+
+        <SpecRow name="ستَّةَ عشرَ مُرشِّحًا في دفترِ تقليب، وخانتانِ لكلِّ حرفٍ لأن الحركتَين لا تجتمعان" bare specimen={
+          <div className="flex w-full flex-wrap items-center justify-center gap-16 rounded-2xl bg-[#07070c] px-6 py-24" dir="ltr">
+            <ElectricCookButton />
+          </div>
+        }>
+          <b>الحدُّ الكهربيُّ ستَّةَ عشرَ مُرشِّحًا لا مُرشِّحًا واحدًا مُحرَّكًا:</b> <code>@keyframes turbulentSwap</code> يخطو <code>filter: url(#turbulent-displace-N)</code> من صفرٍ إلى خمسةَ عشرَ <b>بفواصلَ ٦٫٢٥٪ بالضبط — وستَّةَ عشرَ في ٦٫٢٥ مئة</b>. <b>و<code>filter</code> لا يُستَبانُ استبانةً ناعمةً بينَ مَرجعَي <code>url()</code></b>، فهذا <b>دفترُ تقليب</b>: ستَّةَ عشرَ خريطةَ إزاحةٍ مُنفصِلةً بالترتيبِ على ١٫٥ ثانية، نحوَ ٩٣ مِلّي لكلٍّ. <b>وتحريكُ <code>seed</code> لمُرشِّحٍ واحدٍ كان سيحتاجُ SMIL أو سكربتًا؛ وستَّةَ عشرَ مُرشِّحًا وقائمةَ إطاراتٍ لا يحتاجانِ واحدًا منهما.</b> والمُرشِّحاتُ مُستَنتَجةٌ، <b>والـCSS يقولُ عنها الكثير</b>: ستَّةَ عشرَ بالضبط، لا تختلفُ إلا بالفهرس، تُطبَّقُ على صندوقٍ لا يرسمُ إلا <code>border: 2px solid white</code>، والنتيجةُ اسمُها إزاحةٌ مُضطربة. <b>فذاك <code>feTurbulence</code> إلى <code>feDisplacementMap</code> والبَذرةُ وحدَها تتغيّر.</b>
+          <br /><br />
+          <b>و<code>--d</code> يُقرأُ ولا يُصرَّحُ في أيِّ موضع:</b> <code>@keyframes particleMove</code> يفتحُ بـ<code>transform: translateX(var(--d)) …</code>، <b>واسمٌ غيرُ مُصرَّحٍ داخلَ <code>var()</code> يُبطِلُ التصريحَ كلَّه عندَ حسابِ القيمة</b> — <b>فإطارُ الصِّفرِ لا تحويلَ فيه إطلاقًا</b>: الجُزيئاتُ لا تطيرُ من <code>--d</code>، بل تظهرُ في موضعِها النهائيِّ وتتحرّكُ شفافيّتُها وحدَها. <b>و<code>--t</code> يُقرأُ <code>var(--t, 0)</code> ببديل — فصاحبُها كان يُفكِّرُ في هذا الفشلِ عينِه سطرًا واحدًا قبلَه.</b> <b>وأُثبِتَ بإعطائِه</b>: بلا <code>--d</code> لا مُركِّبةَ إزاحةٍ في الإطارِ إطلاقًا، ومع <code>--d: 40px</code> يحملُ الإطارُ نفسُه <code>matrix(0.468877, -0.379651, 0.468877, 0.379651, 34.6642, 0)</code> — <b>إزاحةَ ٣٤٫٦٦ وميلًا آخر</b>. فالقراءتانِ تختلفان، <b>فتحويلُ الإطارِ لا يَنفُذُ إلا إن حُلَّ <code>--d</code>، وهو في الرفعةِ لا يُحَلُّ أبدًا</b>.
+          <br /><br />
+          <b>وفاصلةٌ واحدةٌ شاردةٌ تجعلُ الزرَّ يَنقُلُ كلَّ شيء:</b> <code>transition: background-color, 0.5s linear, box-shadow 0.5s ease, transform 0.5s ease</code>. <b>والفاصلةُ بعدَ <code>background-color</code> تُنهي البندَ الأوّل، فالبندُ الثاني <code>0.5s linear</code> بلا خاصّيّةٍ مُسمّاة — أي <code>all</code></b>. وقِيسَ:
+          <br />
+          <code>transition-property: background-color, all, box-shadow, transform</code> · <code>duration: 0s, 0.5s, 0.5s, 0.5s</code>
+          <br />
+          <b>فالخاصّيّةُ الوحيدةُ التي سمّاها صاحبُها أوّلًا هي الوحيدةُ التي لا تَنتقِل، وكلُّ ما عداها يَنتقِل.</b> <b>وانكشفَت عَرَضًا</b>: حلقةُ التركيزِ المُضافةُ رجعَت ٢ بكسل من ثلاثةٍ ولونًا في منتصفِ الطريق، <b>لأن <code>all</code> كان يُستَبينُ الإطارَ أيضًا</b>.
+          <br /><br />
+          <b>وفاصلةٌ واحدةٌ شاردةٌ تجعلُ الزرَّ يَنقُلُ كلَّ شيء:</b> <code>transition: background-color, 0.5s linear, box-shadow 0.5s ease, transform 0.5s ease</code>. <b>والفاصلةُ بعدَ <code>background-color</code> تُنهي البندَ الأوّل، فالبندُ الثاني <code>0.5s linear</code> بلا خاصّيّةٍ مُسمّاة — أي <code>all</code></b>. وقِيسَ:
+          <br />
+          <code>transition-property: background-color, all, box-shadow, transform</code> · <code>duration: 0s, 0.5s, 0.5s, 0.5s</code>
+          <br />
+          <b>فالخاصّيّةُ الوحيدةُ التي سمّاها صاحبُها أوّلًا هي الوحيدةُ التي لا تَنتقِلُ (صفرٌ)، وكلُّ ما عداها يَنتقِل.</b> <b>وانكشفَت عَرَضًا</b>: حلقةُ التركيزِ المُضافةُ رجعَت ٢ بكسل من ثلاثةٍ ولونًا في منتصفِ الطريق، <b>لأن <code>all</code> كان يُستَبينُ الإطارَ أيضًا</b>.
+          <br /><br />
+          <b>وخانتانِ لكلِّ حرفٍ لأن الحركتَين لا تجتمعان:</b> <code>.text p.state-1 &gt; span</code> يُجري <code>appear</code>، و<code>.text span &gt; span</code> يُجري <code>waveText</code>. <b>وعنصرٌ واحدٌ لا يحملُهما، لأن كلَّ قاعدةٍ تضبِطُ اختصارَ <code>animation</code> كلَّه فتغلِبُ الأخصُّ غَلَبةً تامّة</b> — فكلُّ حرفٍ خانةٌ خارجةٌ تَقدَمُ وخانةٌ داخلةٌ تتموَّج. <b>والموجةُ بتأخيرٍ سالبٍ</b> — <code>calc(var(--i) * -0.13s)</code> — <b>فتبدأُ كلُّ حرفٍ في منتصفِ دَورتِه لا مُنتظِرةً: التموُّجُ جارٍ سلفًا في الإطارِ الأوّل</b>. و<code>animation-play-state: paused</code> سكونًا، <b>فيحفظُ طَورَه بينَ التمريرَين</b>.
+          <br /><br />
+          <b>وفراغُ الكلمةِ يتنقّلُ بينَ الحالتَين:</b> <code>.state-1 span:nth-child(3)</code> و<code>.state-2 span:nth-child(5)</code> — <b>«GetStarted» تنكسِرُ بعدَ ثلاثةٍ و«Let'sCook!» بعدَ خمسة</b>. وبخلافِ زرِّ الانضمامِ في الموجةِ الثانيةَ عشرةَ — <b>حيثُ خدَمَ <code>nth-child(5)</code> واحدٌ اللافتتَينِ لأنهما تتّفِقانِ في موضعِ الكَسر</b> — هذا الملفُّ يحتاجُ فهرسَين ويكتبُهما.
+          <br /><br />
+          <b>ومربّعُ اختيارٍ بلا <code>display: none</code>:</b> <code>.area input {'{'} opacity: 0; width: 0; height: 0 {'}'}</code>. <b>وثمانِ رفعاتٍ في هذا السجلِّ أخفَت مُدخَلًا بـ<code>display: none</code>، وذاك يُخرِجُه من ترتيبِ الانتقالِ إخراجًا</b>. <b>وهذه لا تفعل</b>: مُدخَلٌ ٠×٠ بشفافيّةِ صفرٍ ما زالَ قابلًا للتركيزِ وللتشغيلِ من لوحةِ المفاتيح، وهو داخلَ <code>&lt;label&gt;</code> يلُفُّ الأداةَ كلَّها. <b>وتلك هي الصيغةُ الصحيحةُ للنمَط، وصلَت إليها الرفعةُ من عندِها.</b>
+          <br /><br />
+          <b>و<code>stroke-dasharray: 0 173</code> مع <code>stroke-dashoffset: 174</code>:</b> دَشّةُ صفرٍ وفُرجةُ ١٧٣ لا ترسمُ شيئًا — <b>وذاك السكون — وطولُ اللفّةِ ١٧٣</b>، أي <code>pathLength=173</code>. <b>و<code>splashFeedback</code> يُحرِّكُها إلى <code>10 110</code> بإزاحةِ ٨٠ — فيتغيّرُ دَورُ نمطِ الدَّشِّ نفسُه في الطريق</b>، وذاك ما يُحوِّلُ الحَلَقةَ إلى شَتاتِ عَلاماتٍ. <b>و<code>splashFeedback</code> و<code>splashFeedback2</code> جسدُهما واحدٌ واسمُهما اثنان.</b>
+          <br /><br />
+          <b>وثلاثُ إضافات:</b> <code>aria-label</code> على المُدخَلِ — <b>وإلّا كان اسمُه حصيلةَ عشرينَ خانةَ حرفٍ من اللافتتَين معًا</b>، لأن الـ<code>label</code> يلُفُّهما كلتَيهما. <b>وخاناتُ الحروفِ والجُزيئاتُ والقوسُ والسائلُ مُخفاةٌ عن المُساعِدات</b>. <b>و<code>outline: none</code> مكتوبٌ على <code>.button</code> وهو ليس العنصرَ القابلَ للتركيز — المُدخَلُ هو</b>، فحلقةُ العامِلِ باقيةٌ عليه؛ <b>لكن المُدخَلَ ٠×٠ بشفافيّةِ صفرٍ فتلك الحلقةُ لا تُرى</b> — فقاعدةُ <code>:focus-visible</code> على المُدخَلِ ترسمُها على الزرِّ، <b>وهو العنصرُ الذي يستطيعُ مستخدمُ لوحةِ المفاتيحِ أن يراه</b>.
         </SpecRow>
 
       </SpecList>
