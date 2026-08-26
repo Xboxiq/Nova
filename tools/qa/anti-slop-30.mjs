@@ -111,9 +111,16 @@ const RULES = [
     re: /window-controls|traffic-lights?\b/ },
   { n: "19", name: "no sparkle glyphs", files: ALL, re: /Sparkle|✨/ },
   /* an arrow glyph in a metric delta is data; what the standard bans is a
-     bouncing or pulsing directional affordance, so the check is the motion. */
+     bouncing or pulsing directional affordance, so the check is the motion.
+
+     And the motion has to REPEAT. Written without that, this caught an imported
+     tile whose pressed state runs "animation: bounce 0.2s 1 linear" once — a
+     glyph peeling away in response to a click the reader just made, which is
+     feedback, not an attractor. The tell is a directional bounce that keeps
+     going while nobody has touched anything, so the count is part of the rule.
+     Mutation-tested: the same declaration with "infinite" still fails. */
   { n: "20", name: "no animated / bouncing arrows", files: [...CSS, ...ALL],
-    re: /animation:[^;]*\b(bounce|bob|float-?arrow)|scroll-?(down|hint|cue)[^;]*animation/i },
+    re: /animation:[^;]*\b(bounce|bob|float-?arrow)[^;]*\b(infinite|alternate)|animation:[^;]*\b(infinite|alternate)[^;]*\b(bounce|bob|float-?arrow)|scroll-?(down|hint|cue)[^;]*animation/i },
   { n: "23", name: "no em dash in a rendered heading", files: [...SHOWCASE, ...SHELL_TSX],
     re: /\b(title|eyebrow|label)="[^"]*—/ },
   { n: "24", name: 'no "it is not X, it is Y" copy', files: ALL,
