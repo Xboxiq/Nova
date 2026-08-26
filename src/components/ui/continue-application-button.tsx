@@ -90,6 +90,21 @@ const StyledWrapper = styled.div`
     transition: background 0.3s;
     color: var(--color);
     background: var(--bg, var(--background));
+
+    /* Added, and it is a NAME COLLISION rather than a defect in the upload. The
+       button paints "var(--bg, var(--background))" and only ever sets --bg inside
+       its own :hover rule, expecting the fallback to supply the resting colour.
+       But this repo declares "--bg: var(--nova-canvas)" in src/madar/bridge.css,
+       and custom properties inherit -- so --bg arrives already defined, the
+       fallback is never reached, and the button paints the PAGE'S OWN CANVAS.
+       Measured before this line: white label on #fbf5ee at 1.08:1, i.e. an
+       invisible button with unreadable text, in every pack whose canvas is light.
+
+       "--bg: initial" makes the name guaranteed-invalid on this element, which is
+       exactly what "var()" needs to fall back. The hover rule still sets it and
+       still wins. Nothing of the author's is changed; the name is simply given
+       back to them. */
+    --bg: initial;
   }
 
   /* Added: "outline: none" above with no replacement anywhere in the upload. */

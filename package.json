@@ -17,7 +17,7 @@
     "qa:hover": "node tools/qa/hover-policy.mjs",
     "qa:operable": "node tools/qa/operable.mjs",
     "qa:geometry": "node tools/qa/geometry.mjs",
-    "qa:source": "for h in geometry composition depth-policy mono-usage no-raw-markdown anti-slop-30 hover-policy agents-skill-claims; do node tools/qa/$h.mjs || exit 1; done",
+    "qa:source": "for h in geometry composition depth-policy mono-usage no-raw-markdown anti-slop-30 hover-policy agents-skill-claims imported-vars; do node tools/qa/$h.mjs || exit 1; done",
     "qa:live": "for h in spec-row-qa operable directions matrix madar-qa; do node tools/qa/$h.mjs || exit 1; done",
     "qa:directions": "node tools/qa/directions.mjs",
     "qa:matrix": "node tools/qa/matrix.mjs"
