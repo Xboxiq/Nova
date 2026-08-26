@@ -158,6 +158,10 @@ const CASES = [
     exclusive: [".pb-ai-radio-group input[type='radio']"],
   },
   {
+    id: "madar-imported-3",
+    name: "imported-3",
+  },
+  {
     id: "madar-imported-2",
     name: "imported-2",
     exclusive: [
@@ -384,17 +388,22 @@ for (const c of CASES) {
      own size is not. Elements that are deliberately parked outside a clip and
      brought in on hover — the GET STARTED arrow, the delete tooltip — are not
      interactive themselves, which is why this walks controls and not every box. */
-  const clipped = await page.evaluate(() => {
+  /* Third shape, and the reason is timing. A disclosure opens with a TRANSITION —
+     the flex product card grows over 0.4s — so focusing a clipped control and
+     measuring in the same synchronous pass reads the card mid-expansion and
+     reports a failure that resolves 400ms later. The candidates are therefore
+     collected first, then focused and re-measured one at a time with a wait, in
+     Node rather than in the page.
+
+     The question this settles: a control clipped at rest is a disclosure if
+     focusing it brings it into view, and a defect if it does not. The
+     reset-password button is the second kind — nothing reveals it. */
+  const candidates = await page.evaluate(() => {
     const out = [];
+    let n = 0;
     for (const el of document.querySelectorAll('button, a[href], input, select, textarea, [role="radio"], [role="switch"], [role="tab"]')) {
       const r = el.getBoundingClientRect();
       if (!r.width || !r.height) continue;
-      /* A control the design deliberately hid is not a clipped control. The
-         shell's file input is `.sr-only` — `clip: rect(0, 0, 0, 0)` — driven by a
-         visible drop-zone button that forwards the click, which is the correct
-         pattern; the first version of this gate failed it in all eight sections.
-         Same four spellings the target-size gate recognises, because it is the
-         same intention. */
       const own = getComputedStyle(el);
       if (own.clipPath.startsWith('inset(50%') || +own.opacity === 0 || own.clip.startsWith('rect(')) continue;
       for (let p = el.parentElement; p; p = p.parentElement) {
@@ -402,12 +411,6 @@ for (const c of CASES) {
         if (!/hidden|clip/.test(cs.overflowX + cs.overflowY)) continue;
         const pr = p.getBoundingClientRect();
         if (!pr.width || !pr.height) continue;
-        /* A file input parked outside a frame with its LABEL visible inside is
-           the sr-only technique, not a clipped control — the hit target is
-           present, only the input's own box is out of view. The shell's own
-           "رفع صورة" input is exactly that, and the first version of this gate
-           failed it in all eight sections. Same reasoning as the target-size
-           gate above, and the same platform answer: el.labels. */
         const visibleLabel = [...(el.labels ?? [])].some((l) => {
           const lr = l.getBoundingClientRect();
           return lr.width && lr.height && lr.top >= pr.top - 1 && lr.bottom <= pr.bottom + 1
@@ -417,13 +420,47 @@ for (const c of CASES) {
         const outside = Math.max(0, pr.top - r.bottom, r.top - pr.bottom, pr.left - r.right, r.left - pr.right);
         const over = Math.max(0, r.bottom - pr.bottom, pr.top - r.top, r.right - pr.right, pr.left - r.left);
         if (outside > 0 || over > Math.max(4, Math.min(r.width, r.height) / 4)) {
-          out.push(`${el.tagName.toLowerCase()} "${(el.getAttribute('aria-label') || el.textContent || '').trim().slice(0, 24)}" is ${Math.round(Math.max(outside, over))}px outside a clipping ${p.tagName.toLowerCase()}.${(p.className || '').toString().split(' ')[0]}`);
+          /* Only the element is marked. The clipping ancestor is re-derived on
+             the second pass by walking up again — marking it broke as soon as two
+             candidates shared one parent, which the flex card's two buttons do. */
+          const mark = `clip-probe-${n++}`;
+          el.setAttribute('data-clip-probe', mark);
+          out.push({ mark, label: (el.getAttribute('aria-label') || el.textContent || '').trim().slice(0, 24),
+                     tag: el.tagName.toLowerCase(), parent: `${p.tagName.toLowerCase()}.${(p.className || '').toString().split(' ')[0]}` });
           break;
         }
       }
     }
     return out;
   });
+
+  const clipped = [];
+  for (const c of candidates) {
+    await page.evaluate((mark) => {
+      const el = document.querySelector(`[data-clip-probe="${mark}"]`);
+      el.focus({ preventScroll: true });
+    }, c.mark);
+    /* Long enough for a disclosure's own transition; the flex card's is 0.4s. */
+    await page.waitForTimeout(650);
+    const gap = await page.evaluate((mark) => {
+      const el = document.querySelector(`[data-clip-probe="${mark}"]`);
+      let p = el.parentElement;
+      while (p) {
+        const cs = getComputedStyle(p);
+        const pb = p.getBoundingClientRect();
+        if (/hidden|clip/.test(cs.overflowX + cs.overflowY) && pb.width && pb.height) break;
+        p = p.parentElement;
+      }
+      if (!p) return 0;
+      const r = el.getBoundingClientRect(), pr = p.getBoundingClientRect();
+      const o = Math.max(0, pr.top - r.bottom, r.top - pr.bottom, pr.left - r.right, r.left - pr.right);
+      const v = Math.max(0, r.bottom - pr.bottom, pr.top - r.top, r.right - pr.right, pr.left - r.left);
+      return o > 0 || v > Math.max(4, Math.min(r.width, r.height) / 4) ? Math.round(Math.max(o, v)) : 0;
+    }, c.mark);
+    if (gap) clipped.push(`${c.tag} "${c.label}" is ${gap}px outside a clipping ${c.parent}, and focusing it does not reveal it`);
+    operated += 1;
+  }
+
   if (clipped.length) failures.push(`${c.name}: ${clipped.length} control(s) clipped by an ancestor: ${clipped.slice(0, 3).join(" | ")}`);
   operated += 1;
 
