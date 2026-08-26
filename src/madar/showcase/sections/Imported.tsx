@@ -12,6 +12,9 @@ import { GlassCheckbox } from '@/components/ui/glass-checkbox';
 import { InnerGlowButton } from '@/components/ui/inner-glow-button';
 import { LessButBetterCard } from '@/components/ui/less-but-better-card';
 import { PrinterCard } from '@/components/ui/printer-card';
+import { PrismCheckbox } from '@/components/ui/prism-checkbox';
+import { DeadboltCheckbox } from '@/components/ui/deadbolt-checkbox';
+import { PixelToggle } from '@/components/ui/pixel-toggle';
 
 /* The pipeline runs sixteen infinite animations: eleven SVG `animateMotion` dots
    and five framer loops. Reduced motion is not a design preference, it is what
@@ -232,6 +235,43 @@ export function Imported() {
           <b>و<code>role="img"</code> هو كلُّ قصّةِ الوصولِ هنا.</b> الكلماتُ الخمسُ للحالة <b>كلُّها في المستند معًا</b> وتُبدَّلُ بالشفافيّة، فقارئُ الشاشةِ يقرأُ «Ready Feeding paper... Printing... Ejecting... Done» في نَفَسٍ واحد: <b>خمسُ حالاتٍ متناقضة، لا واحدةَ منها صحيحة</b>، تصفُ طابعةً لا وجودَ لها. و<code>role="img"</code> يجعلُ الشجرةَ عَرْضيّةً، فتكفُّ الكلماتُ عن أن تُنطَق وتُوصَفُ البطاقةُ مرّةً واحدةً وصفًا صحيحًا.
         </SpecRow>
 
+        <SpecRow name="PrismCheckbox: أوّلُ رفعٍ لم يحتج شيئًا لِلوحةِ المفاتيح" bare specimen={
+          /* السُّلَّمُ الثلاثيُّ والحالتانِ الإضافيّتانِ كلُّها معروضة، لا موصوفة:
+             §29 يقول إنّ مفتاحًا غيرَ مرسومٍ ادّعاءٌ غيرُ مقيس. فالرفعُ يُعلِنُ
+             --small و--large و--icon-only و:disabled، فكلُّها هنا. */
+          <div className="flex w-full flex-wrap items-center justify-center gap-x-10 gap-y-6 bg-[#050810] px-8 py-12" dir="ltr">
+            <PrismCheckbox size="small" label="Small" description="26px box" />
+            <PrismCheckbox label="Enable feature" description="Activate this option" defaultChecked />
+            <PrismCheckbox size="large" label="Large" description="44px box" />
+            <PrismCheckbox iconOnly label="Icon only" />
+            <PrismCheckbox disabled label="Disabled" description="filter: grayscale(0.85)" />
+          </div>
+        }>
+          أكملُ رفعٍ في هذه الدفعة، <b>وأوّلُ واحدٍ لم يحتج إضافةً واحدةً لِلوحةِ المفاتيح</b>: يُخفي مربّعَه بالقصِّ الصحيح، ويكتبُ <code>:focus-visible</code> بنفسه، ويكتبُ كتلةَ <code>prefers-reduced-motion</code> بنفسه. وشجرتُه تُغلِقُها <b>مُركِّبتانِ استُخدِمتا بقصدٍ مختلف</b>: <code>+ __box</code> <b>ملاصقة</b> فالصندوقُ يلي المُدخَلَ مباشرةً، و<code>~ __content</code> <b>عامّة</b> فالنصُّ يليه <b>بعد</b> الصندوق. ولو كانتا واحدةً لَما تعيّنَ الترتيب.
+          <br /><br />
+          <b>والشيءُ الوحيدُ الغائب:</b> مسارُ علامةِ الصحّ. وما يقولُه الـCSS عنه — <code>stroke-dasharray: 22</code> و<code>dashoffset: 22</code> إلى صفر — <b>رسمٌ متدرِّج</b>، ورسمٌ متدرِّجٌ لا ينظفُ إلا إذا ساوت الشُّرطةُ طولَ المسار. وعلامةٌ ذاتُ ضلعَين في مربّعِ ٢٢ تقيسُ نحوَ ٢٠٫٥، فوُضِع <code>pathLength={'{'}22{'}'}</code>: يجعلُ الاثنَين والعشرينَ <b>دقيقةً</b> لا قريبة — نفسُ حكمِ <code>pathLength=100</code> في المُحمِّل.
+        </SpecRow>
+
+        <SpecRow name="DeadboltCheckbox: خاصّيّةٌ تبدو خطأً وهي التي تُعيِّنُ البنية" bare specimen={
+          <div className="flex w-full items-center justify-center gap-12 bg-[#0a0b0d] py-12" dir="ltr">
+            <DeadboltCheckbox label="Lock the door" />
+          </div>
+        }>
+          البنيةُ يُعيِّنُها تفصيلٌ واحدٌ يبدو غلطةً: <code>.deadbolt-input {'{'} pointer-events: none {'}'}</code>. <b>مربّعٌ لا يُنقَر</b>، خلفَ إطارٍ يحملُ <code>cursor: pointer</code> — وهذا الاجتماعُ يعملُ تحت <b>ترتيبٍ واحدٍ لا غير</b>: أن يكونَ <code>.deadbolt-checkbox-box</code> <b>لافتةً</b>. فحينئذٍ يُفعِّلُ النقرُ على الإطارِ المُدخَلَ <b>بتفعيلِ اللافتة</b>، ويصيرُ <code>pointer-events: none</code> على مُدخَلٍ صفريٍّ خفيٍّ <b>ترتيبًا لا قتلًا</b>. ولو كان <code>&lt;div&gt;</code> لكانت الأداةُ صورةً: لا يقلبُها إلا لوحةُ مفاتيح. <b>فخاصّيّةٌ تبدو زائدةً هي الدليلُ على العنصر.</b>
+          <br /><br />
+          والحركةُ مكتوبةٌ كفيزياء: <code>bolt-slam</code> يذهبُ إلى <code>26px</code> ثم يرتدُّ إلى <code>22</code> ثم يستقرُّ على <code>24</code> — <b>تجاوُزٌ ثم ارتدادٌ ثم سكون</b>، وهو ما يفعلُه مِزلاجٌ يُدفَعُ بقوّة. والرجوعُ <code>bolt-retract</code> بمنحنى <code>(0.55, 0, 1, 0.45)</code>: يبدأُ بطيئًا ويُسرِعُ — نابضٌ يُفلَت.
+        </SpecRow>
+
+        <SpecRow name="PixelToggle: أربعُ أيقوناتٍ غائبة، والقيودُ تسمّيها كلَّها" bare specimen={
+          <div className="flex w-full items-center justify-center gap-12 bg-[#08090c] py-12 text-[15px]" dir="ltr">
+            <PixelToggle label="Pixel toggle" />
+          </div>
+        }>
+          هذا الرفعُ يطلبُ <b>أربعَ أيقوناتٍ لا يوفّرُ واحدةً</b> — أكثرُ محتوًى مُستدَلٍّ حتى الآن، فكلٌّ منها مسمًّى. وما يقولُه الـCSS عن كلٍّ: <code>.indicator-on-wrap</code> بـ<code>0.85em</code> و<code>#00ffaa</code> <b>يسارًا</b> باهتةٌ حتى الحفظ — العلامةُ المُوجِبةُ التي يكشفُها القرص؛ و<code>.indicator-off-wrap</code> بـ<code>#ff007f</code> <b>يمينًا</b> ساطعةٌ حتى الحفظ — نقيضُها؛ و<code>.face-sad</code> و<code>.face-happy</code> بـ<code>1.35em</code> ولونٍ واحد. <b>وأربعتُها مقاسةٌ بالـem، ومُلوَّنةٌ عبر <code>color</code>، ومُوسَّطةٌ بالمرونة</b> — وذاك وصفُ SVG مطليٍّ يرثُ <code>currentColor</code>، أربعَ مرّات. فهي <code>Check</code> و<code>X</code> و<code>Frown</code> و<code>Smile</code> من lucide. <b>الاختيارُ لي، والقيودُ للرفع.</b>
+          <br /><br />
+          و<b>ثلاثةُ أشياءَ أُصلِحت، وكلُّها رأيناها قبلًا في هذه الدفعة:</b> <code>display: none</code> على المربّعِ — <b>للمرّةِ الثالثة</b> — فحلَّ محلَّه القصُّ المخفيُّ بصريًّا؛ و<code>display: block</code> على المسار، إذ هو <code>&lt;span&gt;</code> و<code>width/height</code> لا تنطبقانِ على صندوقٍ سطريّ؛ وحلقةُ تركيزٍ لأن المُدخَلَ صار يُدرَك.
+        </SpecRow>
+
         <SpecRow name="ما بقي حرفيًّا، وما أُضيف" specimen={
           <div className="grid w-full gap-2 text-[12.5px]">
             {[
@@ -259,6 +299,10 @@ export function Imported() {
               ['عددُ الأزرارِ والمنافذ', 'حُدِس', 'الـCSS لا يُثبِتُ عددًا'],
               ['role=img للطابعة', 'أُضيف', 'خمسُ حالاتٍ تُنطَقُ معًا بلا هذا'],
               ['ردُّ الألوانِ القسريّة', 'أُضيف', 'العنوانُ المتدرِّجُ يغيبُ تمامًا'],
+              ['pathLength={22} للعلامة', 'استُنتِج', 'الشُّرطةُ يجبُ أن تُساوي الطول'],
+              ['Check · X · Frown · Smile', 'استُدِلّ', 'أربعُ أيقوناتٍ لا يوفّرُها الرفع'],
+              ['pointer-events: none', 'حرفيًّا', 'ويُثبِتُ أنّ الحاويةَ لافتة'],
+              ['نسخةٌ مكرَّرةٌ للطابعة', 'لم تُبنَ', '١٠٢ كتلةً مطابِقة؛ نُسِبت لصاحبها'],
               ['Drawer.Title / Description', 'أُضيف', 'vaul يطلب اسمًا للحوار'],
               ['aria-label على الإغلاق', 'أُضيف', 'زرٌّ محتواه أيقونةٌ بلا اسم'],
               ['العودة إلى default عند الإغلاق', 'أُضيف', 'درجٌ يتذكّر قرارًا تُرك'],

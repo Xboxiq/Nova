@@ -138,7 +138,13 @@ const CASES = [
          is not a class or an attribute — it is the sheet getting taller. */
       { what: "open the drawer", click: "text=Click Me To Open Drawer", watch: "[data-vaul-drawer]", exists: true },
     ],
-    toggles: ["input.hidden-checkbox", "label.container input[type='checkbox']"],
+    toggles: [
+      "input.hidden-checkbox",
+      "label.container input[type='checkbox']",
+      ".prism-checkbox__input:not(:disabled)",
+      ".deadbolt-input",
+      ".pixel-checkbox",
+    ],
   },
 ];
 

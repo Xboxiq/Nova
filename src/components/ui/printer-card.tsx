@@ -1,4 +1,9 @@
-/* The largest CSS-only upload yet: one 6.4s cycle driving twenty infinite
+/* From Uiverse.io by spotift_5948 — the credit arrived with a later re-export of
+   the same CSS (all 102 declaration blocks byte-identical to what was already
+   here), so nothing was rebuilt; only the attribution was missing and is now
+   recorded where it belongs.
+
+   The largest CSS-only upload yet: one 6.4s cycle driving twenty infinite
    animations, and not a single tag. The tree is nonetheless almost entirely
    determined, because every part is absolutely positioned and its `left`/`top`
    only lands in the right place under one parent. Worked example:
