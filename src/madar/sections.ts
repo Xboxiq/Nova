@@ -81,6 +81,17 @@ export const madarSections: MadarSection[] = [
     added: true,
   },
   {
+    id: "madar-imported-2",
+    title: "Imported II",
+    titleAr: "المستورَد II",
+    family: "experiments",
+    description: "A batch of forty-five uploads triaged by measurement before any code: six carry no CSS, two are byte-identical, two were already built. The remaining thirty-six are implemented in waves, each wave measured and committed on its own.",
+    descriptionAr: "دفعةٌ من خمسٍ وأربعين رفعةً، فُرِزت بالقياس قبل أيِّ كود: ستٌّ بلا CSS، واثنتانِ متطابقتان، واثنتانِ مبنيّتانِ سلفًا. والستُّ والثلاثون الباقيةُ تُبنى في دفعاتٍ، كلُّ دفعةٍ مقيسةٌ ومودَعةٌ وحدَها.",
+    tags: ["imported", "triage", "duplicate", "مستورَد", "فرز", "مكرَّر"],
+    component: load("Imported2", () => import("./showcase/sections/Imported2")),
+    added: true,
+  },
+  {
     id: "madar-imported",
     title: "Imported",
     titleAr: "المستورَد",

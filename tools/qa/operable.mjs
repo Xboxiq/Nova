@@ -138,7 +138,15 @@ const CASES = [
          is not a class or an attribute — it is the sheet getting taller. */
       { what: "open the drawer", click: "text=Click Me To Open Drawer", watch: "[data-vaul-drawer]", exists: true },
     ],
-    toggles: ["input.hidden-checkbox"],
+    toggles: [
+      "input.hidden-checkbox",
+      "label.container input[type='checkbox']",
+      ".prism-checkbox__input:not(:disabled)",
+      ".deadbolt-input",
+      ".pixel-checkbox",
+      ".pb-ai-checkbox input",
+      ".folder__toggle",
+    ],
   },
 ];
 
@@ -255,7 +263,12 @@ for (const c of CASES) {
          776x44 and had always passed on its own size. The harness caught my own
          rule; the order is the fix. */
       if (Math.min(r.width, r.height) < 24) {
-      if (el.tagName === 'INPUT' && getComputedStyle(el).clipPath.startsWith('inset(50%')) {
+      /* Recognise the PATTERN, not one technique. This started as a clip-path
+         test, which missed a control hidden with `opacity: 0` at 1x1 instead —
+         the folder's toggle. Both are the same thing: an input deliberately
+         made invisible, whose real target is the <label> around it. */
+      const cs = el.tagName === 'INPUT' ? getComputedStyle(el) : null;
+      if (cs && (cs.clipPath.startsWith('inset(50%') || +cs.opacity === 0)) {
         const lab = el.closest('label');
         const lr = lab?.getBoundingClientRect();
         if (lr && Math.min(lr.width, lr.height) >= 24) continue;
