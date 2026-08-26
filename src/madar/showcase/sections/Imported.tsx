@@ -15,6 +15,11 @@ import { PrinterCard } from '@/components/ui/printer-card';
 import { PrismCheckbox } from '@/components/ui/prism-checkbox';
 import { DeadboltCheckbox } from '@/components/ui/deadbolt-checkbox';
 import { PixelToggle } from '@/components/ui/pixel-toggle';
+import { PbAiRadioGroup } from '@/components/ui/pb-ai-radio-group';
+import { PbAiCheckboxGroup } from '@/components/ui/pb-ai-checkbox-group';
+import { PbAiInput } from '@/components/ui/pb-ai-input';
+import { FolderCard } from '@/components/ui/folder-card';
+import { Ultimate3dButton } from '@/components/ui/ultimate-3d-button';
 
 /* The pipeline runs sixteen infinite animations: eleven SVG `animateMotion` dots
    and five framer loops. Reduced motion is not a design preference, it is what
@@ -272,6 +277,57 @@ export function Imported() {
           و<b>ثلاثةُ أشياءَ أُصلِحت، وكلُّها رأيناها قبلًا في هذه الدفعة:</b> <code>display: none</code> على المربّعِ — <b>للمرّةِ الثالثة</b> — فحلَّ محلَّه القصُّ المخفيُّ بصريًّا؛ و<code>display: block</code> على المسار، إذ هو <code>&lt;span&gt;</code> و<code>width/height</code> لا تنطبقانِ على صندوقٍ سطريّ؛ وحلقةُ تركيزٍ لأن المُدخَلَ صار يُدرَك.
         </SpecRow>
 
+        <SpecRow name="pb-ai: توأمانِ يفترقانِ في ثلاثِ كتلٍ من ستَّ عشرة" bare specimen={
+          <div className="flex w-full flex-wrap items-start justify-center gap-8 bg-[#07060d] px-6 py-12" dir="ltr">
+            <PbAiRadioGroup legend="AI mode" />
+            <PbAiCheckboxGroup legend="AI features" />
+          </div>
+        }>
+          رفعانِ متجاوران، والتشابهُ <b>مقيسٌ لا مُقدَّر</b>: بتطبيعِ النصَّين وإعادةِ تسميةِ radio إلى checkbox، <b>١٣ من ١٦ كتلةَ تصريحٍ مطابِقةٌ حرفًا بحرف</b> — الحاويةُ ولمعانُها وحبيباتُها وحالتا السطحِ ولمعانُه ونسيجُه ورفعُ التمريرِ والضغط. <b>وثلاثُ كتلٍ تفترق، وهي كلُّ الفرق:</b> نصفُ قطرِ السطحِ <code>999px</code> (قرصٌ من عدّة) مقابلَ <code>12px</code> (صندوقٌ يُشعَل أو يُطفأ)؛ والعلامةُ نقطةٌ تتمدّدُ <code>0.4 → 1</code> مقابلَ محرفٍ يمرُّ من الشفافيّةِ إلى الأبيض؛ وقاعدتُها <code>background</code> مقابلَ <code>color</code>.
+          <br /><br />
+          والملفّانِ <b>منفصلانِ وحرفيّانِ كلاهما</b>. وتوحيدُ الثلاثَ عشرةَ كتلةً في مكانٍ واحدٍ أنظفُ — وهو أيضًا <b>إعادةُ كتابةِ ملفَّي شخصَين في ثالثٍ لم يكتبْه أحدُهما</b>. والمطلوبُ تنفيذُ كلٍّ كما هو، فالتكرارُ <b>مسجَّلٌ لا مُزال</b>.
+          <br /><br />
+          <b>وشيئانِ لا يستطيعُ الـCSS قولَهما، وأحدُهما يُقرِّرُ إن كانت هذه مجموعةَ راديو أصلًا:</b> <code>name</code> — فمجموعةُ راديو بلا اسمٍ مشترَك <b>ليست مجموعة</b>: كلُّ زرٍّ أداةٌ مستقلّةٌ تُشعَلُ ولا تُطفأ، فتنتهي الثلاثةُ كلُّها مختارةً ولا واحدَ منها يستثني الآخر. ولا تُعبِّرُ ورقةُ أنماطٍ عن ذلك، فالاسمُ يُولَّدُ لكلِّ نسخةٍ بـ<code>useId</code>. <b>والثاني هديّةُ الأوّل:</b> أسهمُ لوحةِ المفاتيح تأتي <b>مع</b> الاسم — فمجموعةٌ مسمّاةٌ محطّةُ جدولةٍ واحدةٌ تتحرّكُ الأسهمُ داخلَها. فلا كودَ تجوالٍ هنا: <b>المِنصّةُ تفعلُه، متى وُجِد الاسم.</b>
+        </SpecRow>
+
+        <SpecRow name="PbAiInput: استعلامُ وسائطَ يُخبِرُك بالوسمِ، ثم يكشفُ عن العَيب" bare specimen={
+          <div className="flex w-full items-center justify-center bg-[#0a0713] py-12" dir="ltr">
+            <PbAiInput />
+          </div>
+        }>
+          <b>استعلامُ الوسائطِ هو ما يُثبِتُ الوسم:</b> <code>@media (max-width: 640px) {'{'} .pb-ai-input-btn span:first-child {'{'} display: none {'}'} {'}'}</code>. قاعدةٌ تُخفي <b>أوّلَ</b> span في الزرِّ تقولُ شيئَين: أن للزرِّ ابنَين على الأقلّ وأنّ الأوّلَ هو <b>الكلمة</b> — فالترتيبُ <code>Create</code> ثمّ <code>✦</code> لا العكس.
+          <br /><br />
+          <b>وهي أيضًا تكشفُ العَيبَ الذي يحتاجُ إصلاحًا:</b> تحت ٦٤٠px يصيرُ كلُّ محتوى الزرِّ <b>محرفًا زخرفيًّا</b>. وزرٌّ لافتتُه «✦» <b>بلا اسمٍ على الهاتف</b>: يُنطَقُ «زرّ»، ولا تجدُه أوامرُ الصوت. فـ<code>aria-label</code> يحملُ الكلمةَ عبرَ نقطةِ الانكسارِ <b>بلا تكلفةٍ بصريّةٍ واحدة</b>، والشُّهبةُ <code>aria-hidden</code> — فالاسمُ ثابتٌ عند كلِّ عرضٍ لا يتبخّرُ عند ٦٤٠.
+          <br /><br />
+          <b>وهذا أوّلُ رفعٍ يَنزِعُ التركيزَ فعلًا:</b> <code>outline: none</code> على الحقلِ <b>وعلى الزرّ</b>. فأُعيدَ للاثنَين — والغلافُ يقصُّ (<code>overflow: hidden</code>) فحلقةٌ خارجيّةٌ على الحقلِ تُقتَصّ، ولذلك حلقتُه <code>box-shadow</code> داخليّةٌ وحلقةُ الزرِّ <code>outline</code> بإزاحةٍ سالبة.
+        </SpecRow>
+
+        <SpecRow name="FolderCard: أفضلُ رفعٍ سلوكًا بعد البِزم، وأوّلُ من سمّى نفسَه" bare specimen={
+          /* أرضٌ بيضاء، وقد كانت #faf7f0 فأخفقَ المِقياس: لونُ المجلَّدِ الخاصُّ
+             لعدّادِه — --ink-soft: #7c736a — أعطى 4.34:1 على كريمي، وذاك تحت AA.
+             والأرضُ كانت **من عندي** لا من التصميم: على الأبيض يعطي لونُ صاحبِ
+             الكودِ نفسُه 4.65:1 فيعبر. فالعَيبُ كان زينتي، فأُزيلت الزينةُ ولم
+             يُطلَب سماحٌ للون غيري. */
+          <div className="flex w-full items-center justify-center bg-white py-12" dir="ltr">
+            <FolderCard title="Documents" count="128 items" />
+          </div>
+        }>
+          بعد <code>PrismCheckbox</code> هذا <b>أفضلُ رفعٍ سلوكًا في السجلِّ كلِّه</b>: يُخفي مُدخَلَه ببكسلٍ لا يحذفُه، ويكتبُ <code>:focus-visible</code> بنفسه، ويكتبُ <code>prefers-reduced-motion</code> بنفسه. <b>فلم يُضَف شيءٌ لِلوحةِ مفاتيحَ ولا لقارئِ شاشة.</b>
+          <br /><br />
+          و<code>pointer-events: none</code> على المُبدِّلِ يعني ما عناه في المِزلاج: <b>الحاويةُ لافتة</b>. وهنا يُثمِرُ ذلك ثمرةً ثانية — نصُّ العنوانِ <b>داخلَ اللافتة</b>، فيصيرُ «Documents 128 items» <b>اسمَ الأداةِ من تلقاء نفسِه</b>. <b>وهذا أوّلُ رفعٍ في الدفعةِ لم يحتج <code>aria-label</code>، لأن نصَّه هو الذي يعمل.</b>
+        </SpecRow>
+
+        <SpecRow name="Ultimate3dButton: مِحيطٌ يدورُ خلفَ نافذةٍ بعرضِ بكسلَين" bare specimen={
+          <div className="flex w-full flex-wrap items-center justify-center gap-8 bg-[#0b0b0b] py-14" dir="ltr">
+            <Ultimate3dButton>Initialize</Ultimate3dButton>
+            <Ultimate3dButton disabled>Initialize</Ultimate3dButton>
+          </div>
+        }>
+          أغنى أداةٍ منفردةٍ في السجلّ: طبقتانِ زائفتانِ على الزرّ، وطبقتانِ على نصِّه، وعنصرُ تمويجٍ، وشيفرونٌ مرسومٌ بالحدود، وخمسُ حالات، ومجموعتا إطارات. <b>والوسمَ يُثبِتُه ما يقرأُه الـCSS منه لا المُركِّبات:</b> <code>content: attr(data-text)</code> — فطبقتا الخللِ تعرضانِ <b>خاصّيّةً</b>، وبلا <code>data-text</code> تعرضانِ النصَّ الفارغَ <b>ويغيبُ التأثيرُ كلُّه صمتًا</b>: لا خطأً ولا صورةً، غيابًا فقط. فاللافتةُ تُحمَلُ مرّتَين من <b>مصدرٍ واحد</b> حتى لا تفترقا.
+          <br /><br />
+          <b>وترتيبُ الطبقاتِ يستحقُّ القراءةَ، لأنه سببُ كونِ <code>overflow: hidden</code> و<code>z-index: 1</code> حامِلَين لا زينة.</b> الزرُّ سياقُ تراكُم، فالابنُ السالبُ يُرسَمُ <b>فوقَ خلفيّتِه</b>: خلفيّةُ <code>#111</code> ← <code>::before</code> (<code>-2</code>، المخروطُ الدائر) ← <code>::after</code> (<code>-1</code>، مُزاحٌ <code>2px</code>) ← التمويجُ ← النصُّ والأيقونة. و<code>::after</code> مُزاحٌ ببكسلَين، <b>فالمكانُ الوحيدُ الذي يظهرُ فيه المخروطُ هو تلك الحاشيةُ</b>: «تقدُّمُ المِحيط» قرصٌ بعرضِ <code>250%</code> يُرى عبرَ نافذةٍ بعرضِ بكسلَين، و<code>overflow: hidden</code> هو ما يمنعُ القرصَ من الظهورِ في غيرها. <b>وانزِع أيًّا منهما فالنتيجةُ ليست تأثيرًا أضعف، بل صورةٌ أخرى تمامًا.</b>
+        </SpecRow>
+
         <SpecRow name="ما بقي حرفيًّا، وما أُضيف" specimen={
           <div className="grid w-full gap-2 text-[12.5px]">
             {[
@@ -303,6 +359,11 @@ export function Imported() {
               ['Check · X · Frown · Smile', 'استُدِلّ', 'أربعُ أيقوناتٍ لا يوفّرُها الرفع'],
               ['pointer-events: none', 'حرفيًّا', 'ويُثبِتُ أنّ الحاويةَ لافتة'],
               ['نسخةٌ مكرَّرةٌ للطابعة', 'لم تُبنَ', '١٠٢ كتلةً مطابِقة؛ نُسِبت لصاحبها'],
+              ['name للراديو', 'أُضيف', 'بلا اسمٍ ليست مجموعةً بل ثلاثُ أدوات'],
+              ['data-text للخلل', 'أُضيف', 'attr() بلا خاصّيّةٍ يعرضُ لا شيء'],
+              ['aria-label للزرِّ ✦', 'أُضيف', 'تحت 640px لا يبقى إلا محرفٌ زخرفيّ'],
+              ['outline: none ×٢', 'أُعيدت', 'أوّلُ رفعٍ يَنزِعُ التركيزَ فعلًا'],
+              ['١٣ كتلةً مكرَّرةً', 'حرفيًّا', 'التوحيدُ إعادةُ كتابةِ ملفَّي شخصَين'],
               ['Drawer.Title / Description', 'أُضيف', 'vaul يطلب اسمًا للحوار'],
               ['aria-label على الإغلاق', 'أُضيف', 'زرٌّ محتواه أيقونةٌ بلا اسم'],
               ['العودة إلى default عند الإغلاق', 'أُضيف', 'درجٌ يتذكّر قرارًا تُرك'],
