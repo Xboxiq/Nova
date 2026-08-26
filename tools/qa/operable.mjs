@@ -160,6 +160,14 @@ const CASES = [
   {
     id: "madar-imported-3",
     name: "imported-3",
+    controls: [
+      /* The printstream sidebar's four tabs were <div>s in the upload, styled as
+         buttons and doing nothing. They are buttons here, and the only thing that
+         carries "which one is current" to a screen reader is aria-current -- so
+         that is the consequence to watch. A tab that paints an active look and
+         moves no state is the exact failure this harness exists for. */
+      { what: "printstream tab", click: ".cs2-printstream-ui .vtab:not([aria-current])", watch: ".cs2-printstream-ui .vtab[aria-current]", exists: true },
+    ],
   },
   {
     id: "madar-imported-2",
