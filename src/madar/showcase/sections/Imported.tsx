@@ -10,6 +10,8 @@ import { BookmarkToggle } from '@/components/ui/bookmark-toggle';
 import { CodeLoader } from '@/components/ui/code-loader';
 import { GlassCheckbox } from '@/components/ui/glass-checkbox';
 import { InnerGlowButton } from '@/components/ui/inner-glow-button';
+import { LessButBetterCard } from '@/components/ui/less-but-better-card';
+import { PrinterCard } from '@/components/ui/printer-card';
 
 /* The pipeline runs sixteen infinite animations: eleven SVG `animateMotion` dots
    and five framer loops. Reduced motion is not a design preference, it is what
@@ -206,6 +208,30 @@ export function Imported() {
           <b>والأيقونةُ ليست في الرفع.</b> فما يقولُه الـCSS عنها: <code>18×18</code> و<code>stroke</code> لا <code>fill</code> — أيقونةُ خطّ. وما يقولُه التصميمُ: الغلافُ يتمدّدُ من قرصٍ <code>36px</code> إلى شقٍّ <code>50px</code> <b>وينزلقُ 4px يمينًا</b> عند التمرير، أي دفعةٌ في <b>اتّجاهٍ واحد</b>، واللافتةُ «Explore Universe». وذاك سهمٌ يشيرُ حيث تذهبُ الحركة. فهي <code>ArrowRight</code> من <code>lucide-react</code> — <b>تبعيّةٌ مثبَّتةٌ سلفًا</b>، ورسمُ سهمٍ جديدٍ بيدي اختراعٌ حيث يُجيبُ المُثبَّت. وهذا <b>الجزءُ الوحيدُ المُستدَلُّ</b> في المكوّن، ومُعلَنٌ لذلك.
         </SpecRow>
 
+        <SpecRow name="LessButBetterCard: مُرشِّحٌ مفقودٌ لا يُتجاهَل، بل يُخفي البطاقة" bare specimen={
+          <div className="flex w-full items-center justify-center bg-[#f4f4f5] py-12" dir="ltr">
+            <LessButBetterCard />
+          </div>
+        }>
+          الشجرةُ قصيرةٌ والمُحدِّداتُ تُغلِقُها: <code>.wrapper</code> يحملُ <code>:hover</code> ويقصُّ، وفيه <code>.card</code> (لوحُ التدرُّجِ الفائضُ) وفوقَه <code>.title</code> و<code>.desc</code> مُطلَقَي الموضع — وكلتا قاعدتَي التمرير <code>.wrapper:hover .title/.desc</code> فهما سليلا الغلافِ لا البطاقة.
+          <br /><br />
+          <b>والأصلُ المفقود:</b> <code>filter: url("#noise")</code> يشيرُ إلى مُرشِّحِ SVG بمُعرِّفِ <code>noise</code> <b>لا يوفّرُه الرفعُ إطلاقًا</b>. وكنتُ كتبتُ أنّ إشارةً معلّقةً تمنعُ رسمَ العنصرِ أصلًا فتصيرُ البطاقةُ فارغة — <b>وذاك خطأ، والقياسُ قاله</b>: بحذفِ عنصرِ المُرشِّحِ بقيت البطاقةُ ترسمُ ٨٤ لونًا متمايزًا على ٢٢٥ نقطةٍ ثابتة، أي تُرسَمُ كأن لا مُرشِّح. <b>فالإخفاقُ أهدأُ مما ادّعيتُ، وأسوأُ لذلك</b> — البطاقةُ تبدو تامّةً وهي بلا حبيباتٍ فلا يبحثُ أحد. وتوفيرُ المُرشِّحِ يبقى حامِلًا: بمقارنةِ النقاطِ الـ٢٢٥ نفسِها، <b>٨٢ منها تتغيّر</b>.
+          <br /><br />
+          <b>وماهيّةُ المُرشِّحِ تُثبِتُها خاصّيّتانِ لا يكتبُهما أحدٌ لغيرِ سبب:</b> <code>110%</code> للأبعاد مع <code>translate: -5% -5%</code>. فتكبيرُ لوحٍ عُشرًا وسحبُه نصفَ ذلك هو <b>الطريقةُ القياسيّةُ لإبقاءِ حوافِّ مُرشِّحِ إزاحةٍ ممزَّقةً خارجَ القصّ</b> — وطبقةُ حبيباتٍ جمعيّةٌ لا تحتاجُ أيًّا منهما. فـ<code>#noise</code> هو <code>feTurbulence</code> يقودُ <code>feDisplacementMap</code>، والعُشرُ الفائضُ هو بالضبط ما يأكلُه <code>scale</code>. <b>الأرقامُ منّي، والميكانيكيّةُ حسابُ الرفعِ نفسِه.</b>
+        </SpecRow>
+
+        <SpecRow name="PrinterCard: عشرونَ حركةً في دورةٍ واحدة، وخمسُ حالاتٍ تُنطَقُ معًا" bare specimen={
+          <div className="flex w-full items-center justify-center bg-[#0d0d10] py-12" dir="ltr">
+            <PrinterCard />
+          </div>
+        }>
+          أكبرُ رفعٍ بلا وسمٍ حتى الآن: دورةٌ واحدةٌ من <code>6.4s</code> تقودُ عشرينَ حركةً لانهائيّة. ومع ذلك فالشجرةُ <b>مُعيَّنةٌ تقريبًا كلُّها</b>، لأن كلَّ جزءٍ مُطلَقُ الموضعِ و<code>left/top</code> الخاصُّ به لا يقعُ في مكانه الصحيحِ إلا تحت أبٍ واحد. مثالٌ محسوب: <code>.printer-body</code> عند <code>top: 14px</code>، و<code>.slot</code> عند <code>top: 5px</code> — والخمسةُ داخلَ <b>الجسم</b>، إذ تحت <code>.printer</code> لكانت <b>فوقَه</b>. وبالاختبارِ نفسِه: اللوحةُ والأزرارُ والمصباحُ والمنافذُ والعلامةُ والدَّرَجُ كلُّها أبناءُ الجسم. وبالمقابل <code>.printer-ambient-shadow</code> بـ<code>z-index: 0</code> والجسمُ بـ<code>2</code>: فهو <b>شقيقٌ</b> تحت <code>.printer</code> لا ابنٌ للجسم، إذ يجبُ أن يكونَ خلفَه.
+          <br /><br />
+          <b>وعدّانِ لا يُثبِتُهما الـCSS، وهما الحَدْسانِ الوحيدان:</b> الأزرارُ — أقراصٌ ٦px بفواصلَ ٣px تبدأ من ٥٨ والمصباحُ عند ١١٥ تقريبًا، فأيُّ عددٍ من ١ إلى ٨ يسع — فثلاثة؛ والمنافذُ — قضبانُ ١٥×٢ بفواصلَ ٢٫٥ تبدأ من ٣٠ في جسمٍ ٥٨ — فخمسةٌ أكبرُ عددٍ يبقى فوقَ العلامةِ عند ٤٦.
+          <br /><br />
+          <b>و<code>role="img"</code> هو كلُّ قصّةِ الوصولِ هنا.</b> الكلماتُ الخمسُ للحالة <b>كلُّها في المستند معًا</b> وتُبدَّلُ بالشفافيّة، فقارئُ الشاشةِ يقرأُ «Ready Feeding paper... Printing... Ejecting... Done» في نَفَسٍ واحد: <b>خمسُ حالاتٍ متناقضة، لا واحدةَ منها صحيحة</b>، تصفُ طابعةً لا وجودَ لها. و<code>role="img"</code> يجعلُ الشجرةَ عَرْضيّةً، فتكفُّ الكلماتُ عن أن تُنطَق وتُوصَفُ البطاقةُ مرّةً واحدةً وصفًا صحيحًا.
+        </SpecRow>
+
         <SpecRow name="ما بقي حرفيًّا، وما أُضيف" specimen={
           <div className="grid w-full gap-2 text-[12.5px]">
             {[
@@ -229,6 +255,10 @@ export function Imported() {
               ['opacity:0 على المربّع', 'حرفيًّا', 'صحيحٌ أصلًا: يبقى قابلًا للتركيز'],
               ['حلقةُ تركيزٍ للزجاج', 'أُضيف', 'الرفعُ بلا قاعدةِ تركيزٍ إطلاقًا'],
               ['ArrowRight من lucide', 'استُدِلّ', 'الأيقونةُ غائبةٌ، والحركةُ تسمّيها'],
+              ['مُرشِّح #noise', 'استُدِلّ', '110% و-5% تهجّيان مُرشِّحَ إزاحة'],
+              ['عددُ الأزرارِ والمنافذ', 'حُدِس', 'الـCSS لا يُثبِتُ عددًا'],
+              ['role=img للطابعة', 'أُضيف', 'خمسُ حالاتٍ تُنطَقُ معًا بلا هذا'],
+              ['ردُّ الألوانِ القسريّة', 'أُضيف', 'العنوانُ المتدرِّجُ يغيبُ تمامًا'],
               ['Drawer.Title / Description', 'أُضيف', 'vaul يطلب اسمًا للحوار'],
               ['aria-label على الإغلاق', 'أُضيف', 'زرٌّ محتواه أيقونةٌ بلا اسم'],
               ['العودة إلى default عند الإغلاق', 'أُضيف', 'درجٌ يتذكّر قرارًا تُرك'],
