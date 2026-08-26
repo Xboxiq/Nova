@@ -5,6 +5,7 @@ import { SpecList, SpecRow } from '../SpecRow';
 import { AnimatedDrawer } from '@/components/ui/animated-drawer';
 import EnterpriseAIPipeline from '@/components/ui/ai-agent-pipeline';
 import SendMessageButton from '@/components/ui/send-message-button';
+import { YieldCard } from '@/components/ui/yield-card';
 
 /* The pipeline runs sixteen infinite animations: eleven SVG `animateMotion` dots
    and five framer loops. Reduced motion is not a design preference, it is what
@@ -117,6 +118,23 @@ export function Imported() {
           هذا الملفُّ الثالثُ الذي يأكلُ محوِّلُ النصِّ الغنيّ وسومَه — لكنه أكلها <b>وأبقى ما يكفي</b>: الـCSS كاملًا (مكرَّرًا مرّتَين)، ومَسارَي الـ<code>path</code> سليمَين حرفًا حرفًا. فالبنيةُ ليست تخمينًا. و<b>ثلاثُ حِيَلٍ</b> في هذا الكود تستحقّ أن تُقرأ: نصفُ قطرِ الصفيحةِ الداخليّة <code>30px</code> <b>أكبرُ</b> من نصفِ قطرِ الزرِّ <code>12px</code> — فتنحسرُ زواياها داخل <code>overflow: hidden</code> وتبدو الصفيحةُ لينةً داخل إطارٍ حادّ. وعند التمرير تتّسعُ حدودُها من <code>3px</code> إلى <code>1px</code> بينما يكبرُ هامشُها من <code>2px</code> إلى <code>5px</code> — أي أنها <b>تتقلّصُ صافيًا</b>: صفيحةٌ تُضغَط. وعند التركيز تدورُ الطائرةُ <code>-40deg</code>: تُقلِع.
         </SpecRow>
 
+        <SpecRow name="YieldCard: حدٌّ متدرِّجٌ من طبقةٍ خلفَ الطبقة" bare specimen={
+          /* `dir="ltr"`: نصٌّ إنجليزيٌّ كامل، ولا خاصّيّةَ فيزيائيّةَ هنا — لكن
+             محاذاةَ فقرتَي البطاقة تنقلبُ تحت RTL فتصير اللافتةُ يمينًا والأيقونةُ
+             يمينًا وبينهما فراغُ أربعِ مئةِ بكسل. سطحٌ كُتِب LTR، يُعرَض كواحد. */
+          /* أرضٌ داكنة، كإطارِ خطِّ الأنابيب: البطاقةُ أرضُها <code>#080509</code>
+             ونصُّها أبيض، فهي مكتوبةٌ لصفحةٍ داكنةٍ بلا لبس. وهذا <b>عرضٌ</b> لا
+             تعديلٌ في المكوّن — والفرقُ ليس ذوقًا: حلقةُ التدرُّج تبدأ بـ<code>1px</code>
+             داخلَ صندوقِ الحدّ (فـ<code>-inset-px</code> يُحسَبُ من صندوقِ الحشو)،
+             فيبقى بكسلٌ واحدٌ خارجَها يُظهِرُ ما تحت البطاقة. على أرضٍ داكنةٍ لا يُرى،
+             وعلى أرضِنا الفاتحة يصيرُ شعرةً بيضاءَ حولَ بطاقةٍ سوداء. */
+          <div className="flex w-full justify-center bg-[#050406] py-10" dir="ltr">
+            <YieldCard />
+          </div>
+        }>
+          هذا أوّلُ ملفٍّ يصلُ <b>سليمًا تمامًا</b> مع عرضِه — لا وسمَ مأكولًا، ولا مَسارَ SVG منقوصًا — وبنيةُ shadcn والكنيةُ <code>@/</code> وTailwind كانت كلُّها جاهزةً من الدفعات السابقة، فلم يبقَ إلا النسخُ إلى <code>src/components/ui/yield-card.tsx</code> بلا تبعيّةٍ واحدةٍ جديدة. <b>والحيلةُ فيه واحدة</b>: الحدُّ المتدرِّج. الأبُ يحملُ <code>border-2 border-transparent</code> و<code>backgroundClip: padding-box</code> — فتدرُّجُه الأسودُ يتوقّفُ عند صندوقِ الحشو وتبقى الحاشيةُ الثنائيّةُ <b>شفّافةً فعلًا</b> — وخلفَه طبقةٌ بـ<code>-inset-px</code> و<code>-z-10</code> تحملُ تدرُّجًا بزاويةِ <code>71deg</code> من <code>#110e0e</code> إلى ذهبِ <code>#afa220</code>. فما يُرى «حدًّا» ليس حدًّا: هو <b>طبقةٌ خلفَ ثقبٍ في الطبقة</b>. وهذا يعملُ فقط لأن الأبَ <code>relative</code> بـ<code>z-index: auto</code> — أي لا يفتحُ سياقَ تراكُم — فيجوزُ للابن السالبِ أن يهبطَ تحت خلفيّةِ أبيه. ولو أُضيف <code>z-0</code> إلى الأب لاختفى الحدُّ كلُّه. <b>وقد قِيس</b>: الحاشيةُ عند منتصفِ الحافّة اليسرى ذهبيّة.
+        </SpecRow>
+
         <SpecRow name="ما بقي حرفيًّا، وما أُضيف" specimen={
           <div className="grid w-full gap-2 text-[12.5px]">
             {[
@@ -129,6 +147,8 @@ export function Imported() {
               ['margin-right', 'حرفيًّا', 'فيزيائيّة، فعُرِضت LTR لا صُحِّحت'],
               ['ظلٌّ بتمويهِ 44px', 'حرفيًّا', 'أوسعُ من كلِّ depth-* عندنا'],
               ['<button type="button">', 'أُضيف', 'الكودُ يهجّي <a>، ولا مقصدَ له'],
+              ['isolate على الغلاف', 'أُضيف', 'بلا سياقِ تراكُمٍ لا يُرسَم الحدُّ أصلًا'],
+              ['<p> عنوانًا للبطاقة', 'حرفيًّا', 'لا ترقيمَ عنواناتٍ، والسياقُ يعطيه'],
               ['Drawer.Title / Description', 'أُضيف', 'vaul يطلب اسمًا للحوار'],
               ['aria-label على الإغلاق', 'أُضيف', 'زرٌّ محتواه أيقونةٌ بلا اسم'],
               ['العودة إلى default عند الإغلاق', 'أُضيف', 'درجٌ يتذكّر قرارًا تُرك'],
