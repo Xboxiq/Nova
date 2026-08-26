@@ -138,6 +138,7 @@ const CASES = [
          is not a class or an attribute — it is the sheet getting taller. */
       { what: "open the drawer", click: "text=Click Me To Open Drawer", watch: "[data-vaul-drawer]", exists: true },
     ],
+    toggles: ["input.hidden-checkbox"],
   },
 ];
 
@@ -242,13 +243,53 @@ for (const c of CASES) {
       const r = el.getBoundingClientRect();
       if (!r.width || !r.height) continue;
       if (el.closest('p, li, bdi')) continue;
+      /* A visually hidden checkbox is 1x1 by construction; the target the finger
+         hits is its <label>. So for a clipped input UNDER the threshold the
+         criterion is applied to the label, which is the thing with the size, and
+         a missing or small label is what fails. Recognised by the clip, not by a
+         class name, because the clip is what makes the input invisible.
+
+         The size test comes FIRST, deliberately. Written the other way round —
+         clip test first — this demanded a <label> of every clipped input at any
+         size, and failed seven sections on an `input.sr-only[type=file]` that is
+         776x44 and had always passed on its own size. The harness caught my own
+         rule; the order is the fix. */
       if (Math.min(r.width, r.height) < 24) {
+      if (el.tagName === 'INPUT' && getComputedStyle(el).clipPath.startsWith('inset(50%')) {
+        const lab = el.closest('label');
+        const lr = lab?.getBoundingClientRect();
+        if (lr && Math.min(lr.width, lr.height) >= 24) continue;
+        out.push(lab ? `label ${Math.round(lr.width)}x${Math.round(lr.height)} around a clipped input` : 'clipped input under 24px with no <label> to hit');
+        continue;
+      }
         out.push(`${el.tagName.toLowerCase()}${el.getAttribute('data-day') !== null ? '[data-day]' : ''} ${Math.round(r.width)}x${Math.round(r.height)} "${(el.getAttribute('aria-label') || el.textContent || '').trim().slice(0, 30)}"`);
       }
     }
     return out;
   });
   if (small.length) failures.push(`${c.name}: ${small.length} control(s) under 24x24 CSS px: ${small.slice(0, 3).join(" | ")}`);
+
+  /* ── 5. a checkbox drawn as a shape ───────────────────────────────────────
+     The imported bookmark is a real <input type="checkbox"> hidden behind a
+     drawn shape, and the upload hid it with `display: none` — which does not
+     hide a checkbox, it deletes it: unfocusable, out of the tab order, out of
+     the accessibility tree, operable by mouse alone. That is the exact defect
+     class this harness exists for, so it gets a gate rather than a paragraph.
+     Focus it, press Space, and the checked state must flip both ways. */
+  for (const sel of c.toggles ?? []) {
+    const el = page.locator(sel).first();
+    if (!(await el.count())) { failures.push(`${c.name}: no toggle at ${sel}`); continue; }
+    const reached = await el.evaluate((n) => { n.focus(); return document.activeElement === n; });
+    if (!reached) { failures.push(`${c.name}: ${sel} cannot take focus — a keyboard cannot operate it`); continue; }
+    const before = await el.isChecked();
+    await page.keyboard.press("Space");
+    await page.waitForTimeout(120);
+    if (await el.isChecked() === before) failures.push(`${c.name}: Space did not flip ${sel}`);
+    await page.keyboard.press("Space");
+    await page.waitForTimeout(120);
+    if (await el.isChecked() !== before) failures.push(`${c.name}: Space did not flip ${sel} back`);
+    operated += 1;
+  }
 
   /* ── 3. the arrow that moves forward follows the writing direction ── */
   if (c.keyboard) {
