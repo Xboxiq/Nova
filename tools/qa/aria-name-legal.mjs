@@ -53,6 +53,25 @@ for (const file of files) {
   }
 }
 
+/* The MIRROR case is deliberately NOT checked here, and the reason is worth
+   recording. The kinetic badge's anchor has a real href and no accessible name:
+   its rotating textPath is aria-hidden (it would otherwise be read glyph by
+   glyph) and its arrow is aria-hidden (decoration). axe reported `link-name` in
+   six theme/viewport combinations.
+
+   A source-level version of that check was written and then removed, because it
+   was wrong in both directions on real code in this folder:
+
+     · "every child is aria-hidden" MISSES this exact case — the anchor's children
+       are an empty <span> and a <span> whose only content is hidden, so neither
+       child carries the attribute.
+     · any rule loose enough to catch it FALSE-POSITIVES on `<button>{children}
+       </button>`, where the body is an expression that may well render text.
+
+   Deciding whether an accessible name is empty needs the accessibility tree, not
+   a regex over JSX. That tool exists, runs in `qa:madar`, and is what caught it.
+   A gate that approximates it would be a gate that lies. */
+
 console.log(`ARIA_HOSTS_SCANNED=${files.length}`);
 for (const f of failures) console.log(`  FAIL ${f}`);
 console.log(`ARIA_NAME_LEGAL=${failures.length ? "FAIL" : "ok"}`);

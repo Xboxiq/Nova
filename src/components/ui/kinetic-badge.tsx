@@ -37,9 +37,17 @@ import styled from 'styled-components';
 export const KineticBadge = ({
   text = 'VIEW MASTERPIECE • VIEW MASTERPIECE • ',
   href = '#masterpiece',
-}: { text?: string; href?: string }) => (
+  label = 'View masterpiece',
+}: { text?: string; href?: string; label?: string }) => (
   <StyledWrapper>
-    <a className="kinetic-badge" href={href}>
+    {/* The name has to be here. Every child of this link is aria-hidden — the
+        rotating textPath because it would otherwise be read one glyph at a time,
+        the arrow because it is decoration — which left the anchor with NO
+        accessible name at all, and axe reported `link-name` in six theme/viewport
+        combinations. The second wave running in which my own accessibility
+        handling was the defect rather than the upload: hiding the content is
+        right, hiding it without replacing the name is not. */}
+    <a className="kinetic-badge" href={href} aria-label={label}>
       <span className="badge-bg" />
       <span className="badge-text" aria-hidden="true">
         <svg viewBox="0 0 140 140" width={140} height={140}>
