@@ -264,7 +264,24 @@ for (const c of CASES) {
      around it, both of which the criterion itself exempts. */
   const small = await page.evaluate(() => {
     const out = [];
-    for (const el of document.querySelectorAll('button, [role="radio"], [role="switch"], [role="tab"], a[href], input')) {
+    const TARGETS = 'button, [role="radio"], [role="switch"], [role="tab"], a[href], input, select, textarea';
+    /* Every target's centre, so the criterion's SPACING exception can actually be
+       evaluated. This comment has promised "one with enough clear space" since the
+       gate was written and never implemented it — which is how the tilt card's
+       75x21 "View more" button, the author's own 12px text link with a hundred
+       pixels of air around it, came out as a failure. WCAG 2.5.8 exempts an
+       undersized target whose 24px-diameter circle does not intersect any other
+       target's: two centres 24px apart or more cannot overlap. */
+    const centres = [...document.querySelectorAll(TARGETS)].map((n) => {
+      const r = n.getBoundingClientRect();
+      return { n, cx: r.left + r.width / 2, cy: r.top + r.height / 2, has: r.width > 0 && r.height > 0 };
+    }).filter((c) => c.has);
+    const crowded = (el) => {
+      const me = centres.find((c) => c.n === el);
+      if (!me) return false;
+      return centres.some((c) => c.n !== el && Math.hypot(c.cx - me.cx, c.cy - me.cy) < 24);
+    };
+    for (const el of document.querySelectorAll(TARGETS)) {
       const r = el.getBoundingClientRect();
       if (el.closest('p, li, bdi')) continue;
       /* A 0x0 box normally means "not rendered", and skipping it is right almost
@@ -306,7 +323,10 @@ for (const c of CASES) {
             : 'hidden input with no <label> to hit');
           continue;
         }
-        out.push(`${el.tagName.toLowerCase()}${el.getAttribute('data-day') !== null ? '[data-day]' : ''} ${Math.round(r.width)}x${Math.round(r.height)} "${(el.getAttribute('aria-label') || el.textContent || '').trim().slice(0, 30)}"`);
+        /* The spacing exception: undersized but with clear space around it is
+           what the criterion permits. Undersized AND crowded is what it forbids. */
+        if (!crowded(el)) continue;
+        out.push(`${el.tagName.toLowerCase()}${el.getAttribute('data-day') !== null ? '[data-day]' : ''} ${Math.round(r.width)}x${Math.round(r.height)} "${(el.getAttribute('aria-label') || el.textContent || '').trim().slice(0, 30)}" (and crowded: another target within 24px)`);
       }
     }
     return out;
