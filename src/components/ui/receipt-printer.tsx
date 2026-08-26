@@ -60,7 +60,14 @@ export const ReceiptPrinter = () => (
       <div className="printer">
         <div className="printer-display">
           <span className="printer-message">Click to print</span>
-          <span className="letter-wrapper" aria-label="Printing">
+          {/* role="img" is not decoration here, it is what makes the name legal.
+              A bare <span> has role `generic`, and `generic` PROHIBITS an
+              accessible name — axe flagged this as aria-prohibited-attr in six
+              theme/viewport combinations, and it was my own addition that caused
+              it, not the upload. The eleven letters still need collapsing into one
+              word for assistive technology, so the element takes a role that
+              accepts a name instead. Same treatment the printer card needed. */}
+          <span className="letter-wrapper" role="img" aria-label="Printing">
             {LETTERS.map((c, i) => (
               <span className="letter" key={i} aria-hidden="true">{c}</span>
             ))}
