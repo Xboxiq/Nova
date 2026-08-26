@@ -7,6 +7,7 @@ import EnterpriseAIPipeline from '@/components/ui/ai-agent-pipeline';
 import SendMessageButton from '@/components/ui/send-message-button';
 import { YieldCard } from '@/components/ui/yield-card';
 import { BookmarkToggle } from '@/components/ui/bookmark-toggle';
+import { CodeLoader } from '@/components/ui/code-loader';
 
 /* The pipeline runs sixteen infinite animations: eleven SVG `animateMotion` dots
    and five framer loops. Reduced motion is not a design preference, it is what
@@ -158,6 +159,19 @@ export function Imported() {
           <b>والتغييرُ الوحيدُ الذي لا يُزيحُ بكسلًا هو الفرقُ بين أن يعمل وألّا يعمل:</b> الكودُ يكتبُ للمربّع <code>display: none</code>. وذاك <b>لا يُخفي أداةً، يحذفها</b>: خارجَ شجرةِ الوصول، خارجَ ترتيبِ الجدولة، لا يُركَّزُ عليه ولا يُنطَق. فالسبيلُ الوحيدُ لقلبِه فأرةٌ على اللافتة. قِيس قبلَ التغيير: <b>صفرُ محطّاتِ جدولة</b>. فحلَّ محلَّه <b>القصُّ المخفيُّ بصريًّا</b> — بكسلٌ واحدٌ مقصوص، مطلقُ الموضعِ فلا أثرَ له في تخطيطِ اللافتة — فبقي الصندوقُ مخفيًّا كما كان، <b>وصار قابلًا للتركيز والنطق</b>. ولم يتغيّر في الإشارةِ المرسومةِ شيء.
         </SpecRow>
 
+        <SpecRow name="CodeLoader: بنيةٌ يُثبِتها الحسابُ لا الذوق" bare specimen={
+          /* أرضٌ بيضاء: المسارُ #d0d0d0 والسطورُ #666 — لوحةٌ فاتحةٌ بلا لبس.
+             و dir=ltr لأن السطورَ الأربعةَ تُكتَبُ من اليسار وطولُ كلٍّ منها معلومٌ
+             سلفًا، فقلبُها يجعلُ الإزاحةَ تكشفُ من الطرف الخطأ. */
+          <div className="flex w-full items-center justify-center gap-14 bg-white py-12" dir="ltr">
+            <CodeLoader label="Loading code" />
+          </div>
+        }>
+          الملفُّ الثاني الذي يصلُ <b>CSS خالصًا</b>، والأوّلُ الذي تُثبِتُ بنيتَه <b>الأرقامُ</b> لا المُركِّباتُ وحدَها. ثلاثةُ قيودٍ تُغلِقُ الشكلَ تمامًا: <code>fill: none</code> و<code>stroke-width</code> على <code>.track</code> و<code>.car</code> يجعلانهما شكلَي SVG؛ و<code>.container {'{'} overflow: visible {'}'}</code> <b>لا يعني شيئًا</b> إلا إذا كان الطلاءُ يفيضُ عن صندوقِ العرض — وذاك ما يفعله طلاءٌ عرضُه <code>2.5</code> على مستطيلٍ ملاصقٍ للحافّة، يفيضُ <code>1.25</code> من كلِّ جهة، فالمستطيلُ <b>غيرُ مُزاح</b>؛ و<code>25 + 75 = 100</code> مع <code>dashoffset: 100 → 0</code> لا يُغلِقُ دورةً إلا إذا كان طولُ المسار <b>مئةً بالضبط</b> — فـ<code>pathLength={'{'}100{'}'}</code> على الشكلَين، وهي القيمةُ الوحيدةُ التي تجعلُ أرقامَ صاحبِ الكود دورةً متّصلةً لا نمطًا يزحفُ بمقدارِ ما صادفَ أن يكون المحيط.
+          <br /><br />
+          <b>والقيدُ الرابعُ أدقُّها:</b> <code>--len</code> هو <b>الشُّرطةُ والإزاحةُ معًا</b>. فطولُ كلِّ سطرٍ هندسيًّا يجبُ أن يساويَ <code>--len</code> الخاصَّ به بالضبط، وإلا كشفَ الكشفُ أقلَّ من السطر أو أكثر. فـ<code>x2 − x1</code> هي <code>20</code> و<code>14</code> و<code>24</code> و<code>10</code> — <b>وقِيست</b>. و<code>.indent</code> بالأزرق: سطورُ التداخُلِ في كتلةِ الكود.
+        </SpecRow>
+
         <SpecRow name="ما بقي حرفيًّا، وما أُضيف" specimen={
           <div className="grid w-full gap-2 text-[12.5px]">
             {[
@@ -175,6 +189,9 @@ export function Imported() {
               ['display:none على المربّع', 'استُبدِل', 'يحذفُ الأداةَ لا يخفيها'],
               ['حلقةُ تركيزٍ للإشارة', 'أُضيف', 'صار للتركيزِ مكانٌ يهبطُ فيه'],
               ['breathe اللانهائيّة', 'أُوقِفت', 'عند تقليلِ الحركة وحدَه'],
+              ['pathLength={100}', 'استُنتِج', 'القيمةُ الوحيدةُ التي تُغلِقُ الدورة'],
+              ['role=status للمُحمِّل', 'أُضيف', 'مُحمِّلٌ لا يُنطَق زخرفة'],
+              ['نبضةٌ بدل الدوران', 'أُضيف', 'عند تقليلِ الحركة: الإيقافُ تراجُع'],
               ['Drawer.Title / Description', 'أُضيف', 'vaul يطلب اسمًا للحوار'],
               ['aria-label على الإغلاق', 'أُضيف', 'زرٌّ محتواه أيقونةٌ بلا اسم'],
               ['العودة إلى default عند الإغلاق', 'أُضيف', 'درجٌ يتذكّر قرارًا تُرك'],
