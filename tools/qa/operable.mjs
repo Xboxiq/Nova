@@ -147,6 +147,23 @@ const CASES = [
       ".pb-ai-checkbox input",
       ".folder__toggle",
     ],
+    /* ── a radio group that does not exclude ─────────────────────────────────
+       Four of the imported radio groups shipped with NO `name` attribute, and
+       five radios with no shared name are five independent radios: every one of
+       them can be on at once and none can be switched off. That is not a style
+       defect, it is the control not being the control it claims to be, and it is
+       invisible to axe and to a screenshot alike. So: click through every radio
+       in the group and assert that exactly one is checked at the end and that it
+       is the last one clicked. */
+    exclusive: [".pb-ai-radio-group input[type='radio']"],
+  },
+  {
+    id: "madar-imported-2",
+    name: "imported-2",
+    exclusive: [
+      ".radio > input[type='radio']",
+      ".container input[type='radio']",
+    ],
   },
 ];
 
@@ -185,7 +202,7 @@ for (const c of CASES) {
   await page.waitForTimeout(900);
 
   /* ── 1 + 2. every control exists, is reachable, and changes something ── */
-  for (const k of c.controls) {
+  for (const k of c.controls ?? []) {
     const target = page.locator(k.click).first();
     if (!(await target.count())) { failures.push(`${c.name}: no control for ${k.what} (${k.click})`); continue; }
 
@@ -249,32 +266,46 @@ for (const c of CASES) {
     const out = [];
     for (const el of document.querySelectorAll('button, [role="radio"], [role="switch"], [role="tab"], a[href], input')) {
       const r = el.getBoundingClientRect();
-      if (!r.width || !r.height) continue;
       if (el.closest('p, li, bdi')) continue;
-      /* A visually hidden checkbox is 1x1 by construction; the target the finger
-         hits is its <label>. So for a clipped input UNDER the threshold the
-         criterion is applied to the label, which is the thing with the size, and
-         a missing or small label is what fails. Recognised by the clip, not by a
-         class name, because the clip is what makes the input invisible.
+      /* A 0x0 box normally means "not rendered", and skipping it is right almost
+         always — including for the command palette's own search field, which is
+         0x0 while the palette is closed and which the first version of this
+         exception failed in every section. The one case worth keeping is a 0x0
+         input with NO label at all: `appearance: none` on a radio measures 0x0
+         and is still the live control, so if nothing is associated with it there
+         is no hit target anywhere. Labelled 0x0 inputs are their label's problem
+         and their label is measured on its own elsewhere. */
+      if ((!r.width || !r.height) && !(el.tagName === 'INPUT' && !(el.labels?.length ?? 0))) continue;
 
-         The size test comes FIRST, deliberately. Written the other way round —
-         clip test first — this demanded a <label> of every clipped input at any
-         size, and failed seven sections on an `input.sr-only[type=file]` that is
-         776x44 and had always passed on its own size. The harness caught my own
-         rule; the order is the fix. */
       if (Math.min(r.width, r.height) < 24) {
-      /* Recognise the PATTERN, not one technique. This started as a clip-path
-         test, which missed a control hidden with `opacity: 0` at 1x1 instead —
-         the folder's toggle. Both are the same thing: an input deliberately
-         made invisible, whose real target is the <label> around it. */
-      const cs = el.tagName === 'INPUT' ? getComputedStyle(el) : null;
-      if (cs && (cs.clipPath.startsWith('inset(50%') || +cs.opacity === 0)) {
-        const lab = el.closest('label');
-        const lr = lab?.getBoundingClientRect();
-        if (lr && Math.min(lr.width, lr.height) >= 24) continue;
-        out.push(lab ? `label ${Math.round(lr.width)}x${Math.round(lr.height)} around a clipped input` : 'clipped input under 24px with no <label> to hit');
-        continue;
-      }
+        /* Recognise the PATTERN, not one technique. This began as a clip-path
+           test, missed a control hidden with `opacity: 0` at 1x1 (the folder's
+           toggle), then missed `clip: rect(0 0 0 0)` — the legacy sr-only, which
+           is what the juicy switch uses — and missed `appearance: none`, which
+           hides by painting nothing at all. Four spellings of one intention: an
+           input made invisible, whose real target is its label.
+
+           The label is found with `el.labels`, not `el.closest('label')`. The
+           first version only looked upward, so it demanded a WRAPPING label and
+           failed ten controls whose label is a sibling joined by `for` — the
+           same association and the same hit target. The DOM already answers
+           this; the harness was asking a narrower question.
+
+           And this whole branch sits INSIDE the size test, which is deliberate:
+           written the other way round it demanded a label of every hidden input
+           at any size and failed seven sections on an `input.sr-only[type=file]`
+           that is 776x44 and had always passed on its own size. */
+        const cs = el.tagName === 'INPUT' ? getComputedStyle(el) : null;
+        if (cs && (cs.clipPath.startsWith('inset(50%') || +cs.opacity === 0
+                   || cs.clip.startsWith('rect(') || cs.appearance === 'none')) {
+          const boxes = [...(el.labels ?? [])].map((l) => l.getBoundingClientRect());
+          const best = boxes.sort((a, b) => Math.min(b.width, b.height) - Math.min(a.width, a.height))[0];
+          if (best && Math.min(best.width, best.height) >= 24) continue;
+          out.push(best
+            ? `label ${Math.round(best.width)}x${Math.round(best.height)} for a hidden input`
+            : 'hidden input with no <label> to hit');
+          continue;
+        }
         out.push(`${el.tagName.toLowerCase()}${el.getAttribute('data-day') !== null ? '[data-day]' : ''} ${Math.round(r.width)}x${Math.round(r.height)} "${(el.getAttribute('aria-label') || el.textContent || '').trim().slice(0, 30)}"`);
       }
     }
@@ -303,6 +334,78 @@ for (const c of CASES) {
     if (await el.isChecked() !== before) failures.push(`${c.name}: Space did not flip ${sel} back`);
     operated += 1;
   }
+
+  for (const sel of c.exclusive ?? []) {
+    const group = page.locator(sel);
+    const n = await group.count();
+    if (n < 2) { failures.push(`${c.name}: fewer than two radios at ${sel}`); continue; }
+    for (let i = 0; i < n; i += 1) {
+      await group.nth(i).evaluate((el) => { el.click(); });
+      await page.waitForTimeout(60);
+      const checked = await group.evaluateAll((els) => els.map((e) => e.checked));
+      const on = checked.filter(Boolean).length;
+      if (on !== 1) { failures.push(`${c.name}: ${sel} has ${on} radios checked at once — the group does not exclude`); break; }
+      if (!checked[i]) { failures.push(`${c.name}: ${sel} clicking radio ${i} did not check it`); break; }
+    }
+    operated += 1;
+  }
+
+  /* ── 6. a control clipped out of existence by its own ancestor ────────────
+     The reset-password card shipped a "Reset Password" button that sat 39.5px
+     BELOW the 230px card containing it, and the card carries `overflow: hidden`
+     — so the card's only action was invisible and unclickable. Nothing else here
+     could see it: the button has a name (axe is happy), a 180x30 box (the target
+     gate is happy), and it takes focus and fires (the control gates are happy).
+     It is simply not on screen.
+
+     So: for every interactive element, walk its ancestors, and if a clipping
+     ancestor's box does not contain it, that is a failure. A few pixels of
+     rounding are allowed; being outside by more than a quarter of the element's
+     own size is not. Elements that are deliberately parked outside a clip and
+     brought in on hover — the GET STARTED arrow, the delete tooltip — are not
+     interactive themselves, which is why this walks controls and not every box. */
+  const clipped = await page.evaluate(() => {
+    const out = [];
+    for (const el of document.querySelectorAll('button, a[href], input, select, textarea, [role="radio"], [role="switch"], [role="tab"]')) {
+      const r = el.getBoundingClientRect();
+      if (!r.width || !r.height) continue;
+      /* A control the design deliberately hid is not a clipped control. The
+         shell's file input is `.sr-only` — `clip: rect(0, 0, 0, 0)` — driven by a
+         visible drop-zone button that forwards the click, which is the correct
+         pattern; the first version of this gate failed it in all eight sections.
+         Same four spellings the target-size gate recognises, because it is the
+         same intention. */
+      const own = getComputedStyle(el);
+      if (own.clipPath.startsWith('inset(50%') || +own.opacity === 0 || own.clip.startsWith('rect(')) continue;
+      for (let p = el.parentElement; p; p = p.parentElement) {
+        const cs = getComputedStyle(p);
+        if (!/hidden|clip/.test(cs.overflowX + cs.overflowY)) continue;
+        const pr = p.getBoundingClientRect();
+        if (!pr.width || !pr.height) continue;
+        /* A file input parked outside a frame with its LABEL visible inside is
+           the sr-only technique, not a clipped control — the hit target is
+           present, only the input's own box is out of view. The shell's own
+           "رفع صورة" input is exactly that, and the first version of this gate
+           failed it in all eight sections. Same reasoning as the target-size
+           gate above, and the same platform answer: el.labels. */
+        const visibleLabel = [...(el.labels ?? [])].some((l) => {
+          const lr = l.getBoundingClientRect();
+          return lr.width && lr.height && lr.top >= pr.top - 1 && lr.bottom <= pr.bottom + 1
+            && lr.left >= pr.left - 1 && lr.right <= pr.right + 1;
+        });
+        if (visibleLabel) continue;
+        const outside = Math.max(0, pr.top - r.bottom, r.top - pr.bottom, pr.left - r.right, r.left - pr.right);
+        const over = Math.max(0, r.bottom - pr.bottom, pr.top - r.top, r.right - pr.right, pr.left - r.left);
+        if (outside > 0 || over > Math.max(4, Math.min(r.width, r.height) / 4)) {
+          out.push(`${el.tagName.toLowerCase()} "${(el.getAttribute('aria-label') || el.textContent || '').trim().slice(0, 24)}" is ${Math.round(Math.max(outside, over))}px outside a clipping ${p.tagName.toLowerCase()}.${(p.className || '').toString().split(' ')[0]}`);
+          break;
+        }
+      }
+    }
+    return out;
+  });
+  if (clipped.length) failures.push(`${c.name}: ${clipped.length} control(s) clipped by an ancestor: ${clipped.slice(0, 3).join(" | ")}`);
+  operated += 1;
 
   /* ── 3. the arrow that moves forward follows the writing direction ── */
   if (c.keyboard) {

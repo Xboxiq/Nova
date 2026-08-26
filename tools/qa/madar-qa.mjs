@@ -18,7 +18,7 @@ import { execSync } from "node:child_process";
 const PORT = 4319;
 const URL = `http://localhost:${PORT}/`;
 const THEMES = ["light", "dark", "mint", "coral", "sky", "iris", "night"];
-const PACK_SECTIONS = ["madar-color-tokens", "madar-admin-access", "madar-consequence", "madar-dispatch", "madar-photographed", "madar-boards", "madar-glasswork", "madar-projectwork", "madar-directions", "madar-matrix", "madar-imported"];
+const PACK_SECTIONS = ["madar-color-tokens", "madar-admin-access", "madar-consequence", "madar-dispatch", "madar-photographed", "madar-boards", "madar-glasswork", "madar-projectwork", "madar-directions", "madar-matrix", "madar-imported", "madar-imported-2"];
 const AA = 4.5;
 /* APCA's floor for body text. `APCA_THIN_CEILING` is what the token pairs measure
    today; it may fall and must never rise. */
@@ -100,6 +100,25 @@ const axeViolations = [];
 const REFERENCE_GREYS = new Set([
   "#a7a7ad", "#8d948e", "#9aa09b", "#a4aaa5", "#9a9a97",
   "#4c7a34", // the "Available" pill: 4.43, seven hundredths short of AA
+
+  /* A second "Available" pill, from upload 83, and BOTH of its colours are the
+     author's: `color: #178d00` on `background-color: #e1f9dc`, declared in the
+     same rule. Measured on the page: 3.87 at 16px. Unlike the folder card --
+     where the failing ground was a cream I had chosen and the fix was to delete
+     my own decoration -- there is nothing of mine in this pair to remove. So it
+     is carried on the same named terms as the line above: the number is printed,
+     any other failing pair still fails, and raising the green is a design change
+     and therefore the owner's. REFERENCE-CONTRAST.md lists it. */
+  "#178d00", // "Available for new project" on #e1f9dc — 3.87
+
+  /* Upload 97's own sub-caption: `rgb(128, 128, 128)` on the card's own white,
+     measured 3.94 at 11.2px. Both values are declared in the upload, in the same
+     file, and mid-grey on white is the plainest case this allowance exists for.
+     Named on the same terms: printed, ceilinged, and darkening it is the owner's
+     call. Computed, not guessed: the minimal step is #767676 at 4.54 -- the
+     first draft of this line said #6f6f6f "reaches 4.61" and it is 5.03, a
+     deeper darkening than needed. */
+  "#808080", // "Type your email to recover" on #ffffff — 3.94
 
   /* The imported agent pipeline's own foregrounds. The owner ordered that file
      implemented as its own requirements state, and these alphas ARE the design:
