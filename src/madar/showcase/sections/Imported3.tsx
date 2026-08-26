@@ -27,6 +27,7 @@ import { LiquidGlassGenerateButton } from '@/components/ui/liquid-glass-generate
 import { CornerBracketOfferButton } from '@/components/ui/corner-bracket-offer-button';
 import { FifteenZoneBatteryCard } from '@/components/ui/fifteen-zone-battery-card';
 import { ElectricCookButton } from '@/components/ui/electric-cook-button';
+import { SunsetGrayscaleButton } from '@/components/ui/sunset-grayscale-button';
 
 export function Imported3() {
   return (
@@ -300,6 +301,34 @@ export function Imported3() {
           <b>و<code>stroke-dasharray: 0 173</code> مع <code>stroke-dashoffset: 174</code>:</b> دَشّةُ صفرٍ وفُرجةُ ١٧٣ لا ترسمُ شيئًا — <b>وذاك السكون — وطولُ اللفّةِ ١٧٣</b>، أي <code>pathLength=173</code>. <b>و<code>splashFeedback</code> يُحرِّكُها إلى <code>10 110</code> بإزاحةِ ٨٠ — فيتغيّرُ دَورُ نمطِ الدَّشِّ نفسُه في الطريق</b>، وذاك ما يُحوِّلُ الحَلَقةَ إلى شَتاتِ عَلاماتٍ. <b>و<code>splashFeedback</code> و<code>splashFeedback2</code> جسدُهما واحدٌ واسمُهما اثنان.</b>
           <br /><br />
           <b>وثلاثُ إضافات:</b> <code>aria-label</code> على المُدخَلِ — <b>وإلّا كان اسمُه حصيلةَ عشرينَ خانةَ حرفٍ من اللافتتَين معًا</b>، لأن الـ<code>label</code> يلُفُّهما كلتَيهما. <b>وخاناتُ الحروفِ والجُزيئاتُ والقوسُ والسائلُ مُخفاةٌ عن المُساعِدات</b>. <b>و<code>outline: none</code> مكتوبٌ على <code>.button</code> وهو ليس العنصرَ القابلَ للتركيز — المُدخَلُ هو</b>، فحلقةُ العامِلِ باقيةٌ عليه؛ <b>لكن المُدخَلَ ٠×٠ بشفافيّةِ صفرٍ فتلك الحلقةُ لا تُرى</b> — فقاعدةُ <code>:focus-visible</code> على المُدخَلِ ترسمُها على الزرِّ، <b>وهو العنصرُ الذي يستطيعُ مستخدمُ لوحةِ المفاتيحِ أن يراه</b>.
+        </SpecRow>
+
+        <SpecRow name="ثلاثةٌ وخمسونَ مسارًا، وحُكمٌ لي يُسحَب" bare specimen={
+          <div className="flex w-full items-center justify-center rounded-2xl bg-[#141014]" dir="ltr">
+            <SunsetGrayscaleButton />
+          </div>
+        }>
+          <b>هذا الملفُّ بقيَ غيرَ مُنفَّذٍ خمسَ موجاتٍ على موقفٍ مكتوبٍ في هذا السجلّ:</b> «ثلاثةٌ وخمسونَ مسارًا لا تُستَنتَج، إنشاؤها <em>رسمُ لوحةٍ جديدةٍ لا تنفيذُ واحدة</em>». <b>وذاك حُكمٌ كُتِبَ من نظرةٍ إلى المُحدِّدِ <code>path:nth-child(53)</code> ولا يَصمُدُ لقراءةِ الباقي.</b> فالـCSS يُسمّي <b>ستَّةَ فهارسَ مُفرَدةٍ ونطاقَين، ويقولُ ما هو كلُّ واحدٍ منها</b>:
+          <br />
+          <code>1</code> ظلٌّ داكنٌ + <code>swayLeft</code> + <code>transform-origin: 15% 100%</code> → النخلةُ اليُسرى · <code>2</code> → اليُمنى · <code>3</code> <code>sunPulse</code> و<code>translateY(-2px)</code> تمريرًا → الشمس · <code>16</code> ظلٌّ بلا حركة → تلّ · <code>45</code> و<code>53</code> ظلٌّ داخلَ نطاقِ <code>n+30</code> وفَرديّانِ فيبقُبّان → عمودا رَصيف · <code>n+30</code> → الماء · وما بقيَ → خطوطُ السماء
+          <br />
+          <b>فالعددُ مُصرَّحٌ، وكلُّ دورٍ مُصرَّح، والباقي أُسرتانِ مُتماثِلتان</b>: خمسٌ وعشرونَ خطَّ سماءٍ واثنانِ وعشرونَ خطَّ ماء. <b>وذاك تنفيذٌ لا رسم.</b> وتعليقُ الرفعةِ يُسمّي الأُسَرَ صراحةً: «Palm trees, hills, pier paths» و«Sun, clouds, sky lines» و«Water reflection / wave highlights».
+          <br /><br />
+          <b>و<code>transform-origin: 15% 100%</code> يُصدِّقُ القراءة:</b> النِّسَبُ على عنصرِ SVG تُحسَبُ على <code>transform-box: view-box</code> افتراضًا، <b>فـ١٥٪ و٨٥٪ من عَرضِ الـviewBox هما موضعا الشجرتَين — الحافّةُ اليُسرى والحافّةُ اليُمنى — والمئةُ من ارتفاعِه قاعدتُهما</b>. فالمِحورُ ليس زينةً بل <b>صاحبُ الملفِّ يقولُ لنا أين الشجرتان</b>.
+          <br /><br />
+          <b>وسبعُ خاصّيّاتٍ مُصرَّحةٍ لا تُقرأُ ولا مرّةً واحدة:</b> <code>--bg</code> و<code>--text</code> و<code>--accent</code> و<code>--accent-strong</code> و<code>--danger</code> و<code>--secondary</code> على <code>:root</code>، و<code>--ambient</code> بـ<code>color-mix()</code> على الزرّ. <b>سابِعةٌ في ملفٍّ واحد — سجلٌّ لهذا السجلّ</b>. و<code>--bg</code> بخاصّةٍ اسمٌ يُصرِّحُه مُضيفُ هذا المستودعِ نفسُه، <b>فلم يُحمَلْ على مُحدِّدٍ مَوروثٍ هنا</b>.
+          <br /><br />
+          <b>وستُّ واصفاتٍ أُكِلَت — نفسُ فقدِ الموجةِ الرابعةَ عشرة — وهنا ليست ترفًا بل الزرَّ كلَّه:</b> <b>لا واحدةٌ من الستِّ مُصرَّحةٌ في حالةِ السكونِ إطلاقًا</b> — <code>--tilt</code> غيرُ مُصرَّحٍ في أيِّ موضعٍ خارجَ تسجيلِه، والخمسُ الأُخرى لا تظهرُ إلا في <code>:hover</code> و<code>:active</code> والإطارات. <b>فقِيَمُ السكونِ كلُّها من <code>initial-value</code>، وهو لا يُطبَّقُ إلا إن صحَّ التسجيل</b> — وإن لم يصِحَّ فكلُّ تصريحٍ يقرأُها في السكونِ باطلٌ عندَ حسابِ القيمة: <b>التحويلُ يسقُط، والهالةُ تسقُط، واللمعةُ تسقُط، والانتقالاتُ لا تُستَبان</b>. <b>فمَظهرُ هذا الزرِّ في السكونِ يَنهارُ بلا الواصفات.</b> وقِيسَ بها: <b>الستُّ كلُّها تُحَلُّ في السكونِ</b> — <code>135deg</code> و<code>0</code> و<code>35%</code> و<code>18%</code> و<code>-30%</code> و<code>40%</code> — <b>واسمُ ضبطٍ غيرُ مُسجَّلٍ يرجعُ سِلسِلةً خالية</b>. <b>وقِيسَ بنَزعِ <code>--tilt</code>، وذاك هو المقصود:</b>
+          <br />
+          <code>::before background-image: conic-gradient(from 135deg, …)</code> بها · <code>none</code> بلا
+          <br />
+          <b>اسمٌ واحدٌ لا يُحَلُّ فلا هالةَ أصلًا.</b> وأُعيدَت من قِيَمِها الابتدائيّةِ نفسِها فحسمَتها فردًا فردًا: <code>&lt;angle&gt;</code> لـ<code>--tilt</code>، و<code>&lt;number&gt;</code> لـ<code>--lift</code>، و<code>&lt;percentage&gt;</code> للأربعِ الباقية.
+          <br /><br />
+          <b>وواحدةٌ منها مكسورةٌ على الوجهَين، وتلك للمؤلِّف:</b> <code>calc(var(--scan) * 1%)</code> و<code>--scan: -30%</code>. <b>ونسبةٌ في نسبةٍ ليست حسابًا صحيحًا</b>، و<code>--scan</code> لا يصِحُّ أن يكونَ <code>&lt;number&gt;</code> بدلًا من ذلك <b>لأن <code>-30%</code> تصيرُ قيمةً ابتدائيّةً باطلةً فيسقُطُ التسجيل</b>. <b>فبأيِّ وجهٍ سُجِّلَ يسقُطُ ذاك التصريحُ وحدَه</b>، وتَرجِعُ مواضعُ الطبقاتِ الثلاثِ إلى <code>0% 0%</code> — <b>والأولى والثالثةُ تُريدانِ ذلك بعينِه، فالخسارةُ المرئيّةُ هي المَسحةُ وحدَها</b>. والعلاجُ محرفٌ واحد: <code>calc(var(--scan) * 1)</code>.
+          <br /><br />
+          <b>وزائفةٌ لا وجودَ لها إلا في استعلامِ وسائط:</b> <code>.scene::before</code> يظهرُ مرّةً واحدةً في الملفِّ كلِّه، <b>داخلَ <code>@media (prefers-reduced-motion: reduce)</code></b>، يضبِطُ <code>opacity: 0.35</code>. <b>ولا شيءَ في أيِّ موضعٍ يُصرِّحُ لها <code>content</code>، فالنَّقضُ لا شيءَ لديه يَنقُضُه.</b> <b>وما أُرِيدَ إخفاؤُه ليس في الملفِّ الذي وصَل.</b>
+          <br /><br />
+          <b>والزرُّ رماديٌّ حتى تلمِسَه:</b> <code>filter: grayscale(100%) brightness(0.9)</code> أساسًا، و<code>grayscale(0%)</code> تمريرًا، <b>على <code>1200ms</code> — أبطأُ انتقالٍ في هذا السجلِّ كلِّه، والوحيدُ الذي المُنتقِلُ فيه هو <em>لوحةُ الألوانِ كلُّها</em></b>. وقِيسَ: <code>grayscale(1) brightness(0.9)</code> سكونًا، وقائمةُ مُدَدٍ من سبعةِ بنودٍ آخرُها <code>1.2s</code>. <b>والمساراتُ ثلاثةٌ وخمسونَ عَدًّا، وامتلاؤُها بالفهارسِ عينِها التي سمّاها الـCSS:</b> <code>خمسةٌ داكنةٌ [1, 2, 16, 45, 53]</code> · <code>ستٌّ وعشرونَ ذهبيّةٌ [3…29]</code> · <code>اثنتانِ وعشرونَ برتقاليّةٌ [30…52]</code>، <b>ومِحورا النخلتَين <code>34.5px 72px</code> و<code>195.5px 72px</code> — أي ١٥٪ و٨٥٪ من ٢٣٠ بالضبط</b>. <b>ومواضعُ طبقاتِ <code>::after</code> الثلاثِ كلُّها <code>0% 0%</code>، فسقوطُ <code>calc(-30% * 1%)</code> مَقيسٌ لا مُستَنتَج.</b> فالغروبُ موجودٌ في السكونِ ولا لونَ له. <b>وذاك <code>filter</code> يعملُ عملًا بنيويًّا أيضًا</b>: مُرشِّحٌ غيرُ <code>none</code> يُنشئُ سياقَ تراصُف، <b>وهو ما يُبقي <code>::before</code> عند <code>z-index: -2</code> داخلَ الزرّ</b>. <b>وأربعُ خاصّيّاتٍ مختلفةٍ أدَّت هذا العملَ في هذا السجلّ — <code>isolation</code> و<code>perspective</code> و<code>translate</code> والآنَ <code>filter</code> — وواحدةٌ منها فقط كُتِبَت له.</b>
         </SpecRow>
 
       </SpecList>
