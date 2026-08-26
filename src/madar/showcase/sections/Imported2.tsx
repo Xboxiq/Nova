@@ -12,6 +12,11 @@ import { FrostedClickCard } from '@/components/ui/frosted-click-card';
 import { SalesStatCard } from '@/components/ui/sales-stat-card';
 import { SpinBorderButton } from '@/components/ui/spin-border-button';
 import { GlowNotificationCard } from '@/components/ui/glow-notification-card';
+import { CopyTooltipButton } from '@/components/ui/copy-tooltip-button';
+import { LiquidMetaballToggle } from '@/components/ui/liquid-metaball-toggle';
+import { GenerateLettersButton } from '@/components/ui/generate-letters-button';
+import { SwipeConfirm } from '@/components/ui/swipe-confirm';
+import { TiltBatteryCard } from '@/components/ui/tilt-battery-card';
 
 export function Imported2() {
   return (
@@ -74,6 +79,30 @@ export function Imported2() {
           <b>وبطاقةُ التنبيه:</b> الرفعتانِ <code>67</code> و<code>68</code> تحملانِ CSS <b>متطابقًا حرفًا بحرف</b> (١٥٠٣ محرفًا بعد التطبيع)، والثانيةُ تزيدُ كلماتٍ غيرَ مُنسَّقة. <b>فأداةٌ واحدة.</b> وطبقاتُها يُعيِّنُها <code>z-index</code>: اللوحُ الداخليُّ عند <code>2</code>، والقضيبُ المتدرِّجُ عند <code>4</code>، وهالةٌ بينهما عند <code>3</code>، وأخرى تحتَ الكلِّ عند <code>1</code> — <b>ضوءانِ، واحدٌ فوقَ السطحِ وواحدٌ تحتَه</b>. <b>والميكانيكيّةُ التي لا يستطيعُ الـCSS توفيرَها:</b> الهالتانِ <code>20rem</code> بـ<code>translate(-50%, -50%)</code> و<b>بلا <code>top</code> ولا <code>left</code></b> — فتتمركزانِ على أصلِ العنصرِ: لطخةٌ في الزاوية. وتدرُّجٌ شعاعيٌّ مُزاحٌ بنصفِ حجمِه هو <b>بصمةُ ضوءٍ يتبعُ المؤشِّر</b>، ولا ورقةَ أنماطٍ تُحرِّكُه. فخاصّيّتانِ مخصَّصتانِ من مِقبضِ <code>pointermove</code>، والتدرُّجاتُ والأحجامُ والطبقاتُ <b>لم تُلمَس</b>.
           <br /><br />
           <b>وبطاقةُ المبيعات فيها رقمانِ لا يشتقُّ أحدُهما الآخر:</b> النصُّ يقولُ <code>20%</code> والشريطُ يملأُ <code>76%</code>. وفي الرفعِ كلاهما حرفيٌّ فلا تناقُضَ بعد — لكن كأداةٍ سيكون، <b>فعرضُ الشريطِ صار خاصّيّةً وافتراضُها ٧٦ بالضبط</b>. مُعلَنٌ لا مُوفَّقٌ صمتًا. و<code>role="img"</code> باسمٍ على الشريط، إذ شريطٌ محتواه <code>div</code> ملوَّنٌ <b>لا يقولُ شيئًا</b> لقارئٍ، والرقمُ بجانبِه رقمٌ آخر.
+        </SpecRow>
+
+        <SpecRow name="الموجةُ الثالثة: أربعةُ عيوبٍ حقيقيّة، وثلاثُ حِيَلٍ تستحقُّ القراءة" bare specimen={
+          <div className="flex w-full flex-col items-center gap-12 bg-[#0b0d12] px-6 py-12" dir="ltr">
+            <div className="flex flex-wrap items-center justify-center gap-14">
+              <CopyTooltipButton value="npm i nova-ui-react-library" />
+              <LiquidMetaballToggle label="Liquid" />
+              <GenerateLettersButton />
+            </div>
+            <div className="flex flex-wrap items-start justify-center gap-10">
+              <TiltBatteryCard />
+              <SwipeConfirm />
+            </div>
+          </div>
+        }>
+          <b>أحدُ هذه الملفّاتِ يحملُ أحدَّ عَيبِ وصولٍ في السجلِّ كلِّه.</b> كلُّ قواعدِ «تمَّ النسخ» في زرِّ النسخِ مبنيّةٌ على <code>:focus:not(:focus-visible)</code> — أي «مُركَّزٌ بطريقةٍ لا يرى المتصفِّحُ أنها تستحقُّ حلقة»، وذاك عمليًّا يعني <b>مُركَّزًا بالفأرة</b>. فتبدُّلُ التلميحِ إلى «Copied!»، وإخفاءُ أيقونةِ الحافظة، وظهورُ علامةِ الصحّ — <b>ثلاثتُها تحدثُ بالنقرِ ولا تحدثُ أبدًا بلوحةِ المفاتيح</b>. اضغطِ الزرَّ بـEnter فيُنسَخُ النصُّ <b>بلا أيِّ تأكيد</b>: الشيءُ الوحيدُ الذي وُجِدت الأداةُ لتقولَه <b>مُطفأٌ لمستخدمِ لوحةِ المفاتيح بالبناء</b>. فذاك لم يُبقَ حرفيًّا، إذ ليس مظهرًا بل <b>غيابَ رجعِ الفعل</b>: خاصّيّةُ <code>data-copied</code> من المِقبضِ تقودُ القواعدَ الثلاثَ نفسَها، فتأتي الحالةُ <b>مما حدث</b> لا من كيفيّةِ التركيز. ومسارُ الفأرةِ لم يُلمَس. وفيه أيضًا <code>visibility: 0</code> — وليست قيمةً صحيحةً — فكان التلميحُ شفّافًا <b>وما زال في شجرةِ الوصول</b>.
+          <br /><br />
+          <b>ومفتاحُ الكرةِ السائلة</b> أذكى ما في الدفعة: لا إبهامَ ولا مسار، بل <b>عنصرٌ واحد</b> عنصرُه الزائفُ يحملُ قرصَين، والاندماجُ اللزِجُ من <code>filter: blur(0.66em) contrast(20)</code>. فالتمويهُ يحوّلُ كلَّ قرصٍ إلى مُنحدَرٍ ناعم، و<code>contrast(20)</code> يسحقُ المُنحدَرَ إلى حافّةٍ حادّةٍ من جديد — <b>فحيثُ يتراكبُ تمويهانِ يُقرآنِ كتلةً واحدة، وحيثُ لا يتراكبانِ يُقرآنِ قرصَين</b>. وتلك الدالّتانِ <b>هما</b> الكرةُ الفوقيّة. وحلقةُ تركيزِه وُضِعت على غلافٍ <b>خارجَ المُرشِّح</b>، إذ <code>contrast(20)</code> كان سيسحقُها مع كلِّ شيءٍ آخر.
+          <br /><br />
+          <b>وزرُّ الحروف</b> حالتُه مبنيّةٌ على <code>:focus</code> لا على <code>:active</code> ولا على صنف — فالانتقالُ كلُّه إلى «Generating» يقعُ <b>لحظةَ التركيزِ ولو بـTab</b>، قبل أن يُضغَطَ شيء. وذاك اختيارُ صاحبِه فبقي، <b>لكنه يعني أن التركيزَ و«بدأ العمل» إشارةٌ واحدةٌ هنا</b> — وهو ما يجبُ معرفتُه قبل وصلِه بشيءٍ حقيقيّ.
+          <br /><br />
+          <b>وبطاقةُ الإمالة</b> ثالثةُ بطاقاتِ البطّاريّةِ في هذه الرفعات، <b>وليست مكرَّرةً</b>. بنيتَها تُثبِتُها <b>تسعُ مناطقِ تمريرٍ خفيّة</b> عند <code>translateZ(600px)</code> على شبكةِ ٣×٣ — <b>قراءةُ موضعِ مؤشِّرٍ مبنيّةٌ بلا سكربت</b>: تسعةُ صناديقَ تنوبُ عن تسعِ جهات. <b>وشيئانِ يحتاجُهما الـCSS ولا يُعلِنُهما:</b> <code>--z</code> تُقرأُ <b>ستَّ مرّات</b> وتُعلَنُ صفرًا — ومتغيّرٌ غيرُ مُعلَنٍ داخلَ <code>calc()</code> يُبطِلُ التصريحَ كلَّه، فكانت <b>ستُّ تحويلاتٍ ستُسقَطُ جميعًا</b>؛ ونصفُ قطرِ الحدِّ المرسوم، إذ <code>0 0 360 0</code> و<code>dashoffset: 360</code> يقولانِ إن الدورةَ ٣٦٠ وحدة — فـ<code>pathLength={'{'}360{'}'}</code>.
+          <br /><br />
+          <b>وزرُّ التمريرِ يحملُ ثلاثةَ عيوب.</b> الأوّل: الموجتانِ <code>url("data:image/svg+xml;utf8,")</code> — <b>فارغتانِ تمامًا</b>، فـ«الماءُ الجاري» صورتانِ خاليتانِ تنزلقانِ فوقَ تدرُّجٍ مسطَّح: الحركةُ تجري ولا شيءَ يتحرّك. والثاني: <code>:active</code> على مربّعٍ <code>display: none</code> <b>لا يقعُ أبدًا</b>، فحالةُ الضغطِ كلُّها ميّتة — فرُبِطت بـ<code>:active</code> على المِقبضِ المرئيّ، وهو ما يُضغَطُ فعلًا. والثالث: <code>~ .container</code> يطلبُ حاويةً <b>أختًا تاليةً</b> للمربّع، والمربّعُ <b>داخلَها</b> — <b>كودٌ ميّت</b>، بقي غيرَ مُطابِقٍ كما سُلِّم.
         </SpecRow>
 
       </SpecList>
