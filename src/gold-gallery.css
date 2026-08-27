@@ -44,12 +44,10 @@
 }
 
 /* ── 2. The transition transitions what changes ────────────────────────────
-   `border-color` is the whole hover report (anti-slop 21: no lift, no
-   elevation) and it is the only property anything sets. The other two entries
-   were paying the compositor to watch properties nobody writes. */
-.component-card {
-  transition: border-color var(--nova-motion-fast);
-}
+   This was an override here first. It is now fixed AT THE SOURCE, because a gate
+   found the same defect in eleven more places and hand-overriding eleven rules
+   from a second file is not a fix — see tools/qa/dead-transition.mjs. Nothing is
+   needed here any more, and the note stays so the history reads. */
 
 /* ── 3. Eight families, eight identities, zero new colours ─────────────────
    Each category takes a pair the token system already publishes, so every

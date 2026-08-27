@@ -127,10 +127,9 @@
   border-radius: 6px 6px 6px 6px;
   box-shadow: 0 0 0 5px rgb(112 183 255 / 6%);
   margin-inline: auto;
-  transition: border-radius var(--nova-motion-disclosure) var(--nova-ease-physical), background-color var(--nova-motion-control), opacity var(--nova-motion-control);
+  transition: border-radius var(--nova-motion-disclosure) var(--nova-ease-physical);
 }
 
-[dir="ltr"] .context-object { border-radius: 6px 6px 6px 6px; }
 .context-canvas[data-context="1"] .context-object { width: min(38%, 380px); border-radius: var(--nova-radius-card); }
 .context-canvas[data-context="2"] .context-object { width: min(46%, 470px); height: 94px; border-radius: var(--nova-radius-field); }
 .context-object i { display: block; width: 84%; height: 8px; background: rgb(219 242 247 / 18%); border-radius: 4px; }
@@ -242,7 +241,7 @@
 .notification-toolbar button svg { transition: transform var(--nova-motion-disclosure) var(--nova-ease-physical); }
 .notification-stack.is-expanded .notification-toolbar button svg { transform: rotate(180deg); }
 .notification-deck { position: relative; min-height: 290px; }
-.notification-deck article { position: absolute; inset: 0 0 auto; z-index: calc(4 - var(--stack-index)); display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto; align-items: center; gap: var(--nova-space-3); min-height: 116px; padding: var(--nova-space-4); background: var(--nova-surface-raised); border: 1px solid var(--nova-border); border-radius: 6px 6px 6px 6px; transform: translateY(calc(var(--stack-index) * 17px)) scale(calc(1 - (var(--stack-index) * .025))); transform-origin: top center; transition: transform var(--nova-motion-disclosure) var(--nova-ease-physical), opacity var(--nova-motion-control); }
+.notification-deck article { position: absolute; inset: 0 0 auto; z-index: calc(4 - var(--stack-index)); display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto; align-items: center; gap: var(--nova-space-3); min-height: 116px; padding: var(--nova-space-4); background: var(--nova-surface-raised); border: 1px solid var(--nova-border); border-radius: 6px 6px 6px 6px; transform: translateY(calc(var(--stack-index) * 17px)) scale(calc(1 - (var(--stack-index) * .025))); transform-origin: top center; transition: transform var(--nova-motion-disclosure) var(--nova-ease-physical); }
 [dir="ltr"] .notification-deck article { border-radius: 6px 6px 6px 6px; }
 .notification-stack:not(.is-expanded) .notification-deck article:not(:first-child) { pointer-events: none; }
 .notification-stack:not(.is-expanded) .notification-deck article:not(:first-child) > * { opacity: 0; }

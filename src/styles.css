@@ -424,7 +424,7 @@ button:disabled {
   border-radius: var(--nova-radius-control);
   font-size: var(--nova-text-body-sm);
   font-weight: var(--nova-weight-bold);
-  transition: color var(--nova-motion-fast), background-color var(--nova-motion-fast), border-color var(--nova-motion-fast), box-shadow var(--nova-motion-fast), transform var(--nova-motion-instant);
+  transition: color var(--nova-motion-fast), background-color var(--nova-motion-fast), border-color var(--nova-motion-fast), transform var(--nova-motion-instant);
 }
 
 .primary-link,
@@ -1546,7 +1546,7 @@ button:disabled {
   background: var(--nova-surface);
   border: 1px solid var(--nova-border);
   border-radius: var(--nova-radius-card);
-  transition: border-color var(--nova-motion-fast), box-shadow var(--nova-motion-base), transform var(--nova-motion-base) var(--nova-ease-standard);
+  transition: border-color var(--nova-motion-fast);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -2029,7 +2029,7 @@ footer#sources > a {
     border: 0;
     border-radius: 6px;
     font-size: var(--nova-text-label-md);
-    transition: color var(--nova-motion-fast), background-color var(--nova-motion-fast), box-shadow var(--nova-motion-fast), transform var(--nova-motion-instant);
+    transition: color var(--nova-motion-fast), background-color var(--nova-motion-fast), transform var(--nova-motion-instant);
   }
   .mobile-dock svg { width: 20px; height: 20px; }
   .mobile-dock .dock-primary {

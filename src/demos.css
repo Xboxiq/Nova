@@ -45,7 +45,7 @@
   padding-inline: 15px;
   border-radius: 6px;
   font-weight: var(--nova-weight-bold);
-  transition: transform var(--nova-motion-fast) ease, background var(--nova-motion-fast) ease, border-color var(--nova-motion-fast) ease;
+  transition: background var(--nova-motion-fast) ease, border-color var(--nova-motion-fast) ease;
 }
 
 .demo-primary {
@@ -658,7 +658,7 @@
   border: 0;
   border-radius: 6px;
   font-weight: var(--nova-weight-bold);
-  transition: background var(--nova-motion-base) ease, transform var(--nova-motion-fast) ease;
+  transition: background var(--nova-motion-base) ease;
 }
 
 .publish-button:hover:not(:disabled) { background: color-mix(in srgb, var(--nova-action) 88%, var(--nova-ink)); }
@@ -1067,7 +1067,7 @@
 .map-pin { position: absolute; inset: 50% auto auto 50%; display: grid; place-items: center; width: 44px; height: 44px; color: #fff; background: var(--nova-action); border: 5px solid rgb(255 255 255 / 80%); border-radius: 50% 50% 50% 6px; transform: translate(-50%, -50%) rotate(-45deg); }
 .map-pin svg { width: 18px; height: 18px; transform: rotate(45deg); }
 
-.location-tag { z-index: 2; display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 11px; width: min(88%, 310px); min-height: 64px; margin-block-start: -48px; padding: 10px; text-align: start; color: var(--nova-ink); background: var(--nova-surface); border: 1px solid var(--nova-border); border-radius: 6px; transition: transform var(--nova-motion-base) ease; }
+.location-tag { z-index: 2; display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 11px; width: min(88%, 310px); min-height: 64px; margin-block-start: -48px; padding: 10px; text-align: start; color: var(--nova-ink); background: var(--nova-surface); border: 1px solid var(--nova-border); border-radius: 6px; transition: ; }
 .location-tag.open { width: min(94%, 345px); }
 .location-tag > span { display: grid; place-items: center; width: 40px; height: 40px; color: var(--nova-action-ink); background: var(--nova-action-soft); border-radius: 6px; }
 .location-tag > div { display: grid; gap: 2px; }
@@ -1651,7 +1651,7 @@
 
 :root:is([data-theme="dark"], [data-theme="night"]) .demo-profile { background: #0f1014; }
 
-.profile-card { width: min(100%, 360px); overflow: hidden; color: #15161b; background: #fff; border: 1px solid rgb(17 18 23 / 7%); border-radius: 6px; transition: transform var(--nova-motion-base); }
+.profile-card { width: min(100%, 360px); overflow: hidden; color: #15161b; background: #fff; border: 1px solid rgb(17 18 23 / 7%); border-radius: 6px; transition: ; }
 .profile-card:hover { border-color: rgb(17 18 23 / 16%); }
 .profile-cover { height: 88px; padding: 12px; background: radial-gradient(circle at 20% 30%, #c6f4e2, transparent 32%), radial-gradient(circle at 78% 45%, #bce9ff, transparent 34%), #edf3f4; }
 .profile-cover > button { display: grid; place-items: center; width: 38px; height: 38px; margin-inline-start: auto; color: #4f5058; background: rgb(255 255 255 / 72%); border: 1px solid rgb(255 255 255 / 80%); border-radius: 6px; backdrop-filter: blur(10px); }
@@ -1824,7 +1824,7 @@
   background: #11152a;
 }
 
-.glowing-card { position: relative; display: flex; flex-direction: column; width: min(100%, 365px); min-height: 280px; padding: 22px; overflow: visible; color: #f3f3f7; text-align: start; background: #16171d; border: 1px solid #2a2d35; border-radius: 6px; isolation: isolate; transition: transform var(--nova-motion-base); }
+.glowing-card { position: relative; display: flex; flex-direction: column; width: min(100%, 365px); min-height: 280px; padding: 22px; overflow: visible; color: #f3f3f7; text-align: start; background: #16171d; border: 1px solid #2a2d35; border-radius: 6px; isolation: isolate; transition: ; }
 .glowing-card:hover { border-color: #3c404a; }
 .glow-edge { position: absolute; inset: -2px; z-index: -1; background: conic-gradient(from 0deg, #1687ef, #61c8ed, #58d9bd, #ff9278, #1687ef); border-radius: 6px; filter: blur(14px); opacity: .06; transition: opacity var(--nova-motion-slow), filter var(--nova-motion-slow); }
 .glowing-card.active .glow-edge { opacity: .7; filter: blur(18px); animation: glow-rotate 4s linear infinite; }
