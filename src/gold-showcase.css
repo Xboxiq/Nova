@@ -1,0 +1,226 @@
+/* ============================================================================
+   gold-showcase.css — Layer 7 (Motion) and a touch of Layer 6 (Atmosphere)
+   for the system showcase's four specimen panels.
+
+   WHY A SEPARATE FILE. The `visual-redesign` protocol this follows requires
+   "new files > modified files": an override sheet imported AFTER the originals,
+   so rollback is deleting one import line and nothing else. The first operation
+   in this repo (the hero metric card) edited `styles.css` in place, which is a
+   divergence from the protocol and is recorded as one. This one obeys it.
+
+   WHY ONLY TWO LAYERS. The protocol's seven-layer prescription is written for
+   Bootstrap-default codebases: it prescribes replacing #0d6efd, adding a token
+   system, importing a display font, inventing a radius language. Audited against
+   this repo, layers 1 to 5 are already gold — a full `--nova-*` token set, a
+   nine-step ladder, clamp type scales with negative tracking, tabular numerals,
+   `--r-*` radii and `--depth-*` depths. Prescribing them again would be
+   downgrading. So the surgery is layer 7, where the audit found the real crime,
+   plus the one atmosphere item the panels lack.
+
+   WHERE THE PROTOCOL AND VISUAL-LAW DISAGREE, VISUAL-LAW WINS. The protocol asks
+   for warm off-whites, an imported display font and pill buttons; this repo's law
+   fixes the palette, the type stack and the radius language already. Its Motion
+   Check rows are honoured to the letter: no CSS keyword easing anywhere below,
+   and reduced motion is answered.
+
+   ZERO JSX CHANGES. Every rule here reaches its target through `nth-of-type`,
+   which counts TAGS — and the track alternates `<i>` and `<span>`, so the two
+   sequences index cleanly. That is the one case where the tag-counting trap this
+   repo has been bitten by three times is the right tool.
+   ============================================================================ */
+
+/* The step the track has reached, 0 to 3. Registered so it interpolates: one
+   animation on the parent moves three bars and three nodes on one timeline.
+   INHERITS, because six children read it. */
+@property --nv-step {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+/* An orbiting body's own angle. inherits: false is correct here — nothing
+   downstream reads it, each dot animates its own. */
+@property --nv-a {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+/* ── The motion panel, which did not move ──────────────────────────────────
+   Three icons joined by two bars, all static: a panel headed "motion" that
+   demonstrated none. The icons are a sequence — pointer, spinner, check — so the
+   fix is not to add decoration but to let the sequence RUN, with every bar and
+   every node reading the same step. `alternate` rather than a loop, so the run
+   rewinds instead of snapping back at the boundary. */
+.motion-track {
+  position: relative;
+  /* `forwards` is load-bearing and was added after measuring, not before. The repo
+     blanket collapses this to 0.001s with one iteration under reduced motion, and
+     with no fill mode the property then REVERTS to its registered initial value --
+     so the still frame was an EMPTY track, not a completed one. Measured: step 0,
+     no bar filled, no node lit. `forwards` holds the end state instead.
+
+     3.4, not 3: node j lights at step >= j + 1, so with a range ending exactly at 3
+     the third node was lit only at the instant the run touched its top, and
+     `alternate` touches it for one frame. Running to 3.4 caps every bar at 1 and
+     leaves the third node lit for the last twelve percent of the sweep. Measured
+     before the change: the third node's background never moved. */
+  animation: novaTrackRun 5.4s cubic-bezier(0.65, 0, 0.35, 1) infinite alternate forwards;
+}
+
+@keyframes novaTrackRun {
+  from { --nv-step: 0; }
+  to { --nv-step: 3.4; }
+}
+
+/* bar j fills as the step crosses it: 0→1, 1→2, 2→3 */
+.motion-track > i {
+  position: relative;
+  overflow: hidden;
+}
+
+.motion-track > i:nth-of-type(1) { --i: 0; }
+.motion-track > i:nth-of-type(2) { --i: 1; }
+.motion-track > i:nth-of-type(3) { --i: 2; }
+
+/* `inset`, not a transform: the fill's own edge moves, so a 2px bar stays 2px
+   where scaleX would have thickened it. */
+.motion-track > i::after {
+  position: absolute;
+  content: "";
+  inset: 0;
+  inset-inline-end: calc(100% - clamp(0, calc(var(--nv-step) - var(--i)), 1) * 100%);
+  background: var(--nova-action);
+}
+
+/* node j lights when the step passes j + 1 */
+.motion-track > span:nth-of-type(1) { --i: 0; }
+.motion-track > span:nth-of-type(2) { --i: 1; }
+.motion-track > span:nth-of-type(3) { --i: 2; }
+
+.motion-track > span {
+  --nv-lit: clamp(0, calc((var(--nv-step) - var(--i) - 1) * 100), 1);
+  /* feeds --depth-instrument-bloom, which reads --nv-value: the bloom token is
+     reused rather than a fourth one written */
+  --nv-value: calc(var(--nv-lit) * 100);
+
+  color: color-mix(in oklab, var(--nova-on-action) calc(var(--nv-lit) * 100%), var(--nova-action-ink));
+  background: color-mix(in oklab, var(--nova-action) calc(var(--nv-lit) * 100%), var(--nova-action-soft));
+  border-color: color-mix(in oklab, var(--nova-action) calc(24% + var(--nv-lit) * 76%), var(--nova-border));
+  box-shadow: var(--depth-instrument-bloom);
+}
+
+/* the spinner is the middle node, so it spins only while it is the live one */
+.motion-track > span:nth-of-type(2) svg {
+  rotate: calc(var(--nv-step) * 240deg);
+}
+
+/* ── The material panel's orbit, which did not orbit ───────────────────────
+   Three rings at inset 0, 20px and 42px — radii 75, 55 and 33 from a 150px
+   box's centre — and three dots parked at three arbitrary offsets. The dots
+   become the rings' riders: each centred, translated out to its own ring, then
+   rotated about the box's centre. The transform list is right-to-left, so
+   `rotate(a) translateY(-r)` pushes the dot out and swings it round the centre
+   rather than spinning it in place.
+
+   The delays are NEGATIVE: phase, not queue. Positive delays would leave the
+   orbit empty for the first second and a half. */
+.material-orbit > i {
+  inset: 0;
+  margin: auto;
+  transform: rotate(var(--nv-a)) translateY(calc(-1 * var(--nv-r)));
+  animation: novaOrbit var(--nv-t) cubic-bezier(0.4, 0.02, 0.6, 0.98) infinite;
+}
+
+@keyframes novaOrbit {
+  to { --nv-a: 360deg; }
+}
+
+.material-orbit > i:nth-of-type(1) {
+  --nv-r: 75px;
+  --nv-t: 14s;
+  animation-delay: -2.1s;
+}
+
+.material-orbit > i:nth-of-type(2) {
+  --nv-r: 55px;
+  --nv-t: 9.5s;
+  animation-delay: -5.6s;
+}
+
+.material-orbit > i:nth-of-type(3) {
+  --nv-r: 33px;
+  --nv-t: 6.2s;
+  animation-delay: -3.4s;
+}
+
+/* the two inner rings drift in opposite senses, slowly, so the field reads as a
+   system rather than three unrelated dots */
+.material-orbit::before {
+  animation: novaRingDrift 26s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+.material-orbit::after {
+  animation: novaRingDrift 34s cubic-bezier(0.45, 0, 0.55, 1) infinite reverse;
+}
+
+@keyframes novaRingDrift {
+  to { rotate: 360deg; }
+}
+
+/* ── A crime the audit missed, found by looking at the result ───────────────
+   The material panel's paragraph runs UNDERNEATH the orbit: the orbit is
+   `position: absolute` at 8% from the inline end and the text has no stacking
+   claim of its own, so the two overlap. Static, it read as texture; with the dots
+   moving it reads as damage. VISUAL-LAW SS30 -- decoration does not obstruct the
+   thing being read.
+
+   The fix is the one declaration this repo has now used five times: the panel is
+   `isolation: isolate` below, so a negative z-index on the orbit stays inside the
+   panel instead of falling behind the page, and the text sits above it with no
+   z-index of its own. The orbit is atmosphere; the sentence is the content. */
+.specimen-material .material-orbit {
+  z-index: -1;
+  opacity: 0.72;
+}
+
+.specimen-material > h3,
+.specimen-material > p {
+  position: relative;
+}
+
+/* ── Layer 6: the one atmosphere item the panels lack ──────────────────────
+   The four panels sit flat on the section ground. A single ambient wash, keyed
+   to each panel's own subject colour, gives the grid depth without adding a
+   colour: it is a mix off tokens already in the sheet. */
+.specimen-panel {
+  position: relative;
+  isolation: isolate;
+}
+
+.specimen-panel::before {
+  position: absolute;
+  content: "";
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    ellipse 70% 46% at 50% 0%,
+    color-mix(in oklab, var(--nova-action) 7%, transparent) 0%,
+    transparent 68%
+  );
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* ── Reduced motion ────────────────────────────────────────────────────────
+   The repo blanket in tokens.css:326 sets every animation to 1ms with one
+   iteration. The first version of this comment claimed that lands the track on
+   --nv-step: 3, complete and fully lit. It was measured and it was FALSE: with no
+   fill mode a finished animation reverts its property to the registered initial
+   value, so the still frame was an empty track — step 0, nothing filled, nothing
+   lit. `animation-fill-mode: forwards` on the track is what actually produces the
+   completed frame, and it is declared above for that reason.
+
+   The orbiting dots need nothing: their --nv-a returns to 0deg, which is a real
+   resting position on each ring, and three dots parked at the top of three rings
+   is a legitimate still frame for an orbit. Measured: 0deg, 0deg, 0deg. */
