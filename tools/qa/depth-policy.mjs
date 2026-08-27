@@ -86,7 +86,13 @@ const px = (w) => {
 function isBlurredOuter(seg) {
   if (/\binset\b/.test(seg)) return false;
   const lengths = words(seg).map(px).filter((v) => v !== null);
-  return lengths.length >= 3 && lengths[2] > 0;
+  if (lengths.length >= 3 && lengths[2] > 0) return true;
+  /* A blur radius written as calc() parsed to null and dropped out of the count, so
+     `box-shadow: 0 0 calc(...) <colour>` was invisible here -- found by writing one
+     in src/styles.css and watching this gate pass it. A calc() in a non-inset shadow
+     is treated as a blurred outer shadow: over-reporting a shadow that ought to be a
+     token is the safe side of this particular error. */
+  return /\bcalc\(/.test(seg);
 }
 
 const IMPORTED = /^src[\\/]components[\\/]ui[\\/]/;

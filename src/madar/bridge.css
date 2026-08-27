@@ -598,6 +598,22 @@
   --depth-instrument-hub:
     0 2px 5px rgba(0, 0, 0, 0.34),
     inset 0 1px 0 var(--bevel-hair);
+  /* The hero metric's per-bar bloom. Same idea as --depth-instrument-bloom: the
+     spread is the sample, so the glow is the reading. Named because the first draft
+     wrote it inline with a calc() blur radius and depth-policy could not see it --
+     which is a gate hole, not a licence. */
+  /* The adaptive inspector's preview object. Its offset and blur both scale with
+     --preview-depth, which the lab's control drives, so the depth IS the control's
+     value. It sat inline in advanced-lab.css and was invisible to depth-policy for
+     the same reason the bloom above was: a calc() blur radius parsed to null and
+     dropped out of the length count. Both are named now, and the detector was
+     tightened so the next one cannot hide. */
+  --depth-preview-object:
+    0 var(--preview-depth, 0px) calc(var(--preview-depth, 0px) * 2.4)
+      color-mix(in srgb, var(--nova-ink) 14%, transparent);
+  --depth-sample-bloom:
+    0 0 calc(var(--nv-above, 0) * var(--nv-h, 0) * 0.09px)
+      color-mix(in oklab, var(--nova-action) calc(var(--nv-above, 0) * 34%), transparent);
   --depth-instrument-well:
     inset 0 2px 6px rgba(10, 14, 22, 0.24),
     inset 0 -1px 0 var(--bevel-hair);

@@ -10,7 +10,13 @@ interface HeroPreviewProps {
   locale: Locale;
 }
 
-const bars = [36, 50, 44, 68, 58, 78, 70, 92];
+/* The eight samples, and the ONLY source for the figure below them. The card used
+   to draw these and print a hardcoded 84.6% underneath; their mean is 62.0, so the
+   drawing and the number had disagreed since the day it was written. VISUAL-LAW SS15
+   and SS22: a measured quantity is drawn measured, and the measurement falls on the
+   drawn thing. */
+const samples = [36, 50, 44, 68, 58, 78, 70, 92];
+const mean = samples.reduce((a, b) => a + b, 0) / samples.length;
 
 export default function HeroPreview({ locale }: HeroPreviewProps) {
   const copy = uiCopy[locale];
@@ -45,9 +51,26 @@ export default function HeroPreview({ locale }: HeroPreviewProps) {
                   <span>{copy.previewMetric}</span>
                   <small>{copy.previewSample}</small>
                 </header>
-                <strong>84.6%</strong>
-                <div className="stage-bars" aria-hidden="true">
-                  {bars.map((height, index) => <i key={index} style={{ height: `${height}%` }} />)}
+                <strong>{mean.toFixed(1)}%</strong>
+                {/* one scalar per bar drives its height, its saturation against the
+                    mean, and its own bloom -- and the mean is drawn as a reference
+                    line, so eight heights read as a distribution with a centre
+                    rather than eight arbitrary sticks (SS11, SS19) */}
+                <div
+                  className="stage-bars"
+                  aria-hidden="true"
+                  style={{ ['--nv-mean' as string]: mean }}
+                >
+                  <span className="stage-bars__mean" />
+                  {samples.map((height, index) => (
+                    <i
+                      key={index}
+                      style={{
+                        ['--nv-h' as string]: height,
+                        ['--i' as string]: index,
+                      }}
+                    />
+                  ))}
                 </div>
               </section>
 
