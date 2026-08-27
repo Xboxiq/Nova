@@ -1,55 +1,62 @@
 /* شريطُ الفَرق — والمرسومُ هو التقاطُعُ لا أحدُ الطرفَين.
    DeltaBar -- two readings on one axis, and the drawn thing is the difference.
 
-   VISUAL-LAW SS19 says that when two paths share an axis, the information is in
-   the intersection and not in either of them. Nothing in the imported corpus does
-   that: it has progress bars, which draw one number, and it has bars whose fill
-   and whose label disagree -- the fifteen-zone card shows 82.8% of a row under a
-   label reading 69. So this bar draws neither value. **It draws the span between
-   them**, and the readout is the signed delta, because that is the only figure
-   here that is not already visible.
+   VISUAL-LAW SS19: when two paths share an axis, the information is in the
+   intersection and not in either of them. The imported corpus has progress bars,
+   which draw one number, and it has one bar whose fill and label openly disagree --
+   82.8% of a row under a label reading 69. So this draws neither value. It draws
+   the SPAN between them, and the readout is the signed delta, the only figure here
+   that is not already visible.
 
-   THE SPAN IS COMPUTED, NOT PLACED. The fill's box is derived from both scalars at
-   once, in CSS:
+   THE SPAN IS COMPUTED, NOT PLACED.
 
-     inset: 0 calc(100% - max(value, base) * 1%) 0 calc(min(value, base) * 1%)
+     inset: 3px calc(100% - max(value, base) * 1%) 3px calc(min(value, base) * 1%)
 
-   so `min()` and `max()` do the ordering and nothing in React needs to know which
-   reading is the larger. Swap them and the bar is still correct.
+   `min()` and `max()` do the ordering, so nothing in React learns which reading is
+   larger. Swap them and the bar is still right. And it is `inset` rather than a
+   transform -- the corpus found this once, in upload 29 -- because animating a
+   box's own edges keeps its 1px border 1px and its round caps round, where scaleX
+   would stretch both.
 
-   AND IT IS `inset`, NOT `transform`. The corpus found this once, in upload 29:
-   animating `inset` moves a box's own edges apart, so a 1px border stays 1px --
-   where `scaleX` would stretch the border along with the box and thicken it. Here
-   that matters more than it did there, because this fill has a visible cap on each
-   end and a scaled cap is an oval.
-
-   THE SIGN IS A COLOUR MIX, NOT A CLASS. Direction is not passed in; it is
-   derived:
+   THE SIGN IS A COLOUR MIX, NOT A CLASS.
 
      color-mix(in oklab, success calc(clamp(0, (value - base) * 100, 1) * 100%), danger)
 
-   `clamp` saturates, so the mix is 100% success the moment the value passes the
-   base and 0% the moment it drops below -- a sign function out of one declaration,
-   with no second element to light and darken and no attribute for React to keep in
-   sync. The tick highlights in `value-arc.tsx` use the same saturating clamp for a
+   `clamp` saturates, so the mix is pure success the instant the value passes the
+   base and pure danger the instant it drops below. A sign function out of one
+   declaration: no second element to light and darken, no attribute for React to
+   keep in sync. The dial's tick highlights use the same saturating clamp for a
    step; this uses it for a sign. One idiom, two jobs.
 
-   THE EMPTY PART OF THE SCALE IS DATA TOO (SS11). The track is not a groove for
-   the fill to sit in: it carries the base's hairline and the two end labels, so
-   the distance from the reading to each end of the range is legible without the
-   fill. A bar whose empty half says nothing is a bar that has thrown half its
-   information away.
+   AND THE RICHNESS IS INFORMATION TOO. This file was rewritten for the same reason
+   `value-arc.tsx` was: the first version was a hairline in a groove, correct and
+   thin. The layers added are not decoration -- each is arithmetic on the same
+   scalars the reading is:
+
+     the well       a named inset bevel, so the track is a recess and not a line
+     the bloom      the same inset as the span, blurred, so the glow IS the span
+     the gradient   stops mixed off the same sign colour, lit from above (SS2)
+     the ticks      eleven marks, lit by clamp against the value, like the dial's
+     the cap        a machined pin with its own depth token
+     the baseline   engraved: a dark hairline with a light edge under it
+
+   THE EMPTY PART OF THE SCALE IS DATA (SS11). The track is not a groove for the
+   fill to sit in: it carries the base's hairline, eleven marks and the two end
+   numbers, so the distance from the reading to each end is legible with no fill at
+   all.
 
    ONE FOCUS, TWO READINGS. The base is a declared reference, not a second control,
-   so there is one `role="slider"` and the base lives in `aria-valuetext` -- "+7,
-   above the 55 baseline". Two focusables for one fact would be two tab stops that
-   both mean the same thing.
+   so there is one `role="slider"` and the base lives in `aria-valuetext`. Two tab
+   stops for one fact would be two stops that mean the same thing.
 
-   Colour comes entirely from `--nova-*`, so this is a different instrument in each
-   of the seven packs, and the reduced-motion block is its own: the repo blanket
-   neutralises animations and this has only a transition. */
+   Colour is entirely `--nova-*` and `color-mix()` off it, so this is a different
+   instrument in each of the seven packs. Hover halves the bloom's drift rather than
+   adding anything, behind a hover-capability guard. The repo blanket covers the
+   animation; the block at the foot covers the transition. */
 import { useId, useState } from 'react';
 import styled from 'styled-components';
+
+const TICKS = Array.from({ length: 11 }, (_, i) => i);
 
 const clampValue = (n: number) => Math.min(100, Math.max(0, n));
 const signed = (n: number) => (n > 0 ? '+' + n : String(n));
@@ -73,7 +80,7 @@ export const DeltaBar = ({
   const value = clampValue(controlled ?? own);
   const ref = clampValue(base);
   const delta = Math.round((value - ref) * 10) / 10;
-  const labelId = useId();
+  const labelId = 'nv-dlt-' + useId().replace(/:/g, '');
 
   const set = (n: number) => {
     const v = clampValue(n);
@@ -94,17 +101,17 @@ export const DeltaBar = ({
 
   return (
     <StyledWrapper>
-      <div className="delta" style={{ ['--nv-value' as string]: value, ['--nv-base' as string]: ref }}>
-        <div className="delta__head">
-          <span className="delta__label" id={labelId}>{label}</span>
-          <p className="delta__readout">
-            <output className="delta__value">{signed(delta)}</output>
-            <span className="delta__unit">{unit}</span>
+      <div className="gauge" style={{ ['--nv-value' as string]: value, ['--nv-base' as string]: ref }}>
+        <div className="gauge__head">
+          <span className="gauge__label" id={labelId}>{label}</span>
+          <p className="gauge__readout">
+            <output className="gauge__value">{signed(delta)}</output>
+            <span className="gauge__unit">{unit}</span>
           </p>
         </div>
 
         <div
-          className="delta__track"
+          className="gauge__track"
           role="slider"
           tabIndex={0}
           aria-labelledby={labelId}
@@ -114,19 +121,23 @@ export const DeltaBar = ({
           aria-valuetext={signed(delta) + unit + ', ' + (delta >= 0 ? 'above' : 'below') + ' the ' + ref + unit + ' baseline'}
           onKeyDown={onKeyDown}
         >
-          {/* the span between the two readings, ordered by min()/max() in CSS */}
-          <span className="delta__span" aria-hidden="true" />
-          <span className="delta__baseline" aria-hidden="true" />
-          <span className="delta__cap" aria-hidden="true" />
+          <span className="gauge__well" aria-hidden="true" />
+          {TICKS.map((i) => (
+            <span key={i} className="gauge__tick" style={{ ['--i' as string]: i }} aria-hidden="true" />
+          ))}
+          {/* the glow carries the same inset, so it ends where the span ends */}
+          <span className="gauge__bloom" aria-hidden="true" />
+          <span className="gauge__span" aria-hidden="true" />
+          <span className="gauge__baseline" aria-hidden="true" />
+          <span className="gauge__cap" aria-hidden="true" />
         </div>
 
-        {/* SS11: the empty part of the scale is data too. And SS22: the base's
-            label sits AT the base, not centred by a flex rule that happens to
-            put a number where the number is not. */}
-        <div className="delta__scale" aria-hidden="true">
-          <span className="delta__scale-min">0</span>
-          <span className="delta__scale-base">{ref}</span>
-          <span className="delta__scale-max">100</span>
+        {/* SS11 and SS22: the empty scale is data, and the base's number sits AT
+            the base rather than centred by a rule that puts it where it is not. */}
+        <div className="gauge__scale" aria-hidden="true">
+          <span className="gauge__scale-min">0</span>
+          <span className="gauge__scale-base">{ref}</span>
+          <span className="gauge__scale-max">100</span>
         </div>
       </div>
     </StyledWrapper>
@@ -134,20 +145,9 @@ export const DeltaBar = ({
 };
 
 const StyledWrapper = styled.div`
+  /* Both must inherit: set on the root, read by six descendants. */
   @property --nv-value {
     syntax: "<number>";
-    /* inherits: TRUE, and this was measured the hard way. The first draft wrote
-       'inherits: false' -- lifted from this repo's own vocabulary note, where it is
-       recommended to stop one instrument's value leaking into another. It does that,
-       and it also stops the value ARRIVING: set on the root and read in the
-       descendants, every one of them computed the registered initial instead. The
-       dash measured 0 with the readout showing 62, the needle sat at -135deg, and
-       all eleven ticks were dark.
-
-       A scalar read by descendants must inherit. What prevents the leak is not the
-       descriptor, it is that every instance declares its own value on its own root,
-       so a nested instrument shadows the outer one -- which is the same rule that
-       made upload 46's 'body:has()' a no-op, read from the useful side. */
     inherits: true;
     initial-value: 0;
   }
@@ -157,104 +157,162 @@ const StyledWrapper = styled.div`
     initial-value: 0;
   }
 
-  .delta {
+  .gauge {
+    /* the sign, resolved once and read by four layers */
+    --nv-sign: clamp(0, calc((var(--nv-value) - var(--nv-base)) * 100), 1);
+    --nv-tone: color-mix(
+      in oklab,
+      var(--nova-success) calc(var(--nv-sign) * 100%),
+      var(--nova-danger)
+    );
+
     display: grid;
-    gap: 0.5rem;
-    inline-size: 17rem;
+    gap: 0.625rem;
+    inline-size: 18rem;
     padding: 0.875rem 1rem 0.75rem;
     border: 1px solid var(--nova-border);
     border-radius: var(--r-lg);
-    background: var(--nova-surface);
+    background:
+      linear-gradient(
+        180deg,
+        color-mix(in oklab, var(--nova-surface) 92%, white) 0%,
+        var(--nova-surface) 42%
+      );
     box-shadow: var(--depth-widget);
     transition:
-      --nv-value 320ms cubic-bezier(0.22, 1, 0.36, 1),
-      --nv-base 320ms cubic-bezier(0.22, 1, 0.36, 1);
+      --nv-value 340ms cubic-bezier(0.22, 1, 0.36, 1),
+      --nv-base 340ms cubic-bezier(0.22, 1, 0.36, 1);
   }
 
-  .delta__head {
+  .gauge__head {
     display: flex;
     align-items: baseline;
     justify-content: space-between;
     gap: 1rem;
   }
 
-  .delta__label {
+  .gauge__label {
     font-size: 0.8125rem;
+    letter-spacing: 0.02em;
     color: var(--nova-ink-secondary);
   }
 
-  .delta__readout {
+  .gauge__readout {
     margin: 0;
     display: flex;
     align-items: baseline;
     gap: 0.125rem;
   }
 
-  .delta__value {
-    font-size: 1.125rem;
-    font-weight: 650;
+  .gauge__value {
+    font-size: 1.375rem;
+    font-weight: 660;
     font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
     color: var(--nova-ink);
   }
 
-  .delta__unit {
+  .gauge__unit {
     font-size: 0.75rem;
     color: var(--nova-ink-secondary);
   }
 
-  .delta__track {
+  .gauge__track {
     position: relative;
-    block-size: 1.25rem;
-    border: 1px solid var(--nova-border);
+    block-size: 1.625rem;
     border-radius: var(--r-full);
-    background: var(--nova-surface-quiet);
     isolation: isolate;
   }
 
-  .delta__track:focus-visible {
+  .gauge__track:focus-visible {
     outline: 2px solid var(--nova-action);
-    outline-offset: 3px;
+    outline-offset: 4px;
   }
 
-  /* inset, so the 1px border and the two caps keep their shape */
-  .delta__span {
+  /* a recess, not a line */
+  .gauge__well {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: color-mix(in oklab, var(--nova-surface-quiet) 84%, black);
+    box-shadow: var(--depth-instrument-well);
+  }
+
+  .gauge__tick {
+    position: absolute;
+    inset-block: 34%;
+    inline-size: 1px;
+    inset-inline-start: calc(var(--i) * 10%);
+    translate: -0.5px 0;
+    background: var(--nova-ink);
+    /* clamp saturates, so this is a step function on the same scalar -- floored at
+       0.18 rather than 0, because SS11 makes the unread part of a scale data too:
+       at zero the marks vanished and the scale looked as though it ended at the
+       needle. Lit is 1, unread is a ghost, and both are the same declaration. */
+    opacity: calc(0.18 + clamp(0, calc((var(--nv-value) - var(--i) * 10) * 100), 1) * 0.82);
+  }
+
+  .gauge__span,
+  .gauge__bloom {
     position: absolute;
     inset:
-      2px
+      3px
       calc(100% - max(var(--nv-value), var(--nv-base)) * 1%)
-      2px
+      3px
       calc(min(var(--nv-value), var(--nv-base)) * 1%);
     border-radius: var(--r-full);
-    /* the sign, out of one saturating clamp */
-    background: color-mix(
-      in oklab,
-      var(--nova-success)
-        calc(clamp(0, calc((var(--nv-value) - var(--nv-base)) * 100), 1) * 100%),
-      var(--nova-danger)
-    );
   }
 
-  .delta__baseline {
+  .gauge__bloom {
+    background: var(--nv-tone);
+    filter: blur(7px);
+    opacity: 0.55;
+    animation: gaugeBreathe 5.5s ease-in-out infinite;
+  }
+
+  .gauge__span {
+    background:
+      linear-gradient(
+        180deg,
+        color-mix(in oklab, var(--nv-tone) 66%, white) 0%,
+        var(--nv-tone) 54%,
+        color-mix(in oklab, var(--nv-tone) 78%, black) 100%
+      );
+    box-shadow:
+      var(--depth-instrument-hub),
+      0 0 0 1px color-mix(in oklab, var(--nv-tone) 40%, transparent);
+  }
+
+  /* engraved: a dark line with a light edge beneath it */
+  .gauge__baseline {
     position: absolute;
-    inset-block: -3px;
+    inset-block: -4px;
     inline-size: 2px;
     inset-inline-start: calc(var(--nv-base) * 1%);
     translate: -1px 0;
     border-radius: var(--r-full);
     background: var(--nova-ink);
+    box-shadow: 1px 0 0 var(--bevel-hair);
   }
 
-  .delta__cap {
+  /* a machined pin */
+  .gauge__cap {
     position: absolute;
-    inset-block: -2px;
-    inline-size: 3px;
+    inset-block: -3px;
+    inline-size: 4px;
     inset-inline-start: calc(var(--nv-value) * 1%);
-    translate: -1.5px 0;
+    translate: -2px 0;
     border-radius: var(--r-full);
-    background: var(--nova-ink);
+    background:
+      linear-gradient(
+        180deg,
+        color-mix(in oklab, var(--nova-ink) 62%, white) 0%,
+        var(--nova-ink) 100%
+      );
+    box-shadow: var(--depth-instrument-hub);
   }
 
-  .delta__scale {
+  .gauge__scale {
     position: relative;
     block-size: 0.875rem;
     font-size: 0.6875rem;
@@ -262,32 +320,34 @@ const StyledWrapper = styled.div`
     color: var(--nova-ink-secondary);
   }
 
-  .delta__scale-min,
-  .delta__scale-max {
+  .gauge__scale-min,
+  .gauge__scale-max,
+  .gauge__scale-base {
     position: absolute;
     inset-block-start: 0;
   }
 
-  .delta__scale-min {
-    inset-inline-start: 0;
-  }
+  .gauge__scale-min { inset-inline-start: 0; }
+  .gauge__scale-max { inset-inline-end: 0; }
 
-  .delta__scale-max {
-    inset-inline-end: 0;
-  }
-
-  /* Under its own hairline, at the base's own percentage. */
-  .delta__scale-base {
-    position: absolute;
-    inset-block-start: 0;
+  .gauge__scale-base {
     inset-inline-start: calc(var(--nv-base) * 1%);
     translate: -50% 0;
     color: var(--nova-ink);
     font-weight: 600;
   }
 
+  @keyframes gaugeBreathe {
+    0%, 100% { opacity: 0.42; }
+    50% { opacity: 0.68; }
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .gauge:hover .gauge__bloom { animation-duration: 2.6s; }
+  }
+
   @media (prefers-reduced-motion: reduce) {
-    .delta {
+    .gauge {
       transition-duration: 1ms, 1ms;
     }
   }
