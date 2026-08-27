@@ -28,6 +28,11 @@ import { readFileSync, readdirSync } from "node:fs";
 const files = [
   ...readdirSync("src").filter((f) => f.endsWith(".css")).map((f) => `src/${f}`),
   ...readdirSync("src/madar").filter((f) => f.endsWith(".css")).map((f) => `src/madar/${f}`),
+  /* `src/components/nova/` holds components written here rather than imported, so
+     unlike `src/components/ui/` they carry no exemption from this repo's own law.
+     Their CSS lives in styled-components templates inside .tsx, which this scan
+     never read before, so the directory is named explicitly. */
+  ...readdirSync("src/components/nova").filter((f) => f.endsWith(".tsx")).map((f) => `src/components/nova/${f}`),
 ];
 
 const MOVE = /(?:^|[;{\s])(?:transform|translate|scale|rotate)\s*:\s*(?!none)/;

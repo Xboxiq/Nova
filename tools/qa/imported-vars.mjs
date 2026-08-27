@@ -24,7 +24,9 @@
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 
-const IMPORTED = "src/components/ui";
+/* `ui/` is the imported reference code; `nova/` is written here. Both read the
+   host's names, so both can capture one. */
+const SCANNED = ["src/components/ui", "src/components/nova"];
 /* Where this project declares its own custom properties. A name declared in any
    of these inherits into every imported component. */
 const HOST = [
@@ -58,13 +60,14 @@ for (const file of HOST) {
 }
 
 const files = [];
-(function walk(dir) {
+const walk = (dir) => {
   for (const name of readdirSync(dir)) {
     const p = join(dir, name);
     if (statSync(p).isDirectory()) walk(p);
     else if (/\.tsx?$/.test(name)) files.push(p);
   }
-})(IMPORTED);
+};
+for (const dir of SCANNED) walk(dir);
 
 const failures = [];
 for (const file of files) {
@@ -100,7 +103,7 @@ for (const file of files) {
 }
 
 console.log(`HOST_GLOBAL_PROPERTIES=${hostGlobals.size}`);
-console.log(`IMPORTED_FILES_SCANNED=${files.length}`);
+console.log(`COMPONENT_FILES_SCANNED=${files.length}`);
 for (const f of failures) console.log(`  FAIL ${f}`);
 console.log(`IMPORTED_VARS=${failures.length ? "FAIL" : "ok"}`);
 process.exit(failures.length ? 1 : 0);

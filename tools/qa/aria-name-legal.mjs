@@ -30,13 +30,18 @@ import { join } from "node:path";
 const GENERIC = ["div", "span", "p", "b", "i", "em", "strong", "small", "pre", "code", "label"];
 
 const files = [];
-(function walk(dir) {
+const walk = (dir) => {
   for (const name of readdirSync(dir)) {
     const p = join(dir, name);
     if (statSync(p).isDirectory()) walk(p);
     else if (/\.tsx$/.test(name)) files.push(p);
   }
-})("src/components/ui");
+};
+/* `ui/` is the imported reference code; `nova/` is written here and carries no
+   exemption from this repo's law. Both are scanned -- this rule is about what a
+   screen reader is handed, and that is not negotiable for either. */
+walk("src/components/ui");
+walk("src/components/nova");
 
 const failures = [];
 for (const file of files) {
