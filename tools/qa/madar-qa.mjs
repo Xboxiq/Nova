@@ -137,6 +137,29 @@ const REFERENCE_GREYS = new Set([
      0.55, 4.63; #0008 is 4.37 and still short). REFERENCE-CONTRAST.md lists it. */
   "#8c9194", // "Hover to reveal address" on #eaf1f7 — 2.79
 
+  /* Upload 52's hint, and the first pair in this log that has no single ratio.
+     `.hint-pop` is `color: #888` running `pulseHint`, which cycles `opacity`
+     between 0.8 at its 0% and 100% frames and 1 at its 50% frame. On the ground
+     this showcase gives it, that is a pair whose contrast MOVES:
+
+       0% / 100% frame   opacity 0.8   composites #6e6e6f   3.92
+       50% frame         opacity 1     composites #888888   5.64
+
+     So it passed or failed depending on which frame axe happened to sample -- one
+     node in one harness run out of two, and one probe pass out of five. The gate is
+     now frozen on the 0% frame (see the CASES loop), which makes the verdict
+     deterministic and picks the worse of the two ends.
+
+     The ground is mine again, so the folder-card question was asked again and
+     computed again: `#888` at 0.8 opacity over PURE BLACK -- the ground that
+     maximises this pair, since opacity always drags the ink toward whatever is
+     behind it -- reaches only 4.06. No ground clears AA, so there is nothing of
+     mine to delete and the value is the author's.
+
+     Named, printed, ceilinged. The minimal remedy for the owner: #888 -> #999
+     measures 4.79 at the low end and 7.02 at the high one. */
+  "#6e6e6f", // "Tap to spin" on #08080c — 3.92 at the 0% frame, 5.64 at the 50%
+
   /* The imported agent pipeline's own foregrounds. The owner ordered that file
      implemented as its own requirements state, and these alphas ARE the design:
      white at 18%, 20%, 30% and 42% on #090909, plus the blue at 55%. Measured on
@@ -304,6 +327,24 @@ const CASES = [
 for (const c of CASES) {
   const { ctx, page } = await open(c.w, c.h);
   await setTheme(page, c.theme, c.dir);
+
+  /* Freeze every animation on its 0% frame before anything is measured.
+
+     Without this the axe pass samples whatever frame each animation happens to be
+     on when it runs, and a component that ANIMATES a colour or an opacity then
+     passes or fails at random. That is exactly what happened: the wheel selector's
+     hint pulses `opacity` between 0.8 and 1 over 2s, so the same node measured 3.93
+     at one end and 5.64 at the other, and one axe node appeared in one run out of
+     two and one probe pass out of five. A gate whose verdict depends on animation
+     phase is a gate whose green means nothing.
+
+     `animation-delay: 0s` with `animation-play-state: paused` holds the 0% frame --
+     the same frame every run, and the one the author declared as the starting
+     state. Transitions are untouched, so the tab switching below still works. */
+  await page.addStyleTag({
+    content: "*, *::before, *::after { animation-delay: 0s !important; animation-play-state: paused !important }",
+  });
+
   await page.locator("#madar").scrollIntoViewIfNeeded();
   await page.waitForTimeout(800);
 
