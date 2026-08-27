@@ -22,6 +22,7 @@ import "./tailwind.css";
 /* Override sheet, imported last so it wins: see the header of the file. Deleting
    this one line reverts every change it makes. */
 import "./gold-showcase.css";
+import "./gold-gallery.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

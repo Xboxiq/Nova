@@ -183,8 +183,8 @@
 .signal-summary small { color: var(--nova-ink-tertiary); font-size: var(--nova-text-label-sm); }
 .signal-summary strong { font-size: clamp(2.4rem, 5vw, 4rem); line-height: 1; letter-spacing: -.055em; }
 .signal-summary strong span { margin-inline-start: 4px; color: var(--nova-ink-tertiary); font-size: var(--nova-text-title-md); letter-spacing: normal; }
-.signal-summary > span { padding: 7px 10px; color: var(--nova-success); background: var(--nova-success-soft); border-radius: var(--nova-radius-control); font-size: 11px; }
-.signal-summary > span.is-down { color: var(--nova-danger); background: var(--nova-danger-soft); }
+.signal-summary > span { padding: 7px 10px; color: var(--nova-success-ink); background: var(--nova-success-soft); border-radius: var(--nova-radius-control); font-size: 11px; }
+.signal-summary > span.is-down { color: var(--nova-danger-ink); background: var(--nova-danger-soft); }
 .signal-chart { position: relative; padding: var(--nova-space-4) var(--nova-space-3) var(--nova-space-2); background: color-mix(in srgb, var(--nova-surface-quiet) 66%, transparent); border: 1px solid var(--nova-border); border-radius: var(--nova-radius-card); }
 .signal-chart svg { width: 100%; min-height: 210px; overflow: visible; }
 .signal-cursor { stroke: color-mix(in srgb, var(--nova-action) 42%, transparent); stroke-width: 1; stroke-dasharray: 4 5; }

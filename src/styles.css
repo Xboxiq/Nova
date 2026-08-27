@@ -1580,7 +1580,11 @@ button:disabled {
 
 .component-number {
   grid-row: span 2;
-  color: var(--nova-action);
+  /* `--nova-action` is the FILL of the action family, not its ink. As 11px bold
+     text on the card it measured 2.33 in mint against 4.5 -- 72 nodes, one per
+     component card, and the axe pass that would have seen it only ever looked
+     inside `#madar`. `--nova-action-ink` is the ink the family publishes. */
+  color: var(--nova-action-ink);
   font-size: var(--nova-text-label-sm);
   font-weight: var(--nova-weight-bold);
   font-variant-numeric: tabular-nums;

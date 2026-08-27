@@ -49,7 +49,10 @@
 }
 
 .demo-primary {
-  color: #fff;
+  /* `#fff` did not flip with the pack: on mint's action-pressed it measured 3.39
+     and on night's 2.02, against 4.5. `--nova-on-action` is the token published
+     for exactly this job and every pack sets it. */
+  color: var(--nova-on-action);
   background: var(--nova-action-pressed);
   border: 1px solid var(--nova-action-pressed);
 }
@@ -58,7 +61,7 @@
   background: var(--nova-action);
 }
 
-:root[data-theme="dark"] .demo-primary:hover:not(:disabled) {
+:root:is([data-theme="dark"], [data-theme="night"]) .demo-primary:hover:not(:disabled) {
   background: #4842d2;
 }
 
@@ -436,7 +439,9 @@
 .week-strip button small { font-size: var(--nova-text-label-md); }
 .week-strip button strong { font-size: var(--nova-text-body-sm); }
 .week-strip button:hover { background: var(--nova-surface); }
-.week-strip button.active { color: #fff; background: var(--nova-ink); border-color: var(--nova-ink); }
+/* `#fff` assumed `--nova-ink` is always dark. In the night pack the ink is
+   `#edf0f7` and white on it measured 1.14. The ink's opposite has a name. */
+.week-strip button.active { color: var(--nova-canvas); background: var(--nova-ink); border-color: var(--nova-ink); }
 
 .event-card {
   display: grid;
@@ -469,8 +474,10 @@
   gap: 14px;
 }
 
+/* `--nova-action` is a FILL colour. As 11px text on the frame it measured 2.11
+   in mint against a 3:1 threshold. `--nova-action-ink` is the ink of the family. */
 .form-step-head > span {
-  color: var(--nova-action);
+  color: var(--nova-action-ink);
   font-size: 2.625rem;
   font-weight: var(--nova-weight-bold);
   line-height: 1;
@@ -913,6 +920,11 @@
 .demo-listbox button div { display: grid; gap: 3px; }
 .demo-listbox button strong { font-size: var(--nova-text-label-md); }
 .demo-listbox button small { color: var(--nova-ink-tertiary); font-size: var(--nova-text-label-md); }
+/* `--nova-ink-tertiary` is calibrated against the surface, and a selected row
+   swaps the surface for `--nova-action-soft`: on mint that pair measured 4.34
+   against 4.5. The secondary ink is the one that survives the tint. */
+.demo-listbox > button.selected small,
+.liquid-options button.selected small { color: var(--nova-ink-secondary); }
 .radio-dot { width: 16px; height: 16px; border: 1px solid var(--nova-border-strong); border-radius: 50%; }
 .selected .radio-dot { border: 5px solid var(--nova-action); }
 
@@ -960,7 +972,7 @@
   background: #f1f2f5;
 }
 
-:root[data-theme="dark"] .demo-island { background: #0e0f13; }
+:root:is([data-theme="dark"], [data-theme="night"]) .demo-island { background: #0e0f13; }
 
 .dynamic-island {
   position: relative;
@@ -1047,7 +1059,7 @@
 }
 
 .map-field { position: relative; width: min(100%, 360px); height: 175px; overflow: hidden; background-color: #e8ebee; background-image: linear-gradient(28deg, transparent 46%, #fff 47%, #fff 52%, transparent 53%), linear-gradient(-24deg, transparent 43%, #d9dde1 44%, #d9dde1 47%, transparent 48%); background-size: 110px 110px, 90px 90px; border: 1px solid var(--nova-border); border-radius: 6px; }
-:root[data-theme="dark"] .map-field { background-color: #24262d; background-image: linear-gradient(28deg, transparent 46%, #353840 47%, #353840 52%, transparent 53%), linear-gradient(-24deg, transparent 43%, #181a20 44%, #181a20 47%, transparent 48%); }
+:root:is([data-theme="dark"], [data-theme="night"]) .map-field { background-color: #24262d; background-image: linear-gradient(28deg, transparent 46%, #353840 47%, #353840 52%, transparent 53%), linear-gradient(-24deg, transparent 43%, #181a20 44%, #181a20 47%, transparent 48%); }
 .map-field > i { position: absolute; width: 6px; height: 6px; background: #b5bac0; border-radius: 50%; }
 .map-field > i:nth-child(1) { inset: 25% 18%; }
 .map-field > i:nth-child(2) { inset: 60% 72%; }
@@ -1158,7 +1170,7 @@
 
 .demo-skills > header { display: flex; align-items: end; justify-content: space-between; margin-block-end: 22px; }
 .demo-skills > header div { display: grid; gap: 5px; }
-.demo-skills > header strong { color: var(--nova-action); font-size: 1.875rem; letter-spacing: -.05em; }
+.demo-skills > header strong { color: var(--nova-action-ink); font-size: 1.875rem; letter-spacing: -.05em; }
 .skills-list { display: grid; gap: 7px; }
 .skills-list button { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 11px; min-height: 68px; padding: 10px; text-align: start; background: var(--nova-surface); border: 1px solid var(--nova-border); border-radius: 6px; transition: border-color var(--nova-motion-fast), transform var(--nova-motion-fast); }
 .skills-list button:hover { transform: translateX(-2px); }
@@ -1271,7 +1283,7 @@
   background: #e7e9ee;
 }
 
-:root[data-theme="dark"] .demo-foil { background: #0f1015; }
+:root:is([data-theme="dark"], [data-theme="night"]) .demo-foil { background: #0f1015; }
 
 .foil-card { position: relative; display: flex; flex-direction: column; justify-content: space-between; width: min(100%, 340px); aspect-ratio: 1.6; padding: 22px; overflow: hidden; color: #1d1d25; text-align: start; border: 1px solid rgb(255 255 255 / 65%); border-radius: 6px; box-shadow: inset 0 1px rgb(255 255 255 / 80%); transition: transform var(--nova-motion-base) ease; }
 .foil-card:hover { transform: perspective(700px) rotateX(2deg) rotateY(-3deg); }
@@ -1387,7 +1399,7 @@
 .calendar-grid button,
 .calendar-grid > span { display: grid; place-items: center; min-width: 0; height: 39px; padding: 0; background: transparent; border: 0; border-radius: 6px; font-size: var(--nova-text-label-md); }
 .calendar-grid button:hover { background: var(--nova-surface); }
-.calendar-grid button.selected { color: #fff; background: var(--nova-action-pressed); }
+.calendar-grid button.selected { color: var(--nova-on-action); background: var(--nova-action-pressed); }
 .calendar-grid button.event { position: relative; }
 .calendar-grid button.event::after { content: ""; position: absolute; inset-block-end: 4px; width: 4px; height: 4px; background: var(--nova-action); border-radius: 50%; }
 .demo-apple-calendar > footer { display: flex; justify-content: space-between; gap: 12px; margin-block-start: auto; padding-block-start: 14px; border-block-start: 1px solid var(--nova-border); color: var(--nova-ink-tertiary); font-size: var(--nova-text-label-md); }
@@ -1637,7 +1649,7 @@
   background: #eceef2;
 }
 
-:root[data-theme="dark"] .demo-profile { background: #0f1014; }
+:root:is([data-theme="dark"], [data-theme="night"]) .demo-profile { background: #0f1014; }
 
 .profile-card { width: min(100%, 360px); overflow: hidden; color: #15161b; background: #fff; border: 1px solid rgb(17 18 23 / 7%); border-radius: 6px; transition: transform var(--nova-motion-base); }
 .profile-card:hover { border-color: rgb(17 18 23 / 16%); }
@@ -1665,14 +1677,14 @@
   background: #fff;
 }
 
-:root[data-theme="dark"] .demo-dashboard { color: var(--nova-ink); background: var(--nova-surface); }
+:root:is([data-theme="dark"], [data-theme="night"]) .demo-dashboard { color: var(--nova-ink); background: var(--nova-surface); }
 .demo-dashboard > header { display: flex; justify-content: space-between; gap: 16px; }
 .demo-dashboard > header div { display: grid; gap: 5px; }
 .demo-dashboard > header h4 { font-size: 1.75rem; }
 .demo-dashboard > header select { width: auto; min-height: 38px; padding-inline: 10px; color: inherit; background: color-mix(in srgb, var(--nova-surface-quiet) 88%, transparent); border: 1px solid var(--nova-border); border-radius: 6px; font-size: var(--nova-text-label-md); }
 .dashboard-change { display: flex; align-items: center; gap: 8px; margin-block-start: 8px; }
 .dashboard-change span { padding: 4px 6px; color: #157553; background: #dff5eb; border-radius: 6px; font-size: var(--nova-text-label-md); font-weight: var(--nova-weight-bold); }
-:root[data-theme="dark"] .dashboard-change span { color: var(--nova-success); background: var(--nova-success-soft); }
+:root:is([data-theme="dark"], [data-theme="night"]) .dashboard-change span { color: var(--nova-success-ink); background: var(--nova-success-soft); }
 .dashboard-change small { color: var(--nova-ink-tertiary); font-size: var(--nova-text-label-md); }
 .dashboard-chart { display: flex; align-items: end; gap: 7px; height: 170px; margin-block: 20px 14px; padding-block-start: 18px; border-block-end: 1px solid var(--nova-border); background-image: linear-gradient(var(--nova-border) 1px, transparent 1px); background-size: 100% 33.333%; }
 .dashboard-chart > i { position: relative; flex: 1; min-height: 12px; overflow: hidden; background: color-mix(in srgb, var(--nova-action) 24%, var(--nova-surface)); border-radius: 6px 6px 1px 1px; animation: bar-rise var(--nova-motion-slow) ease both; }
@@ -1851,7 +1863,7 @@
 }
 
 .glass-scene { position: relative; display: grid; place-items: center; width: 100%; min-height: 390px; overflow: hidden; background: linear-gradient(145deg, #e7f4f7 0%, #f6faf9 48%, #f7ede6 100%); }
-:root[data-theme="dark"] .glass-scene { background: linear-gradient(145deg, #0d2029, #122e39 52%, #18323a); }
+:root:is([data-theme="dark"], [data-theme="night"]) .glass-scene { background: linear-gradient(145deg, #0d2029, #122e39 52%, #18323a); }
 .glass-scene > i { position: absolute; border-radius: 42%; filter: blur(12px) saturate(112%); }
 .glass-scene > i:nth-child(1) { inset-inline-start: 8%; inset-block-start: 12%; width: 170px; height: 170px; background: #68c9f3; transform: rotate(18deg); }
 .glass-scene > i:nth-child(2) { inset-inline-end: 6%; inset-block-end: 4%; width: 200px; height: 190px; background: #67dcbd; transform: rotate(-20deg); }
@@ -1863,8 +1875,8 @@
 .glass-scene > button.pressed { transform: scale(.96); }
 .glass-scene > button > svg:first-child { color: #0872df; }
 .glass-scene > button span { font-weight: var(--nova-weight-bold); }
-:root[data-theme="dark"] .glass-scene > button { color: #eaf6f8; background: linear-gradient(150deg, rgb(55 91 103 / 68%), rgb(19 53 66 / 52%)); border-color: rgb(222 249 255 / 20%); box-shadow: inset 0 1px rgb(235 252 255 / 22%), inset 0 -1px rgb(0 8 12 / 32%); }
-:root[data-theme="dark"] .glass-scene > button > svg:first-child { color: #80c5ff; }
+:root:is([data-theme="dark"], [data-theme="night"]) .glass-scene > button { color: #eaf6f8; background: linear-gradient(150deg, rgb(55 91 103 / 68%), rgb(19 53 66 / 52%)); border-color: rgb(222 249 255 / 20%); box-shadow: inset 0 1px rgb(235 252 255 / 22%), inset 0 -1px rgb(0 8 12 / 32%); }
+:root:is([data-theme="dark"], [data-theme="night"]) .glass-scene > button > svg:first-child { color: #80c5ff; }
 
 .demo-liquid-glass {
   position: relative;
@@ -1875,7 +1887,7 @@
 }
 
 .liquid-wallpaper { position: absolute; inset: 0; overflow: hidden; background: linear-gradient(145deg, #dceef2 0%, #f6faf8 44%, #f7e9df 100%); }
-:root[data-theme="dark"] .liquid-wallpaper { background: linear-gradient(145deg, #0b1b22 0%, #11303a 52%, #1a353c 100%); }
+:root:is([data-theme="dark"], [data-theme="night"]) .liquid-wallpaper { background: linear-gradient(145deg, #0b1b22 0%, #11303a 52%, #1a353c 100%); }
 .liquid-wallpaper span { position: absolute; border-radius: 42%; filter: blur(18px) saturate(118%); }
 .liquid-wallpaper span:nth-child(1) { inset: -24% auto auto -12%; width: 74%; height: 78%; background: #58bdf0; transform: rotate(24deg); }
 .liquid-wallpaper span:nth-child(2) { inset: auto -18% -30% auto; width: 76%; height: 82%; background: #53d4b2; transform: rotate(-20deg); }
@@ -1888,9 +1900,9 @@
 .liquid-dock button:hover { background: rgb(255 255 255 / 52%); border-color: rgb(255 255 255 / 72%); }
 .liquid-dock button:active { transform: scale(.94); }
 .liquid-dock button.active { color: #005cbf; background: linear-gradient(150deg, rgb(255 255 255 / 78%), rgb(226 244 251 / 46%)); border-color: rgb(255 255 255 / 72%); box-shadow: inset 0 1px rgb(255 255 255 / 96%), inset 0 -1px rgb(29 97 118 / 10%); }
-:root[data-theme="dark"] .liquid-dock { background: linear-gradient(150deg, rgb(37 72 84 / 66%), rgb(13 42 53 / 54%)); border-color: rgb(210 245 255 / 22%); }
-:root[data-theme="dark"] .liquid-dock button { color: #b8cbd0; }
-:root[data-theme="dark"] .liquid-dock button.active { color: #a8d5ff; background: linear-gradient(150deg, rgb(72 113 127 / 52%), rgb(25 64 79 / 48%)); border-color: rgb(220 248 255 / 20%); }
+:root:is([data-theme="dark"], [data-theme="night"]) .liquid-dock { background: linear-gradient(150deg, rgb(37 72 84 / 66%), rgb(13 42 53 / 54%)); border-color: rgb(210 245 255 / 22%); }
+:root:is([data-theme="dark"], [data-theme="night"]) .liquid-dock button { color: #b8cbd0; }
+:root:is([data-theme="dark"], [data-theme="night"]) .liquid-dock button.active { color: #a8d5ff; background: linear-gradient(150deg, rgb(72 113 127 / 52%), rgb(25 64 79 / 48%)); border-color: rgb(220 248 255 / 20%); }
 .liquid-dock button svg { width: 23px; height: 23px; }
 .liquid-dock button span { position: absolute; inset-block-end: -22px; padding: 3px 6px; color: #34353c; background: rgb(255 255 255 / 70%); border-radius: 6px; opacity: 0; font-size: var(--nova-text-label-md); transition: opacity var(--nova-motion-fast); }
 .liquid-dock button:hover span { opacity: 1; }
