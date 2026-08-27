@@ -573,6 +573,34 @@
   --depth-hairline: 0 1px 3px rgba(0, 0, 0, 0.04);
   --depth-pin: 0 1px 3px rgba(0, 0, 0, 0.12);
   --depth-sphere: 0 3px 10px rgba(0, 0, 0, 0.28);
+
+  /* ── instruments. Depth that is also a reading. ──────────────────────────
+     `--depth-instrument-bloom` is the one worth naming twice: its spread is
+     `var(--nv-value)`, the scalar the nova instruments already drive everything
+     from, so the glow does not decorate the dial — it grows with what the dial
+     says, and it interpolates with the same single transition. A depth token can
+     do that because custom properties are substituted at the use site, so the
+     token resolves per element against whatever that element inherits.
+
+     They are named rather than written inline so `depth-policy` stays a policy:
+     richness was the thing missing from the first two instruments, and the answer
+     is more names, not an exemption. */
+  --depth-instrument-bezel:
+    0 18px 34px rgba(10, 14, 22, 0.22),
+    0 4px 10px rgba(10, 14, 22, 0.14),
+    inset 0 1px 0 var(--bevel-hair),
+    inset 0 -10px 22px rgba(10, 14, 22, 0.10),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  --depth-instrument-bloom:
+    0 0 calc(4px + var(--nv-value, 0) * 0.30px)
+      calc(var(--nv-value, 0) * 0.06px)
+      color-mix(in oklab, var(--nova-action) 34%, transparent);
+  --depth-instrument-hub:
+    0 2px 5px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 var(--bevel-hair);
+  --depth-instrument-well:
+    inset 0 2px 6px rgba(10, 14, 22, 0.24),
+    inset 0 -1px 0 var(--bevel-hair);
   --depth-avatar: 0 2px 8px rgba(16, 16, 16, 0.18);
   --depth-round: 0 2px 6px rgba(16, 16, 16, 0.05);
   --depth-orb: 0 0 42px rgba(120, 230, 140, 0.5);
