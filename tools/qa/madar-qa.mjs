@@ -340,9 +340,21 @@ for (const c of CASES) {
 
      `animation-delay: 0s` with `animation-play-state: paused` holds the 0% frame --
      the same frame every run, and the one the author declared as the starting
-     state. Transitions are untouched, so the tab switching below still works. */
+     state.
+
+     `transition: none` is the other half of the same problem, and it was added
+     after the first half proved insufficient. Freezing animations left the counter
+     bouncing 191/192 and produced one contrast node in one pack that three probe
+     passes could not reproduce -- because a transitioned colour is mid-flight for as
+     long as its duration says, and the imported components carry transitions of 900
+     to 1200ms against a 700ms settle. With transitions off, every element is AT its
+     target value, which is the state worth measuring and the only one that is the
+     same every run. Nothing in the section switching depends on a transition
+     completing; the tabs change a class, not an animation. */
   await page.addStyleTag({
-    content: "*, *::before, *::after { animation-delay: 0s !important; animation-play-state: paused !important }",
+    content:
+      "*, *::before, *::after { animation-delay: 0s !important; " +
+      "animation-play-state: paused !important; transition: none !important }",
   });
 
   await page.locator("#madar").scrollIntoViewIfNeeded();
