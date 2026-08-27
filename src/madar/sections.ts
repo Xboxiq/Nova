@@ -70,6 +70,17 @@ const load = (name: string, importer: () => Promise<Record<string, ComponentType
 
 export const madarSections: MadarSection[] = [
   {
+    id: "madar-nova-instruments",
+    title: "Nova Instruments",
+    titleAr: "آلاتُ نوفا",
+    family: "motion",
+    description: "The first components written here rather than imported. One registered scalar drives every visible fact, so a single interpolation moves an arc's dash, a needle's angle and eleven tick opacities on one timeline. The dash IS the value: pathLength=100. The delta bar draws neither reading but the span between them, ordered by min()/max() in CSS, and its sign is a color-mix, not a class.",
+    descriptionAr: "أوّلُ ما كُتِبَ هنا لا استُورِد. خاصّيّةٌ مُسجَّلةٌ واحدةٌ تقودُ كلَّ ما يُرى، فاستبانةٌ واحدةٌ تُحرِّكُ دَشَّ قوسٍ وزاويةَ مِؤشِّرٍ وشفافيّةَ إحدى عشرةَ عَلامةٍ على خطٍّ زمنيٍّ واحد. والدَّشُّ هو القيمةُ نفسُها بـpathLength=100. وشريطُ الفَرقِ لا يرسمُ قراءةً بل المسافةَ بينَ قراءتَين، مُرتَّبةً بـmin() وmax() في الـCSS، وإشارتُه مَزجُ لونٍ لا صنف.",
+    tags: ["instrument", "readout", "@property", "pathLength", "آلة", "قراءة", "حركة"],
+    component: load("NovaInstruments", () => import("./showcase/sections/NovaInstruments")),
+    added: true,
+  },
+  {
     id: "madar-directions",
     title: "Design Directions",
     titleAr: "اتجاهات التصميم",
