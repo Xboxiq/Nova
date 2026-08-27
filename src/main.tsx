@@ -24,6 +24,7 @@ import "./tailwind.css";
 import "./gold-showcase.css";
 import "./gold-gallery.css";
 import "./gold-lab.css";
+import "./gold-studio.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

@@ -1,0 +1,88 @@
+/* ============================================================================
+   gold-studio.css — the spacing ruler was off by up to 5.6x
+
+   Fifth operation under the `visual-redesign` protocol. New file, imported after
+   the originals, zero JSX changes.
+
+   THE MEASUREMENT. `.spacing-ruler` exists to show one thing: the spacing scale,
+   8 / 16 / 24 / 32 / 48 / 64 / 112. Its marks are `width: min(var(--measure),
+   100%)` inside an `<li>` with `min-width: 20px`, laid out in a flex row with
+   `justify-content: space-between`. So `100%` is the li's own content width, and
+   every mark from 24 up collapses to the same 20px:
+
+     value     8    16    24    32    48    64   112
+     rendered  8    16    20    20    20    20    20      <- measured, four widths
+
+     identical at 1440, 1120, 900 and 700 — this is the default state, not a
+     narrow-viewport edge case
+
+   A ruler that draws 24 and 112 the same length. The only truthful encoding left
+   was the height, `calc(8px + var(--measure) * .18)`, which compresses a 14x
+   range into 3x — 9.4px to 28.2px — and is the axis the eye reads least. Its own
+   `max-height: 30px` cap never fires, since the tallest mark computes to 28.2.
+   VISUAL-LAW SS15: a measured quantity is drawn measured.
+
+   THE FIX IS AN AXIS SWAP, not a scale factor. The row could never be honest:
+   seven marks in a row must each fit their own cell, the label under the 8px mark
+   is wider than the mark, and that is exactly why the 20px floor was put there.
+   Turned on its side the constraint disappears — a column of seven rows, each one
+   label plus a bar of its own true length. 112px is then 14 times the 8px bar,
+   which is the fact the specimen is for.
+   ============================================================================ */
+
+.spacing-ruler ol {
+  display: grid;
+  gap: 7px;
+  align-items: center;
+}
+
+/* The `<i>` comes BEFORE the number in the DOM (`<i />{value}`), and a bare text
+   run inside a grid becomes an anonymous grid item that no selector can reach —
+   so the mark is given `order: 2` and the label, at the default 0, is placed
+   first. No JSX moves. */
+.spacing-ruler li {
+  grid-template-columns: 3.5ch minmax(0, 1fr);
+  justify-items: start;
+  gap: var(--nova-space-3);
+  min-width: 0;
+  font-variant-numeric: tabular-nums;
+  text-align: end;
+}
+
+.spacing-ruler li i {
+  order: 2;
+  /* ONE encoding, and it is the true one. The height stops carrying the value —
+     two encodings that disagree are worse than one that does not. */
+  inline-size: var(--measure);
+  block-size: 9px;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  max-block-size: none;
+  border-radius: 0 3px 3px 0;
+  /* the mark is a measurement, so it is opaque: `.78` was dimming the only
+     truthful thing on the row */
+  opacity: 1;
+}
+
+[dir="ltr"] .spacing-ruler li i {
+  border-radius: 3px 0 0 3px;
+}
+
+/* ponytail: `max-inline-size: 100%` is the one clamp left. Below roughly 150px of
+   column width the 112 bar would touch it and start under-reporting again; the
+   overflow gate runs this page at 320 CSS px, where the column measures well
+   above that. If the ruler is ever put in a narrower host, the scale has to
+   become relative — `inline-size: calc(var(--measure) / 112 * 100%)` — which
+   keeps the ratios and loses the absolute reading. */
+
+/* ── The narrow-width rule the axis swap made unnecessary ───────────────────
+   `pattern-studio.css:305` hides `li:nth-child(2n)` under 620px, and it was the
+   right call for a ROW: seven marks and seven labels could not fit, so half the
+   scale was dropped. A column of seven rows fits any width, and showing 8, 24, 48
+   and 112 as if that were the scale is a smaller version of the same lie the
+   widths were telling. `display: grid` restores the base rule's own value. */
+@media (max-width: 620px) {
+  .spacing-ruler li:nth-child(2n) {
+    display: grid;
+  }
+}
