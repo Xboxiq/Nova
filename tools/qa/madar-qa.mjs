@@ -18,7 +18,7 @@ import { execSync } from "node:child_process";
 const PORT = 4319;
 const URL = `http://localhost:${PORT}/`;
 const THEMES = ["light", "dark", "mint", "coral", "sky", "iris", "night"];
-const PACK_SECTIONS = ["madar-color-tokens", "madar-admin-access", "madar-consequence", "madar-dispatch", "madar-photographed", "madar-boards", "madar-glasswork", "madar-projectwork", "madar-directions", "madar-matrix", "madar-imported"];
+const PACK_SECTIONS = ["madar-color-tokens", "madar-admin-access", "madar-consequence", "madar-dispatch", "madar-photographed", "madar-boards", "madar-glasswork", "madar-projectwork", "madar-directions", "madar-matrix", "madar-imported", "madar-imported-2", "madar-imported-3"];
 const AA = 4.5;
 /* APCA's floor for body text. `APCA_THIN_CEILING` is what the token pairs measure
    today; it may fall and must never rise. */
@@ -100,6 +100,65 @@ const axeViolations = [];
 const REFERENCE_GREYS = new Set([
   "#a7a7ad", "#8d948e", "#9aa09b", "#a4aaa5", "#9a9a97",
   "#4c7a34", // the "Available" pill: 4.43, seven hundredths short of AA
+
+  /* A second "Available" pill, from upload 83, and BOTH of its colours are the
+     author's: `color: #178d00` on `background-color: #e1f9dc`, declared in the
+     same rule. Measured on the page: 3.87 at 16px. Unlike the folder card --
+     where the failing ground was a cream I had chosen and the fix was to delete
+     my own decoration -- there is nothing of mine in this pair to remove. So it
+     is carried on the same named terms as the line above: the number is printed,
+     any other failing pair still fails, and raising the green is a design change
+     and therefore the owner's. REFERENCE-CONTRAST.md lists it. */
+  "#178d00", // "Available for new project" on #e1f9dc — 3.87
+
+  /* Upload 97's own sub-caption: `rgb(128, 128, 128)` on the card's own white,
+     measured 3.94 at 11.2px. Both values are declared in the upload, in the same
+     file, and mid-grey on white is the plainest case this allowance exists for.
+     Named on the same terms: printed, ceilinged, and darkening it is the owner's
+     call. Computed, not guessed: the minimal step is #767676 at 4.54 -- the
+     first draft of this line said #6f6f6f "reaches 4.61" and it is 5.03, a
+     deeper darkening than needed. */
+  "#808080", // "Type your email to recover" on #ffffff — 3.94
+
+  /* Upload 29/79's two hint lines: `color: #0006` -- rgba(0,0,0,0.4) -- declared
+     in the upload, composited on the ground this showcase gives it to
+     rgb(140,145,148) = #8c9194, measured 2.79 at 12px.
+
+     The ground here is mine (#eaf1f7, chosen because the button's four corner
+     points are #ffffff and vanish on white), so the question the folder card
+     answered had to be asked again: is the failing half mine? Computed, no. An
+     alpha of 0.4 over PURE WHITE -- the lightest ground that exists, and therefore
+     the ceiling for this declaration -- composites to #999999 and measures 2.85.
+     No ground reaches AA for this alpha, so there is no decoration of mine to
+     delete; the value is the defect and the value is the author's.
+
+     Named, printed, ceilinged, as above. The minimal remedy for the owner:
+     #0006 -> #0009 measures 5.53 on this ground (the exact threshold is alpha
+     0.55, 4.63; #0008 is 4.37 and still short). REFERENCE-CONTRAST.md lists it. */
+  "#8c9194", // "Hover to reveal address" on #eaf1f7 — 2.79
+
+  /* Upload 52's hint, and the first pair in this log that has no single ratio.
+     `.hint-pop` is `color: #888` running `pulseHint`, which cycles `opacity`
+     between 0.8 at its 0% and 100% frames and 1 at its 50% frame. On the ground
+     this showcase gives it, that is a pair whose contrast MOVES:
+
+       0% / 100% frame   opacity 0.8   composites #6e6e6f   3.92
+       50% frame         opacity 1     composites #888888   5.64
+
+     So it passed or failed depending on which frame axe happened to sample -- one
+     node in one harness run out of two, and one probe pass out of five. The gate is
+     now frozen on the 0% frame (see the CASES loop), which makes the verdict
+     deterministic and picks the worse of the two ends.
+
+     The ground is mine again, so the folder-card question was asked again and
+     computed again: `#888` at 0.8 opacity over PURE BLACK -- the ground that
+     maximises this pair, since opacity always drags the ink toward whatever is
+     behind it -- reaches only 4.06. No ground clears AA, so there is nothing of
+     mine to delete and the value is the author's.
+
+     Named, printed, ceilinged. The minimal remedy for the owner: #888 -> #999
+     measures 4.79 at the low end and 7.02 at the high one. */
+  "#6e6e6f", // "Tap to spin" on #08080c — 3.92 at the 0% frame, 5.64 at the 50%
 
   /* The imported agent pipeline's own foregrounds. The owner ordered that file
      implemented as its own requirements state, and these alphas ARE the design:
@@ -268,6 +327,24 @@ const CASES = [
 for (const c of CASES) {
   const { ctx, page } = await open(c.w, c.h);
   await setTheme(page, c.theme, c.dir);
+
+  /* Freeze every animation on its 0% frame before anything is measured.
+
+     Without this the axe pass samples whatever frame each animation happens to be
+     on when it runs, and a component that ANIMATES a colour or an opacity then
+     passes or fails at random. That is exactly what happened: the wheel selector's
+     hint pulses `opacity` between 0.8 and 1 over 2s, so the same node measured 3.93
+     at one end and 5.64 at the other, and one axe node appeared in one run out of
+     two and one probe pass out of five. A gate whose verdict depends on animation
+     phase is a gate whose green means nothing.
+
+     `animation-delay: 0s` with `animation-play-state: paused` holds the 0% frame --
+     the same frame every run, and the one the author declared as the starting
+     state. Transitions are untouched, so the tab switching below still works. */
+  await page.addStyleTag({
+    content: "*, *::before, *::after { animation-delay: 0s !important; animation-play-state: paused !important }",
+  });
+
   await page.locator("#madar").scrollIntoViewIfNeeded();
   await page.waitForTimeout(800);
 

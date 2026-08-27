@@ -81,6 +81,17 @@ export const madarSections: MadarSection[] = [
     added: true,
   },
   {
+    id: "madar-imported-3",
+    title: "Imported III",
+    titleAr: "المستورَد III",
+    family: "experiments",
+    description: "Back to the first batch's remainder. One question recurs: how many elements? The answer is in the CSS every time — in an nth-child, in --i arithmetic, in a dasharray's sum. In one case it was nine for ten, which is a rule nobody wrote.",
+    descriptionAr: "العَودةُ إلى ما بقيَ من الدفعةِ الأولى. وسؤالٌ واحدٌ يتكرَّر: كم عنصرًا؟ والجوابُ في الـCSS في كلِّ مرّة — في nth-child، أو في حسابِ --i، أو في مجموعِ شَرطِ التقطيع. وفي واحدةٍ كان الجوابُ «تسعٌ لعشرةٍ»، وذاك قاعدةٌ لم تُكتَب.",
+    tags: ["imported", "counting", "nth-child", "مستورَد", "عَدّ"],
+    component: load("Imported3", () => import("./showcase/sections/Imported3")),
+    added: true,
+  },
+  {
     id: "madar-imported-2",
     title: "Imported II",
     titleAr: "المستورَد II",

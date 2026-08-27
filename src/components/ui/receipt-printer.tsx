@@ -1,0 +1,463 @@
+/* A receipt printer whose numbers add up, and a twelfth delay with nothing to
+   animate.
+
+   The arithmetic first, because it settles what kind of file this is. Five line
+   items at 1x5.99, 1x21.49, 2x6.20, 1x3.79 and 5x1.29 sum to 50.12; thirteen
+   percent of that is 6.5156, which rounds to the 6.52 printed; and 50.12 + 6.52
+   is 56.64. All three totals in the upload are correct. These are not filler
+   numbers -- somebody did the sums -- so they are reproduced exactly.
+
+   And `td:last-child::after { content: " $" }` means the currency is not in the
+   markup at all. Every price is a bare number and the column adds its own symbol,
+   which is why the table cells here carry no "$". Measured on the total
+   row's last cell: the ::after content resolves to " $".
+
+   The dead delay: there are twelve `.letter:nth-child(n)` rules, 0.05s through
+   0.6s, and the word is "Printing..." -- ELEVEN characters. The twelfth delay has
+   nothing to apply to. Counted, then measured: letterCount 11, word
+   "Printing...". Left as written.
+
+   The torn edges are one rule serving both. `.receipt::before` and `::after` are
+   two linear-gradients at `--angle` and `calc(var(--angle) * -1)`, tiled at
+   `background-size: 8px 8px`, which is how two straight gradients become a
+   zigzag; `::after` then flips `--angle` from 45deg to 225deg and shifts the
+   background-position, and the same declaration block draws the bottom tear.
+
+   The best detail is in the clip. `.receipt-wrapper` rests at
+   `clip-path: inset(100% -100px -100px -100px)` -- fully closed vertically, but
+   NEGATIVE on the other three sides. A clip-path clips the drop-shadow too, so
+   the -100px is there to keep `filter: drop-shadow(0 0 12px #0001)` outside the
+   clip while the paper itself is hidden. The `print` keyframe opens it to
+   `inset(-20% ...)`, past the edge, for the same reason.
+
+   Two animations run on the same element, sequenced by a delay list:
+   `print 1.2s` at 0s and `display 0.4s` at 1.35s -- so there is a 0.15s hold
+   where neither is running and `forwards` keeps the paper where `print` left it.
+   `display` then animates `z-index` from its base to 5 at the 70% mark, which is
+   what lifts the receipt in front of the printer housing only at the end.
+
+   The whole thing is driven by `.wrapper:has(.print-button:focus)`, so it fires
+   on a click AND on a tab -- unlike the copy button earlier in this log, which
+   used `:focus:not(:focus-visible)` and therefore worked only for the mouse. This
+   one is keyed on plain `:focus`, which covers both, so nothing needed changing.
+   Measured after a programmatic focus -- which `:focus-visible` would have
+   ignored and this does not: animationName "print, display", animationDelay
+   "0s, 1.35s", first letter opacity 1.
+
+   Additions, all in the announce-or-nothing class. The print button's only
+   content is an emoji, so it announced as "button"; it gets a name. The eleven
+   `.letter` spans would be read out one character at a time, so the wrapper
+   carries the word and the letters are hidden from the tree -- the same treatment
+   the letters button needed. And a focus ring: `:focus` already drives the
+   animation, but nothing in the upload draws the focus itself. */
+import styled from 'styled-components';
+
+const LETTERS = [...'Printing...'];
+
+export const ReceiptPrinter = () => (
+  <StyledWrapper>
+    <div className="wrapper">
+      <div className="printer">
+        <div className="printer-display">
+          <span className="printer-message">Click to print</span>
+          {/* role="img" is not decoration here, it is what makes the name legal.
+              A bare <span> has role `generic`, and `generic` PROHIBITS an
+              accessible name — axe flagged this as aria-prohibited-attr in six
+              theme/viewport combinations, and it was my own addition that caused
+              it, not the upload. The eleven letters still need collapsing into one
+              word for assistive technology, so the element takes a role that
+              accepts a name instead. Same treatment the printer card needed. */}
+          <span className="letter-wrapper" role="img" aria-label="Printing">
+            {LETTERS.map((c, i) => (
+              <span className="letter" key={i} aria-hidden="true">{c}</span>
+            ))}
+          </span>
+        </div>
+        <button className="print-button" type="button" aria-label="Print receipt">
+          <span aria-hidden="true">&#128424;</span>
+        </button>
+      </div>
+      <div className="receipt-wrapper">
+        <div className="receipt">
+          <div className="receipt-header">
+            <span>
+              Shop Name<br />Address 123,<br />City, State,<br />ZIP Code
+            </span>
+            <span className="logo" aria-hidden="true">&#128085;</span>
+          </div>
+          <div className="receipt-subheader">
+            <span>Order No. #001234</span>
+            <span>2025-01-01 - 11:48</span>
+          </div>
+          <table className="receipt-table">
+            <thead>
+              <tr><th>Item</th><th>Qty</th><th>Price</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>First item</td><td>1 x</td><td>5.99</td></tr>
+              <tr><td>Second item</td><td>1 x</td><td>21.49</td></tr>
+              <tr><td>Third item</td><td>2 x</td><td>6.20</td></tr>
+              <tr><td>Fourth item</td><td>1 x</td><td>3.79</td></tr>
+              <tr><td>Fifth item</td><td>5 x</td><td>1.29</td></tr>
+              <tr className="receipt-subtotal"><td>Subtotal</td><td /><td>50.12</td></tr>
+              <tr className="receipt-subtotal"><td>Tax (13%)</td><td /><td>6.52</td></tr>
+              <tr className="receipt-total"><td>Total</td><td /><td>56.64</td></tr>
+            </tbody>
+          </table>
+          <div className="receipt-message">Thank you!</div>
+        </div>
+      </div>
+    </div>
+  </StyledWrapper>
+);
+
+const StyledWrapper = styled.div`
+  .wrapper {
+    --printer-color: #dcdac4;
+    --printer-color-2: #c0beaa;
+    --receipt-color: #f5f5f5;
+
+    font-size: 14px;
+    position: relative;
+    user-select: none;
+  }
+
+  .printer {
+    width: 320px;
+    height: 80px;
+    border-radius: 0 0 8px 8px;
+    background-color: var(--printer-color);
+    background-image: url(data:image/png;base64,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);
+    border: 2px solid var(--printer-color-2);
+    box-shadow:
+      0 16px 32px 0px #0002,
+      0 -30px 16px 0px #0001;
+    position: relative;
+  }
+
+  .printer::before {
+    content: "";
+    position: absolute;
+    top: -30px;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    border-radius: 12px 12px 0 0;
+    border-bottom: 2px solid #0003;
+    box-shadow:
+      0 12px 16px -12px #fff5 inset,
+      0 -6px 16px -6px #0003 inset,
+      0 6px 8px -6px #0004;
+    box-sizing: border-box;
+    background-color: inherit;
+    background-image: inherit;
+    filter: brightness(1.12);
+    z-index: 2;
+  }
+
+  .printer::after {
+    content: "";
+    position: absolute;
+    top: 20px;
+    left: 30px;
+    width: 260px;
+    height: 40px;
+    border-radius: 0 0 4px 4px;
+    border-bottom: 1px solid #0003;
+    background-color: inherit;
+    background-image: linear-gradient(
+      to top,
+      var(--printer-color),
+      60%,
+      var(--printer-color-2)
+    );
+    box-shadow: 0 4px 4px -2px #0004;
+    z-index: 1;
+  }
+
+  .printer-display {
+    z-index: 2;
+    display: flex;
+    padding: 6px 8px;
+    position: absolute;
+    top: -10px;
+    left: 30px;
+    width: 160px;
+    height: 32px;
+    background-color: #000;
+    background-image: linear-gradient(transparent 0, #fff2 90%, transparent 100%);
+    background-size: 100% 8px;
+    background-repeat: no-repeat;
+    border: 3px solid var(--printer-color-2);
+    border-radius: 6px;
+    box-sizing: border-box;
+    box-shadow:
+      -1px -1px 2px 0 #fff9 inset,
+      1px 1px 5px 1px #000 inset,
+      0 0 1px 2px #0002;
+    font-family: "Courier New", Courier, monospace;
+    font-size: 0.8em;
+    color: #5aff5a;
+    filter: drop-shadow(1px 1px 1px #0002);
+  }
+
+  .print-button {
+    z-index: 2;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2em;
+    position: absolute;
+    top: -30px;
+    right: 0;
+    margin: 16px;
+    border: 1px solid #0001;
+    border-radius: 6px;
+    width: 48px;
+    height: 36px;
+    background-color: var(--printer-color);
+    box-shadow:
+      1px 1px 2px 0 #fff8 inset,
+      -1px -1px 2px 0 #0002 inset,
+      0 2px 6px 0px #0002;
+    transition:
+      box-shadow 0.1s ease-in-out,
+      transform 0.1s ease-in-out;
+  }
+
+  .print-button:hover {
+    box-shadow:
+      2px 2px 2px 0 #fff9 inset,
+      -2px -2px 2px 0 #0002 inset,
+      0 2px 10px 0px #0002;
+    transform: scale(1.05);
+  }
+
+  .print-button:active {
+    box-shadow:
+      2px 2px 2px 0 #0002 inset,
+      -2px -2px 2px 0 #fff9 inset,
+      0 0px 4px 0px #fff9;
+    transform: scale(0.95);
+  }
+
+  /* Added: :focus already drives the print; nothing in the upload draws it. */
+  .print-button:focus-visible {
+    outline: 3px solid #5aff5a;
+    outline-offset: 2px;
+  }
+
+  .receipt-wrapper {
+    position: absolute;
+    top: 0;
+    left: 44px;
+    filter: drop-shadow(0 0 12px #0001);
+  }
+
+  .receipt {
+    z-index: 2;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    padding: 16px;
+    width: 200px;
+    min-height: 160px;
+    font-size: 0.75em;
+    font-family: "Azeret Mono", "Roboto Mono", monospace;
+    font-weight: 400;
+    color: #444;
+    background-color: var(--receipt-color);
+    box-shadow:
+      0 12px 12px 0 #0001,
+      0 24px 24px 0 #0001,
+      0 36px 36px 0 #0001;
+  }
+
+  .receipt::before,
+  .receipt::after {
+    --angle: 45deg;
+
+    content: "";
+    display: block;
+    position: absolute;
+    left: 0px;
+    width: 100%;
+    height: 8px;
+    background: linear-gradient(
+        calc(var(--angle) * -1),
+        var(--receipt-color) 4px,
+        transparent 0
+      ),
+      linear-gradient(var(--angle), var(--receipt-color) 4px, transparent 0);
+    background-position: 4px 0;
+    background-repeat: repeat-x;
+    background-size: 8px 8px;
+  }
+
+  .receipt::before {
+    top: -8px;
+    background-position: 4px 0;
+  }
+
+  .receipt::after {
+    bottom: -8px;
+    background-position: 0 100%;
+    --angle: 225deg;
+  }
+
+  .receipt-header,
+  .receipt-subheader,
+  .receipt-message {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.2em 0;
+  }
+
+  .receipt-header {
+    font-size: 1.1em;
+    font-weight: 600;
+  }
+
+  .receipt-subheader {
+    border-bottom: 1px dashed #ccc;
+  }
+
+  .receipt-message {
+    justify-content: center;
+    text-align: center;
+    padding: 0 1em;
+  }
+
+  .receipt .logo {
+    width: 48px;
+    font-size: 3em;
+    transform: rotate(10deg);
+    filter: grayscale(1);
+  }
+
+  .receipt-subtotal td {
+    border-top: 1px dashed #ccc;
+  }
+
+  .receipt-total td {
+    border-top: 1px dashed #ccc;
+    font-weight: 600;
+  }
+
+  .receipt-table {
+    font: inherit;
+    color: inherit;
+    text-align: left;
+    line-height: 1.5em;
+    border-collapse: collapse;
+
+    th:last-child,
+    td:last-child {
+      text-align: right;
+    }
+
+    td:last-child::after {
+      content: " $";
+    }
+  }
+
+  .receipt-wrapper {
+    transform: translateY(-100%);
+    clip-path: inset(100% -100px -100px -100px);
+    transition: clip-path 0.5s;
+  }
+
+  .letter-wrapper {
+    position: inherit;
+    display: flex;
+  }
+
+  .letter {
+    display: inline-block;
+    opacity: 0;
+  }
+
+  .wrapper:has(.print-button:focus) {
+    .receipt-wrapper {
+      animation:
+        print 1.2s 1 forwards ease-in,
+        display 0.4s 1 forwards cubic-bezier(0, 0.63, 0.96, 1.1);
+      animation-delay: 0s, 1.35s;
+    }
+
+    .printer-message {
+      opacity: 0;
+    }
+
+    .letter:nth-child(1) {
+      animation-delay: 0.05s;
+    }
+    .letter:nth-child(2) {
+      animation-delay: 0.1s;
+    }
+    .letter:nth-child(3) {
+      animation-delay: 0.15s;
+    }
+    .letter:nth-child(4) {
+      animation-delay: 0.2s;
+    }
+    .letter:nth-child(5) {
+      animation-delay: 0.25s;
+    }
+    .letter:nth-child(6) {
+      animation-delay: 0.3s;
+    }
+    .letter:nth-child(7) {
+      animation-delay: 0.35s;
+    }
+    .letter:nth-child(8) {
+      animation-delay: 0.4s;
+    }
+    .letter:nth-child(9) {
+      animation-delay: 0.45s;
+    }
+    .letter:nth-child(10) {
+      animation-delay: 0.5s;
+    }
+    .letter:nth-child(11) {
+      animation-delay: 0.55s;
+    }
+    /* The twelfth: "Printing..." is eleven characters, so nothing matches. */
+    .letter:nth-child(12) {
+      animation-delay: 0.6s;
+    }
+
+    .letter {
+      animation: show-text 0.6s 1 forwards linear;
+    }
+  }
+
+  @keyframes print {
+    100% {
+      transform: translateY(10%);
+      clip-path: inset(-20% -100px -100px -100px);
+    }
+  }
+
+  @keyframes display {
+    30% {
+      transform: translateY(22%) rotate3d(1, 0, 1, -5deg);
+    }
+    70% {
+      z-index: 5;
+    }
+    100% {
+      z-index: 5;
+      transform: translateY(-40%) scale(1.2);
+    }
+  }
+
+  @keyframes show-text {
+    10%,
+    100% {
+      opacity: 1;
+    }
+  }
+`;
