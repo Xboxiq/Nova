@@ -181,6 +181,11 @@ export function ContextRibbon({ locale, compact = false, onNotify }: AdvancedDem
 
 export function SignalLens({ locale, compact = false }: AdvancedDemoProps) {
   const values = [31, 46, 39, 58, 71, 65, 84];
+  /* `values.length - 1` was written as the literal 6 in five places, as 304 in a
+     sixth (16 + 6 * 48, the last point's x) and as the word "seven" in the chart's
+     accessible name. Seven sources for one fact: they agree today and the label
+     lies the moment a day is added. This is the same defect the hero card had. */
+  const last = values.length - 1;
   const [index, setIndex] = useState(4);
   const rawId = useId();
   const gradientId = `signal-${rawId.replace(/:/g, "")}`;
@@ -188,14 +193,14 @@ export function SignalLens({ locale, compact = false }: AdvancedDemoProps) {
   const labels = ar ? ["س", "ح", "ن", "ث", "ر", "خ", "ج"] : ["M", "T", "W", "T", "F", "S", "S"];
   const points = useMemo(() => values.map((value, pointIndex) => ({ x: 16 + pointIndex * 48, y: 142 - value * 1.24 })), []);
   const line = points.map((point) => `${point.x},${point.y}`).join(" ");
-  const area = `M ${points[0].x} 146 L ${points.map((point) => `${point.x} ${point.y}`).join(" L ")} L ${points.at(-1)?.x ?? 304} 146 Z`;
+  const area = `M ${points[0].x} 146 L ${points.map((point) => `${point.x} ${point.y}`).join(" L ")} L ${points[last].x} 146 Z`;
   const delta = index === 0 ? 0 : values[index] - values[index - 1];
 
   return (
     <div className={`signal-lens ${compact ? "is-compact" : ""}`}>
       <div className="signal-summary"><div><small>{ar ? "الإشارة الحالية" : "Current signal"}</small><strong>{values[index]}<span>%</span></strong></div><span className={delta >= 0 ? "is-up" : "is-down"}>{delta >= 0 ? "+" : ""}{delta}%</span></div>
       <div className="signal-chart">
-        <svg viewBox="0 0 320 160" role="img" aria-label={ar ? "اتجاه الإشارة خلال سبعة أيام" : "Seven-day signal trend"}>
+        <svg viewBox="0 0 320 160" role="img" aria-label={ar ? `اتجاه الإشارة خلال ${values.length} أيام` : `${values.length}-day signal trend`}>
           <defs><linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="var(--nova-expressive-sky)" stopOpacity=".42" /><stop offset="1" stopColor="var(--nova-expressive-sky)" stopOpacity="0" /></linearGradient></defs>
           <path d={area} fill={`url(#${gradientId})`} />
           <polyline points={line} fill="none" stroke="var(--nova-action)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
@@ -206,8 +211,8 @@ export function SignalLens({ locale, compact = false }: AdvancedDemoProps) {
       </div>
       <div className="signal-controls">
         <button className="signal-step" type="button" aria-label={ar ? "اليوم السابق" : "Previous day"} disabled={index === 0} onClick={() => setIndex((value) => Math.max(0, value - 1))}>{ar ? <PiCaretRight /> : <PiCaretLeft />}</button>
-        <label><span className="sr-only">{ar ? "اختيار اليوم" : "Select day"}</span><input type="range" min="0" max="6" step="1" value={index} onChange={(event) => setIndex(Number(event.target.value))} style={{ "--signal-progress": `${index / 6 * 100}%` } as CSSProperties} /></label>
-        <button className="signal-step" type="button" aria-label={ar ? "اليوم التالي" : "Next day"} disabled={index === 6} onClick={() => setIndex((value) => Math.min(6, value + 1))}>{ar ? <PiCaretLeft /> : <PiCaretRight />}</button>
+        <label><span className="sr-only">{ar ? "اختيار اليوم" : "Select day"}</span><input type="range" min="0" max={last} step="1" value={index} onChange={(event) => setIndex(Number(event.target.value))} style={{ "--signal-progress": `${index / last * 100}%` } as CSSProperties} /></label>
+        <button className="signal-step" type="button" aria-label={ar ? "اليوم التالي" : "Next day"} disabled={index === last} onClick={() => setIndex((value) => Math.min(last, value + 1))}>{ar ? <PiCaretLeft /> : <PiCaretRight />}</button>
       </div>
     </div>
   );
@@ -234,7 +239,7 @@ export function FlowConstellation({ locale, compact = false }: AdvancedDemoProps
           return <button type="button" className={`flow-node node-${index + 1} is-${node.state}`} aria-pressed={selected === index} key={node.label} onClick={() => setSelected(index)}><span><Icon /></span><small>{node.label}</small>{node.state === "done" && <><i aria-hidden="true"><PiCheck /></i><b className="sr-only">{ar ? "مكتمل" : "Complete"}</b></>}</button>;
         })}
       </div>
-      <div className="flow-detail" aria-live="polite"><span className={`flow-state is-${current.state}`}>{current.state === "done" ? (ar ? "مكتمل" : "Complete") : current.state === "active" ? (ar ? "الحالي" : "Current") : (ar ? "قادم" : "Next")}</span><div><strong>{current.label}</strong><small>{current.detail}</small></div><b>{selected + 1}/5</b></div>
+      <div className="flow-detail" aria-live="polite"><span className={`flow-state is-${current.state}`}>{current.state === "done" ? (ar ? "مكتمل" : "Complete") : current.state === "active" ? (ar ? "الحالي" : "Current") : (ar ? "قادم" : "Next")}</span><div><strong>{current.label}</strong><small>{current.detail}</small></div><b>{selected + 1}/{nodes.length}</b></div>
     </div>
   );
 }

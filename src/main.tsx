@@ -23,6 +23,7 @@ import "./tailwind.css";
    this one line reverts every change it makes. */
 import "./gold-showcase.css";
 import "./gold-gallery.css";
+import "./gold-lab.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

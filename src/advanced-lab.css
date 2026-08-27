@@ -283,8 +283,9 @@
 .empty-orbit { position: relative; display: grid; place-items: center; width: min(100%, 210px); aspect-ratio: 1; margin-inline: auto; }
 .empty-orbit > i { position: absolute; inset: 12%; border: 1px dashed color-mix(in srgb, var(--nova-action) 34%, var(--nova-border)); border-radius: 48% 52% 58% 42%; transform: rotate(12deg); }
 .empty-orbit > i:nth-child(2) { inset: 25%; border-style: solid; border-color: color-mix(in srgb, var(--nova-expressive-mint) 44%, var(--nova-border)); transform: rotate(-18deg); }
-.empty-orbit > span { position: relative; z-index: 1; display: grid; place-items: center; width: 78px; height: 78px; color: var(--nova-action-ink); background: linear-gradient(150deg, var(--nova-glass-strong), var(--nova-glass)); border: 1px solid var(--nova-glass-edge); border-radius: 6px 6px 6px 6px; backdrop-filter: blur(24px) saturate(165%); }
-[dir="ltr"] .empty-orbit > span { border-radius: 6px 6px 6px 6px; }
+/* Four equal corners were written longhand and then overridden, per direction,
+   with the same four equal corners. The override could never change anything. */
+.empty-orbit > span { position: relative; z-index: 1; display: grid; place-items: center; width: 78px; height: 78px; color: var(--nova-action-ink); background: linear-gradient(150deg, var(--nova-glass-strong), var(--nova-glass)); border: 1px solid var(--nova-glass-edge); border-radius: 6px; backdrop-filter: blur(24px) saturate(165%); }
 .empty-orbit > span svg { width: 34px; height: 34px; }
 .empty-orbit.is-working > span svg { animation: advanced-spin 780ms linear infinite; }
 .empty-orbit.is-done > span { color: var(--nova-success); background: var(--nova-success-soft); }
