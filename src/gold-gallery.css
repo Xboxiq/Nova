@@ -82,49 +82,57 @@
    Four semantic colours cannot carry eight meanings. Four of these eight are
    mixes chosen for SEPARATION, not for what the category means, and that is
    written down rather than dressed up as meaning. */
-#category-flows .category-icon {
+#category-flows .category-icon,
+[data-family="flows"] {
   --fam: var(--nova-info);
   --fam-ink: var(--nova-info-ink);
   --fam-soft: var(--nova-info-soft);
 }
 
-#category-controls .category-icon {
+#category-controls .category-icon,
+[data-family="controls"] {
   --fam: var(--nova-warning);
   --fam-ink: var(--nova-warning-ink);
   --fam-soft: var(--nova-warning-soft);
 }
 
-#category-navigation .category-icon {
+#category-navigation .category-icon,
+[data-family="navigation"] {
   --fam: var(--nova-success);
   --fam-ink: var(--nova-success-ink);
   --fam-soft: var(--nova-success-soft);
 }
 
-#category-motion .category-icon {
+#category-motion .category-icon,
+[data-family="motion"] {
   --fam: var(--nova-danger);
   --fam-ink: var(--nova-danger-ink);
   --fam-soft: var(--nova-danger-soft);
 }
 
-#category-inputs .category-icon {
+#category-inputs .category-icon,
+[data-family="inputs"] {
   --fam: color-mix(in oklab, var(--nova-info) 55%, var(--nova-success));
   --fam-ink: color-mix(in oklab, var(--nova-info-ink) 55%, var(--nova-success-ink));
   --fam-soft: color-mix(in oklab, var(--nova-info-soft) 55%, var(--nova-success-soft));
 }
 
-#category-actions .category-icon {
+#category-actions .category-icon,
+[data-family="actions"] {
   --fam: color-mix(in oklab, var(--nova-warning) 50%, var(--nova-danger));
   --fam-ink: color-mix(in oklab, var(--nova-warning-ink) 50%, var(--nova-danger-ink));
   --fam-soft: color-mix(in oklab, var(--nova-warning-soft) 50%, var(--nova-danger-soft));
 }
 
-#category-surfaces .category-icon {
+#category-surfaces .category-icon,
+[data-family="surfaces"] {
   --fam: color-mix(in oklab, var(--nova-info) 55%, var(--nova-danger));
   --fam-ink: color-mix(in oklab, var(--nova-info-ink) 55%, var(--nova-danger-ink));
   --fam-soft: color-mix(in oklab, var(--nova-info-soft) 55%, var(--nova-danger-soft));
 }
 
-#category-effects .category-icon {
+#category-effects .category-icon,
+[data-family="effects"] {
   --fam: color-mix(in oklab, var(--nova-warning) 55%, var(--nova-success));
   --fam-ink: color-mix(in oklab, var(--nova-warning-ink) 55%, var(--nova-success-ink));
   --fam-soft: color-mix(in oklab, var(--nova-warning-soft) 55%, var(--nova-success-soft));
@@ -148,4 +156,92 @@
   background: var(--fam-soft, var(--nova-action-soft));
   border-color: color-mix(in srgb, var(--fam, var(--nova-action)) 22%, var(--nova-border));
   box-shadow: var(--depth-instrument-well);
+}
+
+/* ── The seven families only Madar's sections have ─────────────────────────
+   `MadarFamilyId` and `CategoryId` overlap on `motion` alone, so the other seven
+   need identities of their own — and the FIRST attempt got two things wrong,
+   both caught by opening the palette and reading the plaques:
+
+     - `directions` was given `info`, which is exactly what `flows` already has,
+       so two plaques in one panel measured the same ground
+     - `references` and `experiments` were simply MISSING, and fell back to the
+       default action ink on the plain surface: three grounds for twelve results
+
+   Re-mapped so the alternation holds down the order Madar declares them in,
+   with `motion` fixed where the category set already put it (success, cool):
+
+     directions  amber      patterns   blue      components  red
+     motion      green      layouts    terracotta typography teal
+     references  olive      experiments violet
+
+   These DO collide with the category set — teal is also `inputs`, terracotta also
+   `actions`, violet also `surfaces`, olive also `effects`. Four hues carrying
+   fifteen identities cannot avoid that, and it is left standing rather than
+   papered over: the palette prints the two sets as two labelled groups with a
+   heading between them, so a repeat ACROSS groups reads as a different list,
+   while a repeat WITHIN one reads as an error. Within each group, no two
+   neighbours share a hue. */
+[data-family="directions"] {
+  --fam: var(--nova-warning);
+  --fam-ink: var(--nova-warning-ink);
+  --fam-soft: var(--nova-warning-soft);
+}
+
+[data-family="patterns"] {
+  --fam: var(--nova-info);
+  --fam-ink: var(--nova-info-ink);
+  --fam-soft: var(--nova-info-soft);
+}
+
+[data-family="components"] {
+  --fam: var(--nova-danger);
+  --fam-ink: var(--nova-danger-ink);
+  --fam-soft: var(--nova-danger-soft);
+}
+
+[data-family="layouts"] {
+  --fam: color-mix(in oklab, var(--nova-warning) 50%, var(--nova-danger));
+  --fam-ink: color-mix(in oklab, var(--nova-warning-ink) 50%, var(--nova-danger-ink));
+  --fam-soft: color-mix(in oklab, var(--nova-warning-soft) 50%, var(--nova-danger-soft));
+}
+
+[data-family="typography"] {
+  --fam: color-mix(in oklab, var(--nova-info) 55%, var(--nova-success));
+  --fam-ink: color-mix(in oklab, var(--nova-info-ink) 55%, var(--nova-success-ink));
+  --fam-soft: color-mix(in oklab, var(--nova-info-soft) 55%, var(--nova-success-soft));
+}
+
+[data-family="references"] {
+  --fam: color-mix(in oklab, var(--nova-warning) 55%, var(--nova-success));
+  --fam-ink: color-mix(in oklab, var(--nova-warning-ink) 55%, var(--nova-success-ink));
+  --fam-soft: color-mix(in oklab, var(--nova-warning-soft) 55%, var(--nova-success-soft));
+}
+
+[data-family="experiments"] {
+  --fam: color-mix(in oklab, var(--nova-info) 55%, var(--nova-danger));
+  --fam-ink: color-mix(in oklab, var(--nova-info-ink) 55%, var(--nova-danger-ink));
+  --fam-soft: color-mix(in oklab, var(--nova-info-soft) 55%, var(--nova-danger-soft));
+}
+
+/* ── The command palette's result icon, which was one glyph twelve times ────
+   Twelve results, twelve identical `PiStack` plaques in one ink on one ground:
+   the icon carried no information at all, in a panel whose whole job is telling
+   twelve things apart. It now reads the family the result came from, through the
+   very same custom properties the gallery headings use — no new colours, no
+   second vocabulary. */
+.command-result-icon {
+  color: var(--fam-ink, var(--nova-action-ink));
+  background: var(--fam-soft, var(--nova-surface));
+  border-color: color-mix(in srgb, var(--fam, var(--nova-border)) 26%, var(--nova-border));
+}
+
+/* ── The cap, said out loud ────────────────────────────────────────────────── */
+.command-truncated {
+  margin: var(--nova-space-2) 0 0;
+  padding-inline: var(--nova-space-3);
+  color: var(--nova-ink-tertiary);
+  font-size: var(--nova-text-label-sm);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
 }
