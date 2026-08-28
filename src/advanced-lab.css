@@ -155,7 +155,7 @@
 
 [dir="ltr"] .context-ribbon { padding-inline-start: 8px; padding-inline-end: 12px; border-radius: 6px 6px 6px 6px; }
 .context-identity { display: flex; align-items: center; gap: var(--nova-space-3); min-width: 0; }
-.context-identity > span { display: grid; place-items: center; width: 48px; height: 48px; flex: 0 0 auto; color: #d8f3ff; background: rgb(206 242 250 / 10%); border: 1px solid rgb(227 250 255 / 12%); border-radius: 6px; }
+.context-identity > span { display: grid; place-items: center; width: 48px; height: 48px; flex: 0 0 auto; color: #d8f3ff; background: rgb(10 26 33 / 34%); border: 1px solid rgb(227 250 255 / 22%); border-radius: 6px; }
 .context-identity > span svg { width: 22px; height: 22px; }
 .context-identity > div { display: grid; gap: 2px; min-width: 0; }
 .context-identity small { overflow: hidden; color: #88a8b1; font-size: var(--nova-text-label-sm); text-overflow: ellipsis; white-space: nowrap; }
@@ -218,7 +218,7 @@
 .flow-node[aria-pressed="true"] > span { color: var(--nova-action-ink); border-color: color-mix(in srgb, var(--nova-action) 46%, var(--nova-border)); }
 .flow-node.is-done > span { color: var(--nova-success); }
 .flow-node.is-pending { color: var(--nova-ink-tertiary); }
-.flow-node > i { position: absolute; inset-block-start: 0; inset-inline-end: 8px; display: grid; place-items: center; width: 18px; height: 18px; color: var(--nova-on-action); background: var(--nova-success); border: 2px solid var(--nova-surface); border-radius: 50%; }
+.flow-node > i { position: absolute; inset-block-start: 0; inset-inline-end: 8px; display: grid; place-items: center; width: 18px; height: 18px; color: var(--nova-canvas); background: var(--nova-success); border: 2px solid var(--nova-surface); border-radius: 50%; }
 .flow-node > i svg { width: 10px; height: 10px; }
 .node-1 { inset-inline-start: 0; inset-block-start: 38%; }
 .node-2 { inset-inline-start: 22%; inset-block-start: 38%; }
