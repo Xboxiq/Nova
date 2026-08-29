@@ -414,6 +414,14 @@ for (const c of CASES) {
       if (!r.width || !r.height) continue;
       const own = getComputedStyle(el);
       if (own.clipPath.startsWith('inset(50%') || +own.opacity === 0 || own.clip.startsWith('rect(')) continue;
+      /* `inert` is not a hidden control, it is a control that HAS BEEN WITHDRAWN.
+         The subtree is out of the tab order and out of the accessibility tree, so
+         "clipped and focus does not reveal it" is not a defect there — it is the
+         declared intent, and `el.focus()` is a no-op by specification. This gate
+         predates the attribute and reported a collapsed tree folder's four buttons
+         the day one arrived. `closest` and not a computed style because inertness
+         is inherited through the DOM, not through the cascade. */
+      if (el.closest('[inert]')) continue;
       for (let p = el.parentElement; p; p = p.parentElement) {
         const cs = getComputedStyle(p);
         if (!/hidden|clip/.test(cs.overflowX + cs.overflowY)) continue;
