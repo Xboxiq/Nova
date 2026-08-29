@@ -128,6 +128,19 @@ const REFERENCE_GREYS = new Set([
      pair this repo already publishes — `--nova-info-ink` on `--nova-info-soft`. */
   "#51a2ff", // upload 98's NEW badge on #34456a in the night pack — 3.61
 
+  /* Upload 99's two `text-neutral-500` runs, and both halves of both pairs are
+     the author's: Tailwind's neutral-500 on the card's own hardcoded
+     `bg-neutral-50` / `dark:bg-neutral-900`. Measured `#737373` on `#f5f5f5` at
+     4.34 and on `#171717` at 3.78 — a caption and a timestamp, 10px and 11px.
+
+     The card's TITLE is not carried here and was fixed instead, and the line
+     between them is the one this file has drawn twice already: the title's ground
+     was the author's but its ink was `--color-primary`, which is to say mine, so
+     there was something of mine in the pair to correct. In these two there is
+     nothing. The remedy for the owner is `text-neutral-600 dark:text-neutral-400`,
+     which clears both. */
+  "#737373", // upload 99's caption and timestamp — 4.34 light, 3.78 dark
+
   /* Upload 97's own sub-caption: `rgb(128, 128, 128)` on the card's own white,
      measured 3.94 at 11.2px. Both values are declared in the upload, in the same
      file, and mid-grey on white is the plainest case this allowance exists for.

@@ -30,6 +30,16 @@ import { ElectricCookButton } from '@/components/ui/electric-cook-button';
 import { SunsetGrayscaleButton } from '@/components/ui/sunset-grayscale-button';
 import { TreeFolder, TreeItem, TreeSection, TreeView } from '@/components/ui/animated-file-tree';
 import { Download, Palette, Type } from 'lucide-react';
+import FraudCard from '@/components/ui/fraud-card';
+
+/* The demo's own four rows, unchanged — including `gamil.com`, which is the
+   typo-domain the card exists to flag and not one of mine. */
+const BLOCKED_EMAILS = [
+  { email: 'bad_actor+1@gamil.com', time: 'Aug 9 at 14:09' },
+  { email: 'spammer123@mailor.com', time: 'Aug 10 at 11:23' },
+  { email: 'fake+prmo@tempmail.com', time: 'Aug 11 at 09:45' },
+  { email: 'bot@disposablemail.org', time: 'Aug 12 at 16:02' },
+];
 
 export function Imported3() {
   return (
@@ -410,6 +420,38 @@ export function Imported3() {
           <b>والرسمُ كلُّه بخصائصَ فيزيائيّةٍ لا منطقيّة:</b> <code>pl-8</code> و<code>left-[12.5px]</code> و<code>text-left</code> و<code>ml-auto</code>. <b>وفي مستودعٍ عربيٍّ أوّلًا هذا يعني أنّ الإزاحةَ تنتقلُ إلى الطَّرَفِ الخَلفيِّ في RTL بينما يبقى الخطُّ عندَ <code>left: 12.5px</code></b> — <b>فتنفصِلُ الخطوطُ عن الصفوفِ التي تصِلُها</b>. والعارضةُ تُعلِنُ <code>dir="ltr"</code> كما تفعلُ لكلِّ رفعةٍ مرسومةٍ للاتّجاهِ اللاتينيِّ، <b>فما قِستُه هو LTR وحدَه، وهذا استنتاجٌ من التصريحاتِ لا قياسٌ ــ ويُقالُ كذلك</b>. والعلاجُ <code>ps-8</code> و<code>start-[12.5px]</code> و<code>text-start</code> و<code>ms-auto</code>.
           <br /><br />
           <b>وما يعملُ يعملُ جيّدًا:</b> الخطُّ المُضاءُ يتبَعُ الاختيارَ فِعلًا — قِيسَ المسارُ قبلَ وبعد: <code>M0.5 0 V11 Q0.5 16 5.5 16 H11.5</code> ثمّ <code>V113.1 Q0.5 118.1 …</code> بسُمكِ <code>1.5</code> مقابلَ <code>1</code> للخطوطِ الساكنة. <b>والمَرافِقُ مرسومةٌ بمُنحنى تربيعيٍّ واحدٍ لكلِّ صفٍّ من عَمودٍ واحد</b>، و<code>ResizeObserver</code> يُعيدُ الحسابَ عندَ كلِّ تغيُّرِ ارتفاع، <b>فطَيُّ مُجلَّدٍ يُعيدُ رسمَ الشجرةِ كلِّها بلا حالةٍ إضافيّة</b>.
+        </SpecRow>
+
+        <SpecRow name="بطاقةٌ وصلَت بلا الـCSS الذي يُحرِّكُها، وتُبدِّلُ حالتَها بالنقرِ وحدَه" bare specimen={
+          <div className="flex w-full items-start justify-center rounded-2xl bg-[var(--color-background)] px-6 py-10" dir="ltr">
+            <FraudCard blockedEmails={BLOCKED_EMAILS} />
+          </div>
+        }>
+          <b>ثلاثةُ أصنافٍ مُسمّاةٍ ولا واحدٌ منها مُعرَّف:</b> <code>clbeam-container</code> و<code>clbeam</code> و<code>clbeam-line-1</code>. و<code>grep -rn clbeam src/</code> <b>لا يُعيدُ شيئًا سوى هذا الملفِّ نفسِه</b>. وليسَت زينةً: الدائرةُ الحمراءُ التي كانت تُحرِّكُها <b>ساكنةٌ عند <code>cx=0 cy=0</code></b>، ولا تُرى إلا حيثُ تتقاطعُ مع قِناعٍ مقصوصٍ من الخطّ — <b>فبلا قاعدةٍ تُحرِّكُها يكونُ أثرُ البطاقةِ المُميَّزُ لطخةً ساكنةً عندَ رأسِ السِّلك. الـCSS لم يصِلْ مع المكوِّن.</b>
+          <br /><br />
+          <b>فالحركةُ أدناه مكتوبةٌ هنا، وتقولُ ذلك عن نفسِها.</b> وهي أصغرُ ما يُحقِّقُ ما يقصِدُه الوَسمُ صراحةً — <b>شُعاعٌ يسري في السِّلك</b> — ومَقودُها <code>offset-path</code> <b>الذي يتبَعُ المسارَ الحقيقيَّ لا يُقارِبُه بإزاحتَين</b>. <b>وقِيسَ أنه يسري:</b> <code>offsetDistance</code> من <code>25.675%</code> إلى <code>48.325%</code> في تِسعِ مئةِ جُزءٍ من الثانية.
+          <br /><br />
+          <b>والمسارُ صارَ ثابتًا واحدًا.</b> الرفعةُ كتبَت الإحداثيّاتِ <b>مرّتَين</b> — للخطِّ المرئيِّ وللقِناع — <b>وإعطاءُ الشُّعاعِ نسخةً ثالثةً هو كيفَ يبدأُ رسمٌ في مُناقَضةِ نفسِه</b>. فتصريحٌ واحدٌ وثلاثةُ قُرّاء، <b>وذاك يَطوي ازدواجَ الرفعةِ أيضًا لا يزيدُ عليه</b>.
+          <br /><br />
+          <b>وبطانيّةُ الحركةِ المُخفَّضةِ في هذا المستودعِ CSS</b> — <code>animation-duration: 1ms</code> — <b>ولا تبلُغُ حركةً تُدِيرُها JavaScript إطارًا إطارًا</b>. فشُعاعٌ لانهائيٌّ كان سيظلُّ يسري لقارئٍ طلبَ السكون. و<code>useReducedMotion</code> هو ما تنشُرُه المكتبةُ لهذا بعينِه. <b>مَقيسٌ:</b> <code>offsetDistance: 0%</code> <b>ولا يتحرّك</b>، والدوّارةُ المُنقَّطةُ كذلك.
+          <br /><br />
+          <b>والبطاقةُ كلُّها كانت تُبدَّلُ بالنقرِ على <code>&lt;div&gt;</code>: بلا دَورٍ، وبلا <code>tabIndex</code>، وبلا مُعالِجِ مِفتاح.</b> فكلُّ قارئٍ على لَوحةِ المفاتيحِ لا يرى إلا الحالةَ المُغلَقة — <b>وهي الحالةُ التي تُخفي الأربعةَ صفوفًا التي وُجِدَت البطاقةُ لعَرضِها</b>. فصارَت <code>role="button"</code> بـ<code>tabIndex</code> و<code>aria-expanded</code> واسمٍ، <b>و<code>Enter</code> و<code>Space</code> يُبدِّلانِ كما يُبدِّلُ النقر</b>. ومَقيسٌ: <code>aria-expanded</code> <code>false → true</code> عندَ التركيز، ثمّ <code>false</code> بعدَ <code>Enter</code>.
+          <br /><br />
+          <b>والتدرُّجُ المُتتابِعُ يعملُ فِعلًا، وقِيسَ في طَيرانِه</b> — أربعةُ عناوينَ بريدٍ في لحظةٍ واحدةٍ بعدَ ثانيةٍ من الفتح:
+          <br />
+          <code>مُغلَق</code> — الأربعةُ عندَ <code>0</code> و<code>blur(10px)</code>، والأوقاتُ <code>0</code> و<code>blur(5px)</code>، والصُّلبانُ <code>0</code>
+          <br />
+          <code>مفتوح</code> — <code>1.00 · 1.00 · 0.83 · 0.00</code> <b>والضبابُ يتبَعُ: 0 · 0 · 1.70px · 10px</b>
+          <br />
+          <code>مُغلَقٌ ثانيةً</code> — <code>0 · 0 · 0.12 · 0.15</code>، يَنحلُّ بالترتيبِ نفسِه
+          <br />
+          <b>وذاك <code>staggerChildren: 0.08</code> و<code>delayChildren: 0.15</code> مرئيَّينِ رقمًا.</b>
+          <br /><br />
+          <b>وزوجٌ واحدٌ في البطاقةِ كان لِزامًا عليَّ إصلاحُه لا حَملُه:</b> العنوانُ <code>text-primary</code>، وهو <code>--color-primary</code> الذي يُخرِجُه هذا المستودعُ إلى <code>--nova-action</code> — <b>تعبئةُ العائلةِ لا حِبرُها</b> — على أرضٍ تُصلِّدُها الرفعةُ <code>bg-neutral-50</code>. <b>مَقيسًا: 5.05 في الحُزمةِ الافتراضيّةِ و<code>2.25</code> في mint</b> التي إجراؤُها أخضرُ مائيٌّ فاتح. <b>والأرضُ للمؤلِّفِ والحِبرُ لي، فقولُ «لا شيءَ لي في الزوجِ» لا يصِحُّ هنا</b> — فصارَ <code>--nova-action-ink</code>، <b>وهو التصحيحُ نفسُه المُطبَّقُ في أربعةَ عشرَ موضِعًا آخَرَ في هذا المستودعِ اليوم</b>.
+          <br /><br />
+          <b>وزوجانِ حُمِلا لأنّ نِصفَيهما كِليهما للمؤلِّف:</b> <code>#737373</code> على <code>#f5f5f5</code> بـ<b>4.34</b>، وعلى <code>#171717</code> بـ<b>3.78</b> — لافِظةٌ وطابَعُ وقت. <b>الرقمُ مطبوعٌ والقرارُ للمالك</b>، والعِلاجُ <code>text-neutral-600 dark:text-neutral-400</code> ويَحسِمُ الاثنَين.
+          <br /><br />
+          <b>وثلاثةٌ قرأتُها خطأً وسُحِبَت قبلَ أن تُكتَب:</b> ظننتُ العنوانَ والوصفَ <b>غائبَينِ عن الرَّسم</b> من صورةٍ التقطتُها، <b>والقياسُ يقولُ صندوقًا <code>316×21</code> بنسبةِ 5.05</b>؛ وظننتُ <code>text-white</code> على الحاويةِ يُبيِّضُ نصًّا، <b>والعَدُّ صِفرٌ من عُقَدِ النصِّ كلِّها</b>؛ وقرأتُ أوّلَ بريدٍ بشفافيّةِ <code>1</code> في الحالةِ المُغلَقةِ — <b>وكان ذاك عنوانَ البطاقةِ نفسَه، لا أوّلَ صفّ</b>. <b>عاشرُ خطأِ مُحدِّدٍ غيرِ مُرسًى في هذا العمل، وأُرسِيَ فانقلبَ الجوابُ.</b>
         </SpecRow>
 
       </SpecList>
