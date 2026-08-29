@@ -1,0 +1,247 @@
+/* ============================================================================
+   gold-gallery.css — the gallery, which is the product
+
+   Third operation under the external `visual-redesign` protocol. Same rules as
+   `gold-showcase.css`: a new file imported after the originals, so the rollback
+   is deleting one import line, and ZERO changes to JSX.
+
+   THE AUDIT, IN THE ORDER THE NUMBERS CAME IN.
+
+   1. CRITICAL — the item count in every category heading was painted
+      `--nova-border-strong`: a BORDER token used as a text colour. Measured
+      against its own ground, through a canvas round-trip so `oklab()` packs read
+      as sRGB:
+
+        (none) 1.59 · light 1.59 · dark 2.52 · mint 1.56
+        coral  1.61 · sky   1.60 · iris 1.61 · night 2.31
+
+      At 24px it is large text, so the threshold is 3:1. Eight nodes per view,
+      every pack, every viewport, since the day it was written.
+
+   2. Two of the three transitioned properties on `.component-card` are never
+      set by anything. `transition: border-color, box-shadow, transform` — and
+      grep finds `transform` on that class exactly once, inside that list. This
+      is the defect printed seven times in IMPORTED.md for the uploads, in our
+      own front room.
+
+   3. Eight categories, eight icons, ONE identity: every `.category-icon`
+      measured the same ground, `rgb(220, 238, 255)`. The heading tells you
+      which family you are in by glyph alone.
+
+   WHAT IS NOT DONE HERE, AND WHY. No entrance animation. The protocol's
+   "mount static dead" crime is real, but 72 cards staggering in — most of them
+   below the fold, where the animation plays to nobody and then holds — is more
+   motion than the reading is worth. VISUAL-LAW wins over the protocol again.
+   ============================================================================ */
+
+/* ── 1. The count reads as a count ─────────────────────────────────────────
+   Not a redesign: a colour role correction. The count is tertiary information
+   about a group, so it takes the tertiary INK token, which is the one the
+   token system already publishes for exactly this. `--nova-border-strong`
+   keeps its job, which is borders. */
+.category-heading > strong {
+  color: var(--nova-ink-tertiary);
+}
+
+/* ── 2. The transition transitions what changes ────────────────────────────
+   This was an override here first. It is now fixed AT THE SOURCE, because a gate
+   found the same defect in eleven more places and hand-overriding eleven rules
+   from a second file is not a fix — see tools/qa/dead-transition.mjs. Nothing is
+   needed here any more, and the note stays so the history reads. */
+
+/* ── 3. Eight families, eight identities, zero new colours ─────────────────
+   Each category takes a pair the token system already publishes, so every
+   ground and ink flips with the pack and none of this is a new value.
+
+   THE ARRANGEMENT WAS DECIDED BY LOOKING, AFTER THE NUMBERS SAID IT WAS FINE.
+   The first mapping was by meaning alone -- a flow informs, a control acts, a
+   navigation does both -- and it measured 8 distinct grounds in all seven packs.
+   Then the eight headings were shot side by side and the first three read as ONE
+   pale blue, because `--nova-info` and `--nova-action` are both blue in the light
+   pack and the third was a mix of the two. Eight distinct VALUES is not eight
+   distinct IDENTITIES.
+
+   So the rule became a sequence rule: the headings are read down a column, and
+   what the eye compares is NEIGHBOURS.
+
+   Then "no two adjacent families share a hue" was measured too, as the sum of the
+   sRGB distances between neighbouring grounds and neighbouring glyphs, and its
+   MINIMUM across the column. Meaning-first scored 29 at its weakest pair, in the
+   sky pack: amber into terracotta into red is a smooth warm ramp, which is the
+   three-blues crime again in a different hue. So the sequence alternates COOL and
+   WARM, every pair, and that is what the numbers below report.
+
+   Alternating scored 107 to 120 in six packs and 38 in CORAL, and the reason is
+   worth the line: `--nova-action` is the pack's BRAND hue and every pack rotates
+   it. In coral it is orange, so three families built on it stopped being cool and
+   the alternation collapsed. `--nova-info`, `--nova-success`, `--nova-warning` and
+   `--nova-danger` carry the same oklch values in every light pack -- they are
+   pack-INVARIANT -- so the identities are built from those four alone and the
+   brand hue is left to do its own job.
+
+   Four semantic colours cannot carry eight meanings. Four of these eight are
+   mixes chosen for SEPARATION, not for what the category means, and that is
+   written down rather than dressed up as meaning. */
+#category-flows .category-icon,
+[data-family="flows"] {
+  --fam: var(--nova-info);
+  --fam-ink: var(--nova-info-ink);
+  --fam-soft: var(--nova-info-soft);
+}
+
+#category-controls .category-icon,
+[data-family="controls"] {
+  --fam: var(--nova-warning);
+  --fam-ink: var(--nova-warning-ink);
+  --fam-soft: var(--nova-warning-soft);
+}
+
+#category-navigation .category-icon,
+[data-family="navigation"] {
+  --fam: var(--nova-success);
+  --fam-ink: var(--nova-success-ink);
+  --fam-soft: var(--nova-success-soft);
+}
+
+#category-motion .category-icon,
+[data-family="motion"] {
+  --fam: var(--nova-danger);
+  --fam-ink: var(--nova-danger-ink);
+  --fam-soft: var(--nova-danger-soft);
+}
+
+#category-inputs .category-icon,
+[data-family="inputs"] {
+  --fam: color-mix(in oklab, var(--nova-info) 55%, var(--nova-success));
+  --fam-ink: color-mix(in oklab, var(--nova-info-ink) 55%, var(--nova-success-ink));
+  --fam-soft: color-mix(in oklab, var(--nova-info-soft) 55%, var(--nova-success-soft));
+}
+
+#category-actions .category-icon,
+[data-family="actions"] {
+  --fam: color-mix(in oklab, var(--nova-warning) 50%, var(--nova-danger));
+  --fam-ink: color-mix(in oklab, var(--nova-warning-ink) 50%, var(--nova-danger-ink));
+  --fam-soft: color-mix(in oklab, var(--nova-warning-soft) 50%, var(--nova-danger-soft));
+}
+
+#category-surfaces .category-icon,
+[data-family="surfaces"] {
+  --fam: color-mix(in oklab, var(--nova-info) 55%, var(--nova-danger));
+  --fam-ink: color-mix(in oklab, var(--nova-info-ink) 55%, var(--nova-danger-ink));
+  --fam-soft: color-mix(in oklab, var(--nova-info-soft) 55%, var(--nova-danger-soft));
+}
+
+#category-effects .category-icon,
+[data-family="effects"] {
+  --fam: color-mix(in oklab, var(--nova-warning) 55%, var(--nova-success));
+  --fam-ink: color-mix(in oklab, var(--nova-warning-ink) 55%, var(--nova-success-ink));
+  --fam-soft: color-mix(in oklab, var(--nova-warning-soft) 55%, var(--nova-success-soft));
+}
+
+/* THE GLYPH TAKES THE FAMILY'S INK, NOT ITS FILL, AND THAT WAS MEASURED THE
+   HARD WAY. The first version of this block painted `color: var(--fam)` -- the
+   family's FILL -- and on mint the controls glyph then measured 1.97 against the
+   3:1 that WCAG 1.4.11 asks of a non-text graphic. Before this operation that
+   icon was `--nova-action-ink` on `--nova-action-soft` and passed, so my own
+   addition was the regression. The fill stays, but only for the border mix,
+   which is a hairline and not a thing being read.
+
+/* The plaque itself. `--depth-instrument-well` is REUSED, not a ninth depth
+   token written: it is two inset layers, a shadow under the top edge and a
+   bevel hair along the bottom, which is exactly what a 48px pressed plaque
+   wants. The fallbacks keep every icon on the original ground if a family pair
+   ever fails to arrive. */
+.category-icon {
+  color: var(--fam-ink, var(--nova-action-ink));
+  background: var(--fam-soft, var(--nova-action-soft));
+  border-color: color-mix(in srgb, var(--fam, var(--nova-action)) 22%, var(--nova-border));
+  box-shadow: var(--depth-instrument-well);
+}
+
+/* ── The seven families only Madar's sections have ─────────────────────────
+   `MadarFamilyId` and `CategoryId` overlap on `motion` alone, so the other seven
+   need identities of their own — and the FIRST attempt got two things wrong,
+   both caught by opening the palette and reading the plaques:
+
+     - `directions` was given `info`, which is exactly what `flows` already has,
+       so two plaques in one panel measured the same ground
+     - `references` and `experiments` were simply MISSING, and fell back to the
+       default action ink on the plain surface: three grounds for twelve results
+
+   Re-mapped so the alternation holds down the order Madar declares them in,
+   with `motion` fixed where the category set already put it (success, cool):
+
+     directions  amber      patterns   blue      components  red
+     motion      green      layouts    terracotta typography teal
+     references  olive      experiments violet
+
+   These DO collide with the category set — teal is also `inputs`, terracotta also
+   `actions`, violet also `surfaces`, olive also `effects`. Four hues carrying
+   fifteen identities cannot avoid that, and it is left standing rather than
+   papered over: the palette prints the two sets as two labelled groups with a
+   heading between them, so a repeat ACROSS groups reads as a different list,
+   while a repeat WITHIN one reads as an error. Within each group, no two
+   neighbours share a hue. */
+[data-family="directions"] {
+  --fam: var(--nova-warning);
+  --fam-ink: var(--nova-warning-ink);
+  --fam-soft: var(--nova-warning-soft);
+}
+
+[data-family="patterns"] {
+  --fam: var(--nova-info);
+  --fam-ink: var(--nova-info-ink);
+  --fam-soft: var(--nova-info-soft);
+}
+
+[data-family="components"] {
+  --fam: var(--nova-danger);
+  --fam-ink: var(--nova-danger-ink);
+  --fam-soft: var(--nova-danger-soft);
+}
+
+[data-family="layouts"] {
+  --fam: color-mix(in oklab, var(--nova-warning) 50%, var(--nova-danger));
+  --fam-ink: color-mix(in oklab, var(--nova-warning-ink) 50%, var(--nova-danger-ink));
+  --fam-soft: color-mix(in oklab, var(--nova-warning-soft) 50%, var(--nova-danger-soft));
+}
+
+[data-family="typography"] {
+  --fam: color-mix(in oklab, var(--nova-info) 55%, var(--nova-success));
+  --fam-ink: color-mix(in oklab, var(--nova-info-ink) 55%, var(--nova-success-ink));
+  --fam-soft: color-mix(in oklab, var(--nova-info-soft) 55%, var(--nova-success-soft));
+}
+
+[data-family="references"] {
+  --fam: color-mix(in oklab, var(--nova-warning) 55%, var(--nova-success));
+  --fam-ink: color-mix(in oklab, var(--nova-warning-ink) 55%, var(--nova-success-ink));
+  --fam-soft: color-mix(in oklab, var(--nova-warning-soft) 55%, var(--nova-success-soft));
+}
+
+[data-family="experiments"] {
+  --fam: color-mix(in oklab, var(--nova-info) 55%, var(--nova-danger));
+  --fam-ink: color-mix(in oklab, var(--nova-info-ink) 55%, var(--nova-danger-ink));
+  --fam-soft: color-mix(in oklab, var(--nova-info-soft) 55%, var(--nova-danger-soft));
+}
+
+/* ── The command palette's result icon, which was one glyph twelve times ────
+   Twelve results, twelve identical `PiStack` plaques in one ink on one ground:
+   the icon carried no information at all, in a panel whose whole job is telling
+   twelve things apart. It now reads the family the result came from, through the
+   very same custom properties the gallery headings use — no new colours, no
+   second vocabulary. */
+.command-result-icon {
+  color: var(--fam-ink, var(--nova-action-ink));
+  background: var(--fam-soft, var(--nova-surface));
+  border-color: color-mix(in srgb, var(--fam, var(--nova-border)) 26%, var(--nova-border));
+}
+
+/* ── The cap, said out loud ────────────────────────────────────────────────── */
+.command-truncated {
+  margin: var(--nova-space-2) 0 0;
+  padding-inline: var(--nova-space-3);
+  color: var(--nova-ink-tertiary);
+  font-size: var(--nova-text-label-sm);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}

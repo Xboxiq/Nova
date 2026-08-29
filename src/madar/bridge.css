@@ -598,9 +598,42 @@
   --depth-instrument-hub:
     0 2px 5px rgba(0, 0, 0, 0.34),
     inset 0 1px 0 var(--bevel-hair);
+  /* The hero metric's per-bar bloom. Same idea as --depth-instrument-bloom: the
+     spread is the sample, so the glow is the reading. Named because the first draft
+     wrote it inline with a calc() blur radius and depth-policy could not see it --
+     which is a gate hole, not a licence. */
+  /* The adaptive inspector's preview object. Its offset and blur both scale with
+     --preview-depth, which the lab's control drives, so the depth IS the control's
+     value. It sat inline in advanced-lab.css and was invisible to depth-policy for
+     the same reason the bloom above was: a calc() blur radius parsed to null and
+     dropped out of the length count. Both are named now, and the detector was
+     tightened so the next one cannot hide. */
+  --depth-preview-object:
+    0 var(--preview-depth, 0px) calc(var(--preview-depth, 0px) * 2.4)
+      color-mix(in srgb, var(--nova-ink) 14%, transparent);
+  --depth-sample-bloom:
+    0 0 calc(var(--nv-above, 0) * var(--nv-h, 0) * 0.09px)
+      color-mix(in oklab, var(--nova-action) calc(var(--nv-above, 0) * 34%), transparent);
   --depth-instrument-well:
     inset 0 2px 6px rgba(10, 14, 22, 0.24),
     inset 0 -1px 0 var(--bevel-hair);
+  /* ── The `-ink` the token system publishes for one family out of five ──────
+     `--nova-action-ink` exists; `--nova-success-ink`, `--nova-warning-ink`,
+     `--nova-danger-ink` and `--nova-info-ink` did not. So every small label on a
+     `-soft` chip painted the family's FILL colour, and two of them measured
+     under 4.5: the signal delta chip at 4.39 in night, the danger control at
+     4.42 in mint and 4.25 in night.
+
+     Derived, not invented: both operands are the pack's own tokens, so the mix
+     is correct in every pack without a single new colour value being chosen
+     here. In a light pack both are dark and the ink darkens; in a dark pack both
+     are light and it lightens. The direction is right in both because it is the
+     pack that decides which way `--nova-ink` points. */
+  --nova-success-ink: color-mix(in oklab, var(--nova-success) 76%, var(--nova-ink));
+  --nova-warning-ink: color-mix(in oklab, var(--nova-warning) 76%, var(--nova-ink));
+  --nova-danger-ink: color-mix(in oklab, var(--nova-danger) 76%, var(--nova-ink));
+  --nova-info-ink: color-mix(in oklab, var(--nova-info) 76%, var(--nova-ink));
+
   --depth-avatar: 0 2px 8px rgba(16, 16, 16, 0.18);
   --depth-round: 0 2px 6px rgba(16, 16, 16, 0.05);
   --depth-orb: 0 0 42px rgba(120, 230, 140, 0.5);

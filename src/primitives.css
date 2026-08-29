@@ -69,7 +69,7 @@
 .nova-control.is-quiet { color: var(--nova-ink-secondary); }
 
 .nova-control.is-danger {
-  color: var(--nova-danger);
+  color: var(--nova-danger-ink);
   background: var(--nova-danger-soft);
   border-color: color-mix(in srgb, var(--nova-danger) 24%, var(--nova-border));
 }

@@ -1,0 +1,148 @@
+/* ============================================================================
+   gold-lab.css — the advanced lab: two drawings that did not read their state
+
+   Fourth operation under the `visual-redesign` protocol. Same rules: a new file
+   imported after the originals, rollback is one import line, ZERO JSX changes.
+
+   THE AUDIT.
+
+   1. `.empty-orbit` has THREE states on its own class — `is-empty`, `is-working`,
+      `is-done` — and a 210px drawing that looks identical in all three. The only
+      thing that moves is a 34px spinner inside it. A guided empty state whose
+      whole subject is "what is happening now" says it with 3% of its own area.
+
+   2. `.constellation-stage > svg path` is `stroke-dasharray: 4 7` and still: a
+      FLOW diagram, five nodes, three states, and the connections neither flow nor
+      read anything.
+
+   3. `.flow-node > span` transitions `transform`, `border-color` and `box-shadow`,
+      and nothing ever sets a box-shadow. Rather than delete the entry, give it its
+      job: the selected node is the one being read, so it is the one that blooms.
+      The transition was already being paid for.
+
+   Also fixed at the source, because they are defects and not design: seven copies
+   of `values.length - 1` in `SignalLens`, a hardcoded `/5` beside a five-element
+   array in `FlowConstellation`, and a per-direction `border-radius` override that
+   restated the same four equal corners.
+   ============================================================================ */
+
+/* ── 1. The rings are the state ────────────────────────────────────────────
+   `rotate` is the individual transform property, and it applies BEFORE the
+   `transform` shorthand — so animating it composes with the author's tilt
+   instead of fighting it. The tilts stay exactly as written. */
+
+/* EMPTY: unformed, and slowly breathing so it reads as "nothing here yet"
+   rather than as a broken graphic. Two speeds, opposite senses, low amplitude. */
+.empty-orbit.is-empty > i {
+  animation: labDrift 34s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
+}
+
+.empty-orbit.is-empty > i:nth-child(2) {
+  animation-duration: 26s;
+  animation-direction: alternate-reverse;
+}
+
+@keyframes labDrift {
+  to { rotate: 26deg; }
+}
+
+/* WORKING: the whole drawing turns, the two rings in opposite senses so the
+   field reads as a mechanism and not as one spinning shape. The inner ring is
+   faster, which is what makes the pair legible as two. */
+.empty-orbit.is-working > i {
+  animation: labSpin 4.2s cubic-bezier(0.4, 0.02, 0.6, 0.98) infinite;
+}
+
+.empty-orbit.is-working > i:nth-child(2) {
+  animation-duration: 2.6s;
+  animation-direction: reverse;
+}
+
+@keyframes labSpin {
+  to { rotate: 360deg; }
+}
+
+/* DONE: the rings SETTLE — they close to concentric circles, go solid, and take
+   the success family. One run, `both`, so the reduced-motion blanket lands on the
+   finished frame rather than reverting (the lesson from the motion track: a
+   blanket does not COMPLETE an animation, it shortens it). */
+.empty-orbit.is-done > i {
+  border-style: solid;
+  border-color: color-mix(in oklab, var(--nova-success) 46%, var(--nova-border));
+  border-radius: 50%;
+  animation: labSettle 620ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes labSettle {
+  from {
+    border-radius: 48% 52% 58% 42%;
+    rotate: -14deg;
+  }
+}
+
+/* and the plaque blooms, reusing the instrument bloom rather than writing a
+   shadow: the token reads `--nv-value`, so declaring the value IS the bloom */
+.empty-orbit.is-done > span {
+  --nv-value: 100;
+  box-shadow: var(--depth-instrument-bloom);
+}
+
+/* ── 2. A flow diagram flows ───────────────────────────────────────────────
+   The dash marches along the path, which is the one thing a connection can say
+   without knowing which node is selected: direction. `stroke-dashoffset` in user
+   units, the period equal to the dash pattern's own length (4 + 7), so the loop
+   is seamless without normalising `pathLength`. */
+.constellation-stage > svg path {
+  animation: labFlow 900ms linear infinite;
+}
+
+@keyframes labFlow {
+  to { stroke-dashoffset: -11; }
+}
+
+[dir="ltr"] .constellation-stage > svg path {
+  animation-direction: reverse;
+}
+
+/* ── 3. The selected node blooms, through a transition already declared ────── */
+.flow-node[aria-pressed="true"] > span {
+  --nv-value: 100;
+  box-shadow: var(--depth-instrument-bloom);
+}
+
+/* ── Reduced motion ────────────────────────────────────────────────────────
+   The repo blanket in tokens.css:326 shortens every animation to 1ms with one
+   iteration. Each still frame here was chosen to be a legitimate resting state:
+     - empty  → `alternate` with no fill mode reverts to the authored tilt
+     - working → `labSpin` ends at 360deg, which is where it started
+     - done   → `both` holds the settled frame, which is the point of the state
+     - flow   → a dash offset of -11 is one full pattern, so the dashes land
+                exactly where they began
+   Nothing here needs a `prefers-reduced-motion` block of its own, and that is a
+   claim the Post-Op table measures rather than asserts. */
+
+/* ── A geometry clash the screenshot found and arithmetic confirmed ─────────
+   The plaque's corners cross the inner ring. Not at some widths — at ALL of
+   them, and it predates this operation; making the settled ring a true circle
+   is only what made it obvious.
+
+     box side           S = min(100%, 210px)
+     inner ring         inset 25% → side S/2, radius S/4
+     largest square that fits inside that circle
+                        side = (S/4) · √2 = S · 0.3536
+     at S = 210         74.2px … and the plaque is a fixed 78px
+
+   So the plaque was always ~4px too wide at the maximum size and worse as the
+   panel narrowed, because the rings scale with the box and 78px does not. The
+   fix is to let the plaque scale with everything else: 33% of the box is 69.3px
+   at S = 210, inside the 74.2px that fits.
+
+   ponytail: the 46px floor keeps the 34px glyph from being crushed on a narrow
+   panel, and below a box of ~130px the corners would touch again. The box is
+   `min(100%, 210px)` inside a panel that reflows to one column at 1160px, and
+   the measured minimum in this layout is well above 130. If a narrower host ever
+   appears, the glyph has to scale too — `inline-size: 44%` on the svg. */
+.empty-orbit > span {
+  inline-size: max(46px, 33%);
+  block-size: max(46px, 33%);
+}

@@ -89,6 +89,7 @@ export const uiCopy = {
     commandTitle: "انتقل إلى أي مكوّن",
     commandHint: "اكتب اسم المكوّن أو وظيفته",
     commandEmpty: "لا توجد نتائج مطابقة",
+    commandTruncated: "تُعرَض {shown} من {total} نتيجة",
     close: "إغلاق",
   },
   en: {
@@ -179,6 +180,7 @@ export const uiCopy = {
     commandTitle: "Jump to any component",
     commandHint: "Type a component name or purpose",
     commandEmpty: "No matching results",
+    commandTruncated: "Showing {shown} of {total} results",
     close: "Close",
   },
 } as const;

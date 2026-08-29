@@ -31,7 +31,7 @@ function DiaText() {
     <div className="demo demo-dia-text">
       <span className="demo-kicker">صمّم لتجربة</span>
       <h4>منتج <span key={word}>{words[word]}</span><br />من أول لحظة.</h4>
-      <div className="word-selector" role="radiogroup" aria-label="اختر الكلمة"><button type="button" aria-label="الكلمة السابقة" onClick={() => setWord((value) => (value + 2) % 3)}>−</button>{words.map((label, index) => <i key={label} className={index === word ? "active" : ""} />)}<button type="button" aria-label="الكلمة التالية" onClick={() => setWord((value) => (value + 1) % 3)}>+</button></div>
+      <div className="word-selector" role="radiogroup" aria-label="اختر الكلمة"><button type="button" aria-label="الكلمة السابقة" onClick={() => setWord((value) => (value + words.length - 1) % words.length)}>−</button>{words.map((label, index) => <i key={label} className={index === word ? "active" : ""} />)}<button type="button" aria-label="الكلمة التالية" onClick={() => setWord((value) => (value + 1) % words.length)}>+</button></div>
     </div>
   );
 }

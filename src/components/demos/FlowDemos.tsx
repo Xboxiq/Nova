@@ -30,11 +30,16 @@ function OnboardingDemo({ onNotify }: Pick<DemoProps, "onNotify">) {
   const [avatar, setAvatar] = useState(1);
   const [done, setDone] = useState(false);
   const avatars = ["ن", "ر", "س", "ع"];
+  /* The caption used to read "الخطوة 1 من 3" as a literal, beside three literal
+     `<i>` dots, while `done` lit the SECOND dot. So the drawing advanced and the
+     sentence under it did not — the hero card's defect, one screen over. */
+  const steps = [true, done, false];
+  const at = steps.filter(Boolean).length;
 
   return (
     <div className="demo demo-onboarding">
-      <div className="demo-progress"><i className="active" /><i className={done ? "active" : ""} /><i /></div>
-      <span className="demo-kicker">الخطوة 1 من 3</span>
+      <div className="demo-progress">{steps.map((on, index) => <i key={index} className={on ? "active" : ""} />)}</div>
+      <span className="demo-kicker">الخطوة {at} من {steps.length}</span>
       <h4>{done ? "اختيار موفق" : "اختر حضورك البصري"}</h4>
       <p>{done ? "يمكنك تغييره لاحقًا من الإعدادات." : "ابدأ بصورة بسيطة تمثّلك داخل مساحة العمل."}</p>
       <div className="avatar-row" role="radiogroup" aria-label="اختر الصورة الشخصية">
@@ -74,7 +79,7 @@ function RegistrationDemo() {
           </li>
         ))}
       </ol>
-      <button className="demo-secondary" type="button" onClick={() => setStep((value) => Math.min(3, value + 1))}>أكمل الخطوة <PiArrowLeft /></button>
+      <button className="demo-secondary" type="button" onClick={() => setStep((value) => Math.min(labels.length - 1, value + 1))}>أكمل الخطوة <PiArrowLeft /></button>
     </div>
   );
 }
@@ -109,18 +114,19 @@ function MultistepDemo({ onNotify }: Pick<DemoProps, "onNotify">) {
     { title: "جاهز للانطلاق", label: "ملاحظة اختيارية", placeholder: "أي تفاصيل إضافية" },
   ];
   const current = screens[step];
+  const last = screens.length - 1;
   const next = () => {
-    if (step < 2) setStep((value) => value + 1);
+    if (step < last) setStep((value) => value + 1);
     else onNotify("اكتمل إعداد المشروع");
   };
   return (
     <form className="demo demo-multistep" onSubmit={(event) => { event.preventDefault(); next(); }}>
       <div className="form-step-head"><span>0{step + 1}</span><div><small>إعداد سريع</small><h4>{current.title}</h4></div></div>
       <label><span>{current.label}</span><input value={name} onChange={(event) => setName(event.target.value)} placeholder={current.placeholder} /></label>
-      <div className="form-progress" role="progressbar" aria-label="تقدّم النموذج" aria-valuemin={1} aria-valuemax={3} aria-valuenow={step + 1}><i style={{ transform: `scaleX(${(step + 1) / 3})` }} /></div>
+      <div className="form-progress" role="progressbar" aria-label="تقدّم النموذج" aria-valuemin={1} aria-valuemax={screens.length} aria-valuenow={step + 1}><i style={{ transform: `scaleX(${(step + 1) / screens.length})` }} /></div>
       <div className="form-actions">
         <button className="demo-secondary" type="button" disabled={step === 0} onClick={() => setStep((value) => Math.max(0, value - 1))}><PiArrowRight /> رجوع</button>
-        <button className="demo-primary" type="submit">{step === 2 ? "إنهاء" : "متابعة"} <PiArrowLeft /></button>
+        <button className="demo-primary" type="submit">{step === last ? "إنهاء" : "متابعة"} <PiArrowLeft /></button>
       </div>
     </form>
   );

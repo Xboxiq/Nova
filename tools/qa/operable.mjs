@@ -505,6 +505,58 @@ for (const c of CASES) {
   await page.close();
 }
 
+/* ── The library's own tablist, by keyboard alone ────────────────────────────
+   `tabIndex={-1}` on the unselected tabs is what a tablist is supposed to do: it
+   keeps Tab from walking through forty-five items. But it is only half of the
+   pattern, and for a long time this repository shipped the half: measured, the
+   picker had 45 tabs, ONE reachable by Tab, and ArrowDown, ArrowUp, Home and End
+   moved nothing at all. A keyboard user could reach exactly one of forty-five
+   sections and could never leave it.
+
+   Nothing in the harness could see it. Every other check here CLICKS, and clicking
+   worked perfectly — the defect lived entirely in the one interaction no gate
+   performed. So this block performs it, and asserts the panel followed: focus
+   moving without the panel changing would be the same half-built pattern again. */
+{
+  const page = await browser.newPage({ viewport: { width: 1440, height: 1100 } });
+  page.on("pageerror", (e) => errors.push(`tablist: ${e}`));
+  await page.goto(URL, { waitUntil: "networkidle" });
+  await page.locator("#madar").scrollIntoViewIfNeeded();
+  await page.waitForTimeout(700);
+
+  const state = () => page.evaluate(() => {
+    const tabs = [...document.querySelectorAll('.madar-picker-list [role="tab"]')];
+    return {
+      tabs: tabs.length,
+      focused: tabs.indexOf(document.activeElement),
+      selected: tabs.findIndex((t) => t.getAttribute("aria-selected") === "true"),
+      panel: document.querySelector('.madar-stage[role="tabpanel"]')?.id ?? "",
+    };
+  });
+
+  const first = page.locator('.madar-picker-list [role="tab"][tabindex="0"]').first();
+  if (!(await first.count())) {
+    failures.push("tablist: no tab carries tabindex=0, so the picker has no keyboard entry point");
+  } else {
+    await first.focus();
+    const at = await state();
+    if (at.focused !== at.selected) failures.push(`tablist: focus (${at.focused}) and selection (${at.selected}) disagree at rest`);
+
+    for (const [key, expect] of [["ArrowDown", 1], ["End", "last"], ["Home", 0]]) {
+      const before = await state();
+      await page.keyboard.press(key);
+      await page.waitForTimeout(400);
+      const after = await state();
+      const want = expect === "last" ? after.tabs - 1 : expect;
+      if (after.focused !== want) failures.push(`tablist: ${key} put focus at ${after.focused}, expected ${want}`);
+      if (after.selected !== want) failures.push(`tablist: ${key} left selection at ${after.selected}, expected ${want}`);
+      if (after.panel === before.panel) failures.push(`tablist: ${key} moved the tab and the panel stayed "${before.panel}"`);
+      operated += 1;
+    }
+  }
+  await page.close();
+}
+
 await browser.close();
 
 for (const f of failures) console.log(`  FAIL ${f}`);

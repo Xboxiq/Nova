@@ -424,7 +424,7 @@ button:disabled {
   border-radius: var(--nova-radius-control);
   font-size: var(--nova-text-body-sm);
   font-weight: var(--nova-weight-bold);
-  transition: color var(--nova-motion-fast), background-color var(--nova-motion-fast), border-color var(--nova-motion-fast), box-shadow var(--nova-motion-fast), transform var(--nova-motion-instant);
+  transition: color var(--nova-motion-fast), background-color var(--nova-motion-fast), border-color var(--nova-motion-fast), transform var(--nova-motion-instant);
 }
 
 .primary-link,
@@ -767,7 +767,14 @@ button:disabled {
   font-variant-numeric: tabular-nums;
 }
 
+/* Every sample carries its own scalar, so the height, the saturation against the
+   mean and the bloom are three readings of one number rather than three
+   declarations that can drift apart. */
+@property --nv-h { syntax: "<number>"; inherits: true; initial-value: 0; }
+@property --nv-mean { syntax: "<number>"; inherits: true; initial-value: 0; }
+
 .stage-bars {
+  position: relative;
   display: flex;
   align-items: end;
   gap: var(--nova-space-2);
@@ -779,11 +786,49 @@ button:disabled {
   background-size: 100% 33.333%;
 }
 
+/* SS19: the mean is the second path on the same axis, so the information is where
+   the bars cross it. Drawn, labelled by the figure above, and the only reason the
+   eight heights have a centre to be read against. */
+.stage-bars__mean {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: calc(var(--nv-mean) * 1%);
+  block-size: 0;
+  border-block-start: 1px dashed color-mix(in srgb, var(--nova-ink) 42%, transparent);
+  pointer-events: none;
+  z-index: 1;
+}
+
 .stage-bars i {
+  --nv-above: clamp(0, calc((var(--nv-h) - var(--nv-mean)) * 100), 1);
+
   width: 100%;
-  min-height: 10%;
-  background: linear-gradient(to top, var(--nova-action-pressed) 0%, var(--nova-action) 54%, color-mix(in srgb, var(--nova-expressive-sky) 72%, white) 100%);
+  /* height IS the sample. The old rule floored it at 10%, so a zero sample drew a
+     tenth of the card -- a floor that lies about zero. 1px is a hairline, not a
+     value. */
+  block-size: max(1px, calc(var(--nv-h) * 1%));
+  /* saturated above the mean, quiet below it: the distribution reads at a glance,
+     from one saturating clamp and no class per bar */
+  background: linear-gradient(
+    to top,
+    color-mix(in oklab, var(--nova-action-pressed) calc(40% + var(--nv-above) * 60%), var(--nova-surface-quiet)) 0%,
+    color-mix(in oklab, var(--nova-action) calc(40% + var(--nv-above) * 60%), var(--nova-surface-quiet)) 100%
+  );
   border-radius: 6px 6px 2px 2px;
+  /* the bloom is the sample too, and it is a named token: see bridge.css */
+  box-shadow: var(--depth-sample-bloom);
+  transform-origin: bottom;
+  /* entry: a sweep, so the card mounts as a reading arriving rather than a picture
+     appearing. Positive delays, because this IS a queue -- left to right, in the
+     order the samples were taken. The repo blanket collapses it under reduced
+     motion. */
+  animation: stageBarRise 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--i) * 55ms);
+}
+
+@keyframes stageBarRise {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
 }
 
 .stage-metric footer {
@@ -1501,7 +1546,7 @@ button:disabled {
   background: var(--nova-surface);
   border: 1px solid var(--nova-border);
   border-radius: var(--nova-radius-card);
-  transition: border-color var(--nova-motion-fast), box-shadow var(--nova-motion-base), transform var(--nova-motion-base) var(--nova-ease-standard);
+  transition: border-color var(--nova-motion-fast);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -1535,7 +1580,11 @@ button:disabled {
 
 .component-number {
   grid-row: span 2;
-  color: var(--nova-action);
+  /* `--nova-action` is the FILL of the action family, not its ink. As 11px bold
+     text on the card it measured 2.33 in mint against 4.5 -- 72 nodes, one per
+     component card, and the axe pass that would have seen it only ever looked
+     inside `#madar`. `--nova-action-ink` is the ink the family publishes. */
+  color: var(--nova-action-ink);
   font-size: var(--nova-text-label-sm);
   font-weight: var(--nova-weight-bold);
   font-variant-numeric: tabular-nums;
@@ -1980,7 +2029,7 @@ footer#sources > a {
     border: 0;
     border-radius: 6px;
     font-size: var(--nova-text-label-md);
-    transition: color var(--nova-motion-fast), background-color var(--nova-motion-fast), box-shadow var(--nova-motion-fast), transform var(--nova-motion-instant);
+    transition: color var(--nova-motion-fast), background-color var(--nova-motion-fast), transform var(--nova-motion-instant);
   }
   .mobile-dock svg { width: 20px; height: 20px; }
   .mobile-dock .dock-primary {

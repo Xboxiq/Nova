@@ -31,6 +31,9 @@ const APCA_BODY = 60;
    From here the rule applies again: may fall, never rise. */
 const APCA_THIN_CEILING = 16;
 const apcaThin = [];
+/* Violations in the application shell, outside the showcase. Fatal at zero: this
+   is the repo's own code, not the reference designs the owner ordered in. */
+const shellViolations = [];
 
 // Pairs that carry text or an icon on a surface, so AA applies to all of them.
 const PAIRS = [
@@ -357,6 +360,43 @@ for (const c of CASES) {
       "animation-play-state: paused !important; transition: none !important }",
   });
 
+  /* ── The shell, which this gate had never looked at ─────────────────────────
+     Every axe pass below scopes itself to `#madar`, so the showcase was audited
+     and the APPLICATION around it was not: the hero, the filters, the gallery of
+     72 component cards and 8 category headings. That is where the product lives.
+
+     The hole was found by measuring one element the eye had already flagged: the
+     item count in each category heading was painted `--nova-border-strong`, a
+     BORDER token used as a text colour, and it measures 1.56 to 2.52 against its
+     own ground in all seven theme values -- against a 3:1 threshold, since at
+     24px it is large text. Eight nodes per view, in every pack, since the day it
+     was written, and no gate could see them.
+
+     `exclude` is load-bearing: `#madar` is inside `#main-content`, and without it
+     this pass re-reports the 192 reference greys the section pass already carries
+     as a named allowance.
+
+     And the scope is `#main-content`, not `document`, because THAT WAS MEASURED
+     TOO. `axe.run(document, …)` on this page tests 279 nodes and finds zero
+     violations; `axe.run(main, …)` tests 778 and finds the eight. A wider context
+     tested LESS -- so widening the existing pass to the whole document would have
+     found nothing and read as proof there was nothing to find. */
+  if (AXE && !c.reflowOnly) {
+    await page.addScriptTag({ path: AXE });
+    const shell = await page.evaluate(async () =>
+      window.axe.run(
+        { include: [["#main-content"]], exclude: [["#madar"]] },
+        { runOnly: { type: "tag", values: ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"] } },
+      ),
+    );
+    for (const v of shell.violations) {
+      shellViolations.push(
+        `${c.theme} ${c.w}px shell ${v.id} x${v.nodes.length}` +
+          (v.nodes[0]?.any?.[0]?.message ? ` — ${v.nodes[0].any[0].message.slice(0, 110)}` : ""),
+      );
+    }
+  }
+
   await page.locator("#madar").scrollIntoViewIfNeeded();
   await page.waitForTimeout(800);
 
@@ -409,6 +449,8 @@ const report = [
   ...apcaThin.slice(0, 8).map((x) => `  apca: ${x}`),
   `OVERFLOW=${overflow.length ? overflow.join(" | ") : "none"}`,
   `AXE_VIOLATIONS_MADAR=${AXE ? axeViolations.length : "skipped-no-axe-core"}`,
+  `AXE_VIOLATIONS_SHELL=${AXE ? shellViolations.length : "skipped-no-axe-core"}`,
+  ...shellViolations.slice(0, 10).map((v) => `  shell: ${v}`),
   `REFERENCE_GREY_CONTRAST=${referenceGreyNodes} nodes below AA (ceiling ${REFERENCE_GREY_CEILING}, the reference's own greys — see design-system/REFERENCE-CONTRAST.md)`,
   ...axeViolations.map((v) => `  axe: ${v}`),
   `THEME_MENU=${menuFailures.length ? menuFailures.join(" | ") : "ok"}`,
@@ -418,7 +460,7 @@ const report = [
 console.log(report.join("\n"));
 
 const failed =
-  contrastFailures.length || overflow.length || axeViolations.length || runtimeErrors.length || menuFailures.length
+  contrastFailures.length || overflow.length || axeViolations.length || shellViolations.length || runtimeErrors.length || menuFailures.length
   || referenceGreyNodes > REFERENCE_GREY_CEILING
   || apcaThin.length > APCA_THIN_CEILING;
 process.exit(failed ? 1 : 0);

@@ -127,10 +127,9 @@
   border-radius: 6px 6px 6px 6px;
   box-shadow: 0 0 0 5px rgb(112 183 255 / 6%);
   margin-inline: auto;
-  transition: border-radius var(--nova-motion-disclosure) var(--nova-ease-physical), background-color var(--nova-motion-control), opacity var(--nova-motion-control);
+  transition: border-radius var(--nova-motion-disclosure) var(--nova-ease-physical);
 }
 
-[dir="ltr"] .context-object { border-radius: 6px 6px 6px 6px; }
 .context-canvas[data-context="1"] .context-object { width: min(38%, 380px); border-radius: var(--nova-radius-card); }
 .context-canvas[data-context="2"] .context-object { width: min(46%, 470px); height: 94px; border-radius: var(--nova-radius-field); }
 .context-object i { display: block; width: 84%; height: 8px; background: rgb(219 242 247 / 18%); border-radius: 4px; }
@@ -156,7 +155,7 @@
 
 [dir="ltr"] .context-ribbon { padding-inline-start: 8px; padding-inline-end: 12px; border-radius: 6px 6px 6px 6px; }
 .context-identity { display: flex; align-items: center; gap: var(--nova-space-3); min-width: 0; }
-.context-identity > span { display: grid; place-items: center; width: 48px; height: 48px; flex: 0 0 auto; color: #d8f3ff; background: rgb(206 242 250 / 10%); border: 1px solid rgb(227 250 255 / 12%); border-radius: 6px; }
+.context-identity > span { display: grid; place-items: center; width: 48px; height: 48px; flex: 0 0 auto; color: #d8f3ff; background: rgb(10 26 33 / 34%); border: 1px solid rgb(227 250 255 / 22%); border-radius: 6px; }
 .context-identity > span svg { width: 22px; height: 22px; }
 .context-identity > div { display: grid; gap: 2px; min-width: 0; }
 .context-identity small { overflow: hidden; color: #88a8b1; font-size: var(--nova-text-label-sm); text-overflow: ellipsis; white-space: nowrap; }
@@ -183,8 +182,8 @@
 .signal-summary small { color: var(--nova-ink-tertiary); font-size: var(--nova-text-label-sm); }
 .signal-summary strong { font-size: clamp(2.4rem, 5vw, 4rem); line-height: 1; letter-spacing: -.055em; }
 .signal-summary strong span { margin-inline-start: 4px; color: var(--nova-ink-tertiary); font-size: var(--nova-text-title-md); letter-spacing: normal; }
-.signal-summary > span { padding: 7px 10px; color: var(--nova-success); background: var(--nova-success-soft); border-radius: var(--nova-radius-control); font-size: 11px; }
-.signal-summary > span.is-down { color: var(--nova-danger); background: var(--nova-danger-soft); }
+.signal-summary > span { padding: 7px 10px; color: var(--nova-success-ink); background: var(--nova-success-soft); border-radius: var(--nova-radius-control); font-size: 11px; }
+.signal-summary > span.is-down { color: var(--nova-danger-ink); background: var(--nova-danger-soft); }
 .signal-chart { position: relative; padding: var(--nova-space-4) var(--nova-space-3) var(--nova-space-2); background: color-mix(in srgb, var(--nova-surface-quiet) 66%, transparent); border: 1px solid var(--nova-border); border-radius: var(--nova-radius-card); }
 .signal-chart svg { width: 100%; min-height: 210px; overflow: visible; }
 .signal-cursor { stroke: color-mix(in srgb, var(--nova-action) 42%, transparent); stroke-width: 1; stroke-dasharray: 4 5; }
@@ -219,7 +218,7 @@
 .flow-node[aria-pressed="true"] > span { color: var(--nova-action-ink); border-color: color-mix(in srgb, var(--nova-action) 46%, var(--nova-border)); }
 .flow-node.is-done > span { color: var(--nova-success); }
 .flow-node.is-pending { color: var(--nova-ink-tertiary); }
-.flow-node > i { position: absolute; inset-block-start: 0; inset-inline-end: 8px; display: grid; place-items: center; width: 18px; height: 18px; color: var(--nova-on-action); background: var(--nova-success); border: 2px solid var(--nova-surface); border-radius: 50%; }
+.flow-node > i { position: absolute; inset-block-start: 0; inset-inline-end: 8px; display: grid; place-items: center; width: 18px; height: 18px; color: var(--nova-canvas); background: var(--nova-success); border: 2px solid var(--nova-surface); border-radius: 50%; }
 .flow-node > i svg { width: 10px; height: 10px; }
 .node-1 { inset-inline-start: 0; inset-block-start: 38%; }
 .node-2 { inset-inline-start: 22%; inset-block-start: 38%; }
@@ -242,7 +241,7 @@
 .notification-toolbar button svg { transition: transform var(--nova-motion-disclosure) var(--nova-ease-physical); }
 .notification-stack.is-expanded .notification-toolbar button svg { transform: rotate(180deg); }
 .notification-deck { position: relative; min-height: 290px; }
-.notification-deck article { position: absolute; inset: 0 0 auto; z-index: calc(4 - var(--stack-index)); display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto; align-items: center; gap: var(--nova-space-3); min-height: 116px; padding: var(--nova-space-4); background: var(--nova-surface-raised); border: 1px solid var(--nova-border); border-radius: 6px 6px 6px 6px; transform: translateY(calc(var(--stack-index) * 17px)) scale(calc(1 - (var(--stack-index) * .025))); transform-origin: top center; transition: transform var(--nova-motion-disclosure) var(--nova-ease-physical), opacity var(--nova-motion-control); }
+.notification-deck article { position: absolute; inset: 0 0 auto; z-index: calc(4 - var(--stack-index)); display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto; align-items: center; gap: var(--nova-space-3); min-height: 116px; padding: var(--nova-space-4); background: var(--nova-surface-raised); border: 1px solid var(--nova-border); border-radius: 6px 6px 6px 6px; transform: translateY(calc(var(--stack-index) * 17px)) scale(calc(1 - (var(--stack-index) * .025))); transform-origin: top center; transition: transform var(--nova-motion-disclosure) var(--nova-ease-physical); }
 [dir="ltr"] .notification-deck article { border-radius: 6px 6px 6px 6px; }
 .notification-stack:not(.is-expanded) .notification-deck article:not(:first-child) { pointer-events: none; }
 .notification-stack:not(.is-expanded) .notification-deck article:not(:first-child) > * { opacity: 0; }
@@ -283,8 +282,9 @@
 .empty-orbit { position: relative; display: grid; place-items: center; width: min(100%, 210px); aspect-ratio: 1; margin-inline: auto; }
 .empty-orbit > i { position: absolute; inset: 12%; border: 1px dashed color-mix(in srgb, var(--nova-action) 34%, var(--nova-border)); border-radius: 48% 52% 58% 42%; transform: rotate(12deg); }
 .empty-orbit > i:nth-child(2) { inset: 25%; border-style: solid; border-color: color-mix(in srgb, var(--nova-expressive-mint) 44%, var(--nova-border)); transform: rotate(-18deg); }
-.empty-orbit > span { position: relative; z-index: 1; display: grid; place-items: center; width: 78px; height: 78px; color: var(--nova-action-ink); background: linear-gradient(150deg, var(--nova-glass-strong), var(--nova-glass)); border: 1px solid var(--nova-glass-edge); border-radius: 6px 6px 6px 6px; backdrop-filter: blur(24px) saturate(165%); }
-[dir="ltr"] .empty-orbit > span { border-radius: 6px 6px 6px 6px; }
+/* Four equal corners were written longhand and then overridden, per direction,
+   with the same four equal corners. The override could never change anything. */
+.empty-orbit > span { position: relative; z-index: 1; display: grid; place-items: center; width: 78px; height: 78px; color: var(--nova-action-ink); background: linear-gradient(150deg, var(--nova-glass-strong), var(--nova-glass)); border: 1px solid var(--nova-glass-edge); border-radius: 6px; backdrop-filter: blur(24px) saturate(165%); }
 .empty-orbit > span svg { width: 34px; height: 34px; }
 .empty-orbit.is-working > span svg { animation: advanced-spin 780ms linear infinite; }
 .empty-orbit.is-done > span { color: var(--nova-success); background: var(--nova-success-soft); }
@@ -324,7 +324,7 @@
 .adaptive-inspector { position: relative; z-index: 2; display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(250px, .88fr); gap: var(--nova-space-5); }
 .inspector-preview { position: relative; display: grid; place-items: center; min-height: 340px; overflow: hidden; background: color-mix(in srgb, var(--nova-surface-quiet) 72%, transparent); border: 1px solid var(--nova-border); border-radius: var(--nova-radius-card); }
 .inspector-preview > i { position: absolute; inset: 0; background-image: linear-gradient(var(--nova-border) 1px, transparent 1px), linear-gradient(90deg, var(--nova-border) 1px, transparent 1px); background-size: 26px 26px; opacity: .52; }
-.preview-object { position: relative; z-index: 1; display: grid; justify-items: center; gap: var(--nova-space-2); width: min(74%, 280px); min-height: 180px; padding: var(--nova-space-6); background: linear-gradient(145deg, var(--nova-surface-raised), color-mix(in srgb, var(--nova-surface) 88%, var(--nova-expressive-frost))); border: 1px solid var(--nova-border); border-radius: var(--preview-corner); box-shadow: 0 var(--preview-depth) calc(var(--preview-depth) * 2.4) color-mix(in srgb, var(--nova-ink) 14%, transparent); transition: border-radius var(--nova-motion-control), box-shadow var(--nova-motion-control); }
+.preview-object { position: relative; z-index: 1; display: grid; justify-items: center; gap: var(--nova-space-2); width: min(74%, 280px); min-height: 180px; padding: var(--nova-space-6); background: linear-gradient(145deg, var(--nova-surface-raised), color-mix(in srgb, var(--nova-surface) 88%, var(--nova-expressive-frost))); border: 1px solid var(--nova-border); border-radius: var(--preview-corner); box-shadow: var(--depth-preview-object); transition: border-radius var(--nova-motion-control), box-shadow var(--nova-motion-control); }
 .preview-object > span { display: grid; place-items: center; width: 54px; height: 54px; color: var(--nova-action-ink); background: var(--nova-action-soft); border-radius: calc(var(--preview-corner) * .55); }
 .preview-object strong { font-size: var(--nova-text-title-md); letter-spacing: -.03em; }
 .preview-object small { color: var(--nova-ink-tertiary); font-size: var(--nova-text-label-sm); }

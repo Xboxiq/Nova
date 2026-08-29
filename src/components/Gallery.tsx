@@ -1,20 +1,14 @@
 import { useMemo } from "react";
 import {
   PiArrowUpRight,
-  PiCards,
-  PiChartLineUp,
   PiCopy,
-  PiCursorClick,
-  PiMagicWand,
-  PiNavigationArrow,
-  PiPath,
   PiSquaresFour,
-  PiToggleLeft,
 } from "react-icons/pi";
 import { categories } from "../data/catalog";
 import type { Locale } from "../i18n";
 import type { CatalogItem, CategoryId } from "../types";
 import DemoRenderer from "./demos/DemoRenderer";
+import { familyIcon } from "../family-icons";
 
 interface GalleryProps {
   items: CatalogItem[];
@@ -25,17 +19,6 @@ interface GalleryProps {
   onNotify: (message: string) => void;
   onThemeToggle: () => void;
 }
-
-const categoryIcons = {
-  flows: PiPath,
-  controls: PiToggleLeft,
-  navigation: PiNavigationArrow,
-  motion: PiChartLineUp,
-  inputs: PiSquaresFour,
-  actions: PiCursorClick,
-  surfaces: PiCards,
-  effects: PiMagicWand,
-};
 
 const descriptionsEn: Record<CategoryId, string> = {
   flows: "Clear journeys from entry to completion",
@@ -96,7 +79,7 @@ export default function Gallery({
   return (
     <div className="gallery" role="region" aria-label={locale === "ar" ? "مكوّنات NOVA" : "NOVA components"}>
       {groups.map((group) => {
-        const Icon = categoryIcons[group.id];
+        const Icon = familyIcon(group.id);
         return (
           <section className="category-section" key={group.id} id={`category-${group.id}`} aria-labelledby={`title-${group.id}`}>
             <header className="category-heading">
