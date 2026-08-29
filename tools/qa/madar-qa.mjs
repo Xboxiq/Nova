@@ -114,6 +114,20 @@ const REFERENCE_GREYS = new Set([
      and therefore the owner's. REFERENCE-CONTRAST.md lists it. */
   "#178d00", // "Available for new project" on #e1f9dc — 3.87
 
+  /* Upload 98's "NEW" badge, and BOTH of its colours are the author's: the badge
+     is `bg-blue-500/10 text-blue-600 dark:bg-blue-400/15 dark:text-blue-400`, a
+     hardcoded blue pair rather than a token, and in the NIGHT pack alone the dark
+     half composites to `#51a2ff` on `#34456a` — 3.61 at 10px bold, against 4.5.
+     Two nodes; the six other packs pass.
+
+     Carried on the terms the two entries above established, and for the same
+     reason: there is nothing of MINE in the pair to remove. Recolouring an
+     upload's badge is a design change to what the owner ordered in unchanged, so
+     the number is printed and the decision stays theirs. The remedy, when they
+     want it, is one word each: `text-blue-300 dark:bg-blue-400/25`, or the token
+     pair this repo already publishes — `--nova-info-ink` on `--nova-info-soft`. */
+  "#51a2ff", // upload 98's NEW badge on #34456a in the night pack — 3.61
+
   /* Upload 97's own sub-caption: `rgb(128, 128, 128)` on the card's own white,
      measured 3.94 at 11.2px. Both values are declared in the upload, in the same
      file, and mid-grey on white is the plainest case this allowance exists for.

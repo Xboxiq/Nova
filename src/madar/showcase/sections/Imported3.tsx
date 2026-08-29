@@ -28,6 +28,8 @@ import { CornerBracketOfferButton } from '@/components/ui/corner-bracket-offer-b
 import { FifteenZoneBatteryCard } from '@/components/ui/fifteen-zone-battery-card';
 import { ElectricCookButton } from '@/components/ui/electric-cook-button';
 import { SunsetGrayscaleButton } from '@/components/ui/sunset-grayscale-button';
+import { TreeFolder, TreeItem, TreeSection, TreeView } from '@/components/ui/animated-file-tree';
+import { Download, Palette, Type } from 'lucide-react';
 
 export function Imported3() {
   return (
@@ -329,6 +331,85 @@ export function Imported3() {
           <b>وزائفةٌ لا وجودَ لها إلا في استعلامِ وسائط:</b> <code>.scene::before</code> يظهرُ مرّةً واحدةً في الملفِّ كلِّه، <b>داخلَ <code>@media (prefers-reduced-motion: reduce)</code></b>، يضبِطُ <code>opacity: 0.35</code>. <b>ولا شيءَ في أيِّ موضعٍ يُصرِّحُ لها <code>content</code>، فالنَّقضُ لا شيءَ لديه يَنقُضُه.</b> <b>وما أُرِيدَ إخفاؤُه ليس في الملفِّ الذي وصَل.</b>
           <br /><br />
           <b>والزرُّ رماديٌّ حتى تلمِسَه:</b> <code>filter: grayscale(100%) brightness(0.9)</code> أساسًا، و<code>grayscale(0%)</code> تمريرًا، <b>على <code>1200ms</code> — أبطأُ انتقالٍ في هذا السجلِّ كلِّه، والوحيدُ الذي المُنتقِلُ فيه هو <em>لوحةُ الألوانِ كلُّها</em></b>. وقِيسَ: <code>grayscale(1) brightness(0.9)</code> سكونًا، وقائمةُ مُدَدٍ من سبعةِ بنودٍ آخرُها <code>1.2s</code>. <b>والمساراتُ ثلاثةٌ وخمسونَ عَدًّا، وامتلاؤُها بالفهارسِ عينِها التي سمّاها الـCSS:</b> <code>خمسةٌ داكنةٌ [1, 2, 16, 45, 53]</code> · <code>ستٌّ وعشرونَ ذهبيّةٌ [3…29]</code> · <code>اثنتانِ وعشرونَ برتقاليّةٌ [30…52]</code>، <b>ومِحورا النخلتَين <code>34.5px 72px</code> و<code>195.5px 72px</code> — أي ١٥٪ و٨٥٪ من ٢٣٠ بالضبط</b>. <b>ومواضعُ طبقاتِ <code>::after</code> الثلاثِ كلُّها <code>0% 0%</code>، فسقوطُ <code>calc(-30% * 1%)</code> مَقيسٌ لا مُستَنتَج.</b> فالغروبُ موجودٌ في السكونِ ولا لونَ له. <b>وذاك <code>filter</code> يعملُ عملًا بنيويًّا أيضًا</b>: مُرشِّحٌ غيرُ <code>none</code> يُنشئُ سياقَ تراصُف، <b>وهو ما يُبقي <code>::before</code> عند <code>z-index: -2</code> داخلَ الزرّ</b>. <b>وأربعُ خاصّيّاتٍ مختلفةٍ أدَّت هذا العملَ في هذا السجلّ — <code>isolation</code> و<code>perspective</code> و<code>translate</code> والآنَ <code>filter</code> — وواحدةٌ منها فقط كُتِبَت له.</b>
+        </SpecRow>
+
+        <SpecRow name="شجرةٌ تختارُ بلَوحةِ المفاتيحِ ولا تُطلِقُ نقرة، ومُضيفٌ بلا إعادةِ ضبطٍ يُعيدُ الصفوفَ أزرارَ نظامِ تشغيل" bare specimen={
+          <div className="flex w-full items-start justify-center rounded-2xl bg-[var(--color-background)] px-6 py-10" dir="ltr">
+            <div className="w-full max-w-[240px] rounded-lg bg-[var(--color-card)] py-2">
+              <TreeView variant="line" activeColor="text-orange-600 dark:text-orange-500" defaultSelectedId="announcement">
+                <TreeSection title="Getting Started" defaultExpanded={true}>
+                  <TreeItem id="installation" label="Installation" icon={Download} />
+                </TreeSection>
+
+                <TreeSection title="Foundations" defaultExpanded={true}>
+                  <TreeItem id="color" label="Color" icon={Palette} />
+                  <TreeItem id="typography" label="Typography" icon={Type} />
+                </TreeSection>
+
+                <TreeSection title="Base" defaultExpanded={true}>
+                  <TreeItem id="announcement" label="Announcement" />
+                  <TreeItem id="avatar" label="Avatar" />
+                  <TreeItem id="badge" label="Badge" />
+                  <TreeItem id="breadcrumb" label="Breadcrumb" />
+
+                  <TreeFolder id="buttons-folder" label="Buttons" defaultExpanded={false}>
+                    <TreeItem id="button" label="Button" />
+                    <TreeItem id="button-group" label="Button Group" />
+                    <TreeItem id="icon-button" label="Icon Button" />
+                    <TreeItem id="link-button" label="Link Button" />
+                  </TreeFolder>
+
+                  <TreeItem id="carousel" label="Carousel" badge="NEW" />
+                  <TreeItem id="checkbox" label="Checkbox" />
+                  <TreeItem id="chip" label="Chip" />
+                  <TreeItem id="close-button" label="Close Button" />
+                  <TreeItem id="date-picker" label="Date Picker" />
+                  <TreeItem id="divider" label="Divider" />
+                  <TreeItem id="dropdown" label="Dropdown" />
+
+                  <TreeFolder id="forms-folder" label="Form Controls" defaultExpanded={false}>
+                    <TreeItem id="input" label="Input" />
+                    <TreeItem id="input-otp" label="Input OTP" badge="NEW" />
+                    <TreeItem id="file-upload" label="File Upload" badge="NEW" />
+                    <TreeItem id="radio" label="Radio" />
+                  </TreeFolder>
+
+                  <TreeItem id="notification" label="Notification" badge="NEW" />
+                  <TreeItem id="pagination" label="Pagination" />
+                </TreeSection>
+              </TreeView>
+            </div>
+          </div>
+        }>
+          <b>خمسةُ خِلافاتٍ عن الرفعةِ كما وصَلَت، كلُّها مُلجِئةٌ لا اختياريّة، وتُعلَنُ واحدةً واحدة.</b>
+          <br /><br />
+          <b>الأوّلُ يُسقِطُ الترجمة:</b> <code>AnimatePresence</code> مُستورَدٌ ولا يُرسَمُ أبدًا، و<code>noUnusedLocals</code> مُفعَّلٌ هنا. <b>والثاني يُسقِطُ المُدقِّق:</b> <code>TreeViewProps extends HTMLAttributes</code> ثمّ يُعيدُ إعلانَ <code>onSelect</code> بتوقيعِ <code>(id: string) =&gt; void</code> — و<code>HTMLAttributes</code> يُعلِنُه <code>ReactEventHandler</code>. <b>وذاك تعارُضٌ لا امتداد: TS2430 تحتَ أيِّ إعدادٍ صارم</b>، والعلاجُ <code>Omit&lt;…, "onSelect"&gt;</code> ولا يُغيِّرُ شيئًا وقتَ التشغيل.
+          <br /><br />
+          <b>والثالثُ عيبٌ حقيقيٌّ لا اصطلاحُ مستودع:</b> الطَيُّ بـ<code>grid-rows-[0fr]</code> مع <code>aria-hidden</code>، <b>والأزرارُ داخلَ صفٍّ بارتفاعٍ صِفريٍّ تبقى في تَرتيبِ التنقُّل</b> — قِيسَ: <b>ثمانيةُ أزرارٍ داخلَ مُجلَّدَينِ مطويَّين</b>. و<code>aria-hidden</code> فوقَ ما يُركَّزُ عليه هو <code>aria-hidden-focus</code> عندَ axe، <b>وهو عيبٌ في ذاتِه: مستخدمُ لَوحةِ المفاتيحِ يدخُلُ مُجلَّدًا مطويًّا ويقفُ على عناصرَ قيلَ لقارئِ الشاشةِ إنّها غيرُ موجودة</b>. و<code>inert</code> كلمةٌ واحدةٌ أقوى: تُخرِجُه من التَّرتيبِ <b>ومن شجرةِ الإتاحةِ معًا</b>، ولا يتغيّرُ مَظهرٌ واحد.
+          <br /><br />
+          <b>والرابعُ فَرقُ مُضيفٍ لا خطأَ رفعة، وهو أثقلُها أثرًا:</b> <code>src/tailwind.css</code> يقولُ في سطرِه الثاني «utilities only, deliberately without preflight»، ويَعُدُّ <code>preflight.css</code> في سطرِ العشرينَ <b>غيرَ مُستورَد</b>. وكلُّ مكوِّنِ Tailwind مكتوبٌ على تلكَ الأرضيّة. <b>فبلا إعادةِ الضبطِ ظهرَ كلُّ صفٍّ زرَّ نظامِ تشغيل</b>، مَقيسًا قبلَ العلاج:
+          <br />
+          <code>border 2px outset rgb(0, 0, 0)</code> · <code>background rgb(239, 239, 239)</code> · <code>appearance auto</code> — <b>ولا قاعدةَ واحدةٌ في أوراقِ الأنماطِ تُطابِقُه</b>: تلكَ قِيَمُ وكيلِ المستخدِمِ نفسِها.
+          <br /><br />
+          <b>وثلاثةٌ ممّا قرأتُه أوّلَ مرّةٍ كان خطأً مِنّي، ولا أثرَ له في العلاج:</b> <code>font: -apple-system</code> بدا خطَّ نظام، <b>وهو أوّلُ عائلةٍ في مِكدَسِ هذا المستودعِ نفسِه</b> — <code>-apple-system, BlinkMacSystemFont, "SF Pro Text", "IBM Plex Sans Arabic"…</code> — <b>مُتطابِقٌ على الزرِّ وأبيه و<code>body</code></b>، فالخطُّ لم يكن خاطئًا قطّ. و<code>border-radius: 5px</code> هو <code>--radius-md</code> الذي يُخرِجُه هذا المستودعُ إلى <code>var(--nova-radius-field)</code>. <b>فالناقصُ ثلاثةُ تصريحاتٍ لا ستّة.</b>
+          <br /><br />
+          <b>والخامسُ حُكمُ <code>axe</code> لا رأيي:</b> <code>aria-required-children</code> سقطَ في <b>ستٍّ من الحُزَمِ السبع</b>، لأن <code>role="tree"</code> لا يملِكُ إلا <code>treeitem</code> و<code>group</code>، <b>وكلُّ قِسمٍ وكلُّ مُجلَّدٍ يُسلِّمُه <code>&lt;div&gt;</code> عاريًا</b>. فوُضِعَ <code>role="none"</code> على الأغلفةِ البِنيويّةِ الستّ، <b>فخرجَت من الشجرةِ ولم يتغيّرْ تخطيطٌ واحد</b>، وصارَ زرُّ القِسمِ <code>treeitem</code> — <b>وهو ما يفعلُه أصلًا: يُوسِّعُ ويَطوي ويحملُ <code>aria-expanded</code></b>.
+          <br /><br />
+          <b>وشارةُ «NEW» تسقُطُ في <code>night</code> وحدَها:</b> <code>#51a2ff</code> على <code>#34456a</code> = <b>3.61</b> عندَ 10px عريض، والمطلوبُ 4.5 — <b>عُقدتان، والحُزَمُ الستُّ الأُخرى تعبُر</b>. والزوجُ أزرقُ <b>مُصلَّدٌ لا رُكنيّ</b> (<code>text-blue-600 dark:text-blue-400</code>)، <b>ولا شيءَ لي فيه لأحذفَه</b> — فحُمِلَ على الإعفاءِ المُسمّى الذي في هذا المستودعِ لهذه الحالةِ بعينِها: <b>الرقمُ مطبوع، وأيُّ زوجٍ آخَرَ ما يزالُ يُسقِط، والقرارُ للمالك</b>. <code>REFERENCE-CONTRAST.md</code> يُسجِّلُه، والعَدُّ ١٩٤ من ٣٠٠.
+          <br /><br />
+          <b>وأخطرُ ما في الرفعةِ ليس خِلافًا بل قِياسًا: تختارُ بلَوحةِ المفاتيحِ ولا تُطلِقُ نقرة.</b> <code>handleKeyDown</code> يعترضُ <code>Enter</code> و<code>Space</code> ويستدعي <code>preventDefault()</code> ثمّ <code>onSelect</code> — <b>والعُنصرُ <code>&lt;button&gt;</code>، وهو يُفعَّلُ بهما أصلًا</b>. فالمنعُ يُلغي التفعيلَ الأصليَّ الذي كان سيُنتِجُ <code>click</code>. وقِيسَ <b>بضَغطاتٍ حقيقيّةٍ عبرَ المُتصفِّحِ لا بأحداثٍ مُصطنَعة</b> (والمُصطنَعُ لا يُنتِجُ فِعلًا افتراضيًّا أصلًا، فلا يُثبِتُ شيئًا):
+          <br />
+          <code>Enter → 0 نقرة</code> · <code>Space → 0 نقرة</code> · <code>نقرةُ فأرة → 1</code> · <b>و<code>aria-selected</code> انتقلَ إلى «Avatar» في الحالتَين</b>
+          <br />
+          <b>فالاختيارُ يعمل، ومُستهلِكٌ يُمرِّرُ <code>onClick</code> يحصُلُ عليه بالفأرةِ ولا يحصُلُ عليه بلَوحةِ المفاتيحِ أبدًا.</b> والعلاجُ حَذفُ المُعالِجِ كلِّه: الزرُّ يفعلُ ما يفعلُه بلا مُساعَدة. <b>وتُرِكَ كما هو لأنه سلوكُ الرفعة، وهذا موضِعُ ذِكرِه.</b>
+          <br /><br />
+          <b>وثمانيةَ عشرَ مَوقِفَ تنقُّلٍ في شجرةٍ واحدة.</b> نَمَطُ الشجرةِ في WAI-ARIA يُحدِّدُ <b>واحدًا</b> ثمّ أسهُمًا. وقِيسَ: <code>26</code> عُنصرَ شجرةٍ، <code>18</code> منها يُبلَغُ بـ<code>Tab</code> (والثمانيةُ الباقيةُ داخلَ <code>inert</code>)، و<code>aria-level</code> على <b>صِفرٍ من ٢٦</b>. <b>وهذا النِّصفُ المُتساهِلُ من نَمَطٍ رأيتُ نِصفَه القاسيَ في هذا المستودعِ نفسِه: هناكَ كان واحدٌ يُبلَغُ من ٤٥، وهنا ثمانيةَ عشرَ حيثُ يُرادُ واحد.</b>
+          <br /><br />
+          <b>والسِّتَّةَ عشرَ في <code>child.offsetTop + 16</code> نِصفُ ارتفاعِ الصفّ.</b> قِيسَ: <code>ارتفاعُ الصفِّ 32</code> · <code>مَوضِعُ أوّلِ مِرفَقٍ 16</code> · <code>النِّصفُ 16</code>. <b>فـ<code>h-8</code> مكتوبٌ مرّتَين: مرّةً صِنفًا ومرّةً رقمًا في ملفِّ TypeScript</b> — بدِّلْه إلى <code>h-9</code> فتُشيرُ كلُّ المَرافِقِ فوقَ المركزِ ببكسِلَين، ولا شيءَ يُنبِّه. <b>والعلاجُ قراءةُ الارتفاعِ من الصندوقِ لا كتابتُه.</b>
+          <br /><br />
+          <b>والرسمُ كلُّه بخصائصَ فيزيائيّةٍ لا منطقيّة:</b> <code>pl-8</code> و<code>left-[12.5px]</code> و<code>text-left</code> و<code>ml-auto</code>. <b>وفي مستودعٍ عربيٍّ أوّلًا هذا يعني أنّ الإزاحةَ تنتقلُ إلى الطَّرَفِ الخَلفيِّ في RTL بينما يبقى الخطُّ عندَ <code>left: 12.5px</code></b> — <b>فتنفصِلُ الخطوطُ عن الصفوفِ التي تصِلُها</b>. والعارضةُ تُعلِنُ <code>dir="ltr"</code> كما تفعلُ لكلِّ رفعةٍ مرسومةٍ للاتّجاهِ اللاتينيِّ، <b>فما قِستُه هو LTR وحدَه، وهذا استنتاجٌ من التصريحاتِ لا قياسٌ ــ ويُقالُ كذلك</b>. والعلاجُ <code>ps-8</code> و<code>start-[12.5px]</code> و<code>text-start</code> و<code>ms-auto</code>.
+          <br /><br />
+          <b>وما يعملُ يعملُ جيّدًا:</b> الخطُّ المُضاءُ يتبَعُ الاختيارَ فِعلًا — قِيسَ المسارُ قبلَ وبعد: <code>M0.5 0 V11 Q0.5 16 5.5 16 H11.5</code> ثمّ <code>V113.1 Q0.5 118.1 …</code> بسُمكِ <code>1.5</code> مقابلَ <code>1</code> للخطوطِ الساكنة. <b>والمَرافِقُ مرسومةٌ بمُنحنى تربيعيٍّ واحدٍ لكلِّ صفٍّ من عَمودٍ واحد</b>، و<code>ResizeObserver</code> يُعيدُ الحسابَ عندَ كلِّ تغيُّرِ ارتفاع، <b>فطَيُّ مُجلَّدٍ يُعيدُ رسمَ الشجرةِ كلِّها بلا حالةٍ إضافيّة</b>.
         </SpecRow>
 
       </SpecList>
