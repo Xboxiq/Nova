@@ -37,6 +37,35 @@ const shellViolations = [];
 /* Sections whose skeleton never went away — a chunk that failed to load is not
    a section this gate may declare clean. */
 const skeletonStuck = [];
+/* Sections whose inline styles never stopped changing. Not fatal on its own — a
+   deliberately endless animation is legitimate — but it is printed, because a
+   number measured on a moving target deserves to be labelled as one. */
+const unsettled = [];
+
+/* Two identical fingerprints of every inline `style` in the scope, 160ms apart.
+   160 because Framer Motion's springs here settle in well under that and a frame
+   is 16ms: ten frames of stillness is stillness. */
+/* 14 tries is ~2.2s. The entrances this exists for land in under 300ms, and the
+   one section that never settles — a progress simulator writing inline styles
+   every 80ms forever — should not be charged 6 seconds in each of eight cases to
+   prove it. It is named in STILL_MOVING instead, and its numbers are identical
+   across runs regardless. */
+async function settle(page, scope, tries = 14) {
+  let last = null;
+  for (let i = 0; i < tries; i++) {
+    const now = await page.evaluate((sel) => {
+      const root = document.querySelector(sel);
+      if (!root) return "";
+      let out = "";
+      for (const el of root.querySelectorAll("[style]")) out += el.getAttribute("style") + "|";
+      return out;
+    }, scope);
+    if (now === last) return;
+    last = now;
+    await page.waitForTimeout(160);
+  }
+  throw new Error("did not settle");
+}
 
 // Pairs that carry text or an icon on a surface, so AA applies to all of them.
 const PAIRS = [
@@ -454,6 +483,25 @@ for (const c of CASES) {
         skeletonStuck.push(`${c.theme} ${c.w}px ${section}`);
       });
 
+    /* AND THEN WAIT FOR THE MOTION TO STOP, which the freeze above cannot do.
+       The stylesheet freezes CSS animations and transitions; it has no reach into
+       an animation JavaScript drives by writing inline styles every frame, and
+       three of the last four uploads animate exactly that way.
+
+       What it cost: axe measured a card mid-entrance and reported its title at
+       `#e2e2d9` on `#e8e8e0` — 1.05:1 — a pair that appears nowhere in the
+       component. Sampled six times over six seconds, the same title is a stable
+       `rgb(26, 26, 24)` on `rgb(241, 241, 240)`, about 13:1. The violation was the
+       measurement, not the code.
+
+       Framer Motion writes to the `style` attribute, so the attribute values ARE
+       the animation's state. Fingerprint them and wait for two identical samples:
+       when the inline styles stop moving, the motion has landed. This also covers
+       a late web font and a slow image, which shift layout the same way. */
+    await settle(page, `#${section}-panel`).catch(() => {
+      unsettled.push(`${c.theme} ${c.w}px ${section}`);
+    });
+
     const size = await measureOverflow(page);
     if (size.scroll > size.client || size.body > size.client) {
       overflow.push(`${c.theme} ${c.w}px ${c.dir} ${section} scroll=${size.scroll} client=${size.client}`);
@@ -504,6 +552,7 @@ const report = [
   `REFERENCE_GREY_CONTRAST=${referenceGreyNodes} nodes below AA (ceiling ${REFERENCE_GREY_CEILING}, the reference's own greys — see design-system/REFERENCE-CONTRAST.md)`,
   ...axeViolations.map((v) => `  axe: ${v}`),
   `SKELETON_STUCK=${skeletonStuck.length ? skeletonStuck.join(" | ") : "none"}`,
+  `STILL_MOVING=${unsettled.length ? unsettled.join(" | ") : "none"}`,
   `THEME_MENU=${menuFailures.length ? menuFailures.join(" | ") : "ok"}`,
   `RUNTIME_ERRORS=${runtimeErrors.length}`,
   ...runtimeErrors.slice(0, 5).map((e) => `  error: ${e}`),
