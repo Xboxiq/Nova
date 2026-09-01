@@ -1,4 +1,5 @@
 import { Section, SectionHeader } from '../SectionHeader';
+import { MotionConfig } from 'framer-motion';
 import { SpecList, SpecRow } from '../SpecRow';
 import { SkyThemeToggle } from '@/components/ui/sky-theme-toggle';
 import { FlexProductCard } from '@/components/ui/flex-product-card';
@@ -33,6 +34,7 @@ import { Download, Palette, Type } from 'lucide-react';
 import FraudCard from '@/components/ui/fraud-card';
 import FlameWrap from '@/components/canvasui/FlameWrap';
 import UploadProgress from '@/components/aicanvas/upload-progress';
+import PolaroidStack from '@/components/aicanvas/polaroid-stack';
 import ParticleSphere from '@/components/aicanvas/particle-sphere';
 
 /* The demo's own four rows, unchanged — including `gamil.com`, which is the
@@ -553,6 +555,46 @@ export function Imported3() {
           <b>وما فيها حسنٌ يُقالُ كما يُقالُ العَطَب:</b> <code>new THREE.WebGLRenderer</code> ملفوفٌ بـ<code>try</code> — <b>إطارٌ فارغٌ خيرٌ من صفحةٍ ساقطة</b> — والتفكيكُ كامل: <code>geo</code> و<code>mat</code> و<code>sprite</code> ثم <code>forceContextLoss()</code> ثم <code>dispose()</code>، <b>والمُتصفِّحُ يمنَحُ نحوَ ستةَ عشرَ سياقًا للصفحةِ الواحدة</b>، فالتركيبُ المُتكرِّرُ بلا هذا يُنفِدُها.
           <br /><br />
           <b>وثلاثةٌ تُقالُ ولا تُلمَس:</b> <code>t += 0.004</code> — <b>الدَّورةُ مَشدودةٌ إلى معدَّلِ الإطاراتِ لا إلى الزمن</b>، فلوحٌ بـ120Hz يدورُ ضِعفَ سُرعةِ لوحٍ بـ60؛ ولا تَبويبَ على الظُّهور — <b>الحَلقةُ تركُضُ وإن كان القِسمُ خارجَ الشاشة</b>؛ ولونُ المَحوِ <code>0x000000</code> صريحًا — <b>الكُرةُ تَفترِضُ أرضًا سوداءَ ولا تسألُ الحُزمة</b>، ولذلك أُلبِسَت هنا <code>bg-black</code> و<code>dir=&quot;ltr&quot;</code> على الغِلافِ بدلًا من تعديلِ الرفعة.
+        </SpecRow>
+
+        <SpecRow name="خمسُ صُوَرٍ فوريّة، وكودُ تكيُّفٍ سليمٌ لم يكن ليعملَ أبدًا حتى زِيدَت كلمة" bare specimen={
+          /* `min-w-0`: the specimen cell is a grid item, and a grid item's automatic
+             minimum size is its content, so the 462px stage pinned this column at
+             462 even at a 360px viewport — which is also why the upload's own
+             ResizeObserver never fired. One class hands the column its real width
+             back and the author's scaling starts working.
+             `MotionConfig`: same mechanism section one uses, because framer writes
+             inline transforms per frame and the CSS blanket cannot reach them. */
+          <MotionConfig reducedMotion="user">
+            <div data-polaroid-specimen="" className="w-full min-w-0 [&>div]:min-h-0" dir="ltr">
+              <PolaroidStack />
+            </div>
+          </MotionConfig>
+        }>
+          <b>أرخصُ رفعةٍ في هذه الدفعةِ بعدَ أغلاها.</b> فالكُرةُ قبلَها كلَّفَت نحوَ 506 كيلوبايت، وهذه كلَّفَت <code>3,278</code> بايتًا فقط — من <code>2,833,333</code> إلى <code>2,836,611</code> — <b>لأنّ <code>framer-motion</code> كان في الحِزمةِ أصلًا</b>. وحينَ يُعادُ استخدامُ ما هو موجودٌ يكونُ هذا هو الحساب.
+          <br /><br />
+          <b>١. والرفعةُ كانت تفتحُ طلبًا إلى طرفٍ ثالثٍ عندَ كلِّ تركيب.</b> <code>&lt;style&gt;@import url(fonts.googleapis.com/...Caveat...)&lt;/style&gt;</code> داخلَ المكوِّنِ نفسِه، والطلبُ مَقيسٌ لا مُستنتَج: <b>يَنطلِقُ فعلًا، وبعدَ الحذفِ يرجعُ المِسبارُ بـ<code>[]</code> وبصِفرِ وسومِ نمط</b>. <b>وهذا التطبيقُ لا يُحمِّلُ أيَّ خطٍّ خارجيٍّ في أيِّ موضع</b> — لا رابطَ في <code>index.html</code> ولا <code>@font-face</code> في الأنماطِ المشحونة — <b>فحملُ هذا يجعلُ مكوِّنًا أوّلَ مَن يُدخِلُ مُضيفًا خارجيًّا، وذاك قرارُ خصوصيّةٍ وتبعيّةٍ يملِكُه المالِكُ لا بطاقةٌ تُقرِّرُه من داخلِها</b>. فلم يُحمَل، و<code>'Caveat'</code> تسقُطُ إلى بديلِها المُصرَّحِ <code>cursive</code>. <b>وهي رابعُ خطٍّ تُسمِّيه رفعةٌ ولا يُحمَّلُ هنا</b> بعدَ Inter وClash Display وOswald، <b>ويُسجَّلُ ولا يُستبدَل</b>.
+          <br /><br />
+          <b>ودرسٌ في القياسِ نفسِه: <code>document.fonts.check()</code> لا يصلُحُ للحُكمِ هنا.</b> فقد رجعَ بـ<code>true</code> قبلَ الحذفِ وبعدَه، <b>ورجعَ بـ<code>true</code> أيضًا لأُسرةٍ مُختلَقةٍ اسمُها <code>NoSuchFaceZZZ</code></b> — فهو يُجيبُ «لا شيءَ مُعلَّق» لا «الخطُّ حاضر». <b>وسِجلُّ الشَّبكةِ هو الدليل، لا هذه الدالّة.</b> وفي هذه الحاويةِ يُقاسُ <code>Caveat</code> و<code>cursive</code> و<code>serif</code> ثلاثتُها 181 بكسلًا للكلمةِ نفسِها، <b>أي أنّ فَرقَ البديلِ لا يُرى هنا أصلًا</b> — ويُرى على جهازِ المالِكِ لا في هذه العُلبة.
+          <br /><br />
+          <b>٢. والمكوِّنُ كلُّه كان للفأرةِ وحدَها، والقياسُ صريح:</b> <code>FOCUSABLE_IN_SPECIMEN 0</code>، ولا <code>role</code> في أيِّ موضع، و<code>Enter</code> لا يُغيِّرُ شيئًا في حينِ أنّ نَقرةً بالفأرةِ تُغيِّرُ التخطيط. <b>والبطاقاتُ هي التفاعُل، فصارَت أزرارًا حقيقيّة</b> — و<code>Enter</code> و<code>Space</code> يأتيانِ مع العُنصرِ بلا كود، و<code>aria-pressed</code> يحمِلُ حالةَ الاختيارِ التي كانت ظِلًّا وتكبيرًا فقط. <b>وبعدَه: خمسُ محطّاتِ تنقُّل، و<code>ENTER_FANS_OUT</code>، و<code>aria-pressed</code> يقرأُ <code>false,false,true,false,false</code>، والاختيارُ بلوحةِ المفاتيحِ يرفعُ البطاقةَ <code>matrix(1.4, 0, 0, 1.4, 0, -28)</code> — أي ما تفعلُه الفأرةُ بالحرف.</b>
+          <br /><br />
+          <b>والجِذرُ بقيَ <code>div</code> بقَصد.</b> فإعطاؤه دورَ زِرٍّ كذلك يُعشِّشُ ستَّةَ عناصرَ تحكُّمٍ في واحد، <b>أي مُقايضةُ عَطَبٍ في لوحةِ المفاتيحِ بعَطَبٍ في ARIA</b>. فصارَ <code>Escape</code> يُعيدُ الرَّصف — <b>والجِذرُ يسمَعُ المِفتاحَ بلا أن يكونَ مُستقبِلًا للتركيز، لأنّ الزرَّ المُركَّزَ عليه من نَسلِه</b> — و<code>ESCAPE_RESTACKS</code> مَقيسٌ صحيحًا. وحَلقةُ التركيزِ نجَت من إعادةِ الضبط: <code>solid 3px</code>، مَقيسةً لا مَفروضة، والزرُّ نظيفٌ من زينةِ المُتصفِّح: <code>appearance: none</code> و<code>border 0</code> و<code>padding 0</code>.
+          <br /><br />
+          <b>٣. وأجملُ ما في هذه الرفعةِ أنّها تحمِلُ كودَ تكيُّفٍ لم يكن ليعملَ أبدًا.</b> فالمؤلِّفُ كتبَ <code>ResizeObserver</code> يقيسُ العَرضَ ويُصغِّرُ المَسرحَ بنِسبةِ <code>min(1, clientWidth / 462)</code> — <b>وهو صحيحٌ تمامًا وميْتٌ تمامًا</b>: على 1440 و900 و600 و420 و360 بقيَ المَسرحُ 462 في الخمسةِ كلِّها. <b>والسببُ أنّ خانةَ العيّنةِ عُنصرٌ في شِبكة، وأصغرُ مقاسٍ تلقائيٍّ لعُنصرِ الشِّبكةِ هو مُحتواه</b>، فثبَّتَ المَسرحُ ذو الـ462 عمودَه على 462 <b>حتى في نافذةٍ عرضُها 360 — أي 102 بكسلًا طَفحًا داخلَ عمودٍ عرضُه 270</b>. <b>وحَرَسُ الطَّفحِ أعمى عنه</b> لأنّ <code>scrollWidth</code> يُساوي <code>innerWidth</code> (360 = 360) — سَلَفٌ يَقُصُّ الزائد. <b>وكلمةٌ واحدةٌ — <code>min-w-0</code> — أعادَت للعمودِ عَرضَه الحقيقيَّ فبدأَ كودُ المؤلِّفِ يعمل: على 420 صارَ الجِذرُ 330 والمَسرحُ 236، وعلى 360 صارَ 270 و158.</b> ولا حرفَ في المكوِّنِ مسَّته هذه الكلمة.
+          <br /><br />
+          <b>٤. والنوابضُ كانت تعملُ رغمَ طلبِ تقليلِ الحركة</b> — إطاراتٌ وسطى مُختلفةٌ بفاصلِ 60ms و200ms. <b>والحلُّ كان موجودًا في هذا المستودعِ منذُ القِسمِ الأوّل</b>: <code>MotionConfig reducedMotion=&quot;user&quot;</code> حولَ العيّنة، <b>لأنّ framer يكتُبُ تحويلاتٍ سَطريّةً كلَّ إطارٍ ولا تبلُغُها بطانيّةُ CSS</b>. وبعدَه: <b>الحالةُ النهائيّةُ تُطبَّقُ فورًا والإطاراتُ الوسطى تختفي</b> — أي انتقالٌ بلا رحلة، وهو المطلوبُ بالضبط.
+          <br /><br />
+          {/* the record quotes the value it is describing. anti-slop-ignore-next-line 04 */}
+          <b>وقاعدةُ «لا بنَفسجيَّ على أسود» أوقعَت هذه الرفعة</b>: <code>#8B5CF6</code>. <b>والذي أوقعَته ليس سِمةً ولا سَطحًا ولا لونَ تأكيد، بل واحدٌ من خمسةِ تدرُّجاتِ صُوَرٍ داخلَ نموذجِ بولارويد</b> — Sunset وOcean وDream وGolden وMist. <b>فاستُثنِيَ في موضعِه بعُرفِ الماسِحِ نفسِه</b> (<code>anti-slop-ignore-next-line</code>) <b>لا بتوسيعِ القاعدةِ على الجميعِ ولا بإعادةِ تلوينِ لوحةِ المؤلِّف</b>. <b>واختُبِرَ الاستثناءُ بالتخريبِ مرّتَين: بنَفسجيٌّ غيرُ مُستثنًى في سطرٍ آخرَ يُسقِطُ القاعدةَ، وإبعادُ سطرِ الاستثناءِ سطرًا واحدًا يُسقِطُها كذلك</b> — فهو بعَرضِ سطرٍ واحدٍ لا أكثر.
+          <br /><br />
+          <b>وخطأٌ في قياسي يُسجَّلُ كما تُسجَّلُ العُيوب:</b> أوّلُ قراءةٍ لتباينِ التعليقِ رجعَت <code>1.13</code>، <b>وهي هَراء</b>. فالقيمةُ المَحسوبةُ جاءَت <code>lab(47.8878 1.65477 -5.77283)</code> <b>ومُساعِدي قرأَ مُكوِّناتِ lab كأنها أحمرُ وأخضرُ وأزرق</b> — وهذا العَطَبُ بعينُه سبقَ في هذه الدفعة. <b>وبعدَ تمريرِ اللونِ على لوحِ رَسمٍ ليُحوِّلَه المُتصفِّحُ بنفسِه: <code>rgb(113, 113, 123)</code> على <code>rgb(9, 9, 11)</code> بنسبةِ 4.12</b>، واسمُ البطاقةِ <code>rgb(63, 63, 70)</code> على أبيضَ بنسبةِ 10.44.
+          <br /><br />
+          <b>و4.12 محمولٌ في المسموحِ المُسمّى، لكنّه يختلفُ في نوعِه عن الأربعةِ قبلَه فيُقالُ بصوتٍ عالٍ:</b> تلكَ زينةٌ — شارةٌ وطابعُ وقتٍ وسطرٌ مُساند — <b>وهذا نصُّ التشغيل</b>. «click to fan out» هو كيفَ يعرِفُ القارئُ أنّ الرَّصفَ يفعلُ شيئًا أصلًا. <b>ونِصفا الزوجِ كِلاهما للمؤلِّف</b> (zinc-500 على zinc-950 الخاصِّ بالمكوِّن، ولا يدَ للسِّماتِ فيه) <b>فالقاعدةُ تُطبَّقُ كما طُبِّقَت أربعَ مرّات، لكنّ المالِكَ يُوازِنُ هذه وهو يعلمُ أنها تعليماتٌ لا حاشية</b>. <b>والعِلاجُ كلمةٌ: <code>text-zinc-400</code> يُصعِدُها إلى 5.9.</b>
+          <br /><br />
+          <b>وفائدةٌ أخيرةٌ للبوّابةِ نفسِها: هذا الزوجُ كان موجودًا دائمًا ولم تكن البوّابةُ تراه.</b> فقبلَ <code>min-w-0</code> لم يكن تصغيرُ المؤلِّفِ يعمل، <b>فكان الرَّصفُ يُغطّي التعليقَ في كلِّ عَرض</b>. والآنَ يُبلَّغُ عنه في حالتَي 390 ولا يُبلَّغُ في حالتَي 1440، <b>والألوانُ لم تتغيَّرْ بينَهما</b> — فالعُنصرُ فوقَ مَركزِ التعليقِ عندَ 1440 بطاقةٌ بيضاءُ صَلبة، وعندَ 390 حاويةُ المَسرحِ الشفّافة. <b>فالرقمُ كان سيَظهرُ ويَغيبُ مع التخطيطِ لولا أن سُمِّيَ.</b>
+          <br /><br />
+          <b>وسبعةُ <code>{'{}'}</code> حُذِفَت</b> — بقايا تعليقاتٍ نزَعَ السِّجلُّ نُصوصَها وأبقى أقواسَها، لا تَرسِمُ شيئًا ولا تعني شيئًا.
         </SpecRow>
 
       </SpecList>
