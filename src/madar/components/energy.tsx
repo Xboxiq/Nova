@@ -135,6 +135,7 @@ export function MeterFace({ reading = 76542.8, tier = 2, model = 'NV-370 · 1PH 
           law asks for at a joint — it is what makes the window a window. */}
       <div
         dir="ltr"
+        role="img"
         aria-label={`القراءة ${ar(reading, 1)} كيلوواط ساعة`}
         style={{
           display: 'flex', gap: 3, padding: '9px 10px',

@@ -93,6 +93,7 @@ export function SpecShelf({ children, rhythm = [7, 5, 5, 7, 12], label, bare }: 
   return (
     <div
       data-spec-shelf=""
+      role="group"
       aria-label={label}
       style={{
         display: 'grid',

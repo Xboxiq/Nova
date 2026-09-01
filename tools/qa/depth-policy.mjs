@@ -95,7 +95,13 @@ function isBlurredOuter(seg) {
   return /\bcalc\(/.test(seg);
 }
 
-const IMPORTED = /^src[\\/]components[\\/]ui[\\/]/;
+/* Imported reference code now lives in THREE directories, not one. `ui/` is where
+   uploads pasted by hand land; `canvasui/` and `aicanvas/` are where the shadcn
+   registry puts what it installs, and the destination is the registry's choice,
+   not this repo's. The allowance was written when there was one directory, and a
+   named allowance that misses two thirds of what it names is not an allowance —
+   it is a gate that fails on arrival for a reason unrelated to the code. */
+const IMPORTED = /^src[\\/]components[\\/](ui|canvasui|aicanvas)[\\/]/;
 
 const files = walk("src");
 const literalShadows = [];
@@ -166,7 +172,7 @@ console.log(`DEPTH_TOKENS=${depthTokens}`);
 console.log(`RADIUS_TOKENS=${radiusTokens}`);
 for (const i of imported) console.log(`  IMPORTED ${i}`);
 console.log(`LITERAL_BLURRED_SHADOWS=${literalShadows.length} (was banned, now permitted; ${untokenised.length} outside the token block and outside imported code)`);
-console.log(`IMPORTED_LITERAL_SHADOWS=${imported.length} in src/components/ui (named allowance, not a pass)`);
+console.log(`IMPORTED_LITERAL_SHADOWS=${imported.length} in src/components/{ui,canvasui,aicanvas} (named allowance, not a pass)`);
 console.log(`LITERAL_RADII_OVER_6PX=${literalRadii.length}`);
 console.log(`DEPTH_POLICY=${failures.length ? "FAIL" : "ok"}`);
 process.exit(failures.length ? 1 : 0);

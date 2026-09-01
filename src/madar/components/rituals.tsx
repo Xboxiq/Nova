@@ -70,17 +70,17 @@ export function IconOrbitRing({ icons, size = 150, period = 22 }: { icons: React
       check, error shakes ±4px, loading orbits. Pick by `state`. */
 export function AnimatedStateIcon({ state }: { state: 'loading' | 'success' | 'error' }) {
   if (state === 'loading') {
-    return <span aria-label="Loading" style={{ width: 22, height: 22, borderRadius: '50%', border: '2.5px solid var(--accent-soft)', borderTopColor: 'var(--accent)', display: 'inline-block', animation: 'spin 0.8s linear infinite' }} />;
+    return <span role="img" aria-label="Loading" style={{ width: 22, height: 22, borderRadius: '50%', border: '2.5px solid var(--accent-soft)', borderTopColor: 'var(--accent)', display: 'inline-block', animation: 'spin 0.8s linear infinite' }} />;
   }
   if (state === 'success') {
     return (
-      <span aria-label="Success" style={{ width: 22, height: 22, borderRadius: '50%', background: 'var(--success-soft)', display: 'inline-grid', placeItems: 'center' }}>
+      <span role="img" aria-label="Success" style={{ width: 22, height: 22, borderRadius: '50%', background: 'var(--success-soft)', display: 'inline-grid', placeItems: 'center' }}>
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--success)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M5 13l4 4L19 7" strokeDasharray={240} style={{ animation: 'drawLine 500ms cubic-bezier(0.22,1,0.36,1) forwards' }} /></svg>
       </span>
     );
   }
   return (
-    <span aria-label="Error" style={{ width: 22, height: 22, borderRadius: '50%', background: 'var(--danger-soft)', display: 'inline-grid', placeItems: 'center', animation: 'shakeX 450ms ease-in-out' }}>
+    <span role="img" aria-label="Error" style={{ width: 22, height: 22, borderRadius: '50%', background: 'var(--danger-soft)', display: 'inline-grid', placeItems: 'center', animation: 'shakeX 450ms ease-in-out' }}>
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--danger)" strokeWidth="3" strokeLinecap="round"><path d="M6 6l12 12M18 6L6 18" /></svg>
     </span>
   );
