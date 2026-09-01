@@ -173,6 +173,31 @@ const REFERENCE_GREYS = new Set([
      which clears both. */
   "#737373", // upload 99's caption and timestamp — 4.34 light, 3.78 dark
 
+  /* Upload 103's caption, and this one differs in kind from the four above it, so
+     it is worth saying out loud rather than filing quietly: the others are
+     decoration — a badge, a timestamp, a supporting line — while this text is the
+     OPERATING INSTRUCTIONS. "click to fan out" is how a reader learns the card
+     stack does anything at all. It is carried under the same rule, because both
+     halves are the author's (Tailwind zinc-500 on the component's own zinc-950,
+     with no theme involvement at all), but the owner should weigh this one
+     knowing it is instructions and not trim.
+
+     Measured `#71717b` on `#09090b` at 4.12, 12px, weight 400, against 4.5.
+
+     Two further facts the owner needs. The pair is width-independent — fixed
+     utilities, no media query — yet the gate only samples it in the 390px cases;
+     at 1440px the element sitting over the caption's centre is an opaque card
+     ("Mist"), while at 390px it is the transparent stage container. So this number
+     would come and go with the layout if it were not named here.
+
+     And it went unseen until this batch for a plainer reason: until the specimen's
+     grid column was allowed to shrink, the upload's own scaling never ran, and the
+     stack covered the caption at every width. The colours never changed; what
+     changed is that the gate can now reach them.
+
+     The remedy is one word: `text-zinc-400` clears it at 5.9. */
+  "#71717b", // upload 103's caption — 4.12, and it is instructions, not decoration
+
   /* Upload 97's own sub-caption: `rgb(128, 128, 128)` on the card's own white,
      measured 3.94 at 11.2px. Both values are declared in the upload, in the same
      file, and mid-grey on white is the plainest case this allowance exists for.
