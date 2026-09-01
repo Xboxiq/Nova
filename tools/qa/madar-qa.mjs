@@ -34,6 +34,9 @@ const apcaThin = [];
 /* Violations in the application shell, outside the showcase. Fatal at zero: this
    is the repo's own code, not the reference designs the owner ordered in. */
 const shellViolations = [];
+/* Sections whose skeleton never went away — a chunk that failed to load is not
+   a section this gate may declare clean. */
+const skeletonStuck = [];
 
 // Pairs that carry text or an icon on a surface, so AA applies to all of them.
 const PAIRS = [
@@ -431,6 +434,26 @@ for (const c of CASES) {
     await page.locator(`#${section}-tab`).click();
     await page.waitForTimeout(700);
 
+    /* THE 700ms WAS A GUESS, AND IT LOST A RACE. Every section is a lazy chunk
+       behind `Suspense`, so what is on screen after a fixed delay is whichever of
+       the skeleton and the content happened to win. Two runs of this gate on the
+       SAME build returned `AXE_VIOLATIONS_MADAR=2` and then `0`, and the reference
+       grey count wandered 194, 197, 199, 201 across runs — the tell, because a
+       count of nodes that drifts means the set of nodes axe SEES drifts.
+       Caught in the act: one probe pass in six audited a
+       `<div class="madar-skeleton">` and reported zero contrast nodes, because the
+       section had not arrived yet.
+    
+       So the wait is now a CONDITION rather than a duration. A gate that sometimes
+       measures the loading state is a gate whose green means nothing, and every
+       number it printed today was quietly conditional on a race. */
+    await page
+      .locator(`#${section}-panel .madar-skeleton`)
+      .waitFor({ state: "detached", timeout: 15000 })
+      .catch(() => {
+        skeletonStuck.push(`${c.theme} ${c.w}px ${section}`);
+      });
+
     const size = await measureOverflow(page);
     if (size.scroll > size.client || size.body > size.client) {
       overflow.push(`${c.theme} ${c.w}px ${c.dir} ${section} scroll=${size.scroll} client=${size.client}`);
@@ -480,6 +503,7 @@ const report = [
   ...shellViolations.slice(0, 10).map((v) => `  shell: ${v}`),
   `REFERENCE_GREY_CONTRAST=${referenceGreyNodes} nodes below AA (ceiling ${REFERENCE_GREY_CEILING}, the reference's own greys — see design-system/REFERENCE-CONTRAST.md)`,
   ...axeViolations.map((v) => `  axe: ${v}`),
+  `SKELETON_STUCK=${skeletonStuck.length ? skeletonStuck.join(" | ") : "none"}`,
   `THEME_MENU=${menuFailures.length ? menuFailures.join(" | ") : "ok"}`,
   `RUNTIME_ERRORS=${runtimeErrors.length}`,
   ...runtimeErrors.slice(0, 5).map((e) => `  error: ${e}`),
@@ -487,7 +511,7 @@ const report = [
 console.log(report.join("\n"));
 
 const failed =
-  contrastFailures.length || overflow.length || axeViolations.length || shellViolations.length || runtimeErrors.length || menuFailures.length
+  contrastFailures.length || overflow.length || axeViolations.length || shellViolations.length || runtimeErrors.length || menuFailures.length || skeletonStuck.length
   || referenceGreyNodes > REFERENCE_GREY_CEILING
   || apcaThin.length > APCA_THIN_CEILING;
 process.exit(failed ? 1 : 0);

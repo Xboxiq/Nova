@@ -42,6 +42,14 @@ const walk = (dir) => {
    screen reader is handed, and that is not negotiable for either. */
 walk("src/components/ui");
 walk("src/components/nova");
+/* And the shell, because that is where the one real instance turned out to live.
+   `MadarStageSkeleton` carried `aria-label` on a bare `<div>` — a name on the
+   generic role, which ARIA prohibits — for as long as this gate has existed, and
+   this gate never looked: it walked the imported directories only, on the
+   assumption that the defect class was an imported-code habit. It is not. axe
+   found it only in the runs where a slow chunk left the skeleton on screen. */
+walk("src/components");
+walk("src/madar");
 
 const failures = [];
 for (const file of files) {

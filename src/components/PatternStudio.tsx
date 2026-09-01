@@ -80,7 +80,7 @@ export default function PatternStudio({ locale, onNotify }: PatternStudioProps) 
         <p>{copy.lead}</p>
       </div>
 
-      <div className="spacing-ruler" aria-label={`${copy.ruler}: ${copy.rulerNote}`}>
+      <div className="spacing-ruler" role="group" aria-label={`${copy.ruler}: ${copy.rulerNote}`}>
         <div><strong>{copy.ruler}</strong><span>{copy.rulerNote}</span></div>
         <ol aria-hidden="true">
           {[8, 16, 24, 32, 48, 64, 112].map((value) => (
@@ -167,7 +167,7 @@ export function ButtonWorkbench({ locale, compact = false, onNotify }: Workbench
         </div>
       </div>
 
-      <div className="button-spectrum" aria-label={ar ? "مستويات الإجراءات" : "Action levels"}>
+      <div className="button-spectrum" role="group" aria-label={ar ? "مستويات الإجراءات" : "Action levels"}>
         <button className="nova-control is-secondary" type="button"><PiPalette />{ar ? "ثانوي" : "Secondary"}</button>
         <button className="nova-control is-quiet" type="button"><PiGear />{ar ? "هادئ" : "Quiet"}</button>
         <button className="nova-control is-danger" type="button">{ar ? "حذف" : "Delete"}</button>

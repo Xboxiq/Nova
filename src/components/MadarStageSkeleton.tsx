@@ -6,8 +6,18 @@ import type { Locale } from "../i18n";
    the cell grid, at the sizes the section really uses, so nothing shifts. */
 export default function MadarStageSkeleton({ locale }: { locale: Locale }) {
   return (
+    /* `role="status"`, because `aria-label` on a bare `<div>` is a name on the
+       generic role, which ARIA prohibits — axe's `aria-prohibited-attr`, and the
+       very defect class this repo wrote `aria-name-legal` for in wave 9. That gate
+       walks `src/components/ui` and `src/components/nova`, so it never looked
+       here, and the violation only ever surfaced when a slow chunk left the
+       skeleton on screen at the moment axe ran.
+
+       `status` is also the truthful role: a live region announcing that something
+       is loading, which is what `aria-busy` beside it was already claiming. */
     <div
       className="madar-skeleton"
+      role="status"
       aria-label={locale === "ar" ? "يجري تحميل القسم" : "Loading section"}
       aria-busy="true"
     >

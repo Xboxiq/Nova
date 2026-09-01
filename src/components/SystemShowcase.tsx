@@ -38,7 +38,7 @@ export default function SystemShowcase({ locale }: SystemShowcaseProps) {
           <header>
             <p>{copy.typeLabel}</p>
           </header>
-          <div className="type-sample" aria-label={copy.typeLabel}>
+          <div className="type-sample" role="group" aria-label={copy.typeLabel}>
             <span>NOVA / نوفا</span>
             <h3>{copy.typeTitle}</h3>
             <p>{copy.typeBody}</p>
@@ -52,7 +52,7 @@ export default function SystemShowcase({ locale }: SystemShowcaseProps) {
           <header>
             <p>{copy.paletteLabel}</p>
           </header>
-          <div className="palette-row" aria-label={copy.paletteLabel}>
+          <div className="palette-row" role="group" aria-label={copy.paletteLabel}>
             {swatches.map((swatch) => (
               <span key={swatch.name} style={{ "--swatch": swatch.token } as CSSProperties}>
                 <i />

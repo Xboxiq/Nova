@@ -31,6 +31,7 @@ import { SunsetGrayscaleButton } from '@/components/ui/sunset-grayscale-button';
 import { TreeFolder, TreeItem, TreeSection, TreeView } from '@/components/ui/animated-file-tree';
 import { Download, Palette, Type } from 'lucide-react';
 import FraudCard from '@/components/ui/fraud-card';
+import FlameWrap from '@/components/canvasui/FlameWrap';
 
 /* The demo's own four rows, unchanged — including `gamil.com`, which is the
    typo-domain the card exists to flag and not one of mine. */
@@ -452,6 +453,46 @@ export function Imported3() {
           <b>وزوجانِ حُمِلا لأنّ نِصفَيهما كِليهما للمؤلِّف:</b> <code>#737373</code> على <code>#f5f5f5</code> بـ<b>4.34</b>، وعلى <code>#171717</code> بـ<b>3.78</b> — لافِظةٌ وطابَعُ وقت. <b>الرقمُ مطبوعٌ والقرارُ للمالك</b>، والعِلاجُ <code>text-neutral-600 dark:text-neutral-400</code> ويَحسِمُ الاثنَين.
           <br /><br />
           <b>وثلاثةٌ قرأتُها خطأً وسُحِبَت قبلَ أن تُكتَب:</b> ظننتُ العنوانَ والوصفَ <b>غائبَينِ عن الرَّسم</b> من صورةٍ التقطتُها، <b>والقياسُ يقولُ صندوقًا <code>316×21</code> بنسبةِ 5.05</b>؛ وظننتُ <code>text-white</code> على الحاويةِ يُبيِّضُ نصًّا، <b>والعَدُّ صِفرٌ من عُقَدِ النصِّ كلِّها</b>؛ وقرأتُ أوّلَ بريدٍ بشفافيّةِ <code>1</code> في الحالةِ المُغلَقةِ — <b>وكان ذاك عنوانَ البطاقةِ نفسَه، لا أوّلَ صفّ</b>. <b>عاشرُ خطأِ مُحدِّدٍ غيرِ مُرسًى في هذا العمل، وأُرسِيَ فانقلبَ الجوابُ.</b>
+        </SpecRow>
+
+        <SpecRow name="أوّلُ رفعةٍ في هذا السجلِّ تُجيبُ عن الحركةِ المُخفَّضةِ قبلَ أن أسألَ" bare specimen={
+          <div className="flex w-full items-center justify-center rounded-2xl bg-[#0b0d12] px-6 py-24" dir="ltr">
+            <FlameWrap radius={16} height={150} className="w-[260px]">
+              <div className="rounded-2xl border border-white/10 bg-[#14171f] p-6 text-white">
+                <p className="text-[11px] uppercase tracking-widest text-white/50">Canvas UI</p>
+                <p className="mt-2 text-lg font-semibold">Flame Wrap</p>
+                <p className="mt-1 text-xs text-white/60">WebGL2 over html-in-canvas.</p>
+              </div>
+            </FlameWrap>
+          </div>
+        }>
+          <b>هذه لم تُرسَلْ نصًّا بل أُمرًا:</b> <code>npx shadcn@latest add @canvas-ui/flame-wrap-react</code>. <b>والأداةُ حلَّت الاسمَ وكتبَت ملفًّا واحدًا وأضافَت السِّجِلَّ إلى <code>components.json</code> بنفسِها:</b> <code>"@canvas-ui": "https://canvasui.dev/r/{'{'}name{'}'}.json"</code> — <b>وأُبقيَ لأنه يُسجِّلُ من أينَ جاءَ المكوِّن</b>. وثمانِ مئةٍ وثلاثةٌ وعشرونَ سطرًا: مُظلِّلُ WebGL2 كامل، بضجيجِ سِمبلِكس وحرَكيّةٍ مُضطربةٍ وشَرَرٍ وسُخامٍ وجَمرٍ وتفحيمٍ، على <code>html-in-canvas</code>.
+          <br /><br />
+          <b>وأوّلُ ما قِيسَ هو أنّ المِيزةَ الأساسيّةَ غيرُ موجودةٍ في هذا المُتصفِّح:</b>
+          <br />
+          <code>webgl2: true</code> · <b><code>htmlInCanvasApi: false</code></b> — <code>drawElementImage</code> و<code>requestPaint</code> لا وجودَ لهما
+          <br />
+          <b>فالمسارُ الذي يعملُ فِعلًا هو المسارُ الاحتياطيّ</b>: قماشُ المصدرِ <code>display: none</code>، والمحتوى يُرسَمُ في الـDOM عاديًّا، والنارُ طبقةٌ فوقَه بـ<code>aria-hidden</code> و<code>pointer-events: none</code>. <b>وقِيسَ أنه يعمل: <code>contentVisible: true</code> والنصُّ يُقرأُ كما كُتِب.</b> <b>وذاك أفضلُ ما في الرفعة: تدهورٌ لَبِقٌ مبنيٌّ باختبارِ مِيزةٍ لا بتخمينِ مُتصفِّح</b> — <code>supportsHtmlInCanvas()</code> يسألُ عن الدالّتَينِ بالاسمِ ثمّ يُقرِّر.
+          <br /><br />
+          <b>وهي أوّلُ رفعةٍ في هذا السجلِّ كلِّه تُجيبُ عن الحركةِ المُخفَّضةِ من نفسِها.</b> ثمانٍ وتسعونَ رفعةً قبلَها إمّا تجاهلَتها أو تركَتها لبطانيّةِ الـCSS — <b>وبطانيّةٌ لا تبلُغُ حلقةَ <code>requestAnimationFrame</code></b>. وهذه تسألُ <code>matchMedia</code>، وتُصغي إلى <code>change</code>، <b>وتُخرِجُ نفسَها من الحلقةِ لا تُبطِئُها</b>:
+          <br />
+          <code>if (reducedMotion && !contentDirty) {'{'} running = false; return; {'}'}</code>
+          <br />
+          <b>مَقيسًا: إطارٌ ساكنٌ واحدٌ مرسومٌ ثمّ توقُّف</b> — النارُ حاضرةٌ شكلًا وغائبةٌ حركةً، وهو الجوابُ الصحيحُ بعينِه.
+          <br /><br />
+          <b>وثلاثُ عِناياتٍ أُخرى نادرةٌ في هذا السجلّ:</b> <code>IntersectionObserver</code> يُوقِفُ الحلقةَ حينَ يخرُجُ العُنصرُ من الشاشة؛ و<code>ResizeObserver</code> على القماشِ <b>وعلى المحتوى معًا</b> لا على أحدِهما؛ و<code>destroy()</code> يُفرِغُ كلَّ ما حجَزَه — نسيجًا وبرنامجًا ومُظلِّلَينِ ومَخزنًا — <b>ويفصِلُ المُراقِبَينِ ويُزيلُ مُستمِعَ استعلامِ الوسائط</b>. <b>وتَسريبُ سياقِ WebGL هو ما تفعلُه أكثرُ مكوِّناتِ الشيدر، وهذه لا تفعلُه.</b>
+          <br /><br />
+          <b>وثلاثةٌ تُقالُ ولا تُلمَس، لأنها المؤلِّفُ لا العيب:</b>
+          <br />
+          <b>١.</b> اللونُ الافتراضيُّ <code>[0.31, 0.54, 1]</code> — <b>أزرقٌ</b>، لمكوِّنٍ اسمُه «لِفافةُ اللهب». <b>ليس عيبًا، لكنّه يستحقُّ الذِّكرَ لمن يُدخِلُه متوقِّعًا برتقاليًّا.</b>
+          <br />
+          <b>٢.</b> <code>style={'{'}{'{'} position: "relative", ...style {'}'}{'}'}</code> — <b>ومُستهلِكٌ يُمرِّرُ <code>position</code> في <code>style</code> يَغلِبُ ويكسِرُ القِماشَينِ المُطلَقَين</b>. سطرٌ واحد، وعِلاجُه عَكسُ التَّرتيب.
+          <br />
+          <b>٣.</b> لا مُعالِجَ لـ<code>webglcontextlost</code>: <b>بعدَ فَقدِ السياقِ تستمرُّ الحلقةُ تُصدِرُ نداءاتِ GL إلى سياقٍ ميّت.</b>
+          <br /><br />
+          <b>وخطأٌ في مِسباري، حاديَ عشرَ في هذا العمل، وسُحِبَ قبلَ أن يُكتَب:</b> قرأتُ بِكسِلاتِ قماشِ الخَرجِ بـ<code>readPixels</code> فعادَت أصفارًا كلُّها، <b>فكِدتُ أُبلِغُ أنّ النارَ لا تُرسَم</b>. والسببُ أنّ السياقَ لا يُنشَأُ بـ<code>preserveDrawingBuffer</code>، <b>فمَخزنُ الرسمِ يُمسَحُ بعدَ التركيبِ والقراءةُ بعدَه لا تعني شيئًا</b>. <b>والصورةُ هي الحُكم</b>، وهي تُظهِرُ حَدًّا أزرقَ مُنصهِرًا يُعانِقُ الحرفَ الأعلى والحافّتَين. <b>ولا يُبلَّغُ عن عيبٍ لأنّ أداةَ قياسٍ عادَت صِفرًا.</b>
+          <br /><br />
+          <b>والسِّجِلُّ في وحدةِ التحكُّمِ تحذيراتٌ لا أخطاء</b> — «الرجوعُ التلقائيُّ إلى WebGL البرمجيِّ» و«توقُّفُ المُعالِجِ عندَ <code>ReadPixels</code>» — <b>وكِلاهما من هذه البيئةِ لا من المكوِّن</b>، و<code>RUNTIME_ERRORS</code> يَعُدُّ الأخطاءَ وحدَها فبقيَ صِفرًا. <b>و<code>console.error</code> الوحيدُ في الملفِّ عندَ فشلِ ترجمةِ المُظلِّلِ — ولم يُطلَقْ.</b>
         </SpecRow>
 
       </SpecList>
