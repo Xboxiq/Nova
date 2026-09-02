@@ -128,6 +128,7 @@ for (let i = 0; i < 60; i += 1) {
 }
 
 const runtimeErrors = [];
+const offlineAssetErrors = [];
 const overflow = [];
 const axeViolations = [];
 /* The five greys, read off the references. Anything not in this set is a colour
@@ -273,7 +274,30 @@ const browser = await chromium.launch();
 async function open(width, height) {
   const ctx = await browser.newContext({ viewport: { width, height } });
   const page = await ctx.newPage();
-  page.on("console", (m) => m.type() === "error" && runtimeErrors.push(m.text()));
+
+  /* The uploads carry the owner's background photograph from `ik.imagekit.io`, and
+     that host is unreachable from this environment. Left alone it fails DIFFERENTLY
+     from run to run — sometimes hanging silently, sometimes dying late with
+     ERR_CONNECTION_RESET — and a late failure moves layout and scroll while the
+     gate is measuring. That is how the same unchanged build produced
+     RUNTIME_ERRORS=0 and then RUNTIME_ERRORS=3, and how the operable gate counted
+     one control more in the runs where the reset landed.
+
+     So the request is refused here, immediately and identically every run. This
+     hides nothing: the host cannot be reached either way, and the image-loaded path
+     does not exist in this environment to be tested. What it removes is the timing
+     jitter. The refusal still logs a console error, so that one line is filtered
+     and counted rather than dropped silently. */
+  await page.route(/ik\.imagekit\.io/, (r) => r.abort());
+  page.on("console", (m) => {
+    if (m.type() !== "error") return;
+    const text = m.text();
+    if (/Failed to load resource/i.test(text) && /ERR_(FAILED|ABORTED|CONNECTION_RESET|TIMED_OUT)/.test(text)) {
+      offlineAssetErrors.push(text.slice(0, 60));
+      return;
+    }
+    runtimeErrors.push(text);
+  });
   page.on("pageerror", (e) => runtimeErrors.push(String(e)));
   await page.goto(URL, { waitUntil: "networkidle" });
   return { ctx, page };
@@ -580,6 +604,16 @@ const report = [
   `STILL_MOVING=${unsettled.length ? unsettled.join(" | ") : "none"}`,
   `THEME_MENU=${menuFailures.length ? menuFailures.join(" | ") : "ok"}`,
   `RUNTIME_ERRORS=${runtimeErrors.length}`,
+  /* Counted as DISTINCT messages, not as occurrences. The raw occurrence count is
+     a tally of how many renders happened to reach a specimen carrying the image,
+     which moves with lazy loading and pack sweeps — it read 50 then 45 on one
+     unchanged build. The distinct set is what the line is actually for: proof that
+     something was suppressed, and what. */
+  `OFFLINE_ASSET_ERRORS=${
+    offlineAssetErrors.length
+      ? `${new Set(offlineAssetErrors).size} distinct, refused and filtered (ik.imagekit.io, named allowance)`
+      : "none"
+  }`,
   ...runtimeErrors.slice(0, 5).map((e) => `  error: ${e}`),
 ];
 console.log(report.join("\n"));

@@ -206,10 +206,49 @@ const read = async (page, sel, attr) =>
     return a ? el.getAttribute(a) : el.textContent.trim();
   }, [sel, attr]);
 
+/* Any console error fails this gate, which is the right default and made the gate
+   non-deterministic once uploads began carrying the owner's background photograph
+   from `ik.imagekit.io`. That host is unreachable from this environment: sometimes
+   the request hangs and says nothing, sometimes it dies with ERR_CONNECTION_RESET
+   and Chromium logs "Failed to load resource" — so the same unchanged build failed
+   one run and passed the next.
+
+   A failed fetch of a decorative background on an approved external host is a fact
+   about this network, not a defect in a component, so it is filtered. Scoping it is
+   fiddlier than it looks: Chromium's console text for a failed subresource is
+   "Failed to load resource: net::ERR_CONNECTION_RESET" and carries NO url, so a
+   filter written against the message alone would swallow every reset on the page,
+   from any host. So the message is only ever suppressed when a request to that host
+   actually failed in the same page — which the `requestfailed` event does name.
+   The decision is deferred to the end of each case so it cannot depend on whether
+   the console line or the request event arrives first. What was filtered is counted
+   and printed, so a run that suppressed something says so. */
+const OFFLINE_HOST = "ik.imagekit.io";
+const suppressed = [];
+const isResourceLoadError = (text) =>
+  /Failed to load resource/i.test(text) &&
+  /ERR_(CONNECTION_RESET|CONNECTION_CLOSED|TIMED_OUT|NAME_NOT_RESOLVED|FAILED|ABORTED)/.test(text);
+
 for (const c of CASES) {
   const page = await browser.newPage({ viewport: { width: 1440, height: 1100 } });
   page.on("pageerror", (e) => errors.push(`${c.name}: ${e}`));
-  page.on("console", (m) => m.type() === "error" && errors.push(`${c.name}: ${m.text()}`));
+  /* Refused up front for the reason written at the top of this file: an unreachable
+     host that fails at a DIFFERENT moment each run moves layout while the gate is
+     measuring, and that is what made this gate count 81 controls in one run and 80
+     in the next on an unchanged build. Refusing it makes the failure identical
+     every time. */
+  await page.route(new RegExp(OFFLINE_HOST.replace(".", "\\.")), (r) => r.abort());
+  let offlineHostFailed = false;
+  const undecided = [];
+  page.on("console", (m) => {
+    if (m.type() !== "error") return;
+    const text = m.text();
+    if (isResourceLoadError(text)) { undecided.push(text); return; }
+    errors.push(`${c.name}: ${text}`);
+  });
+  page.on("requestfailed", (r) => {
+    if (r.url().includes(OFFLINE_HOST)) offlineHostFailed = true;
+  });
   await page.goto(`${URL}#${c.id}`, { waitUntil: "networkidle" });
   await page.waitForTimeout(900);
 
@@ -510,6 +549,12 @@ for (const c of CASES) {
     await page.evaluate(() => { document.documentElement.dir = "rtl"; });
   }
 
+  /* Decided here, once the case is done, so event order cannot change the verdict. */
+  for (const text of undecided) {
+    if (offlineHostFailed) suppressed.push(`${c.name}: ${text.slice(0, 58)}`);
+    else errors.push(`${c.name}: ${text}`);
+  }
+
   await page.close();
 }
 
@@ -570,6 +615,15 @@ await browser.close();
 for (const f of failures) console.log(`  FAIL ${f}`);
 for (const e of [...new Set(errors)]) console.log(`  ERROR ${e}`);
 console.log(`OPERATED=${operated} interactions`);
+console.log(
+  /* Distinct messages, not occurrences: the occurrence count tallies renders rather
+     than causes and drifts between runs on an unchanged build. */
+  `OFFLINE_ASSET_ERRORS=${
+    suppressed.length
+      ? `${new Set(suppressed.map((x) => x.split(": ").slice(1).join(": "))).size} distinct, refused and filtered (${OFFLINE_HOST}, named allowance)`
+      : "none"
+  }`,
+);
 console.log(`OPERABLE_FAILURES=${failures.length}`);
 console.log(`OPERABLE=${failures.length || errors.length ? "FAIL" : "ok"}`);
 process.exit(failures.length || errors.length ? 1 : 0);
