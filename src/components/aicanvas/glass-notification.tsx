@@ -1,22 +1,23 @@
 /* Seventh upload of this batch, implemented per its own requirements.
 
-   DIVERGENCE 1. The ground was a hotlinked photograph on a third-party CDN
-   (`ik.imagekit.io/...Ethereal Orange Flower...`), and it does not arrive: the
-   request is issued and then nothing comes back — no response, no failure event,
-   `naturalWidth` still 0 and `complete` still false after twelve seconds. What
-   rendered was a flat `#1A1A19` box, which is to say the entire premise of a
-   glass panel — something worth blurring behind it — was missing.
+   DIVERGENCE 1, and it has been settled by the owner since it was first written.
+   The ground is a hotlinked photograph on a third-party CDN, and it does not
+   arrive in this environment: the request is issued and nothing comes back — no
+   response, no failure event, `naturalWidth` still 0 after twelve seconds. I first
+   declined to carry it, on the same grounds as the Google font in the upload
+   before this one, and said the decision was the owner's. The owner then named
+   that photograph by hand in the brief for the next component, which is the answer.
 
-   This is the same decision the previous upload raised over a Google font, and it
-   is answered the same way: this application reaches no external host, and a
-   component is not the place to make it start. A photograph is the heavier case,
-   because it is also someone else's file under someone else's licence, so it is
-   not vendored into the repository either.
+   So it is carried, and the local ground stays underneath it: the photograph
+   paints over the blooms at `opacity-60` where it loads, and the blooms carry the
+   glass where it does not. Nothing removed, nothing substituted.
 
-   The blur needs something to blur, so the ground is drawn locally instead —
-   three radial blooms in the warm palette the original name promises, costing no
-   request and no bytes. Restoring the photograph, for an owner who wants the
-   hotlink, is one `<img>`.
+   And the blooms are VIVID again, which is the correction that matters. They were
+   dimmed here to rescue the contrast of the text on top, and that is the move that
+   destroys glass: blur a flat dark field and you get a flat dark field. The
+   legibility belongs in the material, so the blur layer now carries a dark scrim
+   of its own — blur, saturate, then tint. The world behind keeps its colour, the
+   blur has structure to smear, and the card interior is dark enough to read on.
 
    DIVERGENCE 2. The dismiss control measured 20x20 CSS pixels, against the 24x24
    minimum. The visual size is the author's and is kept; the hit area is extended
@@ -144,7 +145,11 @@ function NotificationCard({
     >
       <div
         className="pointer-events-none absolute inset-0 z-[-1] rounded-2xl"
-        style={{ backdropFilter: 'blur(20px) saturate(1.6)', WebkitBackdropFilter: 'blur(20px) saturate(1.6)' }}
+        style={{
+          backdropFilter: 'blur(20px) saturate(1.6)',
+          WebkitBackdropFilter: 'blur(20px) saturate(1.6)',
+          background: 'rgba(14,12,16,0.78)',
+        }}
       />
       <div className="flex items-start gap-3.5 px-4 py-3.5 pr-12">
         <motion.div
@@ -205,10 +210,15 @@ export default function GlassNotification() {
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'radial-gradient(120% 92% at 22% 16%, rgba(255, 138, 76, 0.22), transparent 60%),' +
-            'radial-gradient(104% 82% at 80% 74%, rgba(255, 92, 120, 0.16), transparent 62%),' +
-            'radial-gradient(82% 70% at 58% 34%, rgba(255, 196, 120, 0.12), transparent 56%)',
+            'radial-gradient(118% 90% at 24% 14%, rgba(255, 138, 76, 0.85), transparent 58%),' +
+            'radial-gradient(104% 84% at 82% 76%, rgba(255, 92, 150, 0.60), transparent 60%),' +
+            'radial-gradient(88% 72% at 60% 40%, rgba(255, 206, 128, 0.50), transparent 54%)',
         }}
+      />
+      <img
+        src="https://ik.imagekit.io/aitoolkit/bg%20images/Ethereal%20Orange%20Flower%201%20(1).png"
+        alt=""
+        className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-60"
       />
       <div
         className="relative flex w-[360px] flex-col gap-2.5"
