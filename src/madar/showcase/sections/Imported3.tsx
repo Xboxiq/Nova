@@ -45,6 +45,7 @@ import GlassCard from '@/components/aicanvas/glass-card';
 import GlassTags from '@/components/aicanvas/glass-tags';
 import GlassTabBar from '@/components/aicanvas/glass-tab-bar';
 import GlassNavbar from '@/components/aicanvas/glass-navbar';
+import NoiseField from '@/components/aicanvas/noise-field';
 import ParticleSphere from '@/components/aicanvas/particle-sphere';
 
 /* The demo's own four rows, unchanged — including `gamil.com`, which is the
@@ -877,6 +878,31 @@ export function Imported3() {
           <b>وتُقالُ بصَراحةٍ: الخامِلاتُ تَعبُرُ بهوامِشَ ضيّقةٍ جدًّا — أربعةٌ وخمسةُ أجزاءٍ من مئةٍ فوقَ الحدّ.</b> <b>ولم أُعمِّقِ السِّتارةَ أكثرَ طلبًا للهامِش، لأنّ إغراقَ الزُّجاجِ في السَّوادِ هو بعينِه ما نُبِّهتُ عليه في هذا القِسم</b> — <b>ويُضافُ تحذيرٌ لا أستطيعُ قياسَه: حينَ تَصِلُ الصورةُ على جهازِ المالِكِ تتغيَّرُ الأرضُ وتتحرَّكُ هذه الأرقامُ معَها، وهذه اللافِظةُ تجلِسُ قريبًا من الخطّ.</b>
           <br /><br />
           <b>و<code>aria-current=&quot;page&quot;</code> لا <code>aria-pressed</code>:</b> هذا <code>&lt;nav&gt;</code>، <b>ومعنى الإبرازِ فيه «أنتَ هنا» لا «هذا مضغوط»</b> — وقد قِيسَ ظُهورُ الواصِفةِ عندَ النَّقر. <b>ومنارةُ الشَّعارِ تدورُ إلى الأبدِ وتَسكُنُ عندَ الطلب: 44 ثمّ 50 ثمّ 56 ثمّ 63 بلا تفضيل، وصِفرٌ في كلِّ عيّنةٍ مع <code>reduce</code>.</b> <b>وإحدى عشرةَ <code>{'{}'}</code> حُذِفَت</b>، وهي أكبرُ عددٍ في الدفعة.
+        </SpecRow>
+
+        <SpecRow name="حركةٌ لا يَطلُبُها أحدٌ تُوقَف، وحركةٌ تَصنَعُها اليَدُ تَبقى" bare specimen={
+          /* This one cannot take the `min-h-0` neutralisation alone. Its root IS the
+             measured container and its canvas is absolutely positioned, so zeroing
+             the height collapses the root and takes the canvas with it — which is
+             exactly what the upload's own note warns about. The wrapper supplies a
+             real, fluid height instead. */
+          <div data-noise-specimen="" className="aspect-[16/9] w-full min-w-0 [&>div]:h-full [&>div]:min-h-0" dir="ltr">
+            <NoiseField />
+          </div>
+        }>
+          <b>أنظفُ رفعةٍ وصلَت في هذه الدفعةِ كلِّها، ويُقالُ ذلك أوّلًا وبالتفصيل:</b> مقاسُ اللَّوحِ صحيحٌ بنِسبةِ البكسل، و<code>ResizeObserver</code> يُعيدُ بناءَ الشَّبكةِ <b>مع الحفاظِ على زاويةِ كلِّ سَهمٍ وطَورِه عبرَ خريطةٍ مُفتاحُها <code>gx,gy</code></b> فلا تَقفِزُ الحقلةُ عندَ تغييرِ المقاس، والتفكيكُ كامل، وفيها لمسٌ للشاشاتِ لم تطلُبْه المواصفة، <b>ولا <code>{'{}'}</code> واحدةً من بقايا التعليقاتِ المَنزوعة</b> — وهي أوّلُ رفعةٍ في الدفعةِ تصِلُ بلا واحدةٍ منها.
+          <br /><br />
+          <b>١. والحقلةُ كانت تَرسُمُ أرضَها الفاتحةَ في كلِّ حُزمةٍ داكنة.</b> فاختبارُها للدُّكنةِ <code>classList.contains('dark')</code>، <b>وهذا المشروعُ لا يَحمِلُ صَنفَ <code>dark</code> أصلًا — يُبدِّلُ بـ<code>data-theme</code> وقيمتانِ من سَبعِه داكنتان</b>. والقياسُ: مع <code>data-theme=&quot;night&quot;</code> ثمّ <code>&quot;dark&quot;</code> حسَبَ الجِذرُ <code>rgb(245,241,234)</code> — <b>أي <code>#F5F1EA</code>، القيمةَ الفاتحة</b> — و<code>classList.contains('dark')</code> كاذبةٌ في الحُزَمِ الثلاثِ جميعًا. <b>فكانتِ الأسهُمُ تُرسَمُ داكنةً على فاتحٍ والصفحةُ حولَها داكنة.</b> <b>فزِيدَ <code>data-theme</code> إلى الاختبارِ وإلى ما يُراقِبُه المُلاحِظ، والاختباراتُ الأصليّةُ باقيةٌ لأنها هي التي تُشغِّلُ المكوِّنَ خارجَ هذا المستودع.</b> <b>وبعدَه: <code>night</code> و<code>dark</code> تُعطيانِ <code>rgb(17,15,12)</code>، والفاتحةُ باقيةٌ على حالِها.</b>
+          <br /><br />
+          <b>٢. والحَلقةُ لا تتوقَّفُ أبدًا:</b> <code>t += 0.004</code> كلَّ إطار، والحالةُ الخامِلةُ تَنسابُ حتى بلا مُؤشِّر. <b>وبطانيّةُ هذا المستودعِ CSS — <code>animation-duration: 1ms</code> — ولا يدَ لها على حَلقةِ <code>requestAnimationFrame</code></b> كما كان في كُرةِ الجُزَيئات، <b>و<code>MotionConfig</code> لا يُجدي هنا لأنّ لا شيءَ في هذا المكوِّنِ من framer</b>. والقياسُ قبلَ الوصل: <b>لَقطتانِ للَّوحِ بفاصلِ 700ms تختلفانِ بَصمَتُهما تحتَ <code>reduce</code> كما تختلفانِ بدونِه</b>.
+          <br /><br />
+          <b>فصارَ التفضيلُ يُقرأُ في JS، والنتيجةُ ثلاثُ حالاتٍ قِيسَت كلُّها:</b> <b>في السكونِ تحتَ <code>reduce</code>: بَصمتانِ متطابقتان</b> — لا انسياب؛ <b>وبعدَ حركةِ المُؤشِّر: البَصمةُ تتغيَّر</b> — أي أنّ الأسهُمَ تُجيبُ اليَدَ؛ <b>وبالمُؤشِّرِ ثابتًا بعدَها: متطابقتانِ مرّةً أُخرى</b>. <b>فالذي أُوقِفَ هو الحركةُ التي لا يَطلُبُها أحد، لا الحركةُ التي يَصنَعُها القارئُ بيدِه</b> — وإطارٌ واحدٌ يُرسَمُ على أيِّ حال، <b>لأنّ حقلَ أسهُمٍ ساكنٍ هو العيّنة، ومُستطيلٌ فارغٌ جوابٌ أسوأ</b>.
+          <br /><br />
+          <b>٣. ولَقطةُ الوصولِ أرَت <code>{'{"role":"Canvas","name":""}'}</code></b> — عُقدةً لا تُنطِقُ شيئًا. والحقلةُ زينة، <b>فأُخفِيَت كما أُخفِيَ لوحُ الكُرةِ ولوحُ FlameWrap</b>، والعُقدةُ ذهبَت.
+          <br /><br />
+          <b>وغِلافُ العيّنةِ هنا لا يَقبَلُ ما قَبِلَته الرفعاتُ قبلَه، وهذا مكتوبٌ في مُلاحَظةِ الرفعةِ نفسِها:</b> جِذرُها هو الحاويةُ المَقيسةُ ولوحُها مُطلَقُ الموضِع، <b>فتصفيرُ الارتفاعِ يُطبِقُ الجِذرَ ويأخُذُ اللَّوحَ معَه</b>. <b>فأعطاه الغِلافُ ارتفاعًا حقيقيًّا مائعًا (<code>aspect-[16/9]</code>) بدلًا من التصفيرِ وحدَه</b>، والمَقيسُ بعدَه: الغِلافُ والجِذرُ واللَّوحُ ثلاثتُها <code>634x357</code>، ومُخزَّنُ الرَّسمِ مِثلُها.
+          <br /><br />
+          <b>ويُقالُ ولا يُلمَس: الأثرُ كلُّه للمُؤشِّرِ ولا مُكافِئَ له في لوحةِ المفاتيح</b> — <b>وهذا صادقٌ للزينة: ليس هنا شيءٌ يُشغَّل، بل شيءٌ يُنظَرُ إليه</b>.
         </SpecRow>
 
       </SpecList>
