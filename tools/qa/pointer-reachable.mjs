@@ -29,6 +29,8 @@
  *
  * Measured on the day this was written, root `#main-content` per section as
  * `madar-qa` measures: shell 0; eleven own sections 0 each; imported 6, 11, 91.
+ * `madar-energy` joined OWN the day the prepaid runway was added there (gates/26):
+ * its first draft was 13 of these offenders, and this gate is what caught it.
  * "Shell" is the body MINUS `#main-content` — the first draft swept the whole
  * body and reported one injected offender twice, once as shell and once as the
  * section the page opens on; the mutation test is what found that.
@@ -43,7 +45,7 @@ import { createRequire } from "node:module";
 
 const PORT = 4589;
 const URL = `http://localhost:${PORT}/`;
-const OWN = ["madar-nova-instruments", "madar-color-tokens", "madar-admin-access", "madar-consequence", "madar-dispatch",
+const OWN = ["madar-nova-instruments", "madar-energy", "madar-color-tokens", "madar-admin-access", "madar-consequence", "madar-dispatch",
   "madar-photographed", "madar-boards", "madar-glasswork", "madar-projectwork", "madar-directions", "madar-matrix"];
 const IMPORTED = ["madar-imported", "madar-imported-2", "madar-imported-3"];
 /* two above the number measured when this gate was written (108) */

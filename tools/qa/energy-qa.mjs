@@ -99,9 +99,51 @@ if (!tier.ladder.includes(tier.seal)) {
   failures.push(`tier colour ${tier.seal} is not among the ladder's ${tier.ladder.join(", ")}`);
 }
 
-// ── the leak reports leaving the usual range, and nothing else ──────────────
+// ── the leak reports a verdict, and nothing else ────────────────────────────
+// Two cards are in a verdict state on load: ConsumptionBand above its usual
+// range, and PrepaidRunway short of its top-up day. Both leaks must be state:
+// the runway's is proved below by moving the marker and watching it go out.
 const leaks = await page.locator("#madar-energy-panel .madar-leak").count();
-if (leaks !== 1) failures.push(`expected exactly one card to be leaking, found ${leaks}`);
+if (leaks !== 2) failures.push(`expected exactly two cards to be leaking (band above usual, runway short), found ${leaks}`);
+
+// ── the prepaid runway: lengths are the arithmetic, the leak is the verdict ──
+await page.waitForSelector("#madar-energy-panel [data-runway]", { timeout: 15000 });
+const runway = () => page.evaluate(() => {
+  const root = document.querySelector("#madar-energy-panel [data-runway]");
+  const rtl = getComputedStyle(root).direction === "rtl";
+  const t = root.querySelector("[data-track]").getBoundingClientRect();
+  const span = (sel) => { const el = root.querySelector(sel); if (!el) return null; const b = el.getBoundingClientRect(); return rtl ? [(t.right - b.right) / t.width, (t.right - b.left) / t.width] : [(b.left - t.left) / t.width, (b.right - t.left) / t.width]; };
+  const th = root.querySelector("[data-marker]").getBoundingClientRect();
+  return { topUp: +root.dataset.topUp, short: root.dataset.short, fill: span("[data-fill]"), shortfall: span("[data-shortfall]"),
+    thumb: rtl ? (t.right - th.left - th.width / 2) / t.width : (th.left + th.width / 2 - t.left) / t.width,
+    edges: root.querySelectorAll("[data-day-edge]").length, leaks: document.querySelectorAll("#madar-energy-panel .madar-leak").length };
+});
+/* the defaults: balance 58 over days 12,17,16,11,11,12,11,12,17,16 (total 135), top-up on day index 5 (needs 67) */
+const R = await runway();
+const near = (a, b, tol = 0.006) => Math.abs(a - b) <= tol;
+if (!near(R.fill[1], 58 / 135)) failures.push(`runway: the balance is drawn ${(R.fill[1] * 100).toFixed(2)}% long, expected ${(58 / 135 * 100).toFixed(2)}%`);
+if (!R.shortfall || !near(R.shortfall[0], 58 / 135) || !near(R.shortfall[1], 67 / 135)) failures.push(`runway: the shortfall hatch is ${JSON.stringify(R.shortfall)}, expected from the balance's end to the top-up day (${(58 / 135).toFixed(4)}→${(67 / 135).toFixed(4)})`);
+if (!near(R.thumb, 67 / 135)) failures.push(`runway: the top-up marker sits at ${(R.thumb * 100).toFixed(2)}%, expected ${(67 / 135 * 100).toFixed(2)}%`);
+if (R.edges !== 9) failures.push(`runway: ${R.edges} day boundaries drawn for 10 days, expected 9`);
+if (R.short !== "true") failures.push(`runway: default should be short of its top-up day, data-short=${R.short}`);
+/* one day back (ArrowRight in Arabic) needs 56 ≤ 58: the hatch goes, the leak goes out, and the count drops to the band's alone */
+await page.locator("#madar-energy-panel [data-thumb]").focus();
+await page.keyboard.press("ArrowRight");
+await page.waitForTimeout(300);
+const R2 = await runway();
+if (R2.topUp !== 4 || R2.short !== "false" || R2.shortfall || R2.leaks !== 1) failures.push(`runway: after one day back expected top-up 4, not short, no hatch, one leak left; got top-up ${R2.topUp} short=${R2.short} hatch=${JSON.stringify(R2.shortfall)} leaks=${R2.leaks}`);
+await page.keyboard.press("ArrowLeft");
+await page.waitForTimeout(300);
+const R3 = await runway();
+if (R3.topUp !== 5 || R3.leaks !== 2) failures.push(`runway: forward did not restore top-up 5 and the leak (top-up ${R3.topUp}, leaks ${R3.leaks})`);
+/* a press on the axis at 21.5% of its length (29 of 135) lands the marker on the nearest day boundary — day 2 — and leaves focus on the axis so the arrows continue from there */
+const axis = await page.locator("#madar-energy-panel [data-axis]").boundingBox();
+await page.mouse.click(axis.x + axis.width * (1 - 0.215), axis.y + axis.height / 2);
+await page.waitForTimeout(300);
+const R4 = await runway();
+const focused = await page.evaluate(() => document.activeElement?.hasAttribute("data-axis"));
+if (R4.topUp !== 2 || !focused) failures.push(`runway: a press at 21.5% should put the top-up on day 2 with focus on the axis; got top-up ${R4.topUp}, axis focused=${focused}`);
+console.log(`RUNWAY balance=${(R.fill[1] * 100).toFixed(2)}% shortfall=${(R.shortfall?.[0] * 100).toFixed(2)}→${(R.shortfall?.[1] * 100).toFixed(2)}% thumb=${(R.thumb * 100).toFixed(2)}% edges=${R.edges} leaks ${R.leaks}→${R2.leaks}→${R3.leaks} press@21.5%→day ${R4.topUp} focused=${focused}`);
 
 // ── fifth batch: the reference line is drawn on the bars' scale ─────────────
 await page.waitForSelector("#madar-energy-panel [data-target-line]", { timeout: 15000 });

@@ -178,6 +178,14 @@ const CASES = [
     ],
   },
   {
+    id: "madar-energy",
+    name: "energy",
+    /* The runway's axis is one slider, not a grid of cells; it carries data-thumb="true"
+       so the harness can find it. The press on the axis is position-specific (its centre
+       is already the default boundary) and is measured in energy-qa.mjs instead. */
+    keyboard: { group: "[data-runway]", cell: "[data-thumb]", attr: "data-top-up", state: "data-thumb" },
+  },
+  {
     id: "madar-nova-instruments",
     name: "nova-instruments",
     controls: [
