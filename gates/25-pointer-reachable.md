@@ -75,3 +75,42 @@ rule now.
 - Cursor kinds measured, not assumed: the built CSS carries `pointer` ×8, `not-allowed` ×2, `text`, `grab`, `grabbing` (a lower bound — styled-components and inline styles inject at runtime); the source carries `crosshair` ×2, `ew-resize` ×2, `ns-resize` ×1 in madar's own components. All non-passive kinds are now swept; the five own ones are reachable.
 - `aria-hidden` is trusted as a declaration. A component can lie with it; the gate makes the lie visible in `DECLARED_DECORATION` rather than catching it.
 - The imported 108 are the owner's to fix or exempt one by one; the ceiling only stops the number growing unnoticed.
+
+## The second promise: `title`
+
+A tooltip is information, and a browser opens it for a mouse only. Measured with
+the same reachability rule, madar's own sections carried 26 of them; the
+imported sections 0. What they were, and what happened to each:
+
+| where | count | what the title said | fix |
+|---|---|---|---|
+| `MeterFace` seal | 1 | the tier name — written in the same span | title deleted |
+| `TariffLadder` steps | 4 | tier name and upper bound — the bounds 200/400/600 were written NOWHERE else | bounds written under the axis, one per step end, on the steps' own flex scale |
+| `AllocationBar` parts | 5 (two instances) | label and value — repeated by the legend beneath | title deleted |
+| `BillDocument` tier dots | 5 | the tier name — the next span says it | title deleted, dot `aria-hidden` |
+| `MemojiAvatar` | 11 | the person's name — written beside it in every host | `aria-hidden`; the square is decoration for a name |
+| `OutageCompare` / `DutyCycle` marks | (not swept then) | from–to and minutes per mark | exempt inside `role="img"`; `OutageCompare`'s tracks were bare divs and now carry `role="img"` with a count-and-minutes name like `DutyCycle` already did |
+
+- [x] G9: A title on an unreachable element outside a named picture fails the gate, by name
+  CHECK: inject `<span title="…">` into the hold specimen; build; npm run qa:pointer
+  EXPECT: POINTER_REACHABLE=FAIL (1) naming madar-nova-instruments with the title text
+  EVIDENCE: `UNREACHABLE madar-nova-instruments: span 72x24 title="تلميحٌ لا يفتحه إلّا الفأر"`; FAIL (1); exit 1. Removed, diff empty, rebuilt
+
+- [x] G10: After the fixes, seventeen own sections are at zero under BOTH promises
+  CHECK: npm run qa:pointer (OWN now adds madar-outage, madar-schedule, madar-soft-vocabulary, madar-upload, madar-buttons — each censused at 0 cursor offenders before joining)
+  EXPECT: every own section unreachable=0; imported unchanged at 6/11/91
+  EVIDENCE: all seventeen 0; imported 6, 11, 91; IMPORTED_POINTER_UNREACHABLE=108; DECLARED_DECORATION=3158 (was 2594: the five new sections' aria-hidden pointer elements, plus the avatars and dots now declared); POINTER_REACHABLE=ok (0)
+
+- [x] G11: The ladder's boundaries are visible text, aligned to the step ends, in both directions
+  CHECK: node ladder.mjs — rects of [data-tier-edge] against [data-tier-step]
+  EXPECT: each label cell spans the same inline extent as its step, within 1px; text 200, 400, 600, 900 ك.و.س
+  EVIDENCE: rtl edges 454–518 / 387–451 / 320–384 / 220–317 against steps 454–518 / 386–451 / 319–383 / 220–316; ltr 682–746 / 749–813 / 816–880 / 883–980 against 682–746 / 749–814 / 817–881 / 884–980. Screenshots gates/screenshots/qa-tariff-ladder-{light-rtl,coral-ltr}.png, looked at
+
+- [x] G12: The energy gate follows the change and adds the claim
+  CHECK: node tools/qa/energy-qa.mjs
+  EXPECT: seal and steps selected by data attributes; boundaries read 200,400,600,900; zero `[title]` in the panel; ENERGY_CHECKS=ok
+  EVIDENCE: ENERGY_CHECKS=ok RUNTIME_ERRORS=0 — the two selectors that keyed on the tooltip text (`[title*='الشريحة']`) would have silently matched nothing; they were rewritten before the run, not after
+
+### Not claimed
+- The marks inside `OutageCompare` and `DutyCycle` still carry per-mark from–to in `title`, reachable by mouse only. The picture has a name and an axis, so the reading is available; the precision is not, to a sighted keyboard user. The reachable form is a roving axis like `DayStrip`, and it is deferred and written here rather than exempted silently.
+- `aria-hidden` on `MemojiAvatar` trusts every host to write the name beside it. All five hosts do today; a future host that shows avatars alone would be hiding names, and nothing measures that yet.

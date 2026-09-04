@@ -8,6 +8,15 @@
  * then offered nothing to a keyboard. `tools/qa/operable.mjs` catches this — but
  * only for controls somebody remembered to register. This sweeps everything.
  *
+ * A SECOND PROMISE, added after a census: `title`. A tooltip is information, and
+ * a browser opens it for a mouse only. The census found 26 in madar's own
+ * sections — tier names on dots beside the same name in text, allocation parts
+ * beside a legend that repeats them, avatars beside the name they stand for,
+ * and the tariff ladder's boundaries, which were written NOWHERE else. The
+ * redundant ones were deleted or declared decoration; the ladder's boundaries
+ * became visible text under the axis. A title inside `role="img"` is exempt,
+ * because the picture has its own name and assistive tech flattens its children.
+ *
  * THE RULE. Any element whose COMPUTED cursor is not passive — not auto, default,
  * text, not-allowed, wait and their kin; so pointer, grab, crosshair, the resize
  * arrows, zoom, help, every cursor that promises the hand can do something —
@@ -45,7 +54,8 @@ import { createRequire } from "node:module";
 
 const PORT = 4589;
 const URL = `http://localhost:${PORT}/`;
-const OWN = ["madar-nova-instruments", "madar-energy", "madar-color-tokens", "madar-admin-access", "madar-consequence", "madar-dispatch",
+const OWN = ["madar-nova-instruments", "madar-energy", "madar-outage", "madar-schedule", "madar-soft-vocabulary", "madar-upload", "madar-buttons",
+  "madar-color-tokens", "madar-admin-access", "madar-consequence", "madar-dispatch",
   "madar-photographed", "madar-boards", "madar-glasswork", "madar-projectwork", "madar-directions", "madar-matrix"];
 const IMPORTED = ["madar-imported", "madar-imported-2", "madar-imported-3"];
 /* two above the number measured when this gate was written (108) */
@@ -87,13 +97,19 @@ const sweep = (rootSel) => page.evaluate((sel) => {
   const offenders = []; let declared = 0;
   for (const el of root.querySelectorAll("*")) {
     if (!sel && el.closest("#main-content")) continue; /* the shell is the page minus the section it happens to show */
-    const c = getComputedStyle(el).cursor;
-    if (PASSIVE.has(c)) continue; /* every other cursor promises the hand can do something here */
+    /* two promises: a cursor that is not passive says the hand can act here; a `title`
+       says there is more to know here — and a tooltip opens for a mouse only. A title
+       inside a `role="img"` is exempt: the picture has its own name, and its children
+       are flattened away for assistive tech, so that title was never anyone's only path. */
+    const cursor = getComputedStyle(el).cursor;
+    const title = (el.getAttribute("title") || "").trim();
+    const promise = !PASSIVE.has(cursor) ? `cursor=${cursor}` : title && !el.closest('[role="img"]') ? `title="${title.slice(0, 32)}"` : null;
+    if (!promise) continue;
     if (el.closest("[aria-hidden='true'],[aria-hidden='']")) { declared += 1; continue; }
     if (reachable(el)) continue;
     const cls = (typeof el.className === "string" ? el.className : el.getAttribute("class") || "").split(" ").filter(Boolean).slice(0, 2).join(".");
     const b = el.getBoundingClientRect();
-    offenders.push(`${el.tagName.toLowerCase()}${cls ? "." + cls : ""} ${Math.round(b.width)}x${Math.round(b.height)} cursor=${c}`);
+    offenders.push(`${el.tagName.toLowerCase()}${cls ? "." + cls : ""} ${Math.round(b.width)}x${Math.round(b.height)} ${promise}`);
   }
   return { offenders, declared };
 }, rootSel);

@@ -88,13 +88,16 @@ if (!/كيلوواط ساعة/.test(label ?? "")) failures.push(`register not an
 
 // ── the tier colour is one colour, in the seal and in the ladder ────────────
 const tier = await page.evaluate(() => {
-  const seal = document.querySelector("#madar-energy-panel [title*='الشريحة'] i");
-  const segs = [...document.querySelectorAll("#madar-energy-panel [title*='الشريحة'] .madar-fill")];
+  const seal = document.querySelector("#madar-energy-panel [data-tier-seal] i");
+  const segs = [...document.querySelectorAll("#madar-energy-panel [data-tier-step] .madar-fill")];
   return {
     seal: getComputedStyle(seal).backgroundColor,
     ladder: segs.map((s) => getComputedStyle(s).backgroundColor),
   };
 });
+const edges = await page.locator("#madar-energy-panel [data-tier-edge]").allTextContents();
+if (edges.map((t) => t.replace(/\D/g, "")).join() !== "200,400,600,900") failures.push(`ladder boundaries should read 200,400,600,900 under the steps, got ${edges.join(" | ")}`);
+if (await page.locator("#madar-energy-panel [title]").count()) failures.push("energy still carries a title tooltip somewhere — hover-only information");
 if (!tier.ladder.includes(tier.seal)) {
   failures.push(`tier colour ${tier.seal} is not among the ladder's ${tier.ladder.join(", ")}`);
 }

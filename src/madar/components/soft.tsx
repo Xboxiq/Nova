@@ -108,7 +108,10 @@ export function MemojiAvatar({ name, size = 46 }: { name: string; size?: number 
   const [ring, faceA, faceB] = MEMOJI_PALETTES[hash % MEMOJI_PALETTES.length];
   const face = size * 0.72;
   return (
-    <span title={name} style={{ width: size, height: size, borderRadius: 6, background: ring, display: 'grid', placeItems: 'center', flex: 'none' }}>
+    /* Every host writes the name beside this (rows, threads, the assignee button), so the
+       square is decoration and says so. It used to carry the name in `title`, which is a
+       tooltip only a mouse can open — the hover-only defect the pointer gate now counts. */
+    <span aria-hidden="true" style={{ width: size, height: size, borderRadius: 6, background: ring, display: 'grid', placeItems: 'center', flex: 'none' }}>
       <span style={{ width: face, height: face, borderRadius: 6, background: `linear-gradient(135deg, ${faceA}, ${faceB})`, boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.4), inset 0 -1px 1px rgba(0,0,0,0.18)' }} />
     </span>
   );

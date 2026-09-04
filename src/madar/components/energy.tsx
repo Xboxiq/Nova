@@ -118,7 +118,7 @@ export function MeterFace({ reading = 76542.8, tier = 2, model = 'NV-370 · 1PH 
         </span>
         {/* the tier seal — the same colour this tier carries everywhere else */}
         <span
-          title={TIER[tier].ar}
+          data-tier-seal=""
           style={{
             display: 'inline-flex', alignItems: 'center', gap: 6,
             padding: '3px 9px', borderRadius: 'var(--r-full)',
@@ -319,7 +319,6 @@ export interface TariffLadderProps {
    The colours are the encoding from §13: tier three is amber here, in the
    meter's seal, and anywhere else a tier is named. Learn it once. */
 export function TariffLadder({ used = 412, steps = [200, 400, 600, 900] }: TariffLadderProps) {
-  const total = steps[steps.length - 1];
   const tierOf = (n: number) => (Math.min(steps.findIndex((s) => n <= s) + 1, 4) || 4) as TariffTier;
   const current = tierOf(used);
   const nextEdge = steps.find((s) => s > used);
@@ -349,7 +348,7 @@ export function TariffLadder({ used = 412, steps = [200, 400, 600, 900] }: Tarif
             <span
               key={edge}
               className="madar-hatch"
-              title={`${TIER[tier].ar} — حتى ${ar(edge)}`}
+              data-tier-step={tier}
               style={{
                 position: 'relative', flex: `${edge - from} 1 0`,
                 borderRadius: 'var(--r-full)', overflow: 'hidden',
@@ -369,9 +368,17 @@ export function TariffLadder({ used = 412, steps = [200, 400, 600, 900] }: Tarif
         })}
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: 'var(--text-3)' }}>
-        <span><bdi dir="ltr">0</bdi></span>
-        <span><bdi dir="ltr">{ar(total)}</bdi> ك.و.س</span>
+      {/* every boundary written under its own step end, on the same flex scale as the
+          steps above — the edges used to live in a `title` only a mouse could open */}
+      <div aria-hidden="true" style={{ display: 'flex', gap: 3, fontSize: 11, color: 'var(--text-3)', fontVariantNumeric: 'tabular-nums' }}>
+        {steps.map((edge, i) => {
+          const from = i === 0 ? 0 : steps[i - 1];
+          return (
+            <span key={edge} data-tier-edge="" style={{ flex: `${edge - from} 1 0`, textAlign: 'end', whiteSpace: 'nowrap' }}>
+              <bdi dir="ltr">{ar(edge)}</bdi>{i === steps.length - 1 ? ' ك.و.س' : ''}
+            </span>
+          );
+        })}
       </div>
     </div>
   );
@@ -470,7 +477,6 @@ export function AllocationBar({
               key={p.key}
               data-part={p.key}
               className={p.solid ? undefined : 'madar-hatch'}
-              title={`${p.label} — ${ar(p.value)} ${unit}`}
               style={{ width: pct(p.value), ...swatch(p) }}
             />
           ))}
@@ -731,10 +737,7 @@ export function BillDocument({
           <div style={{ display: 'grid', gap: 7 }}>
             {lines.map((l) => (
               <div key={l.tier} style={{ display: 'flex', alignItems: 'center', gap: 9, fontSize: 12 }}>
-                <i
-                  title={TIER[l.tier].ar}
-                  style={{ width: 7, height: 7, borderRadius: '50%', background: TIER[l.tier].color, flex: 'none' }}
-                />
+                <i aria-hidden="true" style={{ width: 7, height: 7, borderRadius: '50%', background: TIER[l.tier].color, flex: 'none' }} />
                 <span style={{ color: 'var(--text-2)' }}>{TIER[l.tier].ar}</span>
                 <span style={{ flex: 1, fontSize: 11, color: 'var(--text-3)', textAlign: 'center' }}>
                   <bdi dir="ltr">{ar(l.kwh, 1)} × {l.rate.toFixed(2)}</bdi>
