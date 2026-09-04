@@ -59,20 +59,26 @@
 
    THE STEP IS THE VALUE; THE SLIDE IS THE DECORATION. Measured before it was
    handled: `transition: inline-size 0.24s` ran unchanged under
-   `prefers-reduced-motion: reduce`, because this repository's blanket at
-   `styles.css:2150` names five selectors and resets no transitions at all. So the
-   duration collapses here instead, and the fill lands on the new step in one
-   frame while still landing in the right place. The same split as the clock's
+   `prefers-reduced-motion: reduce`. The blanket at `styles.css:2150` names five
+   selectors and resets no transitions; there IS a universal reset in the
+   repository -- `bridge.css:329`, `.madar-surface * { transition-duration: 1ms
+   !important }` -- but this specimen is hosted in `Imported3`, which is not a
+   madar surface, so it was never reached. (I first wrote that no such reset
+   existed anywhere; the hold-to-confirm button, hosted on a madar surface, found
+   it by being overruled by it.) So the duration collapses here in the component,
+   and the fill lands on the new step in one frame while still landing in the
+   right place. The same split as the clock's
    time against its blink, the calendar's day against its page turn and the
    deck's hotel count against its count-up.
 
    (Worth the owner's attention, and not taken unilaterally: these durations are
-   already tokens — `--nova-motion-base`, `--nova-motion-fast` and three more. One
-   line inside that existing media block, redefining the five to `1ms`, would
-   honour the preference for every component in the library that reads them
-   rather than one at a time in each file. That is a system-wide behaviour change
-   under the preference, which is the owner's call, so it is reported here and
-   this file handles only itself.)
+   already tokens — `--nova-motion-base`, `--nova-motion-fast` and three more. The
+   repository already does exactly this for its `--dur-1..4` tokens at
+   `bridge.css:322` under the same media query; extending that one block to the
+   five `--nova-motion-*` tokens would honour the preference for every component
+   that reads them rather than one at a time in each file. A precedent to extend,
+   not a proposal to invent -- and still the owner's call, so this file handles
+   only itself.)
 
    FOCUS IS THE PROJECT'S. No outline of its own: the unlayered
    `[tabindex]:focus-visible` in `styles.css:87` outranks anything a component
