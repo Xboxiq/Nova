@@ -336,16 +336,24 @@ export function DragToDismissCard({ children, onDismiss, respawnMs = 1200 }: Dra
   const start = useRef(0);
   const t = useTimeout();
 
+  const dismiss = (dir: 1 | -1) => {
+    setX(480 * dir); setGone(true); onDismiss?.();
+    if (respawnMs) { clearTimeout(t.current); t.current = setTimeout(() => { setGone(false); setX(0); }, respawnMs); }
+  };
+
   return (
     <div
+      /* the keyboard's swipe: Delete, Backspace, Enter or Space dismiss toward the inline end (gates/25) */
+      role="button"
+      tabIndex={0}
+      aria-label="بطاقةٌ تُزاح لتُصرَف"
+      onKeyDown={(e) => { if (gone) return; if (['Delete', 'Backspace', 'Enter', ' '].includes(e.key)) { e.preventDefault(); dismiss(getComputedStyle(e.currentTarget).direction === 'rtl' ? -1 : 1); } }}
       onPointerDown={(e) => { if (gone) return; e.currentTarget.setPointerCapture(e.pointerId); start.current = e.clientX - x; setDrag(true); }}
       onPointerMove={(e) => { if (!drag || gone) return; setX(e.clientX - start.current); }}
       onPointerUp={() => {
         setDrag(false);
-        if (Math.abs(x) > 100) {
-          setX(x > 0 ? 480 : -480); setGone(true); onDismiss?.();
-          if (respawnMs) { clearTimeout(t.current); t.current = setTimeout(() => { setGone(false); setX(0); }, respawnMs); }
-        } else setX(0);
+        if (Math.abs(x) > 100) dismiss(x > 0 ? 1 : -1);
+        else setX(0);
       }}
       style={{
         background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, padding: '14px 18px',
@@ -451,14 +459,48 @@ export function ReorderableList({ items: initial }: { items: string[] }) {
   const [items, setItems] = useState(initial);
   const [drag, setDrag] = useState<{ index: number; y: number } | null>(null);
   const startY = useRef(0);
+  /* The keyboard's drag: one tab stop rides the focused row; Space lifts it, the vertical
+     arrows carry it, Space or Enter sets it down, Escape sets it down too. The rows are keyed
+     by label, so React MOVES the focused node instead of re-creating it and focus rides along.
+     The status line speaks only after a keyboard move (gates/25, named debt paid). */
+  const [lifted, setLifted] = useState<string | null>(null);
+  const [focused, setFocused] = useState(0);
+  const [said, setSaid] = useState('');
+  const moveBy = (label: string, d: number) => {
+    const i = items.indexOf(label);
+    const to = Math.max(0, Math.min(items.length - 1, i + d));
+    if (to === i) return;
+    const next = items.slice(); next.splice(i, 1); next.splice(to, 0, label);
+    setItems(next); setFocused(to);
+    setSaid(`${label}: الموضع ${to + 1} من ${items.length}`);
+  };
+  const onKey = (label: string, i: number) => (e: React.KeyboardEvent<HTMLDivElement>) => {
+    const isLifted = lifted === label;
+    if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); setLifted(isLifted ? null : label); setSaid(isLifted ? `${label}: وُضِع` : `${label}: مرفوع، الأسهم تنقله`); return; }
+    if (e.key === 'Escape' && isLifted) { e.preventDefault(); setLifted(null); setSaid(`${label}: وُضِع`); return; }
+    const d = e.key === 'ArrowDown' ? 1 : e.key === 'ArrowUp' ? -1 : 0;
+    if (!d) return;
+    e.preventDefault();
+    if (isLifted) moveBy(label, d);
+    else { const to = Math.max(0, Math.min(items.length - 1, i + d)); setFocused(to); e.currentTarget.parentElement?.querySelectorAll<HTMLElement>('[data-row]')[to]?.focus(); }
+  };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }} data-reorder="" role="toolbar" aria-orientation="vertical" aria-label="قائمةٌ قابلةٌ لإعادة الترتيب — مسافة ترفع، الأسهم تنقل">
+      <span role="status" aria-live="polite" style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clipPath: 'inset(50%)' }}>{said}</span>
       {items.map((label, i) => {
-        const isDragged = drag?.index === i;
+        const isDragged = drag?.index === i || lifted === label;
         return (
           <div
             key={label}
+            role="button"
+            tabIndex={i === focused ? 0 : -1}
+            aria-pressed={lifted === label}
+            aria-roledescription="صفٌّ قابلٌ لإعادة الترتيب"
+            aria-label={`${label}، الموضع ${i + 1} من ${items.length}`}
+            data-row={label}
+            onFocus={() => setFocused(i)}
+            onKeyDown={onKey(label, i)}
             onPointerDown={(e) => { e.currentTarget.setPointerCapture(e.pointerId); startY.current = e.clientY; setDrag({ index: i, y: 0 }); }}
             onPointerMove={(e) => {
               if (!drag || drag.index !== i) return;
@@ -481,7 +523,7 @@ export function ReorderableList({ items: initial }: { items: string[] }) {
               display: 'flex', alignItems: 'center', gap: 10, height: 44, padding: '0 14px', borderRadius: 6,
               background: 'var(--surface)', border: '1px solid var(--border)',
               boxShadow: isDragged ? 'var(--shadow-3)' : 'var(--shadow-1)',
-              transform: isDragged ? `translateY(${drag.y}px) scale(1.02)` : 'none',
+              transform: isDragged ? `translateY(${drag?.index === i ? drag.y : 0}px) scale(1.02)` : 'none',
               zIndex: isDragged ? 2 : 1, position: 'relative',
               cursor: 'grab', touchAction: 'none', userSelect: 'none', fontSize: 13.5, fontWeight: 600,
               transition: isDragged ? 'box-shadow 150ms' : `transform 300ms ${GLIDE}`,

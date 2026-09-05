@@ -135,17 +135,23 @@ were, and what each became:
 | an expander with `role="button"` and no tabindex | 1 | dynamic island | `tabIndex={0}`, Enter/Space click it |
 | a swipe row whose action button sat behind it | 1 | swipeable list row | the grab cursor moved to the wrapper that CONTAINS the button; focusing the button slides the row open |
 | a chart whose slices highlight on hover | 5 + 5 | donut slices and legend rows | legend rows focusable; slices `aria-hidden` as the mouse duplicate |
-| **named debt** | **10** | kanban cards ×4 and a sortable list ×5 dragged only; a pointer-following playground | counted per section under a ceiling equal to today's number; one more fails. The keyboard form is a roving reorder, deferred and written here |
+| drag-only lists | 9 | kanban cards ×4, a sortable list ×4, a drag-to-dismiss card | the keyboard's drag: Space lifts (`aria-pressed`), arrows carry — vertical for the list, horizontal following the writing direction for the kanban — Space/Enter set down, Escape too; Delete/Backspace dismiss the card; a `role="status"` line speaks only after a keyboard move. The list is a vertical `toolbar` with one roving stop; the kanban re-focuses the card by id after it mounts in the other column |
+| **named debt** | **1** | a pointer-following playground | counted under a ceiling of 1; no keyboard form exists for a thing that follows the pointer |
 
 - [x] G13: The gate reads the registry, and every own section is at zero or at its named debt
   CHECK: npm run qa:pointer
-  EXPECT: 42 own sections; only data-collections 4, kinetics-bank 5, kinetics-99 1 non-zero, each marked "named debt"; imports 3 under a ceiling of 5 roots
-  EVIDENCE: OWN_DEBT=10; IMPORTED_POINTER_UNREACHABLE=3 (ceiling 5); DECLARED_DECORATION=9 (roots only now); POINTER_REACHABLE=ok (0). The registry regex found 45 ids, 3 imported
+  EXPECT: 42 own sections; only kinetics-99 1 non-zero, marked "named debt" (data-collections and kinetics-bank were 4 and 5 until G16); imports 3 under a ceiling of 5 roots
+  EVIDENCE: OWN_DEBT=1 after G16 (10 before it); IMPORTED_POINTER_UNREACHABLE=3 (ceiling 5); DECLARED_DECORATION=9 (roots only now); POINTER_REACHABLE=ok (0). The registry regex found 45 ids, 3 imported
 
 - [x] G14: Every new keyboard path was driven, both directions where direction matters
   CHECK: node keys.mjs — focus, press, read aria-valuenow / aria-pressed / aria-sort / aria-expanded / transform
   EXPECT: forward changes the value and back returns it; rtl forward is ArrowLeft, ltr forward is ArrowRight
   EVIDENCE: rubber-band 60→65→60; range low 20→21→20, high 80→81→80; knob 40→45→40; divider 50→55→50 and in ltr ArrowRight 50→55; scrubber 24→35 (ArrowUp then Shift+ArrowUp); flip card focus→pressed, Enter→unpressed; sortable headers 4 buttons, Enter → aria-sort=ascending; dynamic island false→Enter→true; swipe row focus → translateX 0→92; signature cards 4 focusable, markup changes on focus and restores on blur; menu row buttons transparent at rest, painted on hover; ListBox tabindex 0,-1,-1 and ArrowDown moves selection and focus to 1; SelectField opens with focus on "Riyadh (GMT+3)" (tabindex 0,-1,-1,-1), ArrowDown → "Dubai (GMT+4)", Enter closes and the trigger reads the new value, Escape closes. The range handles first read 20→21→21: the remount bug, found by the probe, fixed, re-read. Two probe runs timed out waiting for a section under parallel load and passed alone: a probe waits for a selector now, not a timer
+
+- [x] G16: The drag-only lists take the keyboard, and focus rides the carried item
+  CHECK: node reorder.mjs — Space, arrows, Space; read order, aria-pressed, activeElement, the status line; kanban in rtl then ltr
+  EXPECT: the lifted row moves two down and stays focused; unlifted arrows move focus only; Delete dismisses and the card respawns; a kanban card carried one column forward with ArrowLeft in Arabic and back with ArrowLeft in English, focus on it throughout
+  EVIDENCE: list tabindex 0,-1,-1,-1; lifted=true; order A>B>C>D → B>C>A>D with focus on A; set down aria-pressed=false; unlifted ArrowUp leaves order, focus → B. Dismiss: opacity 1→0→1 after respawn. Kanban rtl: k1 column 0→1, focus rides=true, status "مراجعة الرموز: في عمود قيد التنفيذ" then "وُضِعت"; ltr: ArrowLeft 1→0. First run: the gate still saw 3 rows (a roving group needs a composite role — now a vertical toolbar), the unlifted arrow landed one row off (the status span was child 0; rows are now indexed by [data-row]), and the kanban lost focus on carry (a card re-mounts in the other column; re-focused by id). All three found by the probe, not by reading
 
 - [x] G15: The other harnesses agree after the wave
   CHECK: npm run qa:source; node tools/qa/operable.mjs; node tools/qa/spec-row-qa.mjs
@@ -153,5 +159,5 @@ were, and what each became:
   EVIDENCE: twelve source gates ok; OPERATED=85 OPERABLE_FAILURES=0; SPEC_ROW_RENDER=ok
 
 ### Not claimed
-- The ten debts are real mouse-only controls, not pictures: two drag-to-reorder lists and a kanban need a keyboard reorder (grab with Space, move with arrows, drop with Space), and the pointer playground has no keyboard meaning at all. The ceilings stop the number growing; they do not make it smaller.
+- One debt remains: the pointer-following playground has no keyboard meaning at all. Its ceiling of 1 stops the number growing; nothing will make it smaller but removing the specimen.
 - A hover reveal made focusable is reachable, not necessarily comfortable: seventeen new tab stops appeared in specimen banks. A bank with many reveals would want one roving stop, as `DayStrip` does.

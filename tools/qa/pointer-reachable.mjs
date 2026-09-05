@@ -61,10 +61,11 @@ const IMPORTED = ["madar-imported", "madar-imported-2", "madar-imported-3"];
 const OWN = [...REGISTRY.matchAll(/id: "(madar-[a-z0-9-]+)"/g)].map((m) => m[1]).filter((id) => !IMPORTED.includes(id));
 /* two above the number of pointer-subtree ROOTS measured in the imports (3) */
 const IMPORTED_CEILING = 5;
-/* Own sections with NAMED debt: drag-only reorder (a kanban and a sortable list) and a
-   pointer-following playground, whose keyboard forms are a roving reorder and nothing.
+/* Own sections with NAMED debt. The kanban, the sortable list and the dismiss card were here
+   at 4 + 5 until they took the keyboard (Space lifts, arrows carry, Space sets down; Delete
+   dismisses). What remains is a pointer-following playground, which has no keyboard meaning.
    Counted at today's number; one more fails. Everything else own fails at one. */
-const DEBT = { "madar-data-collections": 4, "madar-kinetics-bank": 5, "madar-kinetics-99": 1 };
+const DEBT = { "madar-kinetics-99": 1 };
 
 let chromium;
 try { chromium = createRequire(import.meta.url)("playwright").chromium; }
@@ -150,7 +151,7 @@ await browser.close();
 
 for (const f of failures) console.log(`  UNREACHABLE ${f}`);
 console.log(`DECLARED_DECORATION=${declaredTotal} (aria-hidden pointer elements: decoration or a mouse duplicate of a reachable control)`);
-console.log(`OWN_DEBT=${debtTotal} (named per section in DEBT: drag-only reorder ×9, a pointer playground ×1 — keyboard forms deferred, not exempted)`);
+console.log(`OWN_DEBT=${debtTotal} (named per section in DEBT: a pointer-following playground — no keyboard form exists; not exempted, counted)`);
 console.log(`IMPORTED_POINTER_UNREACHABLE=${importedTotal} (ceiling ${IMPORTED_CEILING}, the imported corpus's own mouse-only controls — exempt from this repo's law as hover-policy exempts src/components/ui)`);
 if (importedTotal > IMPORTED_CEILING) failures.push(`imported sections: ${importedTotal} mouse-only pointer elements, over the ceiling of ${IMPORTED_CEILING} — a new upload added one; write its divergence or fix it`);
 console.log(`POINTER_REACHABLE=${failures.length ? "FAIL" : "ok"} (${failures.length})`);
