@@ -107,7 +107,34 @@ if (!tier.ladder.includes(tier.seal)) {
 // range, and PrepaidRunway short of its top-up day. Both leaks must be state:
 // the runway's is proved below by moving the marker and watching it go out.
 const leaks = await page.locator("#madar-energy-panel .madar-leak").count();
-if (leaks !== 2) failures.push(`expected exactly two cards to be leaking (band above usual, runway short), found ${leaks}`);
+if (leaks !== 3) failures.push(`expected exactly three cards to be leaking (band above usual, runway short, night floor running), found ${leaks}`);
+
+// ── the night floor: the band holds every baseline cap and none of the run ──
+await page.waitForSelector("#madar-energy-panel [data-night-floor] [data-band]", { timeout: 15000 });
+const NF = await page.evaluate(() => {
+  const root = document.querySelector("#madar-energy-panel [data-night-floor]");
+  const band = root.querySelector("[data-band]").getBoundingClientRect();
+  const bars = [...root.querySelectorAll("[data-bar]")].map((b) => { const r = b.getBoundingClientRect(); return { label: b.dataset.bar, cap: r.top, loud: getComputedStyle(b).borderTopColor }; });
+  const danger = getComputedStyle(root.querySelector("[data-verdict]")).color;
+  return { run: root.dataset.run, bandTop: band.top, bandBottom: band.bottom, bars, danger, verdict: root.querySelector("[data-verdict]").textContent };
+});
+const inBand = NF.bars.slice(0, -3).every((b) => b.cap >= NF.bandTop - 1.5 && b.cap <= NF.bandBottom + 1.5);
+const aboveBand = NF.bars.slice(-3).every((b) => b.cap < NF.bandTop - 1.5);
+/* the caps carry the TONE and the verdict text carries the tone's INK (AA at 12px), so the caps are
+   compared with each other: the run is one colour, the baseline another, and the two differ */
+const runColour = NF.bars[NF.bars.length - 1].loud;
+const loudLast3 = NF.bars.slice(-3).every((b) => b.loud === runColour) && NF.bars.slice(0, -3).every((b) => b.loud !== runColour) && new Set(NF.bars.slice(0, -3).map((b) => b.loud)).size === 1;
+if (NF.run !== "3") failures.push(`night floor: expected a run of 3 nights, data-run=${NF.run}`);
+if (!inBand) failures.push(`night floor: a baseline night's cap lies outside the hatched usual band (${NF.bandTop.toFixed(1)}–${NF.bandBottom.toFixed(1)}): ${NF.bars.slice(0, -3).map((b) => b.cap.toFixed(1)).join(",")}`);
+if (!aboveBand) failures.push(`night floor: a run night's cap is not above the band`);
+if (!loudLast3) failures.push(`night floor: the run's tone should sit on exactly the last three caps and the baseline caps should share one other colour (caps: ${NF.bars.map((b) => b.loud).join(" | ")})`);
+/* one tab stop; the forward arrow (ArrowLeft in Arabic) reveals the next night's value */
+await page.locator("#madar-energy-panel [data-night-floor] [data-barchart]").focus();
+await page.waitForTimeout(300); /* the value fades in over 180ms; read after it lands, not during */
+const revealed = () => page.evaluate(() => [...document.querySelectorAll("#madar-energy-panel [data-night-floor] [data-bar]")].map((b) => getComputedStyle(b.previousElementSibling).opacity).map(Number));
+const r1 = await revealed(); await page.keyboard.press("ArrowLeft"); await page.waitForTimeout(250); const r2 = await revealed();
+if (r1.indexOf(1) !== 0 || r2.indexOf(1) !== 1 || r2.filter((o) => o === 1).length !== 1) failures.push(`night floor: focus should reveal the first value and ArrowLeft the second; got ${r1.indexOf(1)} then ${r2.indexOf(1)} (revealed count ${r2.filter((o) => o === 1).length})`);
+console.log(`NIGHT_FLOOR run=${NF.run} band=${NF.bandTop.toFixed(1)}–${NF.bandBottom.toFixed(1)} baseline-caps-in-band=${inBand} run-caps-above=${aboveBand} run-tone-on-last-3-only=${loudLast3} reveal ${r1.indexOf(1)}→${r2.indexOf(1)} "${NF.verdict}"`);
 
 // ── the prepaid runway: lengths are the arithmetic, the leak is the verdict ──
 await page.waitForSelector("#madar-energy-panel [data-runway]", { timeout: 15000 });
@@ -134,11 +161,11 @@ await page.locator("#madar-energy-panel [data-thumb]").focus();
 await page.keyboard.press("ArrowRight");
 await page.waitForTimeout(300);
 const R2 = await runway();
-if (R2.topUp !== 4 || R2.short !== "false" || R2.shortfall || R2.leaks !== 1) failures.push(`runway: after one day back expected top-up 4, not short, no hatch, one leak left; got top-up ${R2.topUp} short=${R2.short} hatch=${JSON.stringify(R2.shortfall)} leaks=${R2.leaks}`);
+if (R2.topUp !== 4 || R2.short !== "false" || R2.shortfall || R2.leaks !== 2) failures.push(`runway: after one day back expected top-up 4, not short, no hatch, two leaks left (band, night floor); got top-up ${R2.topUp} short=${R2.short} hatch=${JSON.stringify(R2.shortfall)} leaks=${R2.leaks}`);
 await page.keyboard.press("ArrowLeft");
 await page.waitForTimeout(300);
 const R3 = await runway();
-if (R3.topUp !== 5 || R3.leaks !== 2) failures.push(`runway: forward did not restore top-up 5 and the leak (top-up ${R3.topUp}, leaks ${R3.leaks})`);
+if (R3.topUp !== 5 || R3.leaks !== 3) failures.push(`runway: forward did not restore top-up 5 and the leak (top-up ${R3.topUp}, leaks ${R3.leaks})`);
 /* a press on the axis at 21.5% of its length (29 of 135) lands the marker on the nearest day boundary — day 2 — and leaves focus on the axis so the arrows continue from there */
 const axis = await page.locator("#madar-energy-panel [data-axis]").boundingBox();
 await page.mouse.click(axis.x + axis.width * (1 - 0.215), axis.y + axis.height / 2);

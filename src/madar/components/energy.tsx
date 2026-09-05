@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { MiniBarChart } from './charts';
 import { Sparkline } from './charts';
 import { CATEGORICAL } from './dataviz';
 
@@ -384,6 +385,85 @@ export function TariffLadder({ used = 412, steps = [200, 400, 600, 900] }: Tarif
   );
 }
 
+/* ── NightFloor — is something running while you sleep?
+
+   The roadmap's fourth round: «هل هناك ما يعمل ولا يجب؟». The floor is the least
+   any hour draws between one and five in the morning — the house at rest — and a
+   house has a usual floor the way it has a usual monthly total. One high night is
+   a spike; three in a row is an appliance that never turned off. That is what a
+   number cannot say: a mean over fourteen nights hides the run, and the run IS the
+   finding. So the fourteen floors are bars (reading at the edge, §18), the usual
+   floor is a hatched BAND on the same scale (§14, §11), and the bars that rise
+   above the band take the tone. The card leaks only when the run is long enough
+   to be a verdict; one or two nights are named as such and left in warning.
+
+   Checked and not reused: `ConsumptionBand` is one reading against its range;
+   `MiniBarChart` had a target LINE and now has a band, extended rather than
+   duplicated; `DutyCycle` is a day's run of one appliance, not a run of nights. */
+export interface NightFloorProps {
+  /** The overnight floor per night, in `unit`, oldest first. */
+  nights?: { label: string; floor: number }[];
+  /** How many trailing nights make a run — a verdict rather than a spike. */
+  recent?: number;
+  unit?: string;
+}
+
+const NIGHTS = [0.31, 0.29, 0.33, 0.3, 0.28, 0.34, 0.32, 0.3, 0.29, 0.35, 0.31, 0.71, 0.74, 0.69]
+  .map((floor, i) => ({ label: String(((21 + i) % 30) + 1), floor }));
+
+export function NightFloor({ nights = NIGHTS, recent = 3, unit = 'ك.و/س' }: NightFloorProps) {
+  const base = nights.slice(0, Math.max(1, nights.length - recent));
+  const band = { min: Math.min(...base.map((n) => n.floor)), max: Math.max(...base.map((n) => n.floor)) };
+  let run = 0;
+  for (let i = nights.length - 1; i >= 0 && nights[i].floor > band.max; i -= 1) run += 1;
+  const running = run >= recent;
+  const excess = run ? nights.slice(-run).reduce((sum, n) => sum + n.floor, 0) / run - band.max : 0;
+  const last = nights[nights.length - 1].floor;
+  const tone = running ? 'var(--danger-ink)' : run ? 'var(--warning-ink)' : 'var(--text-3)'; /* text takes the ink; the bars take the tone */
+  const verdict = running
+    ? `شيءٌ يعمل وأنت نائم منذ ${ar(run)} ليالٍ`
+    : run === 2 ? 'ليلتان أعلى من معتادك — الحُكم بعد الثالثة'
+      : run === 1 ? 'ليلةٌ أعلى من معتادك — لا حُكم بعد ليلة'
+        : 'أرضيّتُك الليليّة ضمن معتادها';
+
+  return (
+    <div
+      data-night-floor=""
+      data-run={run}
+      className={running ? 'madar-leak' : undefined}
+      style={{
+        ...(running ? { ['--madar-leak-color' as string]: 'var(--danger)' } : null),
+        position: 'relative', width: '100%', maxWidth: 440,
+        display: 'flex', flexDirection: 'column', gap: 'var(--sp-4)',
+        padding: 'var(--sp-5)',
+        background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--r-lg)',
+      }}
+    >
+      <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 'var(--sp-3)' }}>
+        <b style={{ fontSize: 26, fontWeight: 700, color: 'var(--text)', fontVariantNumeric: 'tabular-nums' }}>
+          <bdi dir="ltr">{ar(last, 2)}</bdi>
+          <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--text-3)', marginInlineStart: 6 }}>{unit} الليلة</span>
+        </b>
+        <span data-verdict="" style={{ fontSize: 12.5, fontWeight: 600, color: tone }}>{verdict}</span>
+      </div>
+
+      <MiniBarChart
+        data={nights.map((n) => ({ label: n.label, value: n.floor }))}
+        gap={4}
+        band={{ min: band.min, max: band.max, label: `معتادك ${ar(band.min, 2)}–${ar(band.max, 2)}`, tone: running ? 'var(--danger)' : 'var(--warning)' }}
+        reading="edge"
+        height={118}
+        name="أرضيّةُ الليل عبر أربع عشرة ليلة، الأسهم تكشف كلّ ليلة"
+      />
+
+      <div style={{ display: 'flex', justifyContent: 'space-between', gap: 'var(--sp-3)', fontSize: 12, color: 'var(--text-2)' }}>
+        <span>الأرضيّة: أقلّ ساعةٍ بين الواحدة والخامسة فجرًا</span>
+        {run ? <span data-excess="" style={{ color: tone }}>زيادةٌ نحو <bdi dir="ltr">{ar(excess, 2)}</bdi> {unit} — قدرُ جهازٍ لم يُطفأ</span> : null}
+      </div>
+    </div>
+  );
+}
+
 /* ── A meter that is actually running, for the showcase and for tests: the
    register turns because consumption happened, not because a timer fired. */
 export function useLiveReading(start = 76542.8, kwhPerTick = 0.1, ms = 1600) {
@@ -456,7 +536,7 @@ export function AllocationBar({
     >
       <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 'var(--sp-3)' }}>
         <b style={{ fontSize: 14, fontWeight: 600, color: 'var(--text)' }}>مخصّص الدورة</b>
-        <span style={{ fontSize: 12, fontWeight: 600, color: over ? 'var(--danger)' : 'var(--text-3)' }}>
+        <span style={{ fontSize: 12, fontWeight: 600, color: over ? 'var(--danger-ink)' : 'var(--text-3)' }}>
           {over
             ? <>متوقّع تجاوزه بـ<bdi dir="ltr"> {ar(used + projected - budget)} </bdi>{unit}</>
             : <><bdi dir="ltr">{ar(budget)}</bdi> {unit}</>}

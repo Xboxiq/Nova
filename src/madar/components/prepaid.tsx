@@ -129,7 +129,7 @@ export function PrepaidRunway({
           <bdi dir="ltr">{n(balance)}</bdi>
           <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--text-3)', marginInlineStart: 6 }}>{unit}</span>
         </b>
-        <span id={`${id}-verdict`} data-verdict="" style={{ fontSize: 12.5, fontWeight: 600, color: short ? 'var(--danger)' : 'var(--text-2)' }}>
+        <span id={`${id}-verdict`} data-verdict="" style={{ fontSize: 12.5, fontWeight: 600, color: short ? 'var(--danger-ink)' : 'var(--text-2)' }}>
           {short ? 'لا يكفي حتى يوم الشحن' : 'يكفي حتى يوم الشحن'}
         </span>
       </div>
@@ -209,7 +209,7 @@ export function PrepaidRunway({
 
       <div style={{ display: 'flex', justifyContent: 'space-between', gap: 'var(--sp-3)', fontSize: 12, color: 'var(--text-2)' }}>
         <span data-out-text="">{outAt}</span>
-        <span data-gap="" style={{ color: short ? 'var(--danger)' : 'var(--text-2)' }}>{verdict}</span>
+        <span data-gap="" style={{ color: short ? 'var(--danger-ink)' : 'var(--text-2)' }}>{verdict}</span>
       </div>
       <p id={`${id}-note`} style={{ margin: 0, fontSize: 11.5, lineHeight: 1.6, color: 'var(--text-3)' }}>
         كلّ خانة يومٌ بعرض ما تستهلكه عادةً فيه، فالعطلة أعرض. الأسهم تُحرّك يوم الشحن، والنقر على المحور يضعه عند أقرب يوم.

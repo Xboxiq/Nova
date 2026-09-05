@@ -46,6 +46,13 @@
   --danger-soft: var(--nova-danger-soft);
   --info: var(--nova-info);
   --info-soft: var(--nova-info-soft);
+  /* the tones above are for fills and hatches; small TEXT in a tone takes its ink — the tone mixed
+     toward the pack's ink so it clears AA at 12px. axe found `--danger` at 12px reading 4.44:1 on the
+     light surface the day energy joined the pack sweep. */
+  --success-ink: var(--nova-success-ink);
+  --warning-ink: var(--nova-warning-ink);
+  --danger-ink: var(--nova-danger-ink);
+  --info-ink: var(--nova-info-ink);
 
   /* material */
   --glass: var(--nova-glass);
