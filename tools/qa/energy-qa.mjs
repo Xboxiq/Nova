@@ -134,6 +134,26 @@ await page.waitForTimeout(300); /* the value fades in over 180ms; read after it 
 const revealed = () => page.evaluate(() => [...document.querySelectorAll("#madar-energy-panel [data-night-floor] [data-bar]")].map((b) => getComputedStyle(b.previousElementSibling).opacity).map(Number));
 const r1 = await revealed(); await page.keyboard.press("ArrowLeft"); await page.waitForTimeout(250); const r2 = await revealed();
 if (r1.indexOf(1) !== 0 || r2.indexOf(1) !== 1 || r2.filter((o) => o === 1).length !== 1) failures.push(`night floor: focus should reveal the first value and ArrowLeft the second; got ${r1.indexOf(1)} then ${r2.indexOf(1)} (revealed count ${r2.filter((o) => o === 1).length})`);
+// ── the appliance area: width is hours/24, height is watts/max, the grid is 12×6, the label is W×h ──
+await page.waitForSelector("#madar-energy-panel [data-appliance-area] [data-area]", { timeout: 15000 });
+const AA = await page.evaluate(() => {
+  const root = document.querySelector("#madar-energy-panel [data-appliance-area]");
+  const ax = root.querySelector("[data-axes]").getBoundingClientRect();
+  const areas = [...root.querySelectorAll("[data-area]")].map((a) => { const r = a.getBoundingClientRect(); return { name: a.dataset.area, w: r.width / ax.width, h: r.height / ax.height }; });
+  return { cols: root.querySelectorAll("[data-grid-col]").length, rows: root.querySelectorAll("[data-grid-row]").length, areas,
+    kwh: [...root.querySelectorAll("[data-kwh]")].map((k) => (k.textContent.match(/[0-9]+(?:\.[0-9]+)?/) || [""])[0]), top: root.querySelector("[data-top]").textContent };
+});
+const expectArea = { "التكييف": [9 / 24, 1800 / 3000], "سخّان الماء": [1.5 / 24, 1], "الثلاجة": [1, 150 / 3000] };
+for (const a of AA.areas) { const [w, h] = expectArea[a.name]; if (Math.abs(a.w - w) > 0.008 || Math.abs(a.h - h) > 0.012) failures.push(`appliance ${a.name}: box ${(a.w * 100).toFixed(1)}% × ${(a.h * 100).toFixed(1)}%, expected ${(w * 100).toFixed(1)}% × ${(h * 100).toFixed(1)}%`); }
+if (AA.cols !== 11 || AA.rows !== 5) failures.push(`appliance grid: ${AA.cols + 1}×${AA.rows + 1} cells, expected 12×6 (one kWh each)`);
+if (AA.kwh.join() !== "16.2,4.5,3.6") failures.push(`appliance kWh labels ${AA.kwh.join()}, expected 16.2,4.5,3.6`);
+if (!/التكييف/.test(AA.top) || !/4\.5×/.test(AA.top)) failures.push(`appliance verdict should name التكييف at 4.5× the least; got "${AA.top}"`);
+/* an hour less of cooling: two back-steps on the slider (ArrowRight in Arabic) shrink the box by 1/24 and the label by 1.8 */
+await page.locator('#madar-energy-panel [data-hours="التكييف"]').focus();
+await page.keyboard.press("ArrowRight"); await page.keyboard.press("ArrowRight"); await page.waitForTimeout(350);
+const AA2 = await page.evaluate(() => { const root = document.querySelector("#madar-energy-panel [data-appliance-area]"); const ax = root.querySelector("[data-axes]").getBoundingClientRect(); const a = root.querySelector('[data-area="التكييف"]').getBoundingClientRect(); return { w: a.width / ax.width, kwh: (root.querySelector('[data-kwh="التكييف"]').textContent.match(/[0-9]+(?:\.[0-9]+)?/) || [""])[0], now: root.querySelector('[data-hours="التكييف"]').getAttribute("aria-valuenow") }; });
+if (Math.abs(AA2.w - 8 / 24) > 0.008 || AA2.kwh !== "14.4" || AA2.now !== "8") failures.push(`appliance: an hour less should give width 33.3%, 14.4 kWh, aria-valuenow 8; got ${(AA2.w * 100).toFixed(1)}%, ${AA2.kwh}, ${AA2.now}`);
+console.log(`APPLIANCE grid=${AA.cols + 1}x${AA.rows + 1} boxes=${AA.areas.map((a) => `${(a.w * 100).toFixed(1)}x${(a.h * 100).toFixed(1)}`).join(" ")} kwh=${AA.kwh.join(",")} hour-less→${(AA2.w * 100).toFixed(1)}% ${AA2.kwh} "${AA.top}"`);
 console.log(`NIGHT_FLOOR run=${NF.run} band=${NF.bandTop.toFixed(1)}–${NF.bandBottom.toFixed(1)} baseline-caps-in-band=${inBand} run-caps-above=${aboveBand} run-tone-on-last-3-only=${loudLast3} reveal ${r1.indexOf(1)}→${r2.indexOf(1)} "${NF.verdict}"`);
 
 // ── the prepaid runway: lengths are the arithmetic, the leak is the verdict ──

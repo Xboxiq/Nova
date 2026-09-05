@@ -464,6 +464,148 @@ export function NightFloor({ nights = NIGHTS, recent = 3, unit = 'ك.و/س' }: N
   );
 }
 
+/* ── ApplianceArea — which appliance drinks the electricity, and WHY.
+
+   The roadmap's second round: «أيّ جهاز يشرب الكهرباء؟». `LoadComb` answers the
+   share per category; what it cannot say is why the answer is what it is. The
+   water heater is the strongest thing in the house and the refrigerator the
+   weakest, and neither is the biggest drinker — because energy is power TIMES
+   time, and a number for kWh hides which of the two factors made it.
+
+   So each appliance is a rectangle on one pair of axes: its hours across the
+   day's twenty-four, its watts up. Its AREA is its energy, and the grid behind
+   it is cut so every cell is one kilowatt-hour (500 W × 2 h) — a counted quantity
+   drawn counted (§15), the axes the reference (§14). A tall narrow box and a low
+   wide one can hold the same energy, and the eye sees that where a table only
+   states it. The hours are the control: a slider per appliance, so "an hour less
+   of cooling" is a box that visibly shrinks by a countable number of cells.
+
+   Checked and not reused: `LoadComb` (share, one dimension); `DutyCycle` (WHEN an
+   appliance ran, not how much); `RangeSlider`/`RubberBandSlider` are generic
+   sliders — the pattern is borrowed, the arrows follow the writing direction (§33). */
+export interface Appliance { name: string; watts: number; hours: number }
+export interface ApplianceAreaProps {
+  appliances?: Appliance[];
+  /** Grid cell: watts × hours = one unit of energy. 500 × 2 = 1 kWh. */
+  cell?: { watts: number; hours: number };
+  unit?: string;
+}
+
+const APPLIANCES: Appliance[] = [
+  { name: 'التكييف', watts: 1800, hours: 9 },
+  { name: 'سخّان الماء', watts: 3000, hours: 1.5 },
+  { name: 'الثلاجة', watts: 150, hours: 24 },
+];
+
+export function ApplianceArea({ appliances = APPLIANCES, cell = { watts: 500, hours: 2 }, unit = 'ك.و.س' }: ApplianceAreaProps) {
+  const [hours, setHours] = useState(appliances.map((a) => a.hours));
+  const maxW = Math.ceil(Math.max(...appliances.map((a) => a.watts)) / cell.watts) * cell.watts;
+  const cols = Math.round(24 / cell.hours);
+  const rows = Math.round(maxW / cell.watts);
+  const kwh = (i: number) => (appliances[i].watts * hours[i]) / 1000;
+  const top = appliances.reduce((best, _, i) => (kwh(i) > kwh(best) ? i : best), 0);
+  const least = appliances.reduce((worst, _, i) => (kwh(i) < kwh(worst) ? i : worst), 0);
+  const setHour = (i: number, h: number) => setHours((hs) => hs.map((v, k) => (k === i ? Math.max(0, Math.min(24, Math.round(h * 2) / 2)) : v)));
+  const onKey = (i: number) => (e: React.KeyboardEvent<HTMLSpanElement>) => {
+    const rtl = getComputedStyle(e.currentTarget).direction === 'rtl';
+    const d = e.key === 'Home' ? -24 : e.key === 'End' ? 24 : e.key === (rtl ? 'ArrowLeft' : 'ArrowRight') || e.key === 'ArrowUp' ? 0.5 : e.key === (rtl ? 'ArrowRight' : 'ArrowLeft') || e.key === 'ArrowDown' ? -0.5 : 0;
+    if (!d) return;
+    e.preventDefault();
+    setHour(i, hours[i] + d);
+  };
+  const onTrack = (i: number) => (e: React.PointerEvent<HTMLSpanElement>) => {
+    e.preventDefault();
+    const r = e.currentTarget.getBoundingClientRect();
+    const rtl = getComputedStyle(e.currentTarget).direction === 'rtl';
+    setHour(i, ((rtl ? r.right - e.clientX : e.clientX - r.left) / r.width) * 24);
+    e.currentTarget.focus();
+  };
+
+  return (
+    <div
+      data-appliance-area=""
+      style={{
+        width: '100%', maxWidth: 440, display: 'flex', flexDirection: 'column', gap: 'var(--sp-4)',
+        padding: 'var(--sp-5)', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--r-lg)',
+      }}
+    >
+      <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 'var(--sp-3)' }}>
+        <b style={{ fontSize: 14, fontWeight: 600, color: 'var(--text)' }}>القوّة × الساعات = ما يشربه الجهاز</b>
+        <span data-top="" style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-2)' }}>
+          الأكبرُ شربًا: {appliances[top].name} — <bdi dir="ltr">{ar(kwh(top) / Math.max(kwh(least), 0.01), 1)}×</bdi> {appliances[least].name}
+        </span>
+      </div>
+
+      {/* the axes: hours across, watts up; each grid cell is one unit of energy */}
+      <div data-axes="" style={{ position: 'relative', height: 160, border: '1px solid var(--border-strong)', borderInlineEnd: 0, borderBlockStart: 0, background: 'var(--surface-2)' }}>
+        {Array.from({ length: cols - 1 }, (_, c) => (
+          <span key={`c${c}`} data-grid-col="" aria-hidden="true" style={{ position: 'absolute', insetBlock: 0, insetInlineStart: `${((c + 1) / cols) * 100}%`, width: 1, background: 'var(--border)' }} />
+        ))}
+        {Array.from({ length: rows - 1 }, (_, r) => (
+          <span key={`r${r}`} data-grid-row="" aria-hidden="true" style={{ position: 'absolute', insetInline: 0, bottom: `${((r + 1) / rows) * 100}%`, height: 1, background: 'var(--border)' }} />
+        ))}
+        {appliances.map((a, i) => {
+          const color = CATEGORICAL[i % CATEGORICAL.length];
+          return (
+            <span
+              key={a.name}
+              data-area={a.name}
+              role="img"
+              aria-label={`${a.name}: ${ar(a.watts)} واط لمدّة ${ar(hours[i], 1)} ساعة، ${ar(kwh(i), 1)} ${unit} في اليوم`}
+              style={{
+                position: 'absolute', insetInlineStart: 0, bottom: 0,
+                width: `${(hours[i] / 24) * 100}%`, height: `${(a.watts / maxW) * 100}%`,
+                border: `1.5px solid ${color}`, backgroundColor: `color-mix(in srgb, ${color} 14%, transparent)`,
+                transition: 'width var(--dur-2) var(--ease-out)',
+              }}
+            />
+          );
+        })}
+        <span aria-hidden="true" style={{ position: 'absolute', bottom: -18, insetInlineStart: 0, fontSize: 10.5, color: 'var(--text-3)' }}>0</span>
+        <span aria-hidden="true" style={{ position: 'absolute', bottom: -18, insetInlineEnd: 0, fontSize: 10.5, color: 'var(--text-3)' }}><bdi dir="ltr">24</bdi> س</span>
+        <span aria-hidden="true" style={{ position: 'absolute', top: -18, insetInlineStart: 0, fontSize: 10.5, color: 'var(--text-3)' }}><bdi dir="ltr">{ar(maxW)}</bdi> واط</span>
+        <span aria-hidden="true" style={{ position: 'absolute', top: -18, insetInlineEnd: 0, fontSize: 10.5, color: 'var(--text-3)' }}>كلُّ خانةٍ <bdi dir="ltr">{ar((cell.watts * cell.hours) / 1000, 0)}</bdi> {unit}</span>
+      </div>
+
+      <div style={{ display: 'grid', gap: 'var(--sp-3)', marginTop: 'var(--sp-3)' }}>
+        {appliances.map((a, i) => {
+          const color = CATEGORICAL[i % CATEGORICAL.length];
+          return (
+            <div key={a.name} data-appliance={a.name} style={{ display: 'grid', gridTemplateColumns: '10px 1fr auto', alignItems: 'center', gap: 10, fontSize: 12 }}>
+              <span aria-hidden="true" style={{ width: 10, height: 10, border: `1.5px solid ${color}`, backgroundColor: `color-mix(in srgb, ${color} 14%, transparent)` }} />
+              <span style={{ display: 'grid', gap: 4 }}>
+                <span style={{ display: 'flex', justifyContent: 'space-between', gap: 8 }}>
+                  <span style={{ color: 'var(--text-2)' }}>{a.name} · <bdi dir="ltr">{ar(a.watts)}</bdi> واط</span>
+                  <span style={{ color: 'var(--text-3)' }}><bdi dir="ltr">{ar(hours[i], 1)}</bdi> س / يوم</span>
+                </span>
+                {/* the hours are the control: a slider whose fill is the same fraction of the day as the box's width */}
+                <span
+                  role="slider"
+                  tabIndex={0}
+                  aria-label={`ساعات تشغيل ${a.name} في اليوم`}
+                  aria-valuemin={0}
+                  aria-valuemax={24}
+                  aria-valuenow={hours[i]}
+                  aria-valuetext={`${ar(hours[i], 1)} ساعة، ${ar(kwh(i), 1)} ${unit}`}
+                  data-hours={a.name}
+                  onKeyDown={onKey(i)}
+                  onPointerDown={onTrack(i)}
+                  style={{ position: 'relative', display: 'block', height: 10, borderRadius: 'var(--r-sm)', background: 'var(--surface-2)', border: '1px solid var(--border)', cursor: 'pointer', overflow: 'hidden' }}
+                >
+                  <span aria-hidden="true" style={{ position: 'absolute', insetBlock: 0, insetInlineStart: 0, width: `${(hours[i] / 24) * 100}%`, background: color, transition: 'width var(--dur-2) var(--ease-out)' }} />
+                </span>
+              </span>
+              <b data-kwh={a.name} style={{ fontWeight: 700, color: i === top ? 'var(--text)' : 'var(--text-2)', fontVariantNumeric: 'tabular-nums', minWidth: '5.5em', textAlign: 'end' }}>
+                <bdi dir="ltr">{ar(kwh(i), 1)}</bdi> <span style={{ fontWeight: 500, fontSize: 11, color: 'var(--text-3)' }}>{unit}</span>
+              </b>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 /* ── A meter that is actually running, for the showcase and for tests: the
    register turns because consumption happened, not because a timer fired. */
 export function useLiveReading(start = 76542.8, kwhPerTick = 0.1, ms = 1600) {
