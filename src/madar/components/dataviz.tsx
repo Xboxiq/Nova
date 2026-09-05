@@ -44,6 +44,7 @@ export function DonutChart({ data, size = 168, thickness = 22, centerLabel }: Do
             const dash = Math.max(frac - gap, 0.0001) * C;
             const el = (
               <circle
+                aria-hidden="true"
                 key={d.label} cx={size / 2} cy={size / 2} r={r} fill="none"
                 stroke={CATEGORICAL[i]} strokeWidth={hov === i ? thickness + 4 : thickness}
                 strokeDasharray={`${dash} ${C - dash}`} strokeDashoffset={-offset * C} strokeLinecap="butt"
@@ -67,7 +68,7 @@ export function DonutChart({ data, size = 168, thickness = 22, centerLabel }: Do
       {/* legend — identity never color-alone */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8, minWidth: 130 }}>
         {items.map((d, i) => (
-          <div key={d.label} onMouseEnter={() => setHov(i)} onMouseLeave={() => setHov(-1)} style={{ display: 'flex', alignItems: 'center', gap: 9, fontSize: 12.5, cursor: 'pointer', opacity: hov < 0 || hov === i ? 1 : 0.5, transition: 'opacity 200ms' }}>
+          <div key={d.label} onMouseEnter={() => setHov(i)} onMouseLeave={() => setHov(-1)} tabIndex={0} onFocus={() => setHov(i)} onBlur={() => setHov(-1)} style={{ display: 'flex', alignItems: 'center', gap: 9, fontSize: 12.5, cursor: 'pointer', opacity: hov < 0 || hov === i ? 1 : 0.5, transition: 'opacity 200ms' }}>
             <span style={{ width: 10, height: 10, borderRadius: 3, background: CATEGORICAL[i], flex: 'none' }} />
             <span style={{ flex: 1, color: 'var(--text-2)' }}>{d.label}</span>
             <span style={{ fontWeight: 700, fontVariantNumeric: 'tabular-nums' }}>{Math.round((d.value / total) * 100)}%</span>
@@ -114,7 +115,8 @@ export function Heatmap({ weeks = 20, seed = 7, label }: { weeks?: number; seed?
             {Array.from({ length: 7 }, (_, d) => {
               const v = val(w, d);
               const on = hov && hov[0] === w && hov[1] === d;
-              return <span key={d} onMouseEnter={() => setHov([w, d])} onMouseLeave={() => setHov(null)} style={{ aspectRatio: '1', borderRadius: 3, background: levelBg(v), outline: on ? '1.5px solid var(--accent)' : 'none', cursor: 'pointer', transition: 'background 160ms' }} />;
+              // a hover highlight with nothing behind it promises nothing: no pointer cursor on 140 cells (gates/25)
+              return <span key={d} onMouseEnter={() => setHov([w, d])} onMouseLeave={() => setHov(null)} style={{ aspectRatio: '1', borderRadius: 3, background: levelBg(v), outline: on ? '1.5px solid var(--accent)' : 'none', transition: 'background 160ms' }} />;
             })}
           </div>
         ))}

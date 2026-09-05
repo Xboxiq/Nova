@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { move } from './roving';
 
 /* ────────────────────────────────────────────────────────────────────────
    ListBox — hero_ui/heroui-list-box (design.md §18.2)
@@ -21,7 +22,19 @@ export function ListBox({ options, value, defaultValue = 0, onChange }: ListBoxP
   const [internal, setInternal] = useState(defaultValue);
   const sel = value ?? internal;
   return (
-    <div role="listbox" style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+    <div
+      role="listbox"
+      style={{ display: 'flex', flexDirection: 'column', gap: 4 }}
+      /* roving: the selected option is the one tab stop; the arrows move selection and focus together */
+      onKeyDown={(e) => {
+        const next = move(e.key, sel, options.length);
+        if (next === null) return;
+        e.preventDefault();
+        if (value === undefined) setInternal(next);
+        onChange?.(next);
+        (e.currentTarget.querySelectorAll<HTMLElement>('[role="option"]')[next])?.focus();
+      }}
+    >
       {options.map((o, i) => {
         const on = sel === i;
         return (
@@ -29,6 +42,7 @@ export function ListBox({ options, value, defaultValue = 0, onChange }: ListBoxP
             key={o.title}
             role="option"
             aria-selected={on}
+            tabIndex={on ? 0 : -1}
             onClick={() => { if (value === undefined) setInternal(i); onChange?.(i); }}
             className={on ? undefined : 'i-surface2'}
             style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 12px', borderRadius: 6, background: on ? 'var(--accent-soft)' : undefined, cursor: 'pointer', transition: 'background 140ms' }}
@@ -65,7 +79,7 @@ export function ActivityDropdown({ items }: { items: ActivityItem[] }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
       {items.map((it, i) => (
-        <div key={i} className="i-surface2" style={{ display: 'flex', alignItems: 'center', gap: 11, padding: '9px 10px', borderRadius: 6, transition: 'background 140ms', cursor: 'pointer' }}>
+        <div key={i} className="i-surface2" style={{ display: 'flex', alignItems: 'center', gap: 11, padding: '9px 10px', borderRadius: 6, transition: 'background 140ms' }}>
           <span style={{ width: 8, height: 8, borderRadius: '50%', background: it.unread ? 'var(--accent)' : 'transparent', flex: 'none' }} />
           <span style={{ width: 30, height: 30, borderRadius: '50%', background: `var(--${it.tint ?? 'accent'}-soft)`, display: 'grid', placeItems: 'center', fontSize: 10, fontWeight: 700, flex: 'none' }}>{it.initials}</span>
           <span style={{ flex: 1, fontSize: 13, lineHeight: '18px', color: it.unread ? undefined : 'var(--text-2)' }}>{it.content}</span>

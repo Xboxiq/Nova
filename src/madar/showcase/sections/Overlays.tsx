@@ -4,10 +4,10 @@ import { SpecShelf } from '../SpecRow';
 
 function MenuRow({ children, danger, shortcut }: { children: React.ReactNode; danger?: boolean; shortcut?: string }) {
   return (
-    <div className={danger ? 'i-danger-soft' : 'i-surface2'} style={{ display: 'flex', alignItems: 'center', gap: 10, height: 36, borderRadius: 6, padding: '0 12px', fontSize: 14, color: danger ? 'var(--danger)' : undefined, cursor: 'pointer' }}>
+    <button type="button" className={danger ? 'i-row-btn i-danger-soft' : 'i-row-btn i-surface2'} style={{ display: 'flex', alignItems: 'center', gap: 10, height: 36, borderRadius: 6, padding: '0 12px', fontSize: 14, color: danger ? 'var(--danger)' : undefined, cursor: 'pointer' }}>
       {children}
       {shortcut && <span style={{ marginInlineStart: 'auto', fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--text-3)' }}>{shortcut}</span>}
-    </div>
+    </button>
   );
 }
 
@@ -44,15 +44,15 @@ export function Overlays() {
           </div>
           <div style={{ padding: 8 }}>
             <div style={{ fontSize: 10.5, fontWeight: 600, letterSpacing: '0.1em', color: 'var(--text-3)', padding: '8px 12px 4px' }}>QUICK ACTIONS</div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 11, height: 40, borderRadius: 6, padding: '0 12px', background: 'var(--accent-soft)', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>
+            <button type="button" className="i-row-btn" style={{ display: 'flex', alignItems: 'center', gap: 11, height: 40, borderRadius: 6, padding: '0 12px', background: 'var(--accent-soft)', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="1.8" strokeLinecap="round"><path d="M12 5v14M5 12h14" /></svg>Create new project<span style={{ marginInlineStart: 'auto', fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--text-3)' }}>C</span>
-            </div>
-            <div className="i-surface2-text" style={{ display: 'flex', alignItems: 'center', gap: 11, height: 40, borderRadius: 6, padding: '0 12px', fontSize: 14, color: 'var(--text-2)', cursor: 'pointer' }}>
+            </button>
+            <button type="button" className="i-row-btn i-surface2-text" style={{ display: 'flex', alignItems: 'center', gap: 11, height: 40, borderRadius: 6, padding: '0 12px', fontSize: 14, color: 'var(--text-2)', cursor: 'pointer' }}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><circle cx="12" cy="8" r="4" /><path d="M4 20c0-3.5 3.6-5.5 8-5.5s8 2 8 5.5" /></svg>Invite a member<span style={{ marginInlineStart: 'auto', fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--text-3)' }}>I</span>
-            </div>
-            <div className="i-surface2-text" style={{ display: 'flex', alignItems: 'center', gap: 11, height: 40, borderRadius: 6, padding: '0 12px', fontSize: 14, color: 'var(--text-2)', cursor: 'pointer' }}>
+            </button>
+            <button type="button" className="i-row-btn i-surface2-text" style={{ display: 'flex', alignItems: 'center', gap: 11, height: 40, borderRadius: 6, padding: '0 12px', fontSize: 14, color: 'var(--text-2)', cursor: 'pointer' }}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><circle cx="12" cy="12" r="4" /><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1" /></svg>Switch theme…<span style={{ marginInlineStart: 'auto', fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--text-3)' }}>T</span>
-            </div>
+            </button>
           </div>
         </div>
 

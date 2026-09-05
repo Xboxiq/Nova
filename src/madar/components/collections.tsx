@@ -104,19 +104,46 @@ export function KanbanBoard({ columns: initial }: { columns: KanbanColumn[] }) {
   const [cols, setCols] = useState(initial);
   const [drag, setDrag] = useState<{ card: KanbanCard; from: string } | null>(null);
   const [over, setOver] = useState<string | null>(null);
+  const carry = (card: KanbanCard, from: string, to: string) => {
+    if (from === to) return;
+    setCols((cs) => cs.map((c) => {
+      if (c.key === from) return { ...c, cards: c.cards.filter((x) => x.id !== card.id) };
+      if (c.key === to) return { ...c, cards: [...c.cards, card] };
+      return c;
+    }));
+  };
   const drop = (to: string) => {
     if (!drag) return;
-    if (drag.from !== to) {
-      setCols((cs) => cs.map((c) => {
-        if (c.key === drag.from) return { ...c, cards: c.cards.filter((x) => x.id !== drag.card.id) };
-        if (c.key === to) return { ...c, cards: [...c.cards, drag.card] };
-        return c;
-      }));
-    }
+    carry(drag.card, drag.from, to);
     setDrag(null); setOver(null);
   };
+  /* The keyboard's drag: Space lifts a card, the horizontal arrows carry it to the next column
+     in the WRITING direction (§33), Space or Enter sets it down, Escape too. Cards are keyed by
+     id, so the focused node moves with its card and focus rides along (gates/25, debt paid). */
+  const [lifted, setLifted] = useState<string | null>(null);
+  const [said, setSaid] = useState('');
+  const onKey = (card: KanbanCard, from: string) => (e: React.KeyboardEvent<HTMLDivElement>) => {
+    const isLifted = lifted === card.id;
+    const name = typeof card.title === 'string' ? card.title : card.id;
+    if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); setLifted(isLifted ? null : card.id); setOver(isLifted ? null : from); setSaid(isLifted ? `${name}: وُضِعت` : `${name}: مرفوعة، الأسهم تنقلها بين الأعمدة`); return; }
+    if (e.key === 'Escape' && isLifted) { e.preventDefault(); setLifted(null); setOver(null); setSaid(`${name}: وُضِعت`); return; }
+    if (!isLifted) return;
+    const rtl = getComputedStyle(e.currentTarget).direction === 'rtl';
+    const d = e.key === (rtl ? 'ArrowLeft' : 'ArrowRight') ? 1 : e.key === (rtl ? 'ArrowRight' : 'ArrowLeft') ? -1 : 0;
+    if (!d) return;
+    e.preventDefault();
+    const at = cols.findIndex((c) => c.key === from);
+    const to = cols[Math.max(0, Math.min(cols.length - 1, at + d))];
+    if (to.key === from) return;
+    /* the card mounts anew in the other column, so focus is put back on it by id after the render */
+    const board = e.currentTarget.closest('[data-kanban]');
+    carry(card, from, to.key); setOver(to.key);
+    setSaid(`${name}: في عمود ${to.title}`);
+    requestAnimationFrame(() => board?.querySelector<HTMLElement>(`[data-card="${card.id}"]`)?.focus());
+  };
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: `repeat(${cols.length},1fr)`, gap: 12, alignItems: 'start' }}>
+    <div style={{ display: 'grid', gridTemplateColumns: `repeat(${cols.length},1fr)`, gap: 12, alignItems: 'start' }} data-kanban="">
+      <span role="status" aria-live="polite" style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clipPath: 'inset(50%)' }}>{said}</span>
       {cols.map((col) => (
         <div
           key={col.key}
@@ -130,7 +157,7 @@ export function KanbanBoard({ columns: initial }: { columns: KanbanColumn[] }) {
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {col.cards.map((card) => (
-              <div key={card.id} draggable onDragStart={() => setDrag({ card, from: col.key })} onDragEnd={() => { setDrag(null); setOver(null); }} style={{ borderRadius: 6, background: 'var(--surface)', border: '1px solid var(--border)', padding: '10px 12px', cursor: 'grab', opacity: drag?.card.id === card.id ? 0.4 : 1 }}>
+              <div key={card.id} draggable role="button" tabIndex={0} aria-pressed={lifted === card.id} aria-roledescription="بطاقةٌ قابلةٌ للنقل" data-card={card.id} onKeyDown={onKey(card, col.key)} onDragStart={() => setDrag({ card, from: col.key })} onDragEnd={() => { setDrag(null); setOver(null); }} style={{ borderRadius: 6, background: 'var(--surface)', border: '1px solid var(--border)', padding: '10px 12px', cursor: 'grab', opacity: drag?.card.id === card.id ? 0.4 : 1 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                   <span style={{ width: 6, height: 6, borderRadius: '50%', background: `var(--${card.tone ?? 'accent'})`, flex: 'none' }} />
                   <span style={{ fontSize: 13, fontWeight: 600 }}>{card.title}</span>

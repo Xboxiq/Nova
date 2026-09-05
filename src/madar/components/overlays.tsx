@@ -77,9 +77,24 @@ export function SelectField({ options, defaultValue = 0, onChange }: { options: 
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ transform: open ? 'rotate(180deg)' : 'none', transition: 'transform 250ms' }}><path d="M6 9l6 6 6-6" /></svg>
       </button>
       {open && (
-        <div role="listbox" style={{ ...panel, insetInline: 0 }}>
+        <div
+          role="listbox"
+          style={{ ...panel, insetInline: 0 }}
+          /* the popup takes focus on the picked option; arrows move it, Enter/Space pick, Escape closes — a popup only a mouse could use is a picture (gates/25) */
+          ref={(el) => el?.querySelector<HTMLElement>('[role="option"][tabindex="0"]')?.focus()}
+          onKeyDown={(e) => {
+            const opts = [...e.currentTarget.querySelectorAll<HTMLElement>('[role="option"]')];
+            const at = Math.max(0, opts.indexOf(document.activeElement as HTMLElement));
+            if (e.key === 'Escape') { e.preventDefault(); setOpen(false); return; }
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSel(at); setOpen(false); onChange?.(at); return; }
+            const d = e.key === 'ArrowDown' ? 1 : e.key === 'ArrowUp' ? -1 : e.key === 'Home' ? -opts.length : e.key === 'End' ? opts.length : 0;
+            if (!d) return;
+            e.preventDefault();
+            opts[Math.max(0, Math.min(opts.length - 1, at + d))]?.focus();
+          }}
+        >
           {options.map((o, i) => (
-            <div key={o} role="option" aria-selected={i === sel} onClick={() => { setSel(i); setOpen(false); onChange?.(i); }} className={i === sel ? undefined : 'i-surface2'} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 38, borderRadius: 6, padding: '0 12px', fontSize: 14, fontWeight: i === sel ? 600 : 400, background: i === sel ? 'var(--accent-soft)' : undefined, cursor: 'pointer' }}>
+            <div key={o} role="option" aria-selected={i === sel} tabIndex={i === sel ? 0 : -1} onClick={() => { setSel(i); setOpen(false); onChange?.(i); }} className={i === sel ? undefined : 'i-surface2'} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 38, borderRadius: 6, padding: '0 12px', fontSize: 14, fontWeight: i === sel ? 600 : 400, background: i === sel ? 'var(--accent-soft)' : undefined, cursor: 'pointer' }}>
               {o}
               {i === sel && <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round"><path d="M5 13l4 4L19 7" /></svg>}
             </div>

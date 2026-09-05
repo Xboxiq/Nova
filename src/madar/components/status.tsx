@@ -34,7 +34,9 @@ export function DynamicIsland({
   return (
     <div
       onClick={() => { const n = !isOpen; if (open === undefined) setInternal(n); onToggle?.(n); }}
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.currentTarget.click(); } }}
       role="button"
+      tabIndex={0}
       aria-expanded={isOpen}
       style={{
         margin: '0 auto', cursor: 'pointer', overflow: 'hidden', background: 'oklch(0.17 0.02 274)', color: 'oklch(0.97 0.005 270)',
@@ -120,7 +122,7 @@ export function AgentDock({ agents, title = 'AGENT DOCK' }: { agents: Agent[]; t
       <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.09em', opacity: 0.55, marginBottom: 12 }}>{title}</div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
         {agents.map((a) => (
-          <div key={a.name} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 12px', borderRadius: 6, background: a.state === 'thinking' ? 'rgba(255,255,255,0.07)' : undefined, cursor: a.state === 'thinking' ? undefined : 'pointer', transition: 'background 180ms' }}>
+          <div key={a.name} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 12px', borderRadius: 6, background: a.state === 'thinking' ? 'rgba(255,255,255,0.07)' : undefined, transition: 'background 180ms' }}>
             <span style={{ width: 26, height: 26, borderRadius: 6, background: a.gradient, display: 'grid', placeItems: 'center', fontSize: 10, fontWeight: 800, color: '#fff' }}>{a.initial}</span>
             <span style={{ fontSize: 13, fontWeight: 600, flex: 1, opacity: a.state === 'thinking' ? 1 : 0.85 }}>{a.name}</span>
             {a.state === 'thinking' && (
@@ -144,7 +146,7 @@ export function AgentDock({ agents, title = 'AGENT DOCK' }: { agents: Agent[]; t
 ──────────────────────────────────────────────────────────────────────── */
 export function LocationTag({ label, live = true }: { label: string; live?: boolean }) {
   return (
-    <span className="i-lift-shadow" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '8px 16px 8px 12px', borderRadius: 6, background: 'var(--surface-2)', border: '1px solid var(--border)', fontSize: 13, fontWeight: 600, cursor: 'pointer', transition: 'transform 220ms, box-shadow 220ms' }}>
+    <span className="i-lift-shadow" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '8px 16px 8px 12px', borderRadius: 6, background: 'var(--surface-2)', border: '1px solid var(--border)', fontSize: 13, fontWeight: 600, transition: 'transform 220ms, box-shadow 220ms' }}>
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11z" /><circle cx="12" cy="10" r="2.4" /></svg>
       {label}
       {live && <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--success)', animation: 'pulseDot 1.8s ease-in-out infinite' }} />}

@@ -14,7 +14,7 @@ export interface PricePlan { name: string; price: string; period?: string; note?
 export function SplitCard({ media, title, text, linkLabel = 'اقرأ المزيد' }: { media: React.ReactNode; title: React.ReactNode; text: React.ReactNode; linkLabel?: string }) {
   const [hov, setHov] = useState(false);
   return (
-    <div onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)} style={{ display: 'grid', gridTemplateColumns: '110px 1fr', borderRadius: 6, border: '1px solid var(--border)', background: 'var(--surface)', overflow: 'hidden', cursor: 'pointer' }}>
+    <div onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)} tabIndex={0} onFocus={() => setHov(true)} onBlur={() => setHov(false)} style={{ display: 'grid', gridTemplateColumns: '110px 1fr', borderRadius: 6, border: '1px solid var(--border)', background: 'var(--surface)', overflow: 'hidden', cursor: 'pointer' }}>
       <div style={{ overflow: 'hidden' }}>
         <div style={{ width: '100%', height: '100%', minHeight: 110, transform: hov ? 'scale(1.07)' : 'scale(1)', transition: 'transform 600ms cubic-bezier(0.22,1,0.36,1)' }}>{media}</div>
       </div>
@@ -347,7 +347,7 @@ const FILE_TONES: Record<string, string> = { PDF: '#E5484D', DOC: '#3E82F7', XLS
 export function FileCard({ name, meta, ext }: { name: string; meta: string; ext: keyof typeof FILE_TONES | string }) {
   const tone = FILE_TONES[ext] ?? 'var(--accent)';
   return (
-    <div className="i-lift-shadow" style={{ position: 'relative', width: 150, borderRadius: 6, border: '1px solid var(--border)', background: 'var(--surface)', padding: '16px 14px 12px', overflow: 'hidden', cursor: 'pointer', transition: 'transform 220ms, box-shadow 220ms' }}>
+    <div className="i-lift-shadow" style={{ position: 'relative', width: 150, borderRadius: 6, border: '1px solid var(--border)', background: 'var(--surface)', padding: '16px 14px 12px', overflow: 'hidden', transition: 'transform 220ms, box-shadow 220ms' }}>
       <span aria-hidden style={{ position: 'absolute', top: 0, insetInlineEnd: 0, width: 0, height: 0, borderStyle: 'solid', borderWidth: '0 26px 26px 0', borderColor: `transparent ${tone} transparent transparent` }} />
       <span style={{ display: 'inline-block', padding: '3px 8px', borderRadius: 6, background: `${tone}1e`, color: tone, fontSize: 10, fontWeight: 800, fontFamily: 'var(--font-mono)', letterSpacing: '0.05em' }}>{ext}</span>
       <div style={{ fontSize: 13, fontWeight: 700, marginTop: 10, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{name}</div>
@@ -361,7 +361,7 @@ export function FileCard({ name, meta, ext }: { name: string; meta: string; ext:
 export function EditorialCard({ overline, title, meta, background }: { overline: string; title: React.ReactNode; meta?: React.ReactNode; background?: string }) {
   const [hov, setHov] = useState(false);
   return (
-    <div onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)} style={{ position: 'relative', borderRadius: 6, overflow: 'hidden', minHeight: 210, cursor: 'pointer', display: 'flex', alignItems: 'flex-end', boxShadow: hov ? 'var(--shadow-3)' : 'var(--shadow-1)', transition: 'box-shadow 340ms' }}>
+    <div onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)} tabIndex={0} onFocus={() => setHov(true)} onBlur={() => setHov(false)} style={{ position: 'relative', borderRadius: 6, overflow: 'hidden', minHeight: 210, cursor: 'pointer', display: 'flex', alignItems: 'flex-end', boxShadow: hov ? 'var(--shadow-3)' : 'var(--shadow-1)', transition: 'box-shadow 340ms' }}>
       <div aria-hidden style={{ position: 'absolute', inset: 0, background: background ?? 'linear-gradient(160deg, color-mix(in srgb, var(--accent) 55%, #1c1c22), color-mix(in srgb, var(--accent) 20%, #101014))', transform: hov ? 'scale(1.05)' : 'scale(1)', transition: 'transform 700ms cubic-bezier(0.22,1,0.36,1)' }} />
       <div aria-hidden style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, transparent 30%, rgba(0,0,0,0.55))' }} />
       <div style={{ position: 'relative', padding: 20, color: '#fff' }}>

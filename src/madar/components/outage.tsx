@@ -111,6 +111,8 @@ export function OutageCompare({
       <span style={{ fontSize: 11.5, color: 'var(--text-3)' }}>{label}</span>
       <div
         data-track={label}
+        role="img"
+        aria-label={`${label}: ${spans.length ? `${spans.length} انقطاع، مجموعها ${mins(spans.reduce((a, s) => a + (s.to - s.from), 0))} دقيقة` : 'لا انقطاع'}`}
         style={{
           position: 'relative', height: 22,
           background: 'var(--surface-2)', border: '1px solid var(--border)',

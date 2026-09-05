@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { MiniBarChart } from './charts';
 import { Sparkline } from './charts';
 import { CATEGORICAL } from './dataviz';
 
@@ -118,7 +119,7 @@ export function MeterFace({ reading = 76542.8, tier = 2, model = 'NV-370 · 1PH 
         </span>
         {/* the tier seal — the same colour this tier carries everywhere else */}
         <span
-          title={TIER[tier].ar}
+          data-tier-seal=""
           style={{
             display: 'inline-flex', alignItems: 'center', gap: 6,
             padding: '3px 9px', borderRadius: 'var(--r-full)',
@@ -319,7 +320,6 @@ export interface TariffLadderProps {
    The colours are the encoding from §13: tier three is amber here, in the
    meter's seal, and anywhere else a tier is named. Learn it once. */
 export function TariffLadder({ used = 412, steps = [200, 400, 600, 900] }: TariffLadderProps) {
-  const total = steps[steps.length - 1];
   const tierOf = (n: number) => (Math.min(steps.findIndex((s) => n <= s) + 1, 4) || 4) as TariffTier;
   const current = tierOf(used);
   const nextEdge = steps.find((s) => s > used);
@@ -349,7 +349,7 @@ export function TariffLadder({ used = 412, steps = [200, 400, 600, 900] }: Tarif
             <span
               key={edge}
               className="madar-hatch"
-              title={`${TIER[tier].ar} — حتى ${ar(edge)}`}
+              data-tier-step={tier}
               style={{
                 position: 'relative', flex: `${edge - from} 1 0`,
                 borderRadius: 'var(--r-full)', overflow: 'hidden',
@@ -369,9 +369,238 @@ export function TariffLadder({ used = 412, steps = [200, 400, 600, 900] }: Tarif
         })}
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: 'var(--text-3)' }}>
-        <span><bdi dir="ltr">0</bdi></span>
-        <span><bdi dir="ltr">{ar(total)}</bdi> ك.و.س</span>
+      {/* every boundary written under its own step end, on the same flex scale as the
+          steps above — the edges used to live in a `title` only a mouse could open */}
+      <div aria-hidden="true" style={{ display: 'flex', gap: 3, fontSize: 11, color: 'var(--text-3)', fontVariantNumeric: 'tabular-nums' }}>
+        {steps.map((edge, i) => {
+          const from = i === 0 ? 0 : steps[i - 1];
+          return (
+            <span key={edge} data-tier-edge="" style={{ flex: `${edge - from} 1 0`, textAlign: 'end', whiteSpace: 'nowrap' }}>
+              <bdi dir="ltr">{ar(edge)}</bdi>{i === steps.length - 1 ? ' ك.و.س' : ''}
+            </span>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+/* ── NightFloor — is something running while you sleep?
+
+   The roadmap's fourth round: «هل هناك ما يعمل ولا يجب؟». The floor is the least
+   any hour draws between one and five in the morning — the house at rest — and a
+   house has a usual floor the way it has a usual monthly total. One high night is
+   a spike; three in a row is an appliance that never turned off. That is what a
+   number cannot say: a mean over fourteen nights hides the run, and the run IS the
+   finding. So the fourteen floors are bars (reading at the edge, §18), the usual
+   floor is a hatched BAND on the same scale (§14, §11), and the bars that rise
+   above the band take the tone. The card leaks only when the run is long enough
+   to be a verdict; one or two nights are named as such and left in warning.
+
+   Checked and not reused: `ConsumptionBand` is one reading against its range;
+   `MiniBarChart` had a target LINE and now has a band, extended rather than
+   duplicated; `DutyCycle` is a day's run of one appliance, not a run of nights. */
+export interface NightFloorProps {
+  /** The overnight floor per night, in `unit`, oldest first. */
+  nights?: { label: string; floor: number }[];
+  /** How many trailing nights make a run — a verdict rather than a spike. */
+  recent?: number;
+  unit?: string;
+}
+
+const NIGHTS = [0.31, 0.29, 0.33, 0.3, 0.28, 0.34, 0.32, 0.3, 0.29, 0.35, 0.31, 0.71, 0.74, 0.69]
+  .map((floor, i) => ({ label: String(((21 + i) % 30) + 1), floor }));
+
+export function NightFloor({ nights = NIGHTS, recent = 3, unit = 'ك.و/س' }: NightFloorProps) {
+  const base = nights.slice(0, Math.max(1, nights.length - recent));
+  const band = { min: Math.min(...base.map((n) => n.floor)), max: Math.max(...base.map((n) => n.floor)) };
+  let run = 0;
+  for (let i = nights.length - 1; i >= 0 && nights[i].floor > band.max; i -= 1) run += 1;
+  const running = run >= recent;
+  const excess = run ? nights.slice(-run).reduce((sum, n) => sum + n.floor, 0) / run - band.max : 0;
+  const last = nights[nights.length - 1].floor;
+  const tone = running ? 'var(--danger-ink)' : run ? 'var(--warning-ink)' : 'var(--text-3)'; /* text takes the ink; the bars take the tone */
+  const verdict = running
+    ? `شيءٌ يعمل وأنت نائم منذ ${ar(run)} ليالٍ`
+    : run === 2 ? 'ليلتان أعلى من معتادك — الحُكم بعد الثالثة'
+      : run === 1 ? 'ليلةٌ أعلى من معتادك — لا حُكم بعد ليلة'
+        : 'أرضيّتُك الليليّة ضمن معتادها';
+
+  return (
+    <div
+      data-night-floor=""
+      data-run={run}
+      className={running ? 'madar-leak' : undefined}
+      style={{
+        ...(running ? { ['--madar-leak-color' as string]: 'var(--danger)' } : null),
+        position: 'relative', width: '100%', maxWidth: 440,
+        display: 'flex', flexDirection: 'column', gap: 'var(--sp-4)',
+        padding: 'var(--sp-5)',
+        background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--r-lg)',
+      }}
+    >
+      <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 'var(--sp-3)' }}>
+        <b style={{ fontSize: 26, fontWeight: 700, color: 'var(--text)', fontVariantNumeric: 'tabular-nums' }}>
+          <bdi dir="ltr">{ar(last, 2)}</bdi>
+          <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--text-3)', marginInlineStart: 6 }}>{unit} الليلة</span>
+        </b>
+        <span data-verdict="" style={{ fontSize: 12.5, fontWeight: 600, color: tone }}>{verdict}</span>
+      </div>
+
+      <MiniBarChart
+        data={nights.map((n) => ({ label: n.label, value: n.floor }))}
+        gap={4}
+        band={{ min: band.min, max: band.max, label: `معتادك ${ar(band.min, 2)}–${ar(band.max, 2)}`, tone: running ? 'var(--danger)' : 'var(--warning)' }}
+        reading="edge"
+        height={118}
+        name="أرضيّةُ الليل عبر أربع عشرة ليلة، الأسهم تكشف كلّ ليلة"
+      />
+
+      <div style={{ display: 'flex', justifyContent: 'space-between', gap: 'var(--sp-3)', fontSize: 12, color: 'var(--text-2)' }}>
+        <span>الأرضيّة: أقلّ ساعةٍ بين الواحدة والخامسة فجرًا</span>
+        {run ? <span data-excess="" style={{ color: tone }}>زيادةٌ نحو <bdi dir="ltr">{ar(excess, 2)}</bdi> {unit} — قدرُ جهازٍ لم يُطفأ</span> : null}
+      </div>
+    </div>
+  );
+}
+
+/* ── ApplianceArea — which appliance drinks the electricity, and WHY.
+
+   The roadmap's second round: «أيّ جهاز يشرب الكهرباء؟». `LoadComb` answers the
+   share per category; what it cannot say is why the answer is what it is. The
+   water heater is the strongest thing in the house and the refrigerator the
+   weakest, and neither is the biggest drinker — because energy is power TIMES
+   time, and a number for kWh hides which of the two factors made it.
+
+   So each appliance is a rectangle on one pair of axes: its hours across the
+   day's twenty-four, its watts up. Its AREA is its energy, and the grid behind
+   it is cut so every cell is one kilowatt-hour (500 W × 2 h) — a counted quantity
+   drawn counted (§15), the axes the reference (§14). A tall narrow box and a low
+   wide one can hold the same energy, and the eye sees that where a table only
+   states it. The hours are the control: a slider per appliance, so "an hour less
+   of cooling" is a box that visibly shrinks by a countable number of cells.
+
+   Checked and not reused: `LoadComb` (share, one dimension); `DutyCycle` (WHEN an
+   appliance ran, not how much); `RangeSlider`/`RubberBandSlider` are generic
+   sliders — the pattern is borrowed, the arrows follow the writing direction (§33). */
+export interface Appliance { name: string; watts: number; hours: number }
+export interface ApplianceAreaProps {
+  appliances?: Appliance[];
+  /** Grid cell: watts × hours = one unit of energy. 500 × 2 = 1 kWh. */
+  cell?: { watts: number; hours: number };
+  unit?: string;
+}
+
+const APPLIANCES: Appliance[] = [
+  { name: 'التكييف', watts: 1800, hours: 9 },
+  { name: 'سخّان الماء', watts: 3000, hours: 1.5 },
+  { name: 'الثلاجة', watts: 150, hours: 24 },
+];
+
+export function ApplianceArea({ appliances = APPLIANCES, cell = { watts: 500, hours: 2 }, unit = 'ك.و.س' }: ApplianceAreaProps) {
+  const [hours, setHours] = useState(appliances.map((a) => a.hours));
+  const maxW = Math.ceil(Math.max(...appliances.map((a) => a.watts)) / cell.watts) * cell.watts;
+  const cols = Math.round(24 / cell.hours);
+  const rows = Math.round(maxW / cell.watts);
+  const kwh = (i: number) => (appliances[i].watts * hours[i]) / 1000;
+  const top = appliances.reduce((best, _, i) => (kwh(i) > kwh(best) ? i : best), 0);
+  const least = appliances.reduce((worst, _, i) => (kwh(i) < kwh(worst) ? i : worst), 0);
+  const setHour = (i: number, h: number) => setHours((hs) => hs.map((v, k) => (k === i ? Math.max(0, Math.min(24, Math.round(h * 2) / 2)) : v)));
+  const onKey = (i: number) => (e: React.KeyboardEvent<HTMLSpanElement>) => {
+    const rtl = getComputedStyle(e.currentTarget).direction === 'rtl';
+    const d = e.key === 'Home' ? -24 : e.key === 'End' ? 24 : e.key === (rtl ? 'ArrowLeft' : 'ArrowRight') || e.key === 'ArrowUp' ? 0.5 : e.key === (rtl ? 'ArrowRight' : 'ArrowLeft') || e.key === 'ArrowDown' ? -0.5 : 0;
+    if (!d) return;
+    e.preventDefault();
+    setHour(i, hours[i] + d);
+  };
+  const onTrack = (i: number) => (e: React.PointerEvent<HTMLSpanElement>) => {
+    e.preventDefault();
+    const r = e.currentTarget.getBoundingClientRect();
+    const rtl = getComputedStyle(e.currentTarget).direction === 'rtl';
+    setHour(i, ((rtl ? r.right - e.clientX : e.clientX - r.left) / r.width) * 24);
+    e.currentTarget.focus();
+  };
+
+  return (
+    <div
+      data-appliance-area=""
+      style={{
+        width: '100%', maxWidth: 440, display: 'flex', flexDirection: 'column', gap: 'var(--sp-4)',
+        padding: 'var(--sp-5)', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--r-lg)',
+      }}
+    >
+      <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 'var(--sp-3)' }}>
+        <b style={{ fontSize: 14, fontWeight: 600, color: 'var(--text)' }}>القوّة × الساعات = ما يشربه الجهاز</b>
+        <span data-top="" style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-2)' }}>
+          الأكبرُ شربًا: {appliances[top].name} — <bdi dir="ltr">{ar(kwh(top) / Math.max(kwh(least), 0.01), 1)}×</bdi> {appliances[least].name}
+        </span>
+      </div>
+
+      {/* the axes: hours across, watts up; each grid cell is one unit of energy */}
+      <div data-axes="" style={{ position: 'relative', height: 160, border: '1px solid var(--border-strong)', borderInlineEnd: 0, borderBlockStart: 0, background: 'var(--surface-2)' }}>
+        {Array.from({ length: cols - 1 }, (_, c) => (
+          <span key={`c${c}`} data-grid-col="" aria-hidden="true" style={{ position: 'absolute', insetBlock: 0, insetInlineStart: `${((c + 1) / cols) * 100}%`, width: 1, background: 'var(--border)' }} />
+        ))}
+        {Array.from({ length: rows - 1 }, (_, r) => (
+          <span key={`r${r}`} data-grid-row="" aria-hidden="true" style={{ position: 'absolute', insetInline: 0, bottom: `${((r + 1) / rows) * 100}%`, height: 1, background: 'var(--border)' }} />
+        ))}
+        {appliances.map((a, i) => {
+          const color = CATEGORICAL[i % CATEGORICAL.length];
+          return (
+            <span
+              key={a.name}
+              data-area={a.name}
+              role="img"
+              aria-label={`${a.name}: ${ar(a.watts)} واط لمدّة ${ar(hours[i], 1)} ساعة، ${ar(kwh(i), 1)} ${unit} في اليوم`}
+              style={{
+                position: 'absolute', insetInlineStart: 0, bottom: 0,
+                width: `${(hours[i] / 24) * 100}%`, height: `${(a.watts / maxW) * 100}%`,
+                border: `1.5px solid ${color}`, backgroundColor: `color-mix(in srgb, ${color} 14%, transparent)`,
+                transition: 'width var(--dur-2) var(--ease-out)',
+              }}
+            />
+          );
+        })}
+        <span aria-hidden="true" style={{ position: 'absolute', bottom: -18, insetInlineStart: 0, fontSize: 10.5, color: 'var(--text-3)' }}>0</span>
+        <span aria-hidden="true" style={{ position: 'absolute', bottom: -18, insetInlineEnd: 0, fontSize: 10.5, color: 'var(--text-3)' }}><bdi dir="ltr">24</bdi> س</span>
+        <span aria-hidden="true" style={{ position: 'absolute', top: -18, insetInlineStart: 0, fontSize: 10.5, color: 'var(--text-3)' }}><bdi dir="ltr">{ar(maxW)}</bdi> واط</span>
+        <span aria-hidden="true" style={{ position: 'absolute', top: -18, insetInlineEnd: 0, fontSize: 10.5, color: 'var(--text-3)' }}>كلُّ خانةٍ <bdi dir="ltr">{ar((cell.watts * cell.hours) / 1000, 0)}</bdi> {unit}</span>
+      </div>
+
+      <div style={{ display: 'grid', gap: 'var(--sp-3)', marginTop: 'var(--sp-3)' }}>
+        {appliances.map((a, i) => {
+          const color = CATEGORICAL[i % CATEGORICAL.length];
+          return (
+            <div key={a.name} data-appliance={a.name} style={{ display: 'grid', gridTemplateColumns: '10px 1fr auto', alignItems: 'center', gap: 10, fontSize: 12 }}>
+              <span aria-hidden="true" style={{ width: 10, height: 10, border: `1.5px solid ${color}`, backgroundColor: `color-mix(in srgb, ${color} 14%, transparent)` }} />
+              <span style={{ display: 'grid', gap: 4 }}>
+                <span style={{ display: 'flex', justifyContent: 'space-between', gap: 8 }}>
+                  <span style={{ color: 'var(--text-2)' }}>{a.name} · <bdi dir="ltr">{ar(a.watts)}</bdi> واط</span>
+                  <span style={{ color: 'var(--text-3)' }}><bdi dir="ltr">{ar(hours[i], 1)}</bdi> س / يوم</span>
+                </span>
+                {/* the hours are the control: a slider whose fill is the same fraction of the day as the box's width */}
+                <span
+                  role="slider"
+                  tabIndex={0}
+                  aria-label={`ساعات تشغيل ${a.name} في اليوم`}
+                  aria-valuemin={0}
+                  aria-valuemax={24}
+                  aria-valuenow={hours[i]}
+                  aria-valuetext={`${ar(hours[i], 1)} ساعة، ${ar(kwh(i), 1)} ${unit}`}
+                  data-hours={a.name}
+                  onKeyDown={onKey(i)}
+                  onPointerDown={onTrack(i)}
+                  style={{ position: 'relative', display: 'block', height: 10, borderRadius: 'var(--r-sm)', background: 'var(--surface-2)', border: '1px solid var(--border)', cursor: 'pointer', overflow: 'hidden' }}
+                >
+                  <span aria-hidden="true" style={{ position: 'absolute', insetBlock: 0, insetInlineStart: 0, width: `${(hours[i] / 24) * 100}%`, background: color, transition: 'width var(--dur-2) var(--ease-out)' }} />
+                </span>
+              </span>
+              <b data-kwh={a.name} style={{ fontWeight: 700, color: i === top ? 'var(--text)' : 'var(--text-2)', fontVariantNumeric: 'tabular-nums', minWidth: '5.5em', textAlign: 'end' }}>
+                <bdi dir="ltr">{ar(kwh(i), 1)}</bdi> <span style={{ fontWeight: 500, fontSize: 11, color: 'var(--text-3)' }}>{unit}</span>
+              </b>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
@@ -449,7 +678,7 @@ export function AllocationBar({
     >
       <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 'var(--sp-3)' }}>
         <b style={{ fontSize: 14, fontWeight: 600, color: 'var(--text)' }}>مخصّص الدورة</b>
-        <span style={{ fontSize: 12, fontWeight: 600, color: over ? 'var(--danger)' : 'var(--text-3)' }}>
+        <span style={{ fontSize: 12, fontWeight: 600, color: over ? 'var(--danger-ink)' : 'var(--text-3)' }}>
           {over
             ? <>متوقّع تجاوزه بـ<bdi dir="ltr"> {ar(used + projected - budget)} </bdi>{unit}</>
             : <><bdi dir="ltr">{ar(budget)}</bdi> {unit}</>}
@@ -470,7 +699,6 @@ export function AllocationBar({
               key={p.key}
               data-part={p.key}
               className={p.solid ? undefined : 'madar-hatch'}
-              title={`${p.label} — ${ar(p.value)} ${unit}`}
               style={{ width: pct(p.value), ...swatch(p) }}
             />
           ))}
@@ -731,10 +959,7 @@ export function BillDocument({
           <div style={{ display: 'grid', gap: 7 }}>
             {lines.map((l) => (
               <div key={l.tier} style={{ display: 'flex', alignItems: 'center', gap: 9, fontSize: 12 }}>
-                <i
-                  title={TIER[l.tier].ar}
-                  style={{ width: 7, height: 7, borderRadius: '50%', background: TIER[l.tier].color, flex: 'none' }}
-                />
+                <i aria-hidden="true" style={{ width: 7, height: 7, borderRadius: '50%', background: TIER[l.tier].color, flex: 'none' }} />
                 <span style={{ color: 'var(--text-2)' }}>{TIER[l.tier].ar}</span>
                 <span style={{ flex: 1, fontSize: 11, color: 'var(--text-3)', textAlign: 'center' }}>
                   <bdi dir="ltr">{ar(l.kwh, 1)} × {l.rate.toFixed(2)}</bdi>

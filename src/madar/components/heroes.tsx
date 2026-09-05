@@ -140,10 +140,15 @@ export function SwipeableListRow({ children, actionLabel = 'Archive', onAction, 
   const [drag, setDrag] = useState(false);
   const start = useRef(0);
 
+  /* the grab cursor sits on the wrapper, which CONTAINS the action button: the swipe is the
+     mouse's way to the same button the keyboard reaches by Tab — and focusing it slides the
+     row open so the button is seen, not just reached (gates/25) */
   return (
-    <div style={{ position: 'relative', borderRadius: 6, overflow: 'hidden', border: '1px solid var(--border)' }}>
+    <div style={{ position: 'relative', borderRadius: 6, overflow: 'hidden', border: '1px solid var(--border)', cursor: 'grab' }}>
       <button
         onClick={() => { onAction?.(); setX(0); }}
+        onFocus={() => setX(OPEN * dirSign)}
+        onBlur={() => setX(0)}
         style={{ position: 'absolute', insetBlock: 0, insetInlineEnd: 0, width: OPEN, border: 'none', background: 'var(--warning)', color: '#fff', fontFamily: 'inherit', fontSize: 12.5, fontWeight: 700, cursor: 'pointer' }}
       >{actionLabel}</button>
       <div
@@ -157,7 +162,7 @@ export function SwipeableListRow({ children, actionLabel = 'Archive', onAction, 
         onPointerUp={() => { setDrag(false); setX(Math.abs(x) > OPEN * 0.5 ? OPEN * dirSign : 0); }}
         style={{
           position: 'relative', display: 'flex', alignItems: 'center', gap: 12, padding: '13px 16px',
-          background: 'var(--surface)', cursor: 'grab', touchAction: 'pan-y', userSelect: 'none',
+          background: 'var(--surface)', touchAction: 'pan-y', userSelect: 'none',
           transform: `translateX(${x}px)`, transition: drag ? 'none' : `transform 420ms ${SPRING}`,
         }}
       >{children}</div>

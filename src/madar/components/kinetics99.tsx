@@ -94,6 +94,8 @@ export function RotaryKnob({ defaultValue = 40, label = 'المستوى' }: { de
         onPointerDown={(e) => { drag.current = { y: e.clientY, v: val }; (e.target as HTMLElement).setPointerCapture(e.pointerId); }}
         onPointerMove={(e) => { if (!drag.current) return; const dv = (drag.current.y - e.clientY) * 0.6; setVal(Math.max(0, Math.min(100, Math.round(drag.current.v + dv)))); }}
         onPointerUp={() => { drag.current = null; }}
+        role="slider" tabIndex={0} aria-label={label} aria-valuemin={0} aria-valuemax={100} aria-valuenow={val}
+        onKeyDown={(e) => { const d = e.key === 'ArrowUp' || e.key === 'ArrowRight' ? 5 : e.key === 'ArrowDown' || e.key === 'ArrowLeft' ? -5 : e.key === 'Home' ? -100 : e.key === 'End' ? 100 : 0; if (!d) return; e.preventDefault(); setVal(Math.max(0, Math.min(100, val + d))); }}
         style={{ position: 'relative', width: 84, height: 84, borderRadius: '50%', background: 'radial-gradient(circle at 50% 35%, var(--surface), var(--surface-2))', border: '1px solid var(--border-strong)', boxShadow: 'inset 0 -3px 6px rgba(0,0,0,0.12)', cursor: 'ns-resize', transition: `transform 400ms ${SPRING}` }}
       >
         <span style={{ position: 'absolute', top: 8, insetInlineStart: '50%', width: 4, height: 22, borderRadius: 3, background: 'var(--accent)', transformOrigin: '50% 34px', transform: `translateX(-50%) rotate(${angle}deg)`, transition: `transform 220ms ${SPRING}` }} />
@@ -303,6 +305,8 @@ export function FlipCard({ front, back, height = 150 }: { front?: React.ReactNod
   const face: React.CSSProperties = { position: 'absolute', inset: 0, backfaceVisibility: 'hidden', borderRadius: 6, display: 'grid', placeItems: 'center', padding: 16, textAlign: 'center' };
   return (
     <div onMouseEnter={() => setFlip(true)} onMouseLeave={() => setFlip(false)} onClick={() => setFlip((f) => !f)}
+      role="button" tabIndex={0} aria-pressed={flip} onFocus={() => setFlip(true)} onBlur={() => setFlip(false)}
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setFlip((f) => !f); } }}
       style={{ width: 200, height, perspective: 900, cursor: 'pointer' }}>
       <div style={{ position: 'relative', width: '100%', height: '100%', transformStyle: 'preserve-3d', transition: `transform 620ms ${GLIDE}`, transform: flip ? 'rotateY(180deg)' : 'none' }}>
         <div style={{ ...face, background: 'var(--surface)', border: '1px solid var(--border)', }}>{front ?? <b style={{ fontSize: 15 }}>الوجه الأمامي</b>}</div>
@@ -332,7 +336,7 @@ export function CubeRotate3D({ size = 96, faces = ['مدار', 'Madar', 'مكت�
 export function ClipWipe({ children = 'يُكشف بمسح' }: { children?: React.ReactNode }) {
   const [on, setOn] = useState(false);
   return (
-    <div onMouseEnter={() => setOn(true)} onMouseLeave={() => setOn(false)}
+    <div onMouseEnter={() => setOn(true)} onMouseLeave={() => setOn(false)} tabIndex={0} onFocus={() => setOn(true)} onBlur={() => setOn(false)}
       style={{ position: 'relative', width: 220, height: 80, borderRadius: 6, overflow: 'hidden', border: '1px solid var(--border)', cursor: 'pointer' }}>
       <div style={{ position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', background: 'var(--surface)', color: 'var(--text-3)', fontSize: 13.5 }}>مرّر للكشف</div>
       <div style={{ position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', background: 'var(--accent)', color: 'var(--on-accent)', fontWeight: 700, fontSize: 15, clipPath: on ? 'inset(0 0 0 0)' : 'inset(0 100% 0 0)', transition: `clip-path 480ms ${GLIDE}` }}>{children}</div>
@@ -345,7 +349,7 @@ export function FoldingDoors({ children = 'مُكتشَف', width = 220, height 
   const [open, setOpen] = useState(false);
   const door: React.CSSProperties = { position: 'absolute', top: 0, width: '50%', height: '100%', background: 'var(--ink)', transition: `transform 620ms ${GLIDE}`, backfaceVisibility: 'hidden' };
   return (
-    <div onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}
+    <div onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)} tabIndex={0} onFocus={() => setOpen(true)} onBlur={() => setOpen(false)}
       style={{ position: 'relative', width, height, borderRadius: 6, overflow: 'hidden', border: '1px solid var(--border)', perspective: 800, cursor: 'pointer' }}>
       <div style={{ position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', background: 'var(--accent-soft)', color: 'var(--accent)', fontWeight: 700, fontSize: 15 }}>{children}</div>
       <div style={{ ...door, insetInlineStart: 0, transformOrigin: 'left center', transform: open ? 'rotateY(-105deg)' : 'none' }} />
@@ -362,7 +366,9 @@ export function BeforeAfter({ width = 260, height = 150 }: { width?: number; hei
   return (
     <div ref={box} style={{ position: 'relative', width, height, borderRadius: 6, overflow: 'hidden', border: '1px solid var(--border)', userSelect: 'none', touchAction: 'none' }}
       onPointerDown={(e) => { move(e.clientX); (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId); }}
-      onPointerMove={(e) => { if (e.buttons) move(e.clientX); }}>
+      onPointerMove={(e) => { if (e.buttons) move(e.clientX); }}
+      role="slider" tabIndex={0} aria-label="موضع الفاصل" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(pos)}
+      onKeyDown={(e) => { const rtl = getComputedStyle(e.currentTarget).direction === 'rtl'; const d = e.key === (rtl ? 'ArrowLeft' : 'ArrowRight') ? 5 : e.key === (rtl ? 'ArrowRight' : 'ArrowLeft') ? -5 : e.key === 'Home' ? -100 : e.key === 'End' ? 100 : 0; if (!d) return; e.preventDefault(); setPos(Math.max(0, Math.min(100, pos + d))); }}>
       <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, var(--surface-2), var(--surface))', display: 'grid', placeItems: 'center', color: 'var(--text-3)', fontWeight: 600, fontSize: 13 }}>قبل</div>
       <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, var(--accent), oklch(from var(--accent) 0.6 0.2 calc(h + 60)))', color: 'var(--on-accent)', display: 'grid', placeItems: 'center', fontWeight: 700, fontSize: 14, clipPath: `inset(0 ${100 - pos}% 0 0)` }}>بعد</div>
       <span style={{ position: 'absolute', top: 0, bottom: 0, insetInlineStart: `${pos}%`, width: 2, background: '#fff', transform: 'translateX(-50%)' }}>
@@ -378,7 +384,7 @@ export function BeforeAfter({ width = 260, height = 150 }: { width?: number; hei
 export function PagePeel({ children = 'بطاقة', hint = 'اقلب', size = 150 }: { children?: React.ReactNode; hint?: string; size?: number }) {
   const [on, setOn] = useState(false);
   return (
-    <div onMouseEnter={() => setOn(true)} onMouseLeave={() => setOn(false)}
+    <div onMouseEnter={() => setOn(true)} onMouseLeave={() => setOn(false)} tabIndex={0} onFocus={() => setOn(true)} onBlur={() => setOn(false)}
       style={{ position: 'relative', width: size, height: size, borderRadius: 6, overflow: 'hidden', background: 'var(--surface)', border: '1px solid var(--border)', display: 'grid', placeItems: 'center', cursor: 'pointer' }}>
       <span style={{ fontSize: 15, fontWeight: 600 }}>{children}</span>
       <span style={{ position: 'absolute', insetInlineEnd: 0, bottom: 0, display: 'grid', placeItems: 'center', color: 'var(--accent)', fontSize: 10, fontWeight: 700, width: on ? 52 : 24, height: on ? 52 : 24, background: 'linear-gradient(135deg, transparent 50%, var(--accent-soft) 50%)', transition: `all 320ms ${GLIDE}` }}>

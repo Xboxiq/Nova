@@ -16,11 +16,11 @@ export const isRtl = () =>
 /**
  * `forward` is the arrow that moves along the writing direction, so the same
  * component reads correctly in Arabic and in English without a second code path.
- * Pass `cols` for a grid; leave it off and the vertical arrows step by one.
+ * Pass `cols` for a grid; leave it off and the vertical arrows step by one. Pass
+ * `rtl` when the element's own direction differs from the document's (§33).
  * Returns the new index, or null when the key was not ours to handle.
  */
-export function move(key: string, at: number, count: number, cols?: number): number | null {
-  const rtl = isRtl();
+export function move(key: string, at: number, count: number, cols?: number, rtl = isRtl()): number | null {
   const step: Record<string, number> = {
     [rtl ? 'ArrowLeft' : 'ArrowRight']: 1,
     [rtl ? 'ArrowRight' : 'ArrowLeft']: -1,

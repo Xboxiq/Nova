@@ -71,7 +71,7 @@ export function IridescentFoilCard({ children, style }: { children: React.ReactN
     <div className="i-foil" style={{
       position: 'relative', borderRadius: 6, padding: 24, border: '1px solid var(--border)', overflow: 'hidden',
       background: 'linear-gradient(115deg, #F6E7F0 0%, #E7EDF9 18%, #E4F4EE 36%, #F8F1E2 54%, #EEE6F8 72%, #E5F0F7 90%, #F6E7F0 100%)',
-      backgroundSize: '280% 280%', cursor: 'pointer', transition: 'background-position 900ms ease',
+      backgroundSize: '280% 280%', transition: 'background-position 900ms ease',
       ...style,
     }}>
       <div aria-hidden style={{ position: 'absolute', inset: 0, background: 'radial-gradient(at 70% 20%, rgba(255,255,255,0.75), transparent 55%)' }} />

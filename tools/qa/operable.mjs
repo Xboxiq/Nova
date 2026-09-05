@@ -177,6 +177,26 @@ const CASES = [
       ".container input[type='radio']",
     ],
   },
+  {
+    id: "madar-energy",
+    name: "energy",
+    /* The runway's axis is one slider, not a grid of cells; it carries data-thumb="true"
+       so the harness can find it. The press on the axis is position-specific (its centre
+       is already the default boundary) and is measured in energy-qa.mjs instead. */
+    keyboard: { group: "[data-runway]", cell: "[data-thumb]", attr: "data-top-up", state: "data-thumb" },
+  },
+  {
+    id: "madar-nova-instruments",
+    name: "nova-instruments",
+    controls: [
+      /* A hold-to-confirm button is the one control here that must NOT commit on
+         the gesture this harness performs. So the consequence watched is the
+         refusal: a short click flips data-state to "nudged" and the hint says
+         "hold, don't click". A button that silently swallowed the click would
+         be the emptiness this file exists to catch, wearing a safer costume. */
+      { what: "hold-to-confirm refuses a click", click: "[data-hold-rtl] .hold", watch: "[data-hold-rtl] .hold", attr: "data-state" },
+    ],
+  },
 ];
 
 let chromium;
