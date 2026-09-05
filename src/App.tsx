@@ -33,6 +33,14 @@ import {
   type GlassLevel,
   type ThemeName,
 } from "./madar/theme/themes";
+import {
+  BRANDS,
+  RADII,
+  isBrandName,
+  isRadiusName,
+  type BrandName,
+  type RadiusName,
+} from "./brands";
 import type { Locale } from "./i18n";
 import { uiCopy } from "./i18n";
 import type { CategoryId } from "./types";
@@ -65,6 +73,19 @@ function getInitialGlass(): GlassLevel {
   return isGlassLevel(stored) ? stored : "g0";
 }
 
+/* The brand and the edge are the product's own decisions, so they persist like
+   the pack does and default to NOTHING — an unset `data-brand` leaves every
+   pack's own accent exactly as it was, which is what makes this axis additive. */
+function getInitialBrand(): BrandName {
+  const stored = window.localStorage.getItem("nova-brand");
+  return isBrandName(stored) ? stored : "none";
+}
+
+function getInitialRadius(): RadiusName {
+  const stored = window.localStorage.getItem("nova-radius");
+  return isRadiusName(stored) ? stored : "default";
+}
+
 function getInitialLocale(): Locale {
   const stored = window.localStorage.getItem("nova-locale");
   return stored === "en" ? "en" : "ar";
@@ -80,6 +101,8 @@ function sectionFromHash(): string | null {
 function App() {
   const [theme, setTheme] = useState<ThemeName>(getInitialTheme);
   const [glass, setGlass] = useState<GlassLevel>(getInitialGlass);
+  const [brand, setBrand] = useState<BrandName>(getInitialBrand);
+  const [radius, setRadius] = useState<RadiusName>(getInitialRadius);
   const [themeMenuOpen, setThemeMenuOpen] = useState(false);
   const [locale, setLocale] = useState<Locale>(getInitialLocale);
   const [category, setCategory] = useState<CategoryId | "all">("all");
@@ -125,6 +148,23 @@ function App() {
     document.documentElement.dataset.glass = glass;
     window.localStorage.setItem("nova-glass", glass);
   }, [glass]);
+
+  /* `none` DELETES the attribute rather than writing a value, so the selector
+     `[data-brand]` stops matching and the pack's own accent returns — one
+     switch, no reset list to maintain. */
+  useEffect(() => {
+    const root = document.documentElement;
+    if (brand === "none") delete root.dataset.brand;
+    else root.dataset.brand = brand;
+    window.localStorage.setItem("nova-brand", brand);
+  }, [brand]);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (radius === "default") delete root.dataset.radius;
+    else root.dataset.radius = radius;
+    window.localStorage.setItem("nova-radius", radius);
+  }, [radius]);
 
   /* A pasted link, and the back button, both arrive as a hash change. */
   useEffect(() => {
@@ -333,6 +373,41 @@ function App() {
                   >
                     <span className="theme-swatch" style={{ background: pack.swatch }} aria-hidden="true" />
                     {locale === "ar" ? pack.labelAr : pack.label}
+                  </button>
+                ))}
+              </div>
+
+              <p className="theme-panel-heading">{copy.brandLabel}</p>
+              <div className="theme-brand-list" role="radiogroup" aria-label={copy.brandLabel}>
+                {BRANDS.map((item) => (
+                  <button
+                    key={item.name}
+                    type="button"
+                    role="radio"
+                    aria-checked={brand === item.name}
+                    className={brand === item.name ? "active" : ""}
+                    onClick={() => setBrand(item.name)}
+                  >
+                    <span className="theme-swatch" style={{ background: item.swatch }} aria-hidden="true" />
+                    {locale === "ar" ? item.labelAr : item.label}
+                  </button>
+                ))}
+              </div>
+
+              <p className="theme-panel-heading">{copy.radiusLabel}</p>
+              <div className="theme-radius-list" role="radiogroup" aria-label={copy.radiusLabel}>
+                {RADII.map((item) => (
+                  <button
+                    key={item.name}
+                    type="button"
+                    role="radio"
+                    aria-checked={radius === item.name}
+                    className={radius === item.name ? "active" : ""}
+                    onClick={() => setRadius(item.name)}
+                  >
+                    {/* the chip wears the radius it sets, so the choice is seen before it is made */}
+                    <span className="radius-preview" style={{ borderRadius: item.preview }} aria-hidden="true" />
+                    {locale === "ar" ? item.labelAr : item.label}
                   </button>
                 ))}
               </div>

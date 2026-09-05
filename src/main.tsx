@@ -16,6 +16,7 @@ import "@fontsource/outfit/latin-600.css";
 import App from "./App";
 import "../design-system/nova-design-os/tokens/tokens.css";
 import "../design-system/nova-design-os/tokens/theme-packs.css";
+import "../design-system/nova-design-os/tokens/brands.css";
 import "../design-system/nova-design-os/tokens/directions.css";
 import "./styles.css";
 import "./tailwind.css";

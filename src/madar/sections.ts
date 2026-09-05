@@ -140,6 +140,17 @@ export const madarSections: MadarSection[] = [
     added: true,
   },
   {
+    id: "madar-brandwork",
+    title: "Brandwork",
+    titleAr: "لونُ العلامة",
+    family: "typography",
+    description: "The brand as its own axis: a gradient card, the curated set as lit spheres, and glass tinted by the brand.",
+    descriptionAr: "العلامةُ محورًا قائمًا بذاته: بطاقةٌ متدرّجة، والمجموعةُ المنتقاةُ كُرَاتٍ مضاءة، وزجاجٌ بصبغتها.",
+    tags: ["brand", "gradient", "palette", "tokens", "علامة", "تدرّج", "ألوان"],
+    added: true,
+    component: load("Brandwork", () => import("./showcase/sections/Brandwork")),
+  },
+  {
     id: "madar-color-tokens",
     title: "Color Tokens",
     titleAr: "توكنز اللون",

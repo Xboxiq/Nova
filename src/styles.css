@@ -308,6 +308,8 @@ button:disabled {
 }
 
 .theme-pack-list button,
+.theme-brand-list button,
+.theme-radius-list button,
 .theme-glass-list button {
   display: flex;
   gap: var(--nova-space-2);
@@ -325,12 +327,16 @@ button:disabled {
 }
 
 .theme-pack-list button:hover,
+.theme-brand-list button:hover,
+.theme-radius-list button:hover,
 .theme-glass-list button:hover {
   color: var(--nova-ink);
   background: var(--nova-state-hover);
 }
 
 .theme-pack-list button.active,
+.theme-brand-list button.active,
+.theme-radius-list button.active,
 .theme-glass-list button.active {
   color: var(--nova-action-ink);
   background: var(--nova-action-soft);
@@ -343,6 +349,46 @@ button:disabled {
   flex: none;
   border: 1px solid var(--nova-border-strong);
   border-radius: var(--nova-radius-pill);
+}
+
+.theme-brand-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--nova-space-1);
+}
+
+.theme-radius-list {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--nova-space-1);
+}
+
+.theme-radius-list button {
+  flex-direction: column;
+  gap: 5px;
+  justify-content: center;
+  padding-block: var(--nova-space-2);
+  padding-inline: var(--nova-space-1);
+  min-height: 52px;
+  font-size: var(--nova-text-label-sm);
+}
+
+/* the chip is a square of the ink itself wearing the corner it sets — the
+   setting is READ before it is chosen, which a word alone cannot do */
+.radius-preview {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  background: var(--nova-surface-quiet);
+  border: 1.5px solid var(--nova-border-strong);
+  /* the corner is fixed per chip and never animates; what changes is the chip
+     going active, so that is what carries the transition (dead-transition) */
+  transition: background-color var(--nova-motion-fast), border-color var(--nova-motion-fast);
+}
+
+.theme-radius-list button.active .radius-preview {
+  background: var(--nova-action-soft);
+  border-color: var(--nova-action);
 }
 
 .theme-glass-list {
