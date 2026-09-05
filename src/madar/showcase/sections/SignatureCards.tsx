@@ -20,7 +20,7 @@ function GridIcon() {
 function Dossier() {
   const [hov, setHov] = useState(false);
   return (
-    <div onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)} style={{ background: 'var(--bg-deep)', border: '1px solid var(--border)', borderRadius: 6, padding: 20, cursor: 'pointer' }}>
+    <div onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)} tabIndex={0} onFocus={() => setHov(true)} onBlur={() => setHov(false)} style={{ background: 'var(--bg-deep)', border: '1px solid var(--border)', borderRadius: 6, padding: 20, cursor: 'pointer' }}>
       <Label>DOSSIER — sheet slips out of its folder</Label>
       <div style={{ position: 'relative', paddingTop: 14 }}>
         <div style={{ position: 'absolute', top: 0, insetInlineStart: 16, width: 76, height: 22, borderRadius: '6px 6px 0 0', background: 'var(--surface-2)', border: '1px solid var(--border)', borderBottom: 'none' }} />
@@ -49,7 +49,7 @@ function FannedStack() {
     transform: hov ? fan : base, transition: `transform 420ms ${spring}`,
   });
   return (
-    <div onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)} style={{ background: 'var(--bg-deep)', border: '1px solid var(--border)', borderRadius: 6, padding: 20, cursor: 'pointer' }}>
+    <div onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)} tabIndex={0} onFocus={() => setHov(true)} onBlur={() => setHov(false)} style={{ background: 'var(--bg-deep)', border: '1px solid var(--border)', borderRadius: 6, padding: 20, cursor: 'pointer' }}>
       <Label>STACK — collection fans open</Label>
       <div style={{ position: 'relative', height: 150, margin: '10px 18px 4px' }}>
         <div style={card('rotate(-4deg) translateY(8px)', 'rotate(-9deg) translate(-30px, -4px)', 1)} />
@@ -69,7 +69,7 @@ function FannedStack() {
 function SpatialGlass() {
   const [hov, setHov] = useState(false);
   return (
-    <div onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)} style={{ background: 'var(--bg-deep)', border: '1px solid var(--border)', borderRadius: 6, padding: 20, cursor: 'pointer', perspective: 800 }}>
+    <div onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)} tabIndex={0} onFocus={() => setHov(true)} onBlur={() => setHov(false)} style={{ background: 'var(--bg-deep)', border: '1px solid var(--border)', borderRadius: 6, padding: 20, cursor: 'pointer', perspective: 800 }}>
       <Label>SPATIAL — layers separate in Z</Label>
       <div style={{
         position: 'relative', height: 150, borderRadius: 6, overflow: 'visible',

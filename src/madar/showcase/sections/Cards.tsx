@@ -16,7 +16,7 @@ function StatusBadge({ token, label }: { token: string; label: string }) {
 
 function ListRow({ initials, bg, name, meta, status, statusLabel }: { initials: string; bg: string; name: string; meta: string; status: string; statusLabel: string }) {
   return (
-    <div className="i-surface2" style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 18px', cursor: 'pointer', transition: 'background 140ms' }}>
+    <div className="i-surface2" style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 18px', transition: 'background 140ms' }}>
       <Avatar initials={initials} bg={bg} />
       <span style={{ flex: 1, minWidth: 0 }}>
         <span style={{ display: 'block', fontSize: 14.5, fontWeight: 600 }}>{name}</span>
@@ -38,7 +38,7 @@ export function Cards() {
       </SectionHeader>
       <SpecShelf>
         {/* service card */}
-        <div className="i-card" style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, padding: 22, cursor: 'pointer', transition: 'transform 340ms cubic-bezier(0.22,1,0.36,1), box-shadow 340ms, border-color 340ms' }}>
+        <div className="i-card" style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, padding: 22, transition: 'transform 340ms cubic-bezier(0.22,1,0.36,1), box-shadow 340ms, border-color 340ms' }}>
           <div style={{ width: 44, height: 44, borderRadius: 6, background: 'var(--accent-soft)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 14 }}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z" /><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5" /></svg>
           </div>

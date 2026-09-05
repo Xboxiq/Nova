@@ -15,7 +15,7 @@ function StatusBadge({ token, label }: { token: string; label: string }) {
 
 function TableRow({ initials, bg, name, plan, status, statusLabel, amount }: { initials: string; bg: string; name: string; plan: string; status: string; statusLabel: string; amount: number }) {
   return (
-    <div className="i-surface2" style={{ display: 'grid', gridTemplateColumns: '2fr 1.4fr 1fr 0.8fr', gap: 12, alignItems: 'center', padding: '0 18px', height: 52, borderTop: '1px solid var(--border)', fontSize: 14, transition: 'background 140ms', cursor: 'pointer' }}>
+    <div className="i-surface2" style={{ display: 'grid', gridTemplateColumns: '2fr 1.4fr 1fr 0.8fr', gap: 12, alignItems: 'center', padding: '0 18px', height: 52, borderTop: '1px solid var(--border)', fontSize: 14, transition: 'background 140ms' }}>
       <span style={{ display: 'flex', alignItems: 'center', gap: 10, fontWeight: 600 }}>
         <span style={{ width: 28, height: 28, borderRadius: '50%', background: bg, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, fontWeight: 700 }}>{initials}</span>{name}
       </span>

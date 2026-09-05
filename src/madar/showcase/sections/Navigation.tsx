@@ -12,10 +12,10 @@ function NavIcon({ path, rect }: { path?: string; rect?: boolean }) {
 
 function SidebarItem({ children, active }: { children: React.ReactNode; active?: boolean }) {
   return (
-    <div className={active ? undefined : 'i-surface2-text'} style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: 9, height: 34, padding: '0 10px', borderRadius: 6, fontSize: 13, fontWeight: active ? 600 : 500, color: active ? undefined : 'var(--text-2)', cursor: 'pointer', background: active ? 'var(--surface)' : undefined, boxShadow: active ? 'var(--shadow-1)' : undefined, transition: 'background 140ms' }}>
+    <button type="button" className={active ? 'i-row-btn' : 'i-row-btn i-surface2-text'} style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: 9, height: 34, padding: '0 10px', borderRadius: 6, fontSize: 13, fontWeight: active ? 600 : 500, color: active ? undefined : 'var(--text-2)', cursor: 'pointer', background: active ? 'var(--surface)' : undefined, boxShadow: active ? 'var(--shadow-1)' : undefined, transition: 'background 140ms' }}>
       {active && <span style={{ position: 'absolute', insetInlineStart: -10, top: 8, bottom: 8, width: 3, borderRadius: 3, background: 'var(--accent)' }} />}
       {children}
-    </div>
+    </button>
   );
 }
 

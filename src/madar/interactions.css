@@ -17,6 +17,8 @@
 
 .i-soft:hover { background: var(--accent-soft); }
 .i-soft-text:hover { background: var(--accent-soft); color: var(--text); }
+/* a row or menu item drawn as a control must BE one: this strips the UA button so the hover classes below still paint it (gates/25) */
+.i-row-btn { appearance: none; border: 0; background: none; font: inherit; color: inherit; text-align: start; width: 100%; }
 .i-surface2:hover { background: var(--surface-2); }
 .i-surface2-text:hover { background: var(--surface-2); color: var(--text); }
 .i-danger-soft:hover { background: var(--danger-soft); }

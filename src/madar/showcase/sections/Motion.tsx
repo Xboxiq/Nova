@@ -17,7 +17,7 @@ export function Motion() {
           <div style={{ color: 'var(--text-2)', fontSize: 12, lineHeight: '19px' }}>ease-out · 0.22, 1, 0.36, 1<br />spring · 0.34, 1.45, 0.64, 1<br />ease-in (exit) · 0.55, 0, 1, 0.45</div>
         </div>
 
-        <div className="i-card" style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, padding: 24, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 12, cursor: 'pointer', transition: 'transform 340ms cubic-bezier(0.22,1,0.36,1), box-shadow 340ms' }}>
+        <div className="i-card" style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 6, padding: 24, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 12, transition: 'transform 340ms cubic-bezier(0.22,1,0.36,1), box-shadow 340ms' }}>
           <div style={{ width: 44, height: 44, borderRadius: 6, background: 'var(--accent-soft)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 19V5M5 12l7-7 7 7" /></svg>
           </div>

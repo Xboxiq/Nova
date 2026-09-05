@@ -38,14 +38,14 @@ export function DataTable<R extends Record<string, Cell>>({ columns, rows, selec
               </th>
             )}
             {columns.map((c) => (
-              <th key={String(c.key)} style={{ ...th, textAlign: c.align ?? 'start', cursor: c.sortable ? 'pointer' : 'default', userSelect: 'none' }}
-                onClick={() => c.sortable && setSort((s) => s?.key === c.key ? { key: c.key, dir: s.dir === 1 ? -1 : 1 } : { key: c.key, dir: 1 })}>
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
-                  {c.label}
-                  {c.sortable && (
+              <th key={String(c.key)} aria-sort={sort?.key === c.key ? (sort.dir === 1 ? 'ascending' : 'descending') : undefined} style={{ ...th, textAlign: c.align ?? 'start' }}>
+                {c.sortable ? (
+                  <button type="button" className="i-row-btn" onClick={() => setSort((s) => s?.key === c.key ? { key: c.key, dir: s.dir === 1 ? -1 : 1 } : { key: c.key, dir: 1 })}
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: 5, width: 'auto', cursor: 'pointer' }}>
+                    {c.label}
                     <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: sort?.key === c.key ? 1 : 0.3, transform: sort?.key === c.key && sort.dir === -1 ? 'rotate(180deg)' : 'none', transition: `transform 220ms ${GLIDE}` }}><path d="M6 15l6 6 6-6M6 9l6-6 6 6" /></svg>
-                  )}
-                </span>
+                  </button>
+                ) : c.label}
               </th>
             ))}
           </tr>
@@ -263,15 +263,24 @@ export function RangeSlider({ min = 0, max = 100, defaultLow = 25, defaultHigh =
     const up = () => { window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', up); };
     window.addEventListener('pointermove', move); window.addEventListener('pointerup', up);
   };
-  const Handle = ({ v, on }: { v: number; on: (e: React.PointerEvent) => void }) => (
-    <span onPointerDown={on} style={{ position: 'absolute', insetInlineStart: `${pct(v)}%`, top: '50%', transform: 'translate(-50%,-50%)', width: 20, height: 20, borderRadius: '50%', background: 'var(--surface)', border: '2px solid var(--accent)', cursor: 'grab', touchAction: 'none' }} />
+  const nudge = (which: 'lo' | 'hi') => (e: React.KeyboardEvent) => {
+    const rtl = getComputedStyle(e.currentTarget).direction === 'rtl';
+    const d = e.key === 'Home' ? -Infinity : e.key === 'End' ? Infinity : e.key === (rtl ? 'ArrowLeft' : 'ArrowRight') || e.key === 'ArrowUp' ? step : e.key === (rtl ? 'ArrowRight' : 'ArrowLeft') || e.key === 'ArrowDown' ? -step : null;
+    if (d === null) return;
+    e.preventDefault();
+    if (which === 'lo') setLo(Math.max(min, Math.min(lo + d, hi - step))); else setHi(Math.min(max, Math.max(hi + d, lo + step)));
+  };
+  /* a plain function, not a component: a component declared inside the render is a new type every
+     render, so React remounts the handle on each keypress and focus falls off it after the first */
+  const handle = (v: number, on: (e: React.PointerEvent) => void, onKey: (e: React.KeyboardEvent) => void, name: string) => (
+    <span key={name} role="slider" tabIndex={0} aria-label={name} aria-valuemin={min} aria-valuemax={max} aria-valuenow={v} onKeyDown={onKey} onPointerDown={on} style={{ position: 'absolute', insetInlineStart: `${pct(v)}%`, top: '50%', transform: 'translate(-50%,-50%)', width: 20, height: 20, borderRadius: '50%', background: 'var(--surface)', border: '2px solid var(--accent)', cursor: 'grab', touchAction: 'none' }} />
   );
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 12, width: '100%', maxWidth: 300 }}>
       <div ref={track} style={{ position: 'relative', height: 6, borderRadius: 6, background: 'var(--surface-2)' }}>
         <span style={{ position: 'absolute', insetInlineStart: `${pct(lo)}%`, width: `${pct(hi) - pct(lo)}%`, top: 0, bottom: 0, background: 'var(--accent)', borderRadius: 6 }} />
-        <Handle v={lo} on={drag('lo')} />
-        <Handle v={hi} on={drag('hi')} />
+        {handle(lo, drag('lo'), nudge('lo'), 'الحدّ الأدنى')}
+        {handle(hi, drag('hi'), nudge('hi'), 'الحدّ الأعلى')}
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, fontWeight: 600, fontVariantNumeric: 'tabular-nums' }}>
         <span>{prefix}{lo}</span>

@@ -99,7 +99,7 @@ export function Inputs() {
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 13l4 4L19 7" /></svg>
             </div>
             {['Dubai (GMT+4)', 'Cairo (GMT+2)', 'London (GMT+1)'].map((label) => (
-              <div key={label} className="i-surface2-text" style={{ display: 'flex', alignItems: 'center', height: 36, borderRadius: 6, padding: '0 12px', fontSize: 14, color: 'var(--text-2)', cursor: 'pointer' }}>{label}</div>
+              <div key={label} className="i-surface2-text" style={{ display: 'flex', alignItems: 'center', height: 36, borderRadius: 6, padding: '0 12px', fontSize: 14, color: 'var(--text-2)' }}>{label}</div>
             ))}
           </div>
         </div>

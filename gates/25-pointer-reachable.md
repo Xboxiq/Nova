@@ -114,3 +114,44 @@ imported sections 0. What they were, and what happened to each:
 ### Not claimed
 - The marks inside `OutageCompare` and `DutyCycle` still carry per-mark from–to in `title`, reachable by mouse only. The picture has a name and an axis, so the reading is available; the precision is not, to a sighted keyboard user. The reachable form is a roving axis like `DayStrip`, and it is deferred and written here rather than exempted silently.
 - `aria-hidden` on `MemojiAvatar` trusts every host to write the name beside it. All five hosts do today; a future host that shows avatars alone would be hiding names, and nothing measures that yet.
+
+## The whole registry, and the affordances that were pictures
+
+Once the gate could count, it was pointed at every section in `sections.ts`
+instead of a hand-written list — so a new section is enforced the day it is
+added. The first full census returned **599** unreachable elements in madar's own
+sections, and the number was wrong: a cursor inherits, so a card with twelve
+children reported thirteen. Counting only the ROOT of each pointer subtree gave
+**227** distinct affordances a keyboard could not reach, in 16 sections. What they
+were, and what each became:
+
+| class | count | example | fix |
+|---|---|---|---|
+| hover reveals with a pointer cursor and no click | 17 | signature cards, rituals, icon lab tiles, flip card, kinetics doors | `tabIndex={0}` with `onFocus`/`onBlur` mirroring enter/leave — the reveal is reachable and the global ring shows where |
+| pictures of controls: rows and cards with `cursor: pointer` and nothing behind it | 12 | list rows, data rows, file card, chips, foil card, dock rows, 140 heat-map cells | the cursor removed — a specimen that does nothing must not promise |
+| rows meant as controls, drawn as `div` | 12 | sidebar items, menu rows, quick actions, sortable table headers | real `<button>`s (`.i-row-btn` strips the UA chrome so the hover classes still paint); headers carry `aria-sort` |
+| sliders without a keyboard | 6 | rubber-band slider, range handles, rotary knob, before/after divider, number scrubber | `role="slider"` with arrows that follow the writing direction (§33), Home/End, `aria-valuenow`; the range handles were an inline component that remounted on every keypress and lost focus — hoisted to a plain function |
+| listboxes whose options only took clicks | 2 | `ListBox`; `SelectField`'s popup (unseen by the sweep because it renders only when open — found by the keyboard probe) | roving tabindex on the picked option; arrows move it, Enter/Space pick, Escape closes the popup; the popup focuses its picked option on open |
+| an expander with `role="button"` and no tabindex | 1 | dynamic island | `tabIndex={0}`, Enter/Space click it |
+| a swipe row whose action button sat behind it | 1 | swipeable list row | the grab cursor moved to the wrapper that CONTAINS the button; focusing the button slides the row open |
+| a chart whose slices highlight on hover | 5 + 5 | donut slices and legend rows | legend rows focusable; slices `aria-hidden` as the mouse duplicate |
+| **named debt** | **10** | kanban cards ×4 and a sortable list ×5 dragged only; a pointer-following playground | counted per section under a ceiling equal to today's number; one more fails. The keyboard form is a roving reorder, deferred and written here |
+
+- [x] G13: The gate reads the registry, and every own section is at zero or at its named debt
+  CHECK: npm run qa:pointer
+  EXPECT: 42 own sections; only data-collections 4, kinetics-bank 5, kinetics-99 1 non-zero, each marked "named debt"; imports 3 under a ceiling of 5 roots
+  EVIDENCE: OWN_DEBT=10; IMPORTED_POINTER_UNREACHABLE=3 (ceiling 5); DECLARED_DECORATION=9 (roots only now); POINTER_REACHABLE=ok (0). The registry regex found 45 ids, 3 imported
+
+- [x] G14: Every new keyboard path was driven, both directions where direction matters
+  CHECK: node keys.mjs — focus, press, read aria-valuenow / aria-pressed / aria-sort / aria-expanded / transform
+  EXPECT: forward changes the value and back returns it; rtl forward is ArrowLeft, ltr forward is ArrowRight
+  EVIDENCE: rubber-band 60→65→60; range low 20→21→20, high 80→81→80; knob 40→45→40; divider 50→55→50 and in ltr ArrowRight 50→55; scrubber 24→35 (ArrowUp then Shift+ArrowUp); flip card focus→pressed, Enter→unpressed; sortable headers 4 buttons, Enter → aria-sort=ascending; dynamic island false→Enter→true; swipe row focus → translateX 0→92; signature cards 4 focusable, markup changes on focus and restores on blur; menu row buttons transparent at rest, painted on hover; ListBox tabindex 0,-1,-1 and ArrowDown moves selection and focus to 1; SelectField opens with focus on "Riyadh (GMT+3)" (tabindex 0,-1,-1,-1), ArrowDown → "Dubai (GMT+4)", Enter closes and the trigger reads the new value, Escape closes. The range handles first read 20→21→21: the remount bug, found by the probe, fixed, re-read. Two probe runs timed out waiting for a section under parallel load and passed alone: a probe waits for a selector now, not a timer
+
+- [x] G15: The other harnesses agree after the wave
+  CHECK: npm run qa:source; node tools/qa/operable.mjs; node tools/qa/spec-row-qa.mjs
+  EXPECT: all ok
+  EVIDENCE: twelve source gates ok; OPERATED=85 OPERABLE_FAILURES=0; SPEC_ROW_RENDER=ok
+
+### Not claimed
+- The ten debts are real mouse-only controls, not pictures: two drag-to-reorder lists and a kanban need a keyboard reorder (grab with Space, move with arrows, drop with Space), and the pointer playground has no keyboard meaning at all. The ceilings stop the number growing; they do not make it smaller.
+- A hover reveal made focusable is reachable, not necessarily comfortable: seventeen new tab stops appeared in specimen banks. A bank with many reveals would want one roving stop, as `DayStrip` does.

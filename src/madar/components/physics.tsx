@@ -295,6 +295,8 @@ export function RubberBandSlider({ defaultValue = 60, onChange, width = 240 }: R
     <div style={{ width, padding: '10px 0', touchAction: 'none' }}>
       <div
         style={{ position: 'relative', height: 6, borderRadius: 6, background: 'var(--surface-2)', cursor: 'pointer' }}
+        role="slider" tabIndex={0} aria-label="القيمة" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(clamp(v))}
+        onKeyDown={(e) => { const rtl = getComputedStyle(e.currentTarget).direction === 'rtl'; const d = e.key === 'Home' ? -100 : e.key === 'End' ? 100 : e.key === (rtl ? 'ArrowLeft' : 'ArrowRight') || e.key === 'ArrowUp' ? 5 : e.key === (rtl ? 'ArrowRight' : 'ArrowLeft') || e.key === 'ArrowDown' ? -5 : 0; if (!d) return; e.preventDefault(); const c = clamp(clamp(v) + d); setV(c); onChange?.(Math.round(c)); }}
         onPointerDown={(e) => {
           e.currentTarget.setPointerCapture(e.pointerId);
           geo.current = { startX: e.clientX, startV: clamp(v) };
@@ -379,6 +381,15 @@ export function NumberScrubber({ defaultValue = 24, min = 0, max = 200, suffix =
         setV(n); onChange?.(n);
       }}
       onPointerUp={() => setScrub(false)}
+      role="slider" tabIndex={0} aria-label="القيمة" aria-valuemin={min} aria-valuemax={max} aria-valuenow={v} aria-valuetext={`${v} ${suffix}`}
+      onKeyDown={(e) => {
+        const rtl = getComputedStyle(e.currentTarget).direction === 'rtl';
+        const unit = e.shiftKey ? 10 : 1;
+        const d = e.key === 'Home' ? min - v : e.key === 'End' ? max - v : e.key === (rtl ? 'ArrowLeft' : 'ArrowRight') || e.key === 'ArrowUp' ? unit : e.key === (rtl ? 'ArrowRight' : 'ArrowLeft') || e.key === 'ArrowDown' ? -unit : 0;
+        if (!d) return;
+        e.preventDefault();
+        const n = Math.max(min, Math.min(v + d, max)); setV(n); onChange?.(n);
+      }}
       style={{
         display: 'inline-flex', alignItems: 'baseline', gap: 3, padding: '8px 14px', borderRadius: 6,
         background: scrub ? 'var(--accent-soft)' : 'var(--surface-2)', border: '1px solid var(--border-strong)',

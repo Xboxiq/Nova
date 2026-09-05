@@ -50,16 +50,21 @@
  *   node tools/qa/pointer-reachable.mjs
  */
 import { execSync, spawn } from "node:child_process";
+import { readFileSync } from "node:fs";
 import { createRequire } from "node:module";
 
 const PORT = 4589;
 const URL = `http://localhost:${PORT}/`;
-const OWN = ["madar-nova-instruments", "madar-energy", "madar-outage", "madar-schedule", "madar-soft-vocabulary", "madar-upload", "madar-buttons",
-  "madar-color-tokens", "madar-admin-access", "madar-consequence", "madar-dispatch",
-  "madar-photographed", "madar-boards", "madar-glasswork", "madar-projectwork", "madar-directions", "madar-matrix"];
+/* every section in the registry that is not an import — so a new section is enforced the day it is added */
+const REGISTRY = readFileSync("src/madar/sections.ts", "utf8"); /* run from the repo root, like every gate here */
 const IMPORTED = ["madar-imported", "madar-imported-2", "madar-imported-3"];
-/* two above the number measured when this gate was written (108) */
-const IMPORTED_CEILING = 110;
+const OWN = [...REGISTRY.matchAll(/id: "(madar-[a-z0-9-]+)"/g)].map((m) => m[1]).filter((id) => !IMPORTED.includes(id));
+/* two above the number of pointer-subtree ROOTS measured in the imports (3) */
+const IMPORTED_CEILING = 5;
+/* Own sections with NAMED debt: drag-only reorder (a kanban and a sortable list) and a
+   pointer-following playground, whose keyboard forms are a roving reorder and nothing.
+   Counted at today's number; one more fails. Everything else own fails at one. */
+const DEBT = { "madar-data-collections": 4, "madar-kinetics-bank": 5, "madar-kinetics-99": 1 };
 
 let chromium;
 try { chromium = createRequire(import.meta.url)("playwright").chromium; }
@@ -102,8 +107,12 @@ const sweep = (rootSel) => page.evaluate((sel) => {
        inside a `role="img"` is exempt: the picture has its own name, and its children
        are flattened away for assistive tech, so that title was never anyone's only path. */
     const cursor = getComputedStyle(el).cursor;
+    /* a cursor inherits, so a card's twelve children all report it; only the ROOT of a
+       pointer subtree is an affordance — the parent's cursor being passive marks it */
+    const parentCursor = el.parentElement ? getComputedStyle(el.parentElement).cursor : "auto";
+    const promisesCursor = !PASSIVE.has(cursor) && (PASSIVE.has(parentCursor) || cursor !== parentCursor);
     const title = (el.getAttribute("title") || "").trim();
-    const promise = !PASSIVE.has(cursor) ? `cursor=${cursor}` : title && !el.closest('[role="img"]') ? `title="${title.slice(0, 32)}"` : null;
+    const promise = promisesCursor ? `cursor=${cursor}` : title && !el.closest('[role="img"]') ? `title="${title.slice(0, 32)}"` : null;
     if (!promise) continue;
     if (el.closest("[aria-hidden='true'],[aria-hidden='']")) { declared += 1; continue; }
     if (reachable(el)) continue;
@@ -115,7 +124,7 @@ const sweep = (rootSel) => page.evaluate((sel) => {
 }, rootSel);
 
 const failures = [];
-let declaredTotal = 0, importedTotal = 0;
+let declaredTotal = 0, importedTotal = 0, debtTotal = 0;
 
 await page.goto(URL, { waitUntil: "networkidle" }); await page.waitForTimeout(900);
 const shell = await sweep(null);
@@ -129,14 +138,19 @@ for (const id of [...OWN, ...IMPORTED]) {
   if (!r) { failures.push(`${id}: #main-content not found`); continue; }
   declaredTotal += r.declared;
   const own = OWN.includes(id);
-  console.log(`${id.padEnd(24)} unreachable=${r.offenders.length} declared-decoration=${r.declared}${own ? "" : "  (imported, counted)"}`);
-  if (own) for (const o of r.offenders) failures.push(`${id}: ${o}`);
+  console.log(`${id.padEnd(24)} unreachable=${r.offenders.length} declared-decoration=${r.declared}${own ? (id in DEBT ? `  (named debt, ceiling ${DEBT[id]})` : "") : "  (imported, counted)"}`);
+  if (own && id in DEBT) {
+    debtTotal += r.offenders.length;
+    for (const o of r.offenders.slice(0, 6)) console.log(`    ${o}`);
+    if (r.offenders.length > DEBT[id]) failures.push(`${id}: ${r.offenders.length} mouse-only affordances, over its named debt of ${DEBT[id]} — a new one was added; make it reachable or raise the debt with a reason`);
+  } else if (own) for (const o of r.offenders) failures.push(`${id}: ${o}`);
   else { importedTotal += r.offenders.length; for (const o of r.offenders.slice(0, 4)) console.log(`    ${o}`); }
 }
 await browser.close();
 
 for (const f of failures) console.log(`  UNREACHABLE ${f}`);
 console.log(`DECLARED_DECORATION=${declaredTotal} (aria-hidden pointer elements: decoration or a mouse duplicate of a reachable control)`);
+console.log(`OWN_DEBT=${debtTotal} (named per section in DEBT: drag-only reorder ×9, a pointer playground ×1 — keyboard forms deferred, not exempted)`);
 console.log(`IMPORTED_POINTER_UNREACHABLE=${importedTotal} (ceiling ${IMPORTED_CEILING}, the imported corpus's own mouse-only controls — exempt from this repo's law as hover-policy exempts src/components/ui)`);
 if (importedTotal > IMPORTED_CEILING) failures.push(`imported sections: ${importedTotal} mouse-only pointer elements, over the ceiling of ${IMPORTED_CEILING} — a new upload added one; write its divergence or fix it`);
 console.log(`POINTER_REACHABLE=${failures.length ? "FAIL" : "ok"} (${failures.length})`);

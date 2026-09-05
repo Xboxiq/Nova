@@ -10,7 +10,7 @@ function RitualCard({ onEnter, onLeave, title, desc, children }: { onEnter: () =
       name={title}
       specimen={(
         <div
-          onMouseEnter={onEnter} onMouseLeave={onLeave}
+          onMouseEnter={onEnter} onMouseLeave={onLeave} tabIndex={0} onFocus={onEnter} onBlur={onLeave}
           className="i-card"
           style={{ position: 'relative', width: 64, height: 64, display: 'grid', placeItems: 'center', cursor: 'pointer' }}
         >
