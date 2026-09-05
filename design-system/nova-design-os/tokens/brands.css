@@ -1,0 +1,224 @@
+/* NOVA brand directions — the colour of the PRODUCT, on an axis of its own.
+   ═══════════════════════════════════════════════════════════════════════════
+
+   The owner's requirement: a shop owner may want deep violet on white, another
+   wants polished orange; the switch must be smooth, and the choices must be a
+   CURATED set picked in settings, never random.
+
+   Two axes already existed and neither could answer that:
+     · `data-theme`  — seven PACKS, each owning the surface world (canvas,
+       surface, ink, border) AND its own accent, hand-authored together.
+     · `data-glass`  — how translucent the material is.
+
+   So a brand was inseparable from a pack: choosing violet meant choosing the
+   iris pack's surfaces too, and a shop that wants violet on WHITE could not say
+   so. This file adds the missing axis:
+
+     `data-brand`  — the product's colour: the action family, a gradient, a tint.
+
+   THE COMPOSITION RULE. A pack owns the ground; a brand owns the action. So
+   brand × pack multiply instead of colliding: `light` + `violet` is white
+   surfaces with a violet action, `night` + `orange` is the indigo night with a
+   polished-orange action. Nothing here re-declares a surface, an ink or a
+   border, and nothing here applies at all until `data-brand` is set — the
+   seven packs behave exactly as they did before this file existed.
+
+   HOW A BRAND IS DECLARED. Not as fifteen hex values, which is how a palette
+   drifts. A brand declares ANCHORS in oklch — a hue, a chroma, a lightness for
+   light grounds and another for dark ones, a second hue for the gradient, and
+   the ink that sits ON the accent. One rule below derives the whole action
+   family from them, so hover/pressed/soft/ink can never disagree with the
+   accent, and a new brand is six lines.
+
+   WHY TWO LIGHTNESSES. The same accent cannot clear 3:1 against white AND
+   against a near-black surface. Each brand therefore carries `--brand-l` for
+   light packs and `--brand-l-dark` for dark ones, and the pair is MEASURED:
+   `tools/qa/brand-contrast.mjs` reads every brand against every pack in a
+   browser and fails the build when an accent, its ink, or its focus ring falls
+   under the floor. A palette nobody measured is a palette that will ship
+   illegible on somebody's pack.
+
+   TO ADD OR REPLACE A BRAND: edit the anchor block here and register it in
+   `src/brands.ts`. That is the whole surface — this file is the one place the
+   product's colours live. */
+
+/* ── the derivation: anchors → the whole action family, one rule ─────────────
+   Selected by the REGISTERED ids rather than by `[data-brand]` alone, and that
+   is not pedantry: the bare attribute selector also matches a value nobody
+   declared anchors for, and then every derived token is an oklch() around an
+   undefined var — invalid at computed-value time, so the accent, its ink and
+   the focus ring all collapse to the same unpainted colour. The brand gate
+   found exactly that by feeding it a name from the wrong list. Listing the ids
+   makes an unknown brand a no-op: the pack keeps its own accent. */
+[data-brand="violet"],
+[data-brand="ember"],
+[data-brand="olive"],
+[data-brand="teal"],
+[data-brand="indigo"],
+[data-brand="ruby"],
+[data-brand="clay"],
+[data-brand="graphite"] {
+  /* `--brand-action-l` is the lightness of the ACTION on the current ground, and
+     it is the only anchor that flips with the pack. The gradient, the mesh and
+     the tint below deliberately keep `--brand-l`: a brand's card is an OBJECT
+     with its own colour, not a surface that follows the room. The first draft
+     flipped both, and on the night pack ember's card turned pale peach with
+     white ink on it — the object stopped being the same object. */
+  --brand-action-l: var(--brand-l);
+  --nova-action: oklch(var(--brand-action-l) var(--brand-c) var(--brand-h));
+  --nova-action-hover: oklch(calc(var(--brand-action-l) - 0.045) var(--brand-c) var(--brand-h));
+  --nova-action-pressed: oklch(calc(var(--brand-action-l) - 0.095) var(--brand-c) var(--brand-h));
+  --nova-action-soft: oklch(var(--brand-action-l) var(--brand-c) var(--brand-h) / 0.13);
+  /* the -ink is the accent as SMALL TEXT on the ground, and it MOVES THE OTHER
+     WAY on a dark pack: darker than the accent against white, lighter than it
+     against near-black. The first draft subtracted lightness on both and the
+     brand gate caught it at 3.08–4.32 across seven brands on the dark packs —
+     one direction of travel cannot serve two grounds. */
+  --brand-ink-l: calc(var(--brand-action-l) - 0.13);
+  --nova-action-ink: oklch(var(--brand-ink-l) calc(var(--brand-c) * 0.82) var(--brand-h));
+  --nova-on-action: var(--brand-on);
+  --nova-focus: oklch(calc(var(--brand-action-l) + 0.02) var(--brand-c) var(--brand-h));
+
+  /* ── the gradient, and why it is a token rather than a component's CSS ─────
+     The owner asked for a card with a gradient whose colours are chosen in
+     settings. A gradient written into a component is a gradient that cannot be
+     chosen. So the brand publishes it: two anchors, one angle, and the angle is
+     160deg because VISUAL-LAW §2 puts the light directly above the object —
+     a diagonal that flips with `dir` is a lamp that moves when the language
+     changes. `--brand-gradient-soft` is the same turn at low alpha, for a
+     ground that must not fight the ink on it. */
+  /* THE CARD IS A DARK OBJECT, and the cap is what makes that true for every
+     brand. The photographed family's inks are translucent whites tuned to ITS
+     meshes, which are all dark; a brand whose anchors sit at 0.60 paints a pale
+     card and the same ink falls to 2.55:1 — measured, in tools/qa/brand-card.mjs,
+     on eight brands at once. `min()` deepens only the brands that need it, so a
+     dark brand keeps its own colour exactly and a bright one keeps its HUE while
+     becoming an object the family's ink can live on. */
+  --brand-card-l: min(var(--brand-l), 0.44);
+  --brand-card-l2: min(var(--brand-l2), 0.48);
+  --brand-from: oklch(var(--brand-card-l) var(--brand-c) var(--brand-h));
+  --brand-to: oklch(var(--brand-card-l2) var(--brand-c2) var(--brand-h2));
+  --brand-gradient: linear-gradient(160deg, var(--brand-from) 0%, var(--brand-to) 100%);
+  --brand-gradient-soft: linear-gradient(
+    160deg,
+    oklch(var(--brand-card-l) var(--brand-c) var(--brand-h) / 0.16) 0%,
+    oklch(var(--brand-card-l2) var(--brand-c2) var(--brand-h2) / 0.16) 100%
+  );
+  /* the mesh reading of the same two hues: pools that TURN rather than a
+     two-stop fade (the photographed family's rule, §26) */
+  --brand-mesh:
+    radial-gradient(76% 52% at 16% 2%, oklch(var(--brand-card-l) var(--brand-c) var(--brand-h) / 0.9) 0%, transparent 62%),
+    radial-gradient(70% 46% at 92% 8%, oklch(calc(var(--brand-card-l) - 0.12) var(--brand-c) var(--brand-h) / 0.85) 0%, transparent 60%),
+    radial-gradient(110% 70% at 44% 104%, oklch(var(--brand-card-l2) var(--brand-c2) var(--brand-h2) / 0.92) 0%, transparent 68%),
+    linear-gradient(160deg, var(--brand-from) 0%, var(--brand-to) 100%);
+
+  /* the tint the glass takes from the brand: a film, not a wash */
+  --brand-tint: oklch(var(--brand-l) var(--brand-c) var(--brand-h) / 0.09);
+  --brand-tint-strong: oklch(var(--brand-l) var(--brand-c) var(--brand-h) / 0.16);
+}
+
+/* On a dark pack the anchors swap to their dark values. Specificity (0,3,0)
+   beats a brand block's (0,1,0), so this wins wherever a brand is set. */
+:root:is([data-theme="dark"], [data-theme="night"])[data-brand="violet"],
+:root:is([data-theme="dark"], [data-theme="night"])[data-brand="ember"],
+:root:is([data-theme="dark"], [data-theme="night"])[data-brand="olive"],
+:root:is([data-theme="dark"], [data-theme="night"])[data-brand="teal"],
+:root:is([data-theme="dark"], [data-theme="night"])[data-brand="indigo"],
+:root:is([data-theme="dark"], [data-theme="night"])[data-brand="ruby"],
+:root:is([data-theme="dark"], [data-theme="night"])[data-brand="clay"],
+:root:is([data-theme="dark"], [data-theme="night"])[data-brand="graphite"] {
+  --brand-action-l: var(--brand-l-dark);
+  --brand-on: var(--brand-on-dark);
+  --brand-ink-l: calc(var(--brand-l-dark) + 0.09);
+}
+
+/* ═══ THE CURATED SET ═══════════════════════════════════════════════════════
+   Eight directions, each with a character rather than a slider position: the
+   hue pair is chosen so the gradient TURNS (two neighbouring hues, never a
+   rainbow), the chroma stays under 0.20 so a large field never buzzes, and the
+   dark-pack lightness is raised, not the chroma, so the accent stays the same
+   colour in both worlds. */
+
+/* بنفسجي غامق — deep violet on white. The owner's own example: a shop that
+   wants a serious, expensive violet, not the lavender every AI page ships. */
+[data-brand="violet"] {
+  --brand-h: 300; --brand-c: 0.175; --brand-l: 0.44; --brand-l-dark: 0.76;
+  --brand-h2: 328; --brand-c2: 0.150; --brand-l2: 0.56; --brand-l2-dark: 0.70;
+  --brand-on: oklch(0.99 0.004 300); --brand-on-dark: oklch(0.18 0.045 300);
+}
+
+/* برتقالي مصقول — polished orange turning to amber. Warm, high-energy retail. */
+[data-brand="ember"] {
+  --brand-h: 42; --brand-c: 0.165; --brand-l: 0.60; --brand-l-dark: 0.78;
+  --brand-h2: 22; --brand-c2: 0.170; --brand-l2: 0.62; --brand-l2-dark: 0.72;
+  --brand-on: oklch(0.15 0.040 42); --brand-on-dark: oklch(0.15 0.040 42);
+}
+
+/* أخضر زيتي — the olive-lime the photographed family already speaks. */
+[data-brand="olive"] {
+  --brand-h: 128; --brand-c: 0.150; --brand-l: 0.52; --brand-l-dark: 0.80;
+  --brand-h2: 108; --brand-c2: 0.170; --brand-l2: 0.68; --brand-l2-dark: 0.85;
+  --brand-on: oklch(0.99 0.004 128); --brand-on-dark: oklch(0.20 0.050 128);
+}
+
+/* تركوازي عميق — deep teal: clinical, trustworthy, banking and health. */
+[data-brand="teal"] {
+  --brand-h: 195; --brand-c: 0.120; --brand-l: 0.50; --brand-l-dark: 0.79;
+  --brand-h2: 172; --brand-c2: 0.130; --brand-l2: 0.62; --brand-l2-dark: 0.84;
+  --brand-on: oklch(0.99 0.004 195); --brand-on-dark: oklch(0.18 0.040 195);
+}
+
+/* نيلي حبري — an ink-blue that goes to cyan, not the indigo→violet AI default. */
+[data-brand="indigo"] {
+  --brand-h: 262; --brand-c: 0.170; --brand-l: 0.47; --brand-l-dark: 0.78;
+  --brand-h2: 232; --brand-c2: 0.140; --brand-l2: 0.60; --brand-l2-dark: 0.82;
+  --brand-on: oklch(0.99 0.004 262); --brand-on-dark: oklch(0.17 0.045 262);
+}
+
+/* قرمزي — a ruby that turns to rose. */
+[data-brand="ruby"] {
+  --brand-h: 18; --brand-c: 0.175; --brand-l: 0.51; --brand-l-dark: 0.75;
+  --brand-h2: 355; --brand-c2: 0.155; --brand-l2: 0.60; --brand-l2-dark: 0.72;
+  --brand-on: oklch(0.99 0.004 18); --brand-on-dark: oklch(0.18 0.050 18);
+}
+
+/* طيني — clay: a warm near-neutral for a brand that wants no colour shouting. */
+[data-brand="clay"] {
+  --brand-h: 58; --brand-c: 0.075; --brand-l: 0.52; --brand-l-dark: 0.80;
+  --brand-h2: 32; --brand-c2: 0.085; --brand-l2: 0.62; --brand-l2-dark: 0.76;
+  --brand-on: oklch(0.99 0.004 58); --brand-on-dark: oklch(0.20 0.030 58);
+}
+
+/* فحمي — graphite: the achromatic brand, for a shop whose product IS the colour. */
+[data-brand="graphite"] {
+  --brand-h: 250; --brand-c: 0.022; --brand-l: 0.40; --brand-l-dark: 0.82;
+  --brand-h2: 250; --brand-c2: 0.030; --brand-l2: 0.55; --brand-l2-dark: 0.70;
+  --brand-on: oklch(0.99 0.002 250); --brand-on-dark: oklch(0.20 0.020 250);
+}
+
+/* ═══ THE EDGE ══════════════════════════════════════════════════════════════
+   How sharp the product's corners are, on its own axis, because "our brand is
+   soft" is a decision a shop makes once and everything inherits.
+
+   It scales the UI ladder ONLY (control, field, card, feature). The
+   photographed family's own radii (`--r-widget: 52px`, `--r-sheet`) are its
+   material, not a preference, and are deliberately untouched — a 52px widget
+   at `sharp` would stop being that object. Unset = the system's own 4–6px. */
+[data-radius="sharp"] {
+  --nova-radius-control: 2px;
+  --nova-radius-field: 2px;
+  --nova-radius-card: 3px;
+  --nova-radius-feature: 3px;
+}
+[data-radius="soft"] {
+  --nova-radius-control: 8px;
+  --nova-radius-field: 9px;
+  --nova-radius-card: 12px;
+  --nova-radius-feature: 14px;
+}
+[data-radius="round"] {
+  --nova-radius-control: 999px;
+  --nova-radius-field: 14px;
+  --nova-radius-card: 18px;
+  --nova-radius-feature: 22px;
+}
